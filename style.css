@@ -45,27 +45,55 @@ html, body{
 
 .logChart{
     margin-top: 2em;
+    margin-bottom: 5em;
     width: 100%;
-    text-align: center;
-}
-.logChart table{
-    width: 100%;
-    /* background-color: #fff1; */
-    margin: .5em;
-    color: #fffe;
-}
-.logChart th{
-    border-bottom: 2px solid #fff3;
-}
-.logChart th, .logChart td{
+    height: 100%;
     text-align: left;
 }
-.logChart tr{
-    /* display: grid; */
-    grid-template-columns: 1fr 2fr 3fr;
+.logChart .header{
+    border-bottom: 2px solid #fff4 !important;
+    font-weight: bold;
+    position: sticky;
+    top: 0em;
+    background-color: black;
+    z-index: 5;
 }
-.logChart tr{
-    border-bottom: 1px solid #fff1;
+.logChart .logDay{
+    width: 100%;
+    display: flex;
+    border-bottom: 1px solid #fff2;
+    padding: .5em 0;
+}
+.stickyDate{
+    position: sticky;
+    top: 3em;
+    padding-bottom: .25em;
+}
+.logChart .logDate{
+    width: 15%;
+}
+.logChart .logProject{
+    width: 35%;
+}
+.logChart .logTask{
+    width: 50%;
+}
+.logChart .daysTasks{
+    width: 85%;
+    display: flex;
+    flex-direction: column;
+}
+.logChart .daysTasks .logProject{
+    width: 41.1355%;
+}
+.logChart .daysTasks .logTask{
+    width: 58.82%;
+}
+.logChart .taskRow{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    padding: 0 0 .25em 0;
 }
 
 *{
