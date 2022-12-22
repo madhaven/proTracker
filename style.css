@@ -45,7 +45,7 @@ html, body{
 
 .logChart{
     margin-top: 2em;
-    margin-bottom: 5em;
+    margin-bottom: 10em;
     width: 100%;
     height: 100%;
     text-align: left;
@@ -94,6 +94,30 @@ html, body{
     display: flex;
     flex-direction: row;
     padding: 0 0 .25em 0;
+}
+.logChart .logDay.inputs{
+    padding: 0 !important;
+    border: none !important;
+}
+.logChart input{
+    background-color: #0000;
+    border-color: #fff0;
+    color: grey;
+    height: 100%;
+    width: 100%;
+    padding: .25em 0 .25em 0;
+    transition: .2s;
+    outline: none;
+}
+.logChart input:hover{
+    border-bottom: 1px solid #fff2;
+    transition: .2s ease-out;
+}
+.logChart input:focus{
+    outline: none;
+    border: none;
+    border-bottom: 2px solid white;
+    transition: .2s ease-out;
 }
 
 *{
