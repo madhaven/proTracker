@@ -137,13 +137,125 @@
             </div>
             <div class="logDay header inputs">
                 <div class="logDate">
-                    <input type="date" name="Date" id="newLogDate" required></div>
+                    <input type="date" name="Date" id="newLogDate" required placeholder="yyyy-mm-dd">
+                </div>
                 <div class="logProject">
-                    <input type="text" name="Project" id="newLogProject" autocomplete required></div>
+                    <input type="text" name="Project" id="newLogProject" autocomplete required title="Parent Task/Project">
+                </div>
                 <div class="logTask">
-                    <input type="text" name="Task" id="newLogTask"></div>
+                    <input type="text" name="Task" id="newLogTask" title="Task">
+                </div>
             </div>
         </main>
     </div>
+    <script>
+
+        function setDefaultDate(){
+            now = new Date()
+            date = now.getFullYear() + "-" + now.getMonth() + "-" + now.getDate()
+            document.getElementById('newLogDate').value = date
+        }
+
+        function addLogToUI(date, project, task){
+            latestDates = document.getElementsByClassName('stickyDate')
+            if (latestDates.length > 0){
+                latestDate = latestDates[latestDates.length - 1].innerHTML.trim()
+            } else {
+                latestDate = 0
+            }
+            
+            // compares current date with only the latest date
+            if (latestDate != date){
+                // add new date section
+                var logDay = document.createElement('div')
+                logDay.classList = 'logDay'
+    
+                var logDate = document.createElement('div')
+                logDate.classList = 'logDate'
+    
+                var stickyDate = document.createElement('div')
+                stickyDate.classList = "stickyDate"
+                stickyDate.innerHTML = date
+    
+                var daysTasks = document.createElement('div')
+                daysTasks.classList = "daysTasks"
+    
+                var taskRow = document.createElement('div')
+                taskRow.classList = "taskRow"
+    
+                var logProject = document.createElement('div')
+                logProject.classList = "logProject"
+                logProject.innerHTML = project
+    
+                var logTask = document.createElement('div')
+                logTask.classList = "logTask"
+                logTask.innerHTML = task
+    
+                logDate.appendChild(stickyDate)
+                logDay.appendChild(logDate)
+                logDay.appendChild(daysTasks)
+                daysTasks.append(taskRow)
+                taskRow.append(logProject)
+                taskRow.append(logTask)
+    
+                var chart = document.getElementsByClassName('logChart')[0]
+                console.log(chart.childNodes)
+                inputs = chart.getElementsByClassName('inputs')[0]
+                console.log('inputs', inputs)
+                inputs.remove()
+                chart.appendChild(logDay)
+                chart.appendChild(inputs)
+            } else {
+                // add new task row
+                var days = document.getElementsByClassName('logDay')
+                targetDay = days[days.length-2]
+                targetContainer = targetDay.getElementsByClassName('daysTasks')[0]
+
+                var taskRow = document.createElement('div')
+                taskRow.classList = "taskRow"
+
+                var logProject = document.createElement('div')
+                logProject.classList = "logProject"
+                logProject.innerHTML = project
+
+                var logTask = document.createElement('div')
+                logTask.classList = "logTask"
+                logTask.innerHTML = task
+
+                taskRow.appendChild(logProject)
+                taskRow.appendChild(logTask)
+                targetContainer.appendChild(taskRow)
+            }
+        }
+
+        window.addEventListener('load', (event) => {
+            setDefaultDate()
+        })
+
+        document.getElementById('newLogTask').addEventListener('change', (event) => {
+            UItask = document.getElementById('newLogTask')
+            task = UItask.value
+            if (task == "") return
+            UIproject = document.getElementById('newLogProject')
+            project = UIproject.value
+            if (project == "") return
+            UIdate = document.getElementById('newLogDate')
+            date = UIdate.value
+            if (date == "") return
+            
+            allGood = confirm('Add task: ' + task + '\nProject: ' + project + '\ndate: ' + date)
+            if (!allGood) return
+
+            // add to db
+            // TODO
+
+            // add stuff to log UI
+            addLogToUI(date, project, task)
+
+            // clear input fields
+            UItask.value = UIproject.value = ""
+            setDefaultDate()
+        })
+    </script>
 </body>
 </html>
