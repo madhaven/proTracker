@@ -195,14 +195,14 @@
             if (!allGood) return
 
             // add to db
-            // TODO
-
-            // add stuff to log UI
-            addLogToUI(date, project, task)
-
-            // clear input fields
-            UItask.value = UIproject.value = ""
-            setDefaultDate()
+            if (true && allGood) {
+                // add stuff to log UI
+                addLogToUI(date, project, task)
+                
+                // clear input fields
+                UItask.value = UIproject.value = ""
+                setDefaultDate()
+            }
         }
 
         function populatePage(dataset){
@@ -238,7 +238,8 @@
             ['2022-12-20', 'Project X', 'target acquired', 'pending'],
             ['2022-12-20', 'Project X', 'destroyed', 'pending'],
             ['2022-12-20', 'Project X', 'bleh again', 'pending'],
-            ['2022-12-20', 'Project X', 'another bleh', 'pending'],
+            ['2022-12-20', 'Project X', 'anothasdfasdfasdfasdfasdfasdfasdfasdf;laksjdlfkjas;ldkfj;lkjasd;flkjasd;flkjas;dlkfjasd;lfkjasd;lfkjas;ldfkja;sdlkfja;lsdkfjas;dlfkjasd;lfkjasd;fkljasd;lfkjasd;lfkjas;ldfkja;lsdkfj;alskdfj', 'pending'],
+            ['2022-12-20', 'Project X', 'my name is not the name that you think is my name because my name is the name of the name you wont think about when you are naming a person with no name and that is why my name is not the name you would name the nameless person with barely a name', 'pending'],
         ]
         window.addEventListener('load', (event) => {
             setDefaultDate()
