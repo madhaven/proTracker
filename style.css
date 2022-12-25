@@ -1,6 +1,17 @@
+:root{
+    --bg: #181818ff;
+    --whiteLayer: #fff1;
+    --whiteLayer2: #fff2;
+    --blackLayer: #0003;
+    --fg-strong: white;
+    --fg: grey;
+    --green: rgb(0, 128, 0);
+    --red: rgb(192, 0, 0);
+}
+
 html, body{
-    color: #fffb;
-    background-color: black;
+    color: var(--fg);
+    background-color: var(--bg);
     margin: 0;
     padding: 0;
     top: 0;
@@ -19,7 +30,7 @@ html, body{
     position: absolute;
     left: 0;
     top: 0;
-    background-color: #fff3;
+    background-color: var(--whiteLayer);
     width: 4em;
     height: 100vh;
 }
@@ -38,8 +49,8 @@ html, body{
     transition: .2s ease-out;
 }
 .sideBar ul li:hover{
-    color: white;
-    background-color: #0002;
+    color: var(--fg-strong);
+    background-color: var(--blackLayer);
     cursor: pointer;
     transition: none;
 }
@@ -52,11 +63,11 @@ html, body{
     text-align: left;
 }
 .logChart .header{
-    border-bottom: 2px solid #fff4 !important;
+    border-bottom: 2px solid var(--whiteLayer) !important;
     font-weight: bold;
     position: sticky;
     top: 0em;
-    background-color: black;
+    background-color: var(--bg);
     z-index: 5;
 }
 .logChart .header > *:not(:first-child), .logChart .taskRow > *{
@@ -65,7 +76,7 @@ html, body{
 .logChart .logDay{
     width: 100%;
     display: flex;
-    border-bottom: 1px solid #fff1;
+    border-bottom: 1px solid var(--whiteLayer);
     padding: .5em 0;
 }
 .stickyDate{
@@ -76,8 +87,9 @@ html, body{
 .logChart .logDate{
     width: 15%;
 }
-.logChart .logProject{
+.logChart .logProject, .logProject input{
     width: 35%;
+    text-align: right;
 }
 .logChart .logTask{
     width: 50%;
@@ -92,24 +104,25 @@ html, body{
 }
 .logChart .daysTasks .logTask{
     width: 58.82%;
+    transition: .2s ease-out;
 }
 .logChart :not(.header, .inputs) .logTask{
-    color: rgb(192, 0, 0);
+    color: var(--red);
     cursor: pointer;
 }
 .logChart .logTask.completed{
-    color: rgb(0, 128, 0);
+    color: var(--green);
 }
 .logChart .taskRow{
     width: 100%;
     display: flex;
     flex-direction: row;
     border-radius: .25em;
-    transition: .2s ease-out;
+    transition: .2s linear;
 }
 .logChart .taskRow:hover{
-    background-color: #ffffff18;
-    transition: none;
+    background-color: var(--blackLayer);
+    transition-delay: .2s;
 }
 .logChart .logDay.inputs{
     padding: 0 !important;
@@ -117,9 +130,10 @@ html, body{
 }
 
 .logChart input{
-    background-color: #0000;
-    border-color: #fff0;
-    color: grey;
+    background-color: transparent;
+    border: 1px solid transparent;
+    border-bottom: 2px solid transparent;
+    color: var(--fg);
     height: 100%;
     width: 100%;
     padding: .25em 0 .25em 0;
@@ -127,15 +141,33 @@ html, body{
     outline: none;
 }
 .logChart input:hover{
-    border-bottom: 1px solid #fff2;
+    border-bottom: 2px solid var(--whiteLayer);
     transition: .2s ease-out;
+    outline: none;
 }
 .logChart input:focus{
     outline: none;
-    border: none;
-    border-bottom: 2px solid white;
+    border-bottom: 2px solid var(--fg-strong);
     transition: .2s ease-out;
 }
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+  }
+/* Track */
+::-webkit-scrollbar-track {
+background: transparent;
+}
+/* Handle */
+::-webkit-scrollbar-thumb {
+background: var(--whiteLayer);
+}
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+background: var(--whiteLayer2);
+}
+
 *{
     /* outline: 1px solid green; */
 }
