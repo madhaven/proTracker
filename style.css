@@ -6,6 +6,7 @@ html, body{
     top: 0;
     left: 0;
     font-family: Arial, Helvetica, sans-serif;
+    scroll-behavior: smooth;
     /* font-weight: 600; */
 }
 .mainContainer{
@@ -58,10 +59,13 @@ html, body{
     background-color: black;
     z-index: 5;
 }
+.logChart .header > *:not(:first-child), .logChart .taskRow > *{
+    padding: 0 .5em 0 .5em;
+}
 .logChart .logDay{
     width: 100%;
     display: flex;
-    border-bottom: 1px solid #fff2;
+    border-bottom: 1px solid #fff1;
     padding: .5em 0;
 }
 .stickyDate{
@@ -89,16 +93,29 @@ html, body{
 .logChart .daysTasks .logTask{
     width: 58.82%;
 }
+.logChart :not(.header, .inputs) .logTask{
+    color: rgb(192, 0, 0);
+    cursor: pointer;
+}
+.logChart .logTask.completed{
+    color: rgb(0, 128, 0);
+}
 .logChart .taskRow{
     width: 100%;
     display: flex;
     flex-direction: row;
-    padding: 0 0 .25em 0;
+    border-radius: .25em;
+    transition: .2s ease-out;
+}
+.logChart .taskRow:hover{
+    background-color: #ffffff18;
+    transition: none;
 }
 .logChart .logDay.inputs{
     padding: 0 !important;
     border: none !important;
 }
+
 .logChart input{
     background-color: #0000;
     border-color: #fff0;
@@ -119,7 +136,6 @@ html, body{
     border-bottom: 2px solid white;
     transition: .2s ease-out;
 }
-
 *{
     /* outline: 1px solid green; */
 }
