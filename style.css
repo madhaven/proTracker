@@ -2,6 +2,7 @@
     --bg: #181818ff;
     --whiteLayer: #fff1;
     --whiteLayer2: #fff2;
+    --whiteLayer3: #fff4;
     --blackLayer: #0003;
     --fg-strong: white;
     --fg: grey;
@@ -105,6 +106,8 @@ html, body{
 .logChart .daysTasks .logTask{
     width: 58.82%;
     transition: .2s ease-out;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 .logChart :not(.header, .inputs) .logTask{
     color: var(--red);
@@ -147,7 +150,7 @@ html, body{
 }
 .logChart input:focus{
     outline: none;
-    border-bottom: 2px solid var(--fg-strong);
+    border-bottom: 2px solid var(--whiteLayer3);
     transition: .2s ease-out;
 }
 
