@@ -12,10 +12,15 @@ const createWindow = () => {
         height: 600,
         webPreferences: {
             preload: path.join(__dirname, 'preloadElectron.js')
-        }
+        },
+        show: false,
+        autoHideMenuBar: true
     })
     ipcMain.handle('taskClickChannel', taskToggler)
     win.loadFile('./log.html')
+    win.once('ready-to-show', () => {
+        win.show()
+    })
 }
 
 app.whenReady().then(() => {
