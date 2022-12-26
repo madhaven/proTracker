@@ -1,0 +1,28 @@
+{
+  "name": "protracker",
+  "version": "1.0.0",
+  "description": "app to track tasks",
+  "main": "mainElectron.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/madhaven/proTracker.git"
+  },
+  "keywords": [
+    "habit",
+    "track",
+    "task"
+  ],
+  "author": "madhaven",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/madhaven/proTracker/issues"
+  },
+  "homepage": "https://github.com/madhaven/proTracker#readme",
+  "devDependencies": {
+    "electron": "^22.0.0"
+  }
+}
