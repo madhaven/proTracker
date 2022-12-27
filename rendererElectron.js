@@ -1,3 +1,4 @@
+var sideBarState = false
 var data = [
     ['2022-11-24', 'Project X', 'the initial task done', 'done'],
     ['2022-11-24', 'Project X', 'the second task done', 'done'],
@@ -58,6 +59,34 @@ async function taskClick(event, element){
     else 
         task.classList.remove('completed')
 }
+
+function toggleSideBar(){
+    const sidebar = document.getElementById('sideBar')
+    const handle = document.getElementById('sideHandle')
+    if (!sideBarState){
+        // open side bar
+        sidebar.style.left = "0%";
+        handle.style.left = "0%";
+        handle.style.transform = "translate(0%, -50%) rotate(90deg)"
+        sideBarState = true
+        document.body.classList.add('scrollLock')
+    } else {
+        // close side bar
+        sidebar.style.left = "-100vw";
+        handle.style.left = "100%";
+        handle.style.transform = "translate(0%, -50%) rotate(90deg)"
+        sideBarState = false
+        document.body.classList.remove('scrollLock')
+    }
+}
+document.getElementById('sideBar').addEventListener('click', () => {
+    toggleSideBar()
+})
+document.querySelectorAll('#sideBar li').forEach((item) => {
+    item.addEventListener('click', () => {
+        toggleSideBar()
+    })
+})
 
 function newLogInput(){
     UItask = document.getElementById('newLogTask')

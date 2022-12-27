@@ -4,6 +4,8 @@
     --whiteLayer2: #fff2;
     --whiteLayer3: #fff4;
     --blackLayer: #0003;
+    --blackLayer2: #0006;
+    --blackLayer3: #000c;
     --fg-strong: white;
     --fg: grey;
     --green: rgb(0, 128, 0);
@@ -19,7 +21,12 @@ html, body{
     left: 0;
     font-family: Arial, Helvetica, sans-serif;
     scroll-behavior: smooth;
+    transition: .2s;
     /* font-weight: 600; */
+}
+html.scrollLock, body.scrollLock{
+    overflow: hidden;
+    height: 100%;
 }
 .mainContainer{
     width: 100vw;
@@ -27,33 +34,60 @@ html, body{
     height: 100%;
     overflow-x: hidden;
 }
-.sideBar{
-    position: absolute;
-    left: 0;
-    top: 0;
-    background-color: var(--whiteLayer);
-    width: 4em;
+
+#sideBar{
+    transition: .5s ease;
+    width: 100vw;
     height: 100vh;
+    position: fixed;
+    top: 0%;
+    left: -100vw;
+    z-index: 100;
+    backdrop-filter: blur(5px);
+    background-color: var(--whiteLayer);
+    background-color: var(--blackLayer);
+    display: flex;
+    text-align: center;
+    justify-content: center;
 }
-.sideBar ul{
-    margin: 0;
+#sideBar #sideHandle{
+    transition: .5s ease;
+    position: fixed;
+    left: 100%;
+    top: 50%;
+    transform: translate(0%, -50%) rotate(90deg);
+    padding: 0em 1%;
+    font-size: 2em;
+    cursor: pointer;
+}
+#sideBar .menu{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+}
+#sideBar .menu ul{
     list-style-type: none;
     padding: 0;
+    margin: 0;
     display: flex;
-    flex-direction: column;
 }
-.sideBar ul li{
-    width: 100%;
-    /* display: block; */
-    padding: 1em 0em;
+#sideBar .menu li{
+    padding: 2em;
     text-align: center;
-    transition: .2s ease-out;
-}
-.sideBar ul li:hover{
-    color: var(--fg-strong);
-    background-color: var(--blackLayer);
+    justify-content: center;
+    vertical-align: center;
     cursor: pointer;
-    transition: none;
+    border-radius: 1em;
+    margin: 1em;
+    border: 1px solid var(--whiteLayer3);
+    background-color: transparent;
+    transition: .2 ease-out;
+}
+#sideBar .menu li:hover{
+    /* background-color: var(--whiteLayer); */
+    box-shadow: 0 0 5px 3px var(--whiteLayer);
 }
 
 .logChart{
@@ -120,8 +154,8 @@ html, body{
     width: 100%;
     display: flex;
     flex-direction: row;
-    border-radius: .25em;
-    transition: .2s linear;
+    border-radius: .5em;
+    transition: .1s linear;
 }
 .logChart .taskRow:hover{
     background-color: var(--blackLayer);
@@ -140,7 +174,7 @@ html, body{
     height: 100%;
     width: 100%;
     padding: .25em 0 .25em 0;
-    transition: .2s;
+    transition: .1s;
     outline: none;
 }
 .logChart input:hover{
