@@ -12,75 +12,108 @@
     <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-    <!-- <div class="mainContainer">
-        <aside class="sideBar">
+    <aside id="sideBar">
+        <div id="sideHandle">
+            ...
+        </div>
+        <div class="menu">
             <ul>
-                <li title="Log">Logs</li>
-                <li>yolo</li>
+                <li>LOAD</li>
+                <li>SAVE</li>
             </ul>
-        </aside> -->
-        <main class="container logChart">
-            <div class="logDay header">
-                <div class="logDate">Date</div>
-                <div class="logProject">Project</div>
-                <div class="logTask">Task</div>
-            </div>
-            <!-- <div class="logDay">
-                <div class="logDate">
-                    <div class="stickyDate">
-                        2022-12-21
-                    </div>
-                </div>
-                <div class="daysTasks">
-                    <div class="taskRow">
-                        <div class="logProject">MCBackend</div>
-                        <div class="logTask">Destroyed Design bugs</div>
-                    </div>
-                    <div class="taskRow">
-                        <div class="logProject">MCBackend</div>
-                        <div class="logTask">Blockced Pipeline indefinitely</div>
-                    </div>
-                    <div class="taskRow">
-                        <div class="logProject">MCBackend</div>
-                        <div class="logTask">Destroyed Design bugs</div>
-                    </div>
-                    <div class="taskRow">
-                        <div class="logProject">MCBackend</div>
-                        <div class="logTask completed">Blockced Pipeline indefinitely</div>
-                    </div>
-                    <div class="taskRow">
-                        <div class="logProject">MCBackend</div>
-                        <div class="logTask completed">Destroyed Design bugs</div>
-                    </div>
+        </div>
+    </aside>
+    <main class="container logChart">
+        <div class="logDay header">
+            <div class="logDate">Date</div>
+            <div class="logProject">Project</div>
+            <div class="logTask">Task</div>
+        </div>
+        <!-- <div class="logDay">
+            <div class="logDate">
+                <div class="stickyDate">
+                    2022-12-21
                 </div>
             </div>
-            <div class="logDay">
-                <div class="logDate">
-                    <div class="stickyDate">
-                        2022-12-21
-                    </div>
+            <div class="daysTasks">
+                <div class="taskRow">
+                    <div class="logProject">MCBackend</div>
+                    <div class="logTask">Destroyed Design bugs</div>
                 </div>
-                <div class="daysTasks">
-                    <div class="taskRow">
-                        <div class="logProject">XSight</div>
-                        <div class="logTask">Deleted database</div>
-                    </div>
+                <div class="taskRow">
+                    <div class="logProject">MCBackend</div>
+                    <div class="logTask">Blockced Pipeline indefinitely</div>
                 </div>
-            </div> -->
-            <div class="logDay header inputs" id="inputs">
-                <div class="logDate">
-                    <input type="date" name="Date" id="newLogDate" required placeholder="yyyy-mm-dd">
+                <div class="taskRow">
+                    <div class="logProject">MCBackend</div>
+                    <div class="logTask">Destroyed Design bugs</div>
                 </div>
-                <div class="logProject">
-                    <input type="text" name="Project" id="newLogProject" autocomplete required title="Parent Task/Project">
+                <div class="taskRow">
+                    <div class="logProject">MCBackend</div>
+                    <div class="logTask completed">Blockced Pipeline indefinitely</div>
                 </div>
-                <div class="logTask">
-                    <input type="text" name="Task" id="newLogTask" title="Task">
+                <div class="taskRow">
+                    <div class="logProject">MCBackend</div>
+                    <div class="logTask completed">Destroyed Design bugs</div>
                 </div>
             </div>
-        </main>
-    </div>
+        </div>
+        <div class="logDay">
+            <div class="logDate">
+                <div class="stickyDate">
+                    2022-12-21
+                </div>
+            </div>
+            <div class="daysTasks">
+                <div class="taskRow">
+                    <div class="logProject">XSight</div>
+                    <div class="logTask">Deleted database</div>
+                </div>
+            </div>
+        </div> -->
+        <div class="logDay header inputs" id="inputs">
+            <div class="logDate">
+                <input type="date" name="Date" id="newLogDate" required placeholder="yyyy-mm-dd">
+            </div>
+            <div class="logProject">
+                <input type="text" name="Project" id="newLogProject" autocomplete required title="Parent Task/Project">
+            </div>
+            <div class="logTask">
+                <input type="text" name="Task" id="newLogTask" title="Task">
+            </div>
+        </div>
+    </main>
     <script>
+
+        var sideBarState = false
+        function toggleSideBar(){
+            const sidebar = document.getElementById('sideBar')
+            const handle = document.getElementById('sideHandle')
+            // console.log(sidebar)
+            if (!sideBarState){
+                // open side bar
+                sidebar.style.left = "0%";
+                handle.style.left = "0%";
+                handle.style.transform = "translate(0%, -50%) rotate(90deg)"
+                sideBarState = true
+                document.body.classList.add('scrollLock')
+            } else {
+                // close side bar
+                sidebar.style.left = "-100vw";
+                handle.style.left = "100%";
+                handle.style.transform = "translate(0%, -50%) rotate(90deg)"
+                sideBarState = false
+                document.body.classList.remove('scrollLock')
+            }
+        }
+        document.getElementById('sideBar').addEventListener('click', () => {
+            toggleSideBar()
+        })
+        document.querySelectorAll('#sideBar li').forEach((item) => {
+            item.addEventListener('click', () => {
+                toggleSideBar()
+            })
+        })
 
         function setDefaultDate(){
             now = new Date()
@@ -248,8 +281,8 @@
             document.getElementById('newLogTask').addEventListener('change', (event) => {
                 newLogInput()
             })
+            toggleSideBar()
         })
-
     </script>
 </body>
 </html>
