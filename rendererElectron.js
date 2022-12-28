@@ -1,34 +1,5 @@
 var sideBarState = false
-var data = [
-    ['2022-11-24', 'Project X', 'the initial task done', 'done'],
-    ['2022-11-24', 'Project X', 'the second task done', 'done'],
-    ['2022-11-24', 'Project X', 'the third task done', 'done'],
-    ['2022-11-24', 'Project X', 'the fourth task done', 'done'],
-    ['2022-11-24', 'Project X', 'the fifth task done', 'done'],
-    ['2022-11-24', 'Project X', 'the sixth task done', 'done'],
-    ['2022-11-24', 'Project X', 'the seventh task done', 'done'],
-    ['2022-11-24', 'Project X', 'the eighth task done', 'done'],
-    ['2022-11-24', 'Project X', 'the ninth task done', 'done'],
-    ['2022-11-24', 'Project X', 'the tenth task done', 'done'],
-    ['2022-12-20', 'Project X', 'some task', 'done'],
-    ['2022-12-20', 'Project X', 'some other task', 'done'],
-    ['2022-12-20', 'Project Manga', 'some big other task', 'done'],
-    ['2022-12-20', 'Project Manga', 'some small other task', 'done'],
-    ['2022-12-20', 'Project Manga', 'The greatest other task', 'done'],
-    ['2022-12-20', 'Project Manga', 'The other task again', 'done'],
-    ['2022-12-20', 'Project Manga', 'The other task revamped', 'done'],
-    ['2022-12-20', 'Project Manga', 'One small task', 'done'],
-    ['2022-12-20', 'Project Manga', 'yet another small task', 'done'],
-    ['2022-12-20', 'Project Manga', 'bleh', 'done'],
-    ['2022-12-20', 'Project X', 'bleh2', 'pending'],
-    ['2022-12-20', 'Project X', 'the bleh bleh', 'pending'],
-    ['2022-12-20', 'Project X', 'the bleh bleh stuff', 'pending'],
-    ['2022-12-20', 'Project X', 'target acquired', 'pending'],
-    ['2022-12-20', 'Project X', 'destroyed', 'pending'],
-    ['2022-12-20', 'Project X', 'bleh again', 'pending'],
-    ['2022-12-20', 'Project X', 'anothasdfasdfasdfasdfasdfasdfasdfasdf;laksjdlfkjas;ldkfj;lkjasd;flkjasd;flkjas;dlkfjasd;lfkjasd;lfkjas;ldfkja;sdlkfja;lsdkfjas;dlfkjasd;lfkjasd;fkljasd;lfkjasd;lfkjas;ldfkja;lsdkfj;alskdfj', 'pending'],
-    ['2022-12-20', 'Project X', 'my name is not the name that you think is my name because my name is the name of the name you wont think about when you are naming a person with no name and that is why my name is not the name you would name the nameless person with barely a name', 'pending'],
-]
+var data = []
 
 function clearAllLogs(){
     for (var day of document.querySelectorAll('.logDay:not(.header)')){
@@ -47,24 +18,6 @@ function setDefaultDate(){
     date = now.getFullYear() + "-" + now.getMonth() + "-" + now.getDate()
     document.getElementById('newLogDate').value = date
 }
-
-function clickLoad(){
-    const inp = document.getElementById('dataFile')
-    inp.click()
-}
-document.getElementById('loadButton').addEventListener('click', () => {
-    clickLoad()
-})
-
-function fileLoad(event){
-    const inp = event.srcElement;
-    console.log(inp.value)
-    // TODO: READ Data with main
-    // TODO: LOAD UI with data
-}
-document.getElementById('dataFile').addEventListener('change', (event) => {
-    fileLoad(event)
-})
 
 async function taskClick(event, element){
     task = element.getElementsByClassName('logTask')[0]
@@ -119,7 +72,7 @@ function newLogInput(){
     
     allGood = confirm('Add task: ' + task + '\nProject: ' + project + '\ndate: ' + date)
     if (!allGood) return
-
+    
     // add to db
     if (true && allGood) {
         // add stuff to log UI
@@ -144,24 +97,24 @@ function addLogToUI(date, project, task, progress){
         // add new date section
         var logDay = document.createElement('div')
         logDay.classList = 'logDay'
-
+        
         var logDate = document.createElement('div')
         logDate.classList = 'logDate'
-
+        
         var stickyDate = document.createElement('div')
         stickyDate.classList = "stickyDate"
         stickyDate.innerHTML = date
-
+        
         var daysTasks = document.createElement('div')
         daysTasks.classList = "daysTasks"
-
+        
         var taskRow = document.createElement('div')
         taskRow.classList = "taskRow"
         
         var logProject = document.createElement('div')
         logProject.classList = "logProject"
         logProject.innerHTML = project
-
+        
         var logTask = document.createElement('div')
         logTask.classList = "logTask"
         logTask.innerHTML = task
@@ -210,6 +163,7 @@ function addLogToUI(date, project, task, progress){
 window.addEventListener('load', (event) => {
     setDefaultDate()
     populatePage(data)
+    toggleSideBar()
     document.getElementById('inputs').scrollIntoView()
     document.getElementById('newLogTask').addEventListener('change', (event) => {
         newLogInput()

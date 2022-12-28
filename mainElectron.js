@@ -18,6 +18,7 @@ const createWindow = () => {
     })
     ipcMain.handle('taskClickChannel', taskToggler)
     win.loadFile('./log.html')
+    win.maximize()
     win.once('ready-to-show', () => {
         win.show()
     })
