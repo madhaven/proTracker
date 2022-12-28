@@ -18,8 +18,11 @@
         </div>
         <div class="menu">
             <ul>
-                <li>LOAD</li>
-                <li>SAVE</li>
+                <li id="loadButton">
+                    LOAD
+                    <input type="file" accept=".xlsx, .xls, .csv" name="data" id="dataFile" hidden>
+                </li>
+                <li id="saveButton">SAVE</li>
             </ul>
         </div>
     </aside>

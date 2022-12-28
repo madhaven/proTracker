@@ -48,6 +48,24 @@ function setDefaultDate(){
     document.getElementById('newLogDate').value = date
 }
 
+function clickLoad(){
+    const inp = document.getElementById('dataFile')
+    inp.click()
+}
+document.getElementById('loadButton').addEventListener('click', () => {
+    clickLoad()
+})
+
+function fileLoad(event){
+    const inp = event.srcElement;
+    console.log(inp.value)
+    // TODO: READ Data with main
+    // TODO: LOAD UI with data
+}
+document.getElementById('dataFile').addEventListener('change', (event) => {
+    fileLoad(event)
+})
+
 async function taskClick(event, element){
     task = element.getElementsByClassName('logTask')[0]
     console.log(element, task)
