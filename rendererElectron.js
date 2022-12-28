@@ -160,12 +160,26 @@ function addLogToUI(date, project, task, progress){
     })
 }
 
+function dataFromMainHandler(event, logs){
+    console.log(logs)
+    logs.forEach(log => {
+        data.push(log)
+        addLogToUI(log.date, log.project, log.task, log.status)
+    });
+}
+
 window.addEventListener('load', (event) => {
     setDefaultDate()
     populatePage(data)
     toggleSideBar()
+    comms.registerMainDataCallback(dataFromMainHandler)
     document.getElementById('inputs').scrollIntoView()
     document.getElementById('newLogTask').addEventListener('change', (event) => {
         newLogInput()
+    })
+    document.getElementById('loadButton').addEventListener('click', async () => {
+        result = await comms.loadFile()
+        console.log(typeof(result), result)
+        // TODO: load results into work log
     })
 })

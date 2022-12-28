@@ -1,9 +1,26 @@
-const { app, BrowserWindow, ipcMain } = require('electron')
+const { app, BrowserWindow, ipcMain, dialog } = require('electron')
 const path = require('path')
+const fs = require('fs')
+const csv = require('fast-csv');
 
 function taskToggler(event, id){
     console.log('toggle task', id)
     return 'pong from mainHandler'
+}
+
+async function loadFile(event){
+    const { cancelled, filePaths } = await dialog.showOpenDialog()
+    if (cancelled){
+        return
+    } else {      
+        let data = []  
+        // Read the CSV file
+        fs.createReadStream(filePaths[0])
+            .pipe(csv.parse({ headers: true }))
+            .on('data', (row) => { data.push(row) })
+            .on('error', (error) => { console.error(error); })
+            .on('end', () => { event.reply('DataPing', data) });
+    }
 }
 
 const createWindow = () => {
@@ -17,6 +34,7 @@ const createWindow = () => {
         autoHideMenuBar: true
     })
     ipcMain.handle('taskClickChannel', taskToggler)
+    ipcMain.on('loadFileChannel', loadFile)
     win.loadFile('./log.html')
     win.maximize()
     win.once('ready-to-show', () => {
