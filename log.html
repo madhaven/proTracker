@@ -18,8 +18,11 @@
         </div>
         <div class="menu">
             <ul>
-                <li>LOAD</li>
-                <li>SAVE</li>
+                <li id="loadButton">
+                    LOAD
+                    <input type="file" accept=".xlsx, .xls, .csv" name="data" id="dataFile" hidden>
+                </li>
+                <li id="saveButton">SAVE</li>
             </ul>
         </div>
     </aside>
@@ -84,6 +87,24 @@
         </div>
     </main>
     <script>
+
+        function clickLoad(){
+            const inp = document.getElementById('dataFile')
+            inp.click()
+        }
+        document.getElementById('loadButton').addEventListener('click', () => {
+            clickLoad()
+        })
+
+        function fileLoad(event){
+            const inp = event.srcElement;
+            console.log(inp.value)
+            // TODO: READ Data with main
+            // TODO: LOAD UI with data
+        }
+        document.getElementById('dataFile').addEventListener('change', (event) => {
+            fileLoad(event)
+        })
 
         var sideBarState = false
         function toggleSideBar(){
