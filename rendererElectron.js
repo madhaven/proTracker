@@ -168,4 +168,8 @@ window.addEventListener('load', (event) => {
     document.getElementById('newLogTask').addEventListener('change', (event) => {
         newLogInput()
     })
+    document.getElementById('loadButton').addEventListener('click', async () => {
+        result = await comms.requestData()
+        console.log(result)
+    })
 })
