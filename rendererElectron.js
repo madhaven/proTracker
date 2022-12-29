@@ -1,25 +1,25 @@
-var sideBarState = false
+var sideBarState = undefined
 var data = []
 
-function clearAllLogs(){
-    for (var day of document.querySelectorAll('.logDay:not(.header)')){
+function clearAllLogs() {
+    for (var day of document.querySelectorAll('.logDay:not(.header)')) {
         day.remove()
     }
 }
 
-function populatePage(dataset){
-    for (var data of dataset){
-        addLogToUI(...data)
+function populatePage(dataset) {
+    for (var log of dataset) {
+        addLogToUI(...log)
     }
 }
 
-function setDefaultDate(){
+function setDefaultDate() {
     now = new Date()
     date = now.getFullYear() + "-" + now.getMonth() + "-" + now.getDate()
     document.getElementById('newLogDate').value = date
 }
 
-async function taskClick(event, element){
+async function taskClick(event, element) {
     task = element.getElementsByClassName('logTask')[0]
     console.log(element, task)
     taskid = 'x'
@@ -31,17 +31,17 @@ async function taskClick(event, element){
         task.classList.remove('completed')
 }
 
-function toggleSideBar(){
+function toggleSideBar(setState = undefined) {
     const sidebar = document.getElementById('sideBar')
     const handle = document.getElementById('sideHandle')
-    if (!sideBarState){
+    if ((setState==undefined && !sideBarState) || setState==true) {
         // open side bar
         sidebar.style.left = "0%";
         handle.style.left = "0%";
         handle.style.transform = "translate(0%, -50%) rotate(90deg)"
         sideBarState = true
         document.body.classList.add('scrollLock')
-    } else {
+    } else if ((setState==undefined && sideBarState) || setState==false) {
         // close side bar
         sidebar.style.left = "-100vw";
         handle.style.left = "100%";
@@ -59,7 +59,7 @@ document.querySelectorAll('#sideBar li').forEach((item) => {
     })
 })
 
-function newLogInput(){
+function newLogInput() {
     UItask = document.getElementById('newLogTask')
     task = UItask.value
     if (task == "") return
@@ -84,16 +84,16 @@ function newLogInput(){
     }
 }
 
-function addLogToUI(date, project, task, progress){
+function addLogToUI(date, project, task, progress) {
     latestDates = document.getElementsByClassName('stickyDate')
-    if (latestDates.length > 0){
+    if (latestDates.length > 0) {
         latestDate = latestDates[latestDates.length - 1].innerHTML.trim()
     } else {
         latestDate = 0
     }
     
     // TODO: compares current date with only the latest date
-    if (latestDate != date){
+    if (latestDate != date) {
         // add new date section
         var logDay = document.createElement('div')
         logDay.classList = 'logDay'
@@ -160,26 +160,47 @@ function addLogToUI(date, project, task, progress){
     })
 }
 
-function dataFromMainHandler(event, logs){
-    console.log(logs)
+function dataFromMainHandler(event, logs) {
     logs.forEach(log => {
         data.push(log)
         addLogToUI(log.date, log.project, log.task, log.status)
     });
+    toggleSideBar(false)
+    document.getElementById('inputs').scrollIntoView()
+}
+
+function errFromMainHandler(err, args) {
+    console.log(args, err)
+    alert(args)
 }
 
 window.addEventListener('load', (event) => {
     setDefaultDate()
-    populatePage(data)
-    toggleSideBar()
+    toggleSideBar(true)
     comms.registerMainDataCallback(dataFromMainHandler)
+    comms.registerMainDataErrorHandler(errFromMainHandler)
     document.getElementById('inputs').scrollIntoView()
     document.getElementById('newLogTask').addEventListener('change', (event) => {
         newLogInput()
     })
-    document.getElementById('loadButton').addEventListener('click', async () => {
-        result = await comms.loadFile()
-        console.log(typeof(result), result)
-        // TODO: load results into work log
+    document.getElementById('loadButton').addEventListener('click', () => {
+        clearAllLogs()
+        comms.loadFile()
+    })
+    document.getElementById('saveButton').addEventListener('click', async () => {
+        comms.saveData(
+            data,
+            result => {
+                console.log(result)
+                if (result === true) {
+                    console.log('TODO: BUILD UI FOR SUCCESFUL SAVE')
+                } else {
+                    console.log('TODO: BUILD UI FOR FAILED SAVE')
+                }
+            },
+            (err, data) => {
+                console.log('ERROR', err, data)
+            }
+        )
     })
 })
