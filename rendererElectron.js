@@ -2,36 +2,42 @@ var sideBarState = undefined
 var data = []
 
 function clearAllLogs() {
+    // clears all logs
     for (var day of document.querySelectorAll('.logDay:not(.header)')) {
         day.remove()
     }
 }
 
 function populatePage(dataset) {
+    // populates the log page with items from the dataset
     for (var log of dataset) {
         addLogToUI(...log)
     }
 }
 
 function setDefaultDate() {
+    // sets a default date for the input field
     now = new Date()
     date = now.getFullYear() + "-" + now.getMonth() + "-" + now.getDate()
     document.getElementById('newLogDate').value = date
 }
 
 async function taskClick(event, element) {
+    // handles the event when a task in the log page is clicked
     task = element.getElementsByClassName('logTask')[0]
     console.log(element, task)
     taskid = 'x'
     state = 'x'
     const response = await comms.toggleTask(taskid)
-    if (Math.random() >= 0.5) // TODO: complete server response
+    // TODO: complete server response
+    if (Math.random() >= 0.5)
         task.classList.add('completed')
     else 
         task.classList.remove('completed')
 }
 
 function toggleSideBar(setState = undefined) {
+    // handles the open and close of the sidebar
     const sidebar = document.getElementById('sideBar')
     const handle = document.getElementById('sideHandle')
     if ((setState==undefined && !sideBarState) || setState==true) {
@@ -60,6 +66,7 @@ document.querySelectorAll('#sideBar li').forEach((item) => {
 })
 
 function newLogInput() {
+    // handles new entry made in the log page
     UItask = document.getElementById('newLogTask')
     task = UItask.value
     if (task == "") return
@@ -70,11 +77,8 @@ function newLogInput() {
     date = UIdate.value
     if (date == "") return
     
-    allGood = confirm('Add task: ' + task + '\nProject: ' + project + '\ndate: ' + date)
-    if (!allGood) return
-    
-    // add to db
-    if (true && allGood) {
+    // TODO: add to db
+    if (true) {
         // add stuff to log UI
         addLogToUI(date, project, task)
         
@@ -85,6 +89,7 @@ function newLogInput() {
 }
 
 function addLogToUI(date, project, task, progress) {
+    // adds a log to the log page UI
     latestDates = document.getElementsByClassName('stickyDate')
     if (latestDates.length > 0) {
         latestDate = latestDates[latestDates.length - 1].innerHTML.trim()
@@ -161,6 +166,7 @@ function addLogToUI(date, project, task, progress) {
 }
 
 function dataFromMainHandler(event, logs) {
+    // handles the data received from Main process and adds it to the log page
     logs.forEach(log => {
         data.push(log)
         addLogToUI(log.date, log.project, log.task, log.status)
@@ -170,6 +176,7 @@ function dataFromMainHandler(event, logs) {
 }
 
 function errFromMainHandler(err, args) {
+    // handles any error from the main process on ...?
     console.log(args, err)
     alert(args)
 }
