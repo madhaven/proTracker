@@ -17,9 +17,13 @@ function populatePage(dataset) {
 
 function setDefaultDate() {
     // sets a default date for the input field
-    now = new Date()
-    date = now.getFullYear() + "-" + now.getMonth() + "-" + now.getDate()
-    document.getElementById('newLogDate').value = date
+    const now = new Date()
+    const year = now.getFullYear();
+    const month = now.getMonth() + 1;
+    const day = now.getDate();
+    const dateString = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+
+    document.getElementById('newLogDate').value = dateString
 }
 
 async function taskClick(event, element) {
