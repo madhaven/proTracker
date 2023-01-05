@@ -1,47 +1,57 @@
-var sideBarState = false
+var sideBarState = undefined
 var data = []
 
-function clearAllLogs(){
-    for (var day of document.querySelectorAll('.logDay:not(.header)')){
+function clearAllLogs() {
+    // clears all logs
+    for (var day of document.querySelectorAll('.logDay:not(.header)')) {
         day.remove()
     }
 }
 
-function populatePage(dataset){
-    for (var data of dataset){
-        addLogToUI(...data)
+function populatePage(dataset) {
+    // populates the log page with items from the dataset
+    for (var log of dataset) {
+        addLogToUI(...log)
     }
 }
 
-function setDefaultDate(){
-    now = new Date()
-    date = now.getFullYear() + "-" + now.getMonth() + "-" + now.getDate()
-    document.getElementById('newLogDate').value = date
+function setDefaultDate() {
+    // sets a default date for the input field
+    const now = new Date()
+    const year = now.getFullYear();
+    const month = now.getMonth() + 1;
+    const day = now.getDate();
+    const dateString = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+
+    document.getElementById('newLogDate').value = dateString
 }
 
-async function taskClick(event, element){
+async function taskClick(event, element) {
+    // handles the event when a task in the log page is clicked
     task = element.getElementsByClassName('logTask')[0]
     console.log(element, task)
     taskid = 'x'
     state = 'x'
     const response = await comms.toggleTask(taskid)
-    if (Math.random() >= 0.5) // TODO: complete server response
+    // TODO: complete server response
+    if (Math.random() >= 0.5)
         task.classList.add('completed')
     else 
         task.classList.remove('completed')
 }
 
-function toggleSideBar(){
+function toggleSideBar(setState = undefined) {
+    // handles the open and close of the sidebar
     const sidebar = document.getElementById('sideBar')
     const handle = document.getElementById('sideHandle')
-    if (!sideBarState){
+    if ((setState==undefined && !sideBarState) || setState==true) {
         // open side bar
         sidebar.style.left = "0%";
         handle.style.left = "0%";
         handle.style.transform = "translate(0%, -50%) rotate(90deg)"
         sideBarState = true
         document.body.classList.add('scrollLock')
-    } else {
+    } else if ((setState==undefined && sideBarState) || setState==false) {
         // close side bar
         sidebar.style.left = "-100vw";
         handle.style.left = "100%";
@@ -59,7 +69,8 @@ document.querySelectorAll('#sideBar li').forEach((item) => {
     })
 })
 
-function newLogInput(){
+function newLogInput() {
+    // handles new entry made in the log page
     UItask = document.getElementById('newLogTask')
     task = UItask.value
     if (task == "") return
@@ -70,11 +81,8 @@ function newLogInput(){
     date = UIdate.value
     if (date == "") return
     
-    allGood = confirm('Add task: ' + task + '\nProject: ' + project + '\ndate: ' + date)
-    if (!allGood) return
-    
-    // add to db
-    if (true && allGood) {
+    // TODO: add to db
+    if (true) {
         // add stuff to log UI
         addLogToUI(date, project, task)
         
@@ -84,16 +92,17 @@ function newLogInput(){
     }
 }
 
-function addLogToUI(date, project, task, progress){
+function addLogToUI(date, project, task, progress) {
+    // adds a log to the log page UI
     latestDates = document.getElementsByClassName('stickyDate')
-    if (latestDates.length > 0){
+    if (latestDates.length > 0) {
         latestDate = latestDates[latestDates.length - 1].innerHTML.trim()
     } else {
         latestDate = 0
     }
     
     // TODO: compares current date with only the latest date
-    if (latestDate != date){
+    if (latestDate != date) {
         // add new date section
         var logDay = document.createElement('div')
         logDay.classList = 'logDay'
@@ -160,16 +169,49 @@ function addLogToUI(date, project, task, progress){
     })
 }
 
+function dataFromMainHandler(event, logs) {
+    // handles the data received from Main process and adds it to the log page
+    logs.forEach(log => {
+        data.push(log)
+        addLogToUI(log.date, log.project, log.task, log.status)
+    });
+    toggleSideBar(false)
+    document.getElementById('inputs').scrollIntoView()
+}
+
+function errFromMainHandler(err, args) {
+    // handles any error from the main process on ...?
+    console.log(args, err)
+    alert(args)
+}
+
 window.addEventListener('load', (event) => {
     setDefaultDate()
-    populatePage(data)
-    toggleSideBar()
+    toggleSideBar(true)
+    comms.registerMainDataCallback(dataFromMainHandler)
+    comms.registerMainDataErrorHandler(errFromMainHandler)
     document.getElementById('inputs').scrollIntoView()
     document.getElementById('newLogTask').addEventListener('change', (event) => {
         newLogInput()
     })
-    document.getElementById('loadButton').addEventListener('click', async () => {
-        result = await comms.requestData()
-        console.log(result)
+    document.getElementById('loadButton').addEventListener('click', () => {
+        clearAllLogs()
+        comms.loadFile()
+    })
+    document.getElementById('saveButton').addEventListener('click', async () => {
+        comms.saveData(
+            data,
+            result => {
+                console.log(result)
+                if (result === true) {
+                    console.log('TODO: BUILD UI FOR SUCCESFUL SAVE')
+                } else {
+                    console.log('TODO: BUILD UI FOR FAILED SAVE')
+                }
+            },
+            (err, data) => {
+                console.log('ERROR', err, data)
+            }
+        )
     })
 })
