@@ -54,7 +54,7 @@ const createWindow = () => {
     ipcMain.handle('taskClickChannel', taskToggler)
     ipcMain.on('loadFileRequest', loadData)
     ipcMain.handle('saveDataRequest', saveData)
-    win.loadFile('./log.html')
+    win.loadFile('./Screens/log.html')
     win.maximize()
     win.once('ready-to-show', () => {
         win.show()
