@@ -59,6 +59,7 @@ html.scrollLock, body.scrollLock{
     padding: 0em 1%;
     font-size: 2em;
     cursor: pointer;
+    user-select: none;
 }
 #sideBar .menu{
     position: fixed;
@@ -82,6 +83,7 @@ html.scrollLock, body.scrollLock{
     border: 2px solid transparent;
     background-color: transparent;
     transition: .1s ease-out, border-left 0s ease-out;
+    user-select: none;
 }
 #sideBar .menu li:hover, #sideBar .menu li:focus{
     border-left: 2px solid var(--whiteLayer3);
