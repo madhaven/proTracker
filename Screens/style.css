@@ -36,7 +36,7 @@ html.scrollLock, body.scrollLock{
 }
 
 #sideBar{
-    transition: .5s ease;
+    transition: .5s ease, width 0s, height 0s;
     width: 100vw;
     height: 100vh;
     position: fixed;

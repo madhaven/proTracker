@@ -1,21 +1,21 @@
 var sideBarState = undefined
 var data = []
 
-function clearAllLogs() {
+const clearAllLogs = () => {
     // clears all logs
     for (var day of document.querySelectorAll('.logDay:not(.header)')) {
         day.remove()
     }
 }
 
-function populatePage(dataset) {
+const populatePage = (dataset) => {
     // populates the log page with items from the dataset
     for (var log of dataset) {
         addLogToUI(...log)
     }
 }
 
-function setDefaultDate() {
+const setDefaultDate = () => {
     // sets a default date for the input field
     const now = new Date()
     const year = now.getFullYear();
@@ -26,7 +26,7 @@ function setDefaultDate() {
     document.getElementById('newLogDate').value = dateString
 }
 
-async function taskClick(event, element) {
+const taskClick = async (event, element) => {
     // handles the event when a task in the log page is clicked
     task = element.getElementsByClassName('logTask')[0]
     console.log(element, task)
@@ -34,13 +34,14 @@ async function taskClick(event, element) {
     state = 'x'
     const response = await comms.toggleTask(taskid)
     // TODO: complete server response
-    if (Math.random() >= 0.5)
+    console.log('response from server: ', typeof(response), response)
+    if (response == true)
         task.classList.add('completed')
-    else 
+    else if (response == false)
         task.classList.remove('completed')
 }
 
-function toggleSideBar(setState = undefined) {
+const toggleSideBar = (setState = undefined) => {
     // handles the open and close of the sidebar
     const sidebar = document.getElementById('sideBar')
     const handle = document.getElementById('sideHandle')
@@ -69,7 +70,7 @@ document.querySelectorAll('#sideBar li').forEach((item) => {
     })
 })
 
-function newLogInput() {
+const newLogInput = () => {
     // handles new entry made in the log page
     UItask = document.getElementById('newLogTask')
     task = UItask.value
@@ -92,7 +93,7 @@ function newLogInput() {
     }
 }
 
-function addLogToUI(date, project, task, progress) {
+const addLogToUI = (date, project, task, progress) => {
     // adds a log to the log page UI
     latestDates = document.getElementsByClassName('stickyDate')
     if (latestDates.length > 0) {
@@ -169,7 +170,7 @@ function addLogToUI(date, project, task, progress) {
     })
 }
 
-function dataFromMainHandler(event, logs) {
+const dataFromMainHandler = (event, logs) => {
     // handles the data received from Main process and adds it to the log page
     logs.forEach(log => {
         data.push(log)
@@ -179,17 +180,23 @@ function dataFromMainHandler(event, logs) {
     document.getElementById('inputs').scrollIntoView()
 }
 
-function errFromMainHandler(err, args) {
+const errFromMainHandler = (err, args) => {
     // handles any error from the main process on ...?
     console.log(args, err)
     alert(args)
 }
 
+const recieveStateChanges = (event, anything_else) => {
+    // TODO
+    console.log('client: recieved state change prompt', event, anything_else)
+}
+
 window.addEventListener('load', (event) => {
     setDefaultDate()
     toggleSideBar(true)
-    comms.registerMainDataCallback(dataFromMainHandler)
-    comms.registerMainDataErrorHandler(errFromMainHandler)
+    state.registerListener('updateUI', recieveStateChanges)
+    comms.registerListener('DataPing', dataFromMainHandler)
+    comms.registerListener('DataError', errFromMainHandler)
     document.getElementById('inputs').scrollIntoView()
     document.getElementById('newLogTask').addEventListener('change', (event) => {
         newLogInput()
