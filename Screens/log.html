@@ -11,17 +11,17 @@
     <link rel="stylesheet" href="./style.css">
 </head>
 <body>
+    <div id="sideHandle">
+        ...
+    </div>
     <aside id="sideBar">
-        <div id="sideHandle">
-            ...
-        </div>
-        <div class="menu">
+        <div class="menu container">
             <ul>
-                <li id="loadButton">
+                <li id="loadButton" tabindex="1">
                     OPEN FILE
                     <input type="file" accept=".xlsx, .xls, .csv" name="data" id="dataFile" hidden>
                 </li>
-                <li id="saveButton">SAVE</li>
+                <li id="saveButton" tabindex="2">SAVE</li>
             </ul>
         </div>
     </aside>

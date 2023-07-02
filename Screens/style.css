@@ -36,29 +36,41 @@ html.scrollLock, body.scrollLock{
 }
 
 #sideBar{
-    transition: .5s ease, width 0s, height 0s;
+    transition: .5s ease, visibility 0s 0.5s;
     width: 100vw;
     height: 100vh;
     position: fixed;
     top: 0%;
-    left: -100vw;
+    left: 0vw;
     z-index: 100;
     backdrop-filter: blur(5px);
     background-color: var(--whiteLayer);
     background-color: var(--blackLayer);
     display: flex;
+    visibility: hidden;
+    opacity: 0;
     text-align: center;
     justify-content: center;
 }
-#sideBar #sideHandle{
-    transition: .5s ease;
+#sideBar.sideBar_open{
+    transition: .5s ease, visibility 0s;
+    opacity: 1;
+    visibility: visible;
+}
+#sideHandle{
     position: fixed;
-    left: 100%;
+    left: 0;
     top: 50%;
     transform: translate(0%, -50%) rotate(90deg);
     padding: 0em 1%;
     font-size: 2em;
     cursor: pointer;
+    user-select: none;
+    z-index: 2000;
+}
+#sideHandle:hover{
+    color: var(--fg-strong);
+    transition: .25s ease-out;
 }
 #sideBar .menu{
     position: fixed;
@@ -71,23 +83,28 @@ html.scrollLock, body.scrollLock{
     list-style-type: none;
     padding: 0;
     margin: 0;
-    display: flex;
+    /* display: flex; */
 }
 #sideBar .menu li{
-    padding: 2em;
     text-align: center;
     justify-content: center;
     vertical-align: center;
     cursor: pointer;
-    border-radius: 1em;
-    margin: 1em;
-    border: 1px solid var(--whiteLayer3);
+    padding: .5em 2em;
+    border: 2px solid transparent;
     background-color: transparent;
-    transition: .2 ease-out;
+    transition: .1s ease-out, border-left 0s ease-out;
+    user-select: none;
 }
-#sideBar .menu li:hover{
-    /* background-color: var(--whiteLayer); */
-    box-shadow: 0 0 5px 3px var(--whiteLayer);
+#sideBar .menu li:hover, #sideBar .menu li:focus{
+    border-left: 2px solid var(--whiteLayer3);
+    background-color: var(--whiteLayer);
+    transition: .05s ease-out, border-left 0s ease-out;
+    outline: none;
+}
+#sideBar .menu li:active{
+    border-left: 2px solid green;
+    transition:  border-left none;
 }
 
 .logChart{

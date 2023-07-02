@@ -47,17 +47,13 @@ const toggleSideBar = (visible = undefined) => {
     const handle = document.getElementById('sideHandle')
     if ((visible==undefined && !sideBarState) || visible==true) {
         // open side bar
-        sidebar.style.left = "0%";
-        handle.style.left = "0%";
-        handle.style.transform = "translate(0%, -50%) rotate(90deg)"
+        sidebar.classList.add("sideBar_open");
         sideBarState = true
         document.body.classList.add('scrollLock')
         uiState.menuVisible = true
     } else if ((visible==undefined && sideBarState) || visible==false) {
         // close side bar
-        sidebar.style.left = "-100vw";
-        handle.style.left = "100%";
-        handle.style.transform = "translate(0%, -50%) rotate(90deg)"
+        sidebar.classList.remove("sideBar_open");
         sideBarState = false
         document.body.classList.remove('scrollLock')
         uiState.menuVisible = false
@@ -174,6 +170,9 @@ const addLogToUI = (date, project, task, progress) => {
 window.addEventListener('load', (event) => {
     setDefaultDate()
     document.getElementById('sideBar').addEventListener('click', () => {
+        toggleSideBar()
+    })
+    document.getElementById("sideHandle").addEventListener('click', () => {
         toggleSideBar()
     })
     document.querySelectorAll('#sideBar li').forEach((item) => {
