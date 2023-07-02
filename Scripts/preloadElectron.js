@@ -9,7 +9,7 @@ contextBridge.exposeInMainWorld('comms', {
 })
 
 contextBridge.exposeInMainWorld('state', {
-    notifyUIEvent: (state) => ipcRenderer.send('UIEventNotifications', state),
-    requestUIChange: (state, callback, err) => ipcRenderer.invoke('UIEventRequests', state).then(callback, err),
+    notifyUIEvent: (state) => { ipcRenderer.send('UIEventNotifications', state) },
+    requestUIChange: (state, callback, err) => { ipcRenderer.invoke('UIEventRequests', state).then(callback, err) },
     registerListener: (channel, callback) => { ipcRenderer.on(channel, callback) }
 })

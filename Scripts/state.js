@@ -2,7 +2,7 @@ class State {
     // Intended to keep track of the Webpage state
     // All UI should be loadable from an instance of this class
 
-    constructor (menuVisible, dataProfile) {
+    constructor (menuVisible=true, dataProfile=true) {
         this.menuVisible = menuVisible
         this.dataProfile = dataProfile
         this.dailyTodo = [] // TODO: fetch from files
@@ -18,4 +18,6 @@ class State {
     }
 }
 
-module.exports = { State }
+module.exports = {
+    State
+}

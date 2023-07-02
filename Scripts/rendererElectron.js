@@ -1,4 +1,4 @@
-var sideBarState = undefined
+var uiState = new State()
 var data = []
 
 const clearAllLogs = () => {
@@ -16,7 +16,7 @@ const populatePage = (dataset) => {
 }
 
 const setDefaultDate = () => {
-    // sets a default date for the input field
+    // sets a default date client: recieved state change promptfor the input field
     const now = new Date()
     const year = now.getFullYear();
     const month = now.getMonth() + 1;
@@ -33,7 +33,7 @@ const taskClick = async (event, element) => {
     taskid = 'x'
     state = 'x'
     const response = await comms.toggleTask(taskid)
-    // TODO: complete server response
+    // TODO: complete server response with state mechanism
     console.log('response from server: ', typeof(response), response)
     if (response == true)
         task.classList.add('completed')
@@ -41,34 +41,29 @@ const taskClick = async (event, element) => {
         task.classList.remove('completed')
 }
 
-const toggleSideBar = (setState = undefined) => {
+const toggleSideBar = (visible = undefined) => {
     // handles the open and close of the sidebar
     const sidebar = document.getElementById('sideBar')
     const handle = document.getElementById('sideHandle')
-    if ((setState==undefined && !sideBarState) || setState==true) {
+    if ((visible==undefined && !sideBarState) || visible==true) {
         // open side bar
         sidebar.style.left = "0%";
         handle.style.left = "0%";
         handle.style.transform = "translate(0%, -50%) rotate(90deg)"
         sideBarState = true
         document.body.classList.add('scrollLock')
-    } else if ((setState==undefined && sideBarState) || setState==false) {
+        uiState.menuVisible = true
+    } else if ((visible==undefined && sideBarState) || visible==false) {
         // close side bar
         sidebar.style.left = "-100vw";
         handle.style.left = "100%";
         handle.style.transform = "translate(0%, -50%) rotate(90deg)"
         sideBarState = false
         document.body.classList.remove('scrollLock')
+        uiState.menuVisible = false
     }
+    state.notifyUIEvent(uiState)
 }
-document.getElementById('sideBar').addEventListener('click', () => {
-    toggleSideBar()
-})
-document.querySelectorAll('#sideBar li').forEach((item) => {
-    item.addEventListener('click', () => {
-        toggleSideBar()
-    })
-})
 
 const newLogInput = () => {
     // handles new entry made in the log page
@@ -82,7 +77,7 @@ const newLogInput = () => {
     date = UIdate.value
     if (date == "") return
     
-    // TODO: add to db
+    // TODO: notify state change
     if (true) {
         // add stuff to log UI
         addLogToUI(date, project, task)
@@ -91,6 +86,11 @@ const newLogInput = () => {
         UItask.value = UIproject.value = ""
         setDefaultDate()
     }
+}
+
+const loadState = (state) => {
+    uiState = state
+    toggleSideBar(state.menuView)
 }
 
 const addLogToUI = (date, project, task, progress) => {
@@ -170,33 +170,19 @@ const addLogToUI = (date, project, task, progress) => {
     })
 }
 
-const dataFromMainHandler = (event, logs) => {
-    // handles the data received from Main process and adds it to the log page
-    logs.forEach(log => {
-        data.push(log)
-        addLogToUI(log.date, log.project, log.task, log.status)
-    });
-    toggleSideBar(false)
-    document.getElementById('inputs').scrollIntoView()
-}
-
-const errFromMainHandler = (err, args) => {
-    // handles any error from the main process on ...?
-    console.log(args, err)
-    alert(args)
-}
-
-const recieveStateChanges = (event, anything_else) => {
-    // TODO
-    console.log('client: recieved state change prompt', event, anything_else)
-}
-
+// connect UI functionality
 window.addEventListener('load', (event) => {
     setDefaultDate()
+    document.getElementById('sideBar').addEventListener('click', () => {
+        toggleSideBar()
+    })
+    document.querySelectorAll('#sideBar li').forEach((item) => {
+        item.addEventListener('click', () => {
+            toggleSideBar()
+        })
+    })
     toggleSideBar(true)
-    state.registerListener('updateUI', recieveStateChanges)
-    comms.registerListener('DataPing', dataFromMainHandler)
-    comms.registerListener('DataError', errFromMainHandler)
+
     document.getElementById('inputs').scrollIntoView()
     document.getElementById('newLogTask').addEventListener('change', (event) => {
         newLogInput()
