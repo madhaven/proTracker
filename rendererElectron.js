@@ -42,30 +42,30 @@ async function taskClick(event, element) {
 
 function toggleSideBar(setState = undefined) {
     // handles the open and close of the sidebar
+    console.log("toggleing", setState)
     const sidebar = document.getElementById('sideBar')
     const handle = document.getElementById('sideHandle')
     if ((setState==undefined && !sideBarState) || setState==true) {
         // open side bar
-        sidebar.style.left = "0%";
-        handle.style.left = "0%";
-        handle.style.transform = "translate(0%, -50%) rotate(90deg)"
+        sidebar.classList.add("sideBar_open");
         sideBarState = true
         document.body.classList.add('scrollLock')
     } else if ((setState==undefined && sideBarState) || setState==false) {
         // close side bar
-        sidebar.style.left = "-100vw";
-        handle.style.left = "100%";
-        handle.style.transform = "translate(0%, -50%) rotate(90deg)"
+        sidebar.classList.remove("sideBar_open");
         sideBarState = false
         document.body.classList.remove('scrollLock')
     }
 }
 document.getElementById('sideBar').addEventListener('click', () => {
+    toggleSideBar(false)
+})
+document.getElementById("sideHandle").addEventListener('click', () => {
     toggleSideBar()
 })
 document.querySelectorAll('#sideBar li').forEach((item) => {
     item.addEventListener('click', () => {
-        toggleSideBar()
+        toggleSideBar(false)
     })
 })
 
