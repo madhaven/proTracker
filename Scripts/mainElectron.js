@@ -1,26 +1,9 @@
 const path = require('path')
-const { State } = require('./state')
-const { app, BrowserWindow, ipcMain, dialog } = require('electron')
-const {
-    loadDataHandler,
-    saveDataHandler,
-    taskToggleHandler,
-    stateEventHandler,
-    stateChangeRequestHandler,
-} = require('./handlers')
+const { app, BrowserWindow } = require('electron')
+const { State } = require('./Models/state')
+const { registerHandlers } = require('./hostHandlers')
 
 var mainWindow
-
-const registerHandlers = () => {
-    // comms
-    ipcMain.handle('taskClickChannel', taskToggleHandler)
-    ipcMain.on('loadFileRequest', loadDataHandler)
-    ipcMain.handle('saveDataRequest', saveDataHandler)
-
-    // state info exchange
-    ipcMain.on('UIEventNotifications', stateEventHandler)
-    ipcMain.handle('UIEventRequests', stateChangeRequestHandler)
-}
 
 const InitialState = () => {
     // loads the data and creates the state instance that is sent to the UI
@@ -42,7 +25,7 @@ const createWindow = () => {
         show: false,
         autoHideMenuBar: true
     })
-    registerHandlers()
+    registerHandlers(win)
     win.loadFile('./Screens/log.html')
     win.webContents.on('did-finish-load', () => {
         win.webContents.openDevTools(); // TODO: REMOVE ON PRODUCTION

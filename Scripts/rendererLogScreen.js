@@ -61,7 +61,7 @@ const toggleSideBar = (visible = undefined) => {
     state.notifyUIEvent(uiState)
 }
 
-const newLogInput = () => {
+const newLogInput = (event) => {
     // handles new entry made in the log page
     UItask = document.getElementById('newLogTask')
     task = UItask.value
@@ -166,44 +166,40 @@ const addLogToUI = (date, project, task, progress) => {
     })
 }
 
+const saveData = async () => {
+    comms.saveData(
+        data,
+        result => {
+            console.log(result)
+            if (result === true) {
+                console.log('TODO: BUILD UI FOR SUCCESFUL SAVE')
+            } else {
+                console.log('TODO: BUILD UI FOR FAILED SAVE')
+            }
+        },
+        (err, data) => {
+            console.log('ERROR', err, data)
+        }
+    )
+}
+
+const loadData = () => {
+    clearAllLogs()
+    comms.loadFile()
+}
+
 // connect UI functionality
 window.addEventListener('load', (event) => {
     setDefaultDate()
-    document.getElementById('sideBar').addEventListener('click', () => {
-        toggleSideBar()
-    })
-    document.getElementById("sideHandle").addEventListener('click', () => {
-        toggleSideBar()
-    })
+    document.getElementById('sideBar').addEventListener('click', (e) => toggleSideBar())
+    document.getElementById("sideHandle").addEventListener('click', (e) => toggleSideBar())
     document.querySelectorAll('#sideBar li').forEach((item) => {
-        item.addEventListener('click', () => {
-            toggleSideBar()
-        })
+        item.addEventListener('click', (e) => toggleSideBar())
     })
     toggleSideBar(true)
 
     document.getElementById('inputs').scrollIntoView()
-    document.getElementById('newLogTask').addEventListener('change', (event) => {
-        newLogInput()
-    })
-    document.getElementById('loadButton').addEventListener('click', () => {
-        clearAllLogs()
-        comms.loadFile()
-    })
-    document.getElementById('saveButton').addEventListener('click', async () => {
-        comms.saveData(
-            data,
-            result => {
-                console.log(result)
-                if (result === true) {
-                    console.log('TODO: BUILD UI FOR SUCCESFUL SAVE')
-                } else {
-                    console.log('TODO: BUILD UI FOR FAILED SAVE')
-                }
-            },
-            (err, data) => {
-                console.log('ERROR', err, data)
-            }
-        )
-    })
+    document.getElementById('newLogTask').addEventListener('change', newLogInput)
+    document.getElementById('loadButton').addEventListener('click', loadData)
+    document.getElementById('saveButton').addEventListener('click', saveData)
 })

@@ -1,16 +1,15 @@
 const csv = require('fast-csv')
 const fs = require('fs')
+const { ipcMain, dialog } = require('electron')
 
-const loadDataHandler = async (event) => {
+const loadDataHandler = async (event, mainWindow) => {
     // prompts user to select a file and returns the data to the caller
     // TODO: verify if cSV is in prescribed format
     const options = {
         filters: [{ name: 'CSV Files', extensions: ['csv'] }]
-      };
+    };
     const { cancelled, filePaths } = await dialog.showOpenDialog(mainWindow, options)
-    if (cancelled) {
-        return
-    } else {
+    if (!cancelled) {
         let data = []  
         // Read the CSV file
         fs.createReadStream(filePaths[0])
@@ -18,7 +17,9 @@ const loadDataHandler = async (event) => {
             .on('data', (row) => { data.push(row) })
             .on('error', (error) => { console.error(error); ipcMain.emit('DataError', 'something Went wrong')})
             .on('end', () => { event.reply('DataPing', data) });
+        // TODO: read shit man
     }
+    return
 }
 
 const saveDataHandler = async (event, data) => {
@@ -57,10 +58,17 @@ const stateChangeRequestHandler = async (event, data) => {
     console.log('main: state change request recieved', event, data)
 }
 
+const registerHandlers = (mainWindow) => {
+    // comms
+    ipcMain.handle('taskClickChannel', taskToggleHandler)
+    ipcMain.on('loadFileRequest', (event) => { loadDataHandler(event, mainWindow) })
+    ipcMain.handle('saveDataRequest', saveDataHandler)
+
+    // state info exchange
+    ipcMain.on('UIEventNotifications', stateEventHandler)
+    ipcMain.handle('UIEventRequests', stateChangeRequestHandler)
+}
+
 module.exports = {
-    loadDataHandler,
-    saveDataHandler,
-    taskToggleHandler,
-    stateEventHandler,
-    stateChangeRequestHandler,
+    registerHandlers,
 }

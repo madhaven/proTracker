@@ -1,6 +1,6 @@
 const dataFromMainHandler = (event, logs) => {
     // handles the data received from Main process and adds it to the log page
-    console.log('client|DataPing ### REMOVE THIS THING')
+    console.log('UI|DataPing ### REMOVE THIS THING')
     logs.forEach(log => {
         data.push(log)
         addLogToUI(log.date, log.project, log.task, log.status)
@@ -17,9 +17,9 @@ const errFromMainHandler = (err, args) => {
 
 const recieveStateChanges = (event, state) => {
     // TODO
-    console.log('client|updateUI: recieved state change prompt', event, state)
+    console.log('UI|updateUI: recieved state change prompt', event, state)
     if (typeof(state) != State){
-        console.log("state isn't of type State though")
+        console.log("state isn't of type State though", state)
     } else {
         loadState(state)
     }
