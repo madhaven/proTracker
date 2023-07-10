@@ -6,3 +6,5 @@ const TaskStatusChange = class {
         this.dateTime = dateTime
     }
 }
+
+module.exports = { TaskStatusChange }

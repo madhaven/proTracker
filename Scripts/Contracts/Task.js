@@ -7,5 +7,3 @@ const Task = class {
         this.parent = parent
     }
 }
-
-module.exports = { Task }

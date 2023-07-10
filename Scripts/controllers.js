@@ -1,205 +1,74 @@
-var uiState = new State()
-var data = []
+const csv = require('fast-csv')
+const fs = require('fs')
+const { ipcMain, dialog } = require('electron')
 
-const clearAllLogs = () => {
-    // clears all logs
-    for (var day of document.querySelectorAll('.logDay:not(.header)')) {
-        day.remove()
+const loadDataHandler = async (event, mainWindow) => {
+    // prompts user to select a file and returns the data to the caller
+    // TODO: verify if cSV is in prescribed format
+    const options = {
+        filters: [{ name: 'CSV Files', extensions: ['csv'] }]
+    };
+    const { cancelled, filePaths } = await dialog.showOpenDialog(mainWindow, options)
+    if (!cancelled) {
+        let data = []  
+        // Read the CSV file
+        fs.createReadStream(filePaths[0])
+            .pipe(csv.parse({ headers: true }))
+            .on('data', (row) => { data.push(row) })
+            .on('error', (error) => { console.error(error); ipcMain.emit('DataError', 'something Went wrong')})
+            .on('end', () => { event.reply('DataPing', data) });
+        // TODO: read shit man
     }
+    return
 }
 
-const populatePage = (dataset) => {
-    // populates the log page with items from the dataset
-    for (var log of dataset) {
-        addLogToUI(...log)
-    }
-}
-
-const setDefaultDate = () => {
-    // sets a default date client: recieved state change promptfor the input field
-    const now = new Date()
-    const year = now.getFullYear();
-    const month = now.getMonth() + 1;
-    const day = now.getDate();
-    const dateString = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-
-    document.getElementById('newLogDate').value = dateString
-}
-
-const taskClick = async (event, element) => {
-    // handles the event when a task in the log page is clicked
-    task = element.getElementsByClassName('logTask')[0]
-    console.log(element, task)
-    taskid = 'x'
-    state = 'x'
-    const response = await comms.toggleTask(taskid)
-    // TODO: complete server response with state mechanism
-    console.log('response from server: ', typeof(response), response)
-    if (response == true)
-        task.classList.add('completed')
-    else if (response == false)
-        task.classList.remove('completed')
-}
-
-const toggleSideBar = (visible = undefined) => {
-    // handles the open and close of the sidebar
-    const sidebar = document.getElementById('sideBar')
-    const handle = document.getElementById('sideHandle')
-    if ((visible==undefined && !sideBarState) || visible==true) {
-        // open side bar
-        sidebar.classList.add("sideBar_open");
-        sideBarState = true
-        document.body.classList.add('scrollLock')
-        uiState.menuVisible = true
-    } else if ((visible==undefined && sideBarState) || visible==false) {
-        // close side bar
-        sidebar.classList.remove("sideBar_open");
-        sideBarState = false
-        document.body.classList.remove('scrollLock')
-        uiState.menuVisible = false
-    }
-    state.notifyUIEvent(uiState)
-}
-
-const newLogInput = (event) => {
-    // handles new entry made in the log page
-    UItask = document.getElementById('newLogTask')
-    task = UItask.value
-    if (task == "") return
-    UIproject = document.getElementById('newLogProject')
-    project = UIproject.value
-    if (project == "") return
-    UIdate = document.getElementById('newLogDate')
-    date = UIdate.value
-    if (date == "") return
+const saveDataHandler = async (event, data) => {
+    // prompts user for file name and saves the data into the file
+    const {cancelled, filePath} = await dialog.showSaveDialog({
+        filters: [
+            { name: 'CSV files', extensions: ['csv'] }
+        ]
+    });
+    if (cancelled) return false;
     
-    // TODO: notify state change
-    if (true) {
-        // add stuff to log UI
-        addLogToUI(date, project, task)
-        
-        // clear input fields
-        UItask.value = UIproject.value = ""
-        setDefaultDate()
-    }
+    const csvData = "date,project,task,status\n" + data.map((row) => [row.date, row.project, row.task, row.status].join(',')).join('\n')
+    fs.writeFileSync(filePath, csvData)
+    return true
 }
 
-const loadState = (state) => {
-    uiState = state
-    toggleSideBar(state.menuView)
+const taskToggleHandler = (event, id) => {
+    // marks a task as completed or incomplete
+    // TODO: this method should be handled by UI state change mechanism
+    console.log('toggle task', id)
+    if (Math.random() >= 0.5)
+        return true
+    else 
+        return false
 }
 
-const addLogToUI = (date, project, task, progress) => {
-    // adds a log to the log page UI
-    latestDates = document.getElementsByClassName('stickyDate')
-    if (latestDates.length > 0) {
-        latestDate = latestDates[latestDates.length - 1].innerHTML.trim()
-    } else {
-        latestDate = 0
-    }
-    
-    // TODO: compares current date with only the latest date
-    if (latestDate != date) {
-        // add new date section
-        var logDay = document.createElement('div')
-        logDay.classList = 'logDay'
-        
-        var logDate = document.createElement('div')
-        logDate.classList = 'logDate'
-        
-        var stickyDate = document.createElement('div')
-        stickyDate.classList = "stickyDate"
-        stickyDate.innerHTML = date
-        
-        var daysTasks = document.createElement('div')
-        daysTasks.classList = "daysTasks"
-        
-        var taskRow = document.createElement('div')
-        taskRow.classList = "taskRow"
-        
-        var logProject = document.createElement('div')
-        logProject.classList = "logProject"
-        logProject.innerHTML = project
-        
-        var logTask = document.createElement('div')
-        logTask.classList = "logTask"
-        logTask.innerHTML = task
-        
-        logDate.appendChild(stickyDate)
-        logDay.appendChild(logDate)
-        logDay.appendChild(daysTasks)
-        daysTasks.append(taskRow)
-        taskRow.append(logProject)
-        taskRow.append(logTask)
-        
-        var chart = document.getElementsByClassName('logChart')[0]
-        inputs = document.getElementById('inputs')
-        inputs.remove()
-        chart.appendChild(logDay)
-        chart.appendChild(inputs)
-    } else {
-        // add new task row
-        var days = document.getElementsByClassName('logDay')
-        targetDay = days[days.length-2]
-        targetContainer = targetDay.getElementsByClassName('daysTasks')[0]
+/// STATE EVENTS
 
-        var taskRow = document.createElement('div')
-        taskRow.classList = "taskRow"
-        
-        var logProject = document.createElement('div')
-        logProject.classList = "logProject"
-        logProject.innerHTML = project
-        
-        var logTask = document.createElement('div')
-        logTask.classList = "logTask"
-        logTask.innerHTML = task
-        
-        taskRow.appendChild(logProject)
-        taskRow.appendChild(logTask)
-        targetContainer.appendChild(taskRow)
-    }
-    
-    if (progress == 'done')
-        logTask.classList.add('completed')
-    logTask.addEventListener('click', (event) => {
-        taskClick(event, taskRow)
-    })
+const stateEventHandler = async (event, data) => {
+    // TODO
+    console.log('main: state event notified', event, data)
 }
 
-const saveData = async () => {
-    comms.saveData(
-        data,
-        result => {
-            console.log(result)
-            if (result === true) {
-                console.log('TODO: BUILD UI FOR SUCCESFUL SAVE')
-            } else {
-                console.log('TODO: BUILD UI FOR FAILED SAVE')
-            }
-        },
-        (err, data) => {
-            console.log('ERROR', err, data)
-        }
-    )
+const stateChangeRequestHandler = async (event, data) => {
+    // TODO
+    console.log('main: state change request recieved', event, data)
 }
 
-const loadData = () => {
-    clearAllLogs()
-    comms.loadFile()
+const registerHandlers = (mainWindow) => {
+    // comms
+    ipcMain.handle('taskClickChannel', taskToggleHandler)
+    ipcMain.on('loadFileRequest', (event) => { loadDataHandler(event, mainWindow) })
+    ipcMain.handle('saveDataRequest', saveDataHandler)
+
+    // state info exchange
+    ipcMain.on('UIEventNotifications', stateEventHandler)
+    ipcMain.handle('UIEventRequests', stateChangeRequestHandler)
 }
 
-// connect UI functionality
-window.addEventListener('load', (event) => {
-    setDefaultDate()
-    document.getElementById('sideBar').addEventListener('click', (e) => toggleSideBar())
-    document.getElementById("sideHandle").addEventListener('click', (e) => toggleSideBar())
-    document.querySelectorAll('#sideBar li').forEach((item) => {
-        item.addEventListener('click', (e) => toggleSideBar())
-    })
-    toggleSideBar(true)
-
-    document.getElementById('inputs').scrollIntoView()
-    document.getElementById('newLogTask').addEventListener('change', newLogInput)
-    document.getElementById('loadButton').addEventListener('click', loadData)
-    document.getElementById('saveButton').addEventListener('click', saveData)
-})
+module.exports = {
+    registerHandlers,
+}

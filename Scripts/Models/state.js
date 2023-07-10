@@ -18,6 +18,4 @@ const State = class {
     }
 }
 
-module.exports = {
-    State
-}
+module.exports = { State }

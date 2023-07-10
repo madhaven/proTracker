@@ -1,7 +1,7 @@
 const path = require('path')
 const { app, BrowserWindow } = require('electron')
-const { State } = require('./Models/state')
-const { registerHandlers } = require('./hostHandlers')
+const { State } = require('./Models/State')
+const { registerHandlers } = require('./controllers')
 
 var mainWindow
 
@@ -20,7 +20,7 @@ const createWindow = () => {
         width: 800,
         height: 600,
         webPreferences: {
-            preload: path.join(__dirname, './preloadElectron.js')
+            preload: path.join(__dirname, './ePreload.js')
         },
         show: false,
         autoHideMenuBar: true
