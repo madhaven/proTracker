@@ -8,7 +8,7 @@ The [Electron framework](https://www.electronjs.org/) as I understand works with
 
 * The main: handles all the local components of the program  
 * The preload: handles the bridge and permissions between the main world and the front render
-* The renderer: handles logic on the front end
+* The renderer: normal frontend script that handles logic on the front end
 
 ## Motivation
 
@@ -20,4 +20,9 @@ The [Electron framework](https://www.electronjs.org/) as I understand works with
 
 * It started out as an excel sheet which had two tabs for tasks that were pending and those that were completed  
 * The UI was next built and basic functionality added with the help of the [Electron framework](https://www.electronjs.org/)  
-* Tests are needed https://www.electronjs.org/docs/latest/tutorial/automated-testing
+* IPC calls were established and it all worked like a monolith
+* Thinking of setting up a
+  * layered architecture to handle the data flow
+  * db and tables to save stuff better
+  * Tests https://www.electronjs.org/docs/latest/tutorial/automated-testing
+  

@@ -1,4 +1,4 @@
-class State {
+const State = class {
     // Intended to keep track of the Webpage state
     // All UI should be loadable from an instance of this class
 
