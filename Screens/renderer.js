@@ -170,15 +170,15 @@ const saveData = async () => {
     comms.saveData(
         data,
         result => {
-            console.log(result)
+            console.log('saveData result', result)
             if (result === true) {
                 console.log('TODO: BUILD UI FOR SUCCESFUL SAVE')
             } else {
                 console.log('TODO: BUILD UI FOR FAILED SAVE')
             }
         },
-        (err, data) => {
-            console.log('ERROR', err, data)
+        err => {
+            console.log('saveData ERROR', err)
         }
     )
 }
@@ -201,5 +201,5 @@ window.addEventListener('load', (event) => {
     document.getElementById('inputs').scrollIntoView()
     document.getElementById('newLogTask').addEventListener('change', newLogInput)
     document.getElementById('loadButton').addEventListener('click', loadData)
-    document.getElementById('saveButton').addEventListener('click', saveData)
+    document.getElementById('saveButton').addEventListener('click', event => { saveData(data) })
 })

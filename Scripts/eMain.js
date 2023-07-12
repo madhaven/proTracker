@@ -1,7 +1,7 @@
 const path = require('path')
 const { app, BrowserWindow } = require('electron')
 const { State } = require('./Models/State')
-const { registerHandlers } = require('./controllers')
+const { registerHandlers } = require('./handlers')
 
 var mainWindow
 
