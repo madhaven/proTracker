@@ -62,6 +62,4 @@ const registerHandlers = mainWindow => {
     ipcMain.handle('UIEventRequests', stateChangeRequestHandler)
 }
 
-module.exports = {
-    registerHandlers,
-}
+module.exports = { registerHandlers };

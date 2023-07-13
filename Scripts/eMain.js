@@ -7,7 +7,7 @@ const { ConfigService } = require('./Services/ConfigService')
 var mainWindow
 const configService = ConfigService.getService()
 
-const InitialState = () => {
+const initialState = () => {
     // loads the data and creates the state instance that is sent to the UI
     var state = new State(
         menuVisible=true,
@@ -31,7 +31,7 @@ const createWindow = () => {
     win.loadFile('./Screens/log.html')
     win.webContents.on('did-finish-load', () => {
         win.webContents.openDevTools(); // TODO: REMOVE ON PRODUCTION
-        state = InitialState()
+        state = initialState()
         mainWindow.webContents.send('updateUI', state)
     })
     win.once('ready-to-show', () => {
