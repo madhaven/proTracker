@@ -4,42 +4,42 @@ const path = require('path')
 
 const userDataPath = app.getPath('appData')
 const configFileName = path.join(userDataPath, 'proTracker', 'appconfig.json')
+const debugConfigFileName = 'appconfig.json'
 const defaultConfig = {
     dbPath: path.join(userDataPath, 'proTracker', 'proTracker.db'),
-    defaultScreen: 'log'
 }
 
 const ConfigService = class {
     static singleton = undefined
-    static defaultConfig = {
-        dbPath: path.join(userDataPath, 'proTracker', 'proTracker.db'),
-        defaultScreen: 'log'
-    }
     config = undefined
     filename = ''
 
     constructor (filename, defaultConfig) {
         this.filename = filename
-        fs.readFile(filename, 'utf8', (err, data) => {
-            if (err) {
-                if (err.code == 'ENOENT') {
-                    console.info('No Config File, creating new')
-                    this.config = defaultConfig
-                    this.save()
-                } else {
-                    console.error('error reading config')
-                    dialog.showErrorBox('File Read Error', 'proTracker was not able to read important configuration.\nThe app will close now.')
-                    app.exit()
-                }
+        try {
+            const savedConfig = JSON.parse(fs.readFileSync(filename, 'utf8'))
+            console.info('Config Read', savedConfig)
+            this.config = savedConfig
+        } catch (err) {
+            if (err.code == 'ENOENT') {
+                console.info('No Config File, creating new')
+                this.config = defaultConfig
+                this.save()
             } else {
-                console.info('Config Read', data)
+                console.error('error reading config')
+                dialog.showErrorBox('File Read Error', 'proTracker was not able to read important configuration.\nThe app will close now.')
+                app.exit()
             }
-        })
+        }
     }
 
-    static getService() {
-        if (!this.singleton)
-            this.singleton = new this(configFileName, defaultConfig)
+    static getService(config) {
+        if (!this.singleton) {
+            if (config)
+                this.singleton = new this(debugConfigFileName, config)
+            else
+                this.singleton = new this(configFileName, defaultConfig)
+        }
         return this.singleton
     }
 

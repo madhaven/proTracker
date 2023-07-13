@@ -4,8 +4,11 @@ const { registerHandlers } = require('./handlers')
 const { State } = require('./Models/State')
 const { ConfigService } = require('./Services/ConfigService')
 
+const debugMode = process.argv.some(arg => arg.includes('--inspect'))
+const configService = ConfigService.getService(
+    debugMode ? { dbPath: 'proTracker.db' } : undefined
+)
 var mainWindow
-const configService = ConfigService.getService()
 
 const initialState = () => {
     // loads the data and creates the state instance that is sent to the UI
