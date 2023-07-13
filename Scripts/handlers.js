@@ -1,6 +1,6 @@
 const csv = require('fast-csv')
 const fs = require('fs')
-const { ipcMain, dialog } = require('electron')
+const { ipcMain } = require('electron')
 const { FileService } = require('./Services/FileService')
 
 const loadDataHandler = async (event, mainWindow) => {
@@ -42,7 +42,7 @@ const taskToggleHandler = (event, id) => {
 
 const stateEventHandler = async (event, data) => {
     // TODO
-    console.log('main: state event notified', event, data)
+    console.log('main: state event notified', data)
 }
 
 const stateChangeRequestHandler = async (event, data) => {

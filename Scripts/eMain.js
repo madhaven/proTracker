@@ -1,9 +1,11 @@
 const path = require('path')
-const { app, BrowserWindow } = require('electron')
-const { State } = require('./Models/State')
+const { app, BrowserWindow, dialog } = require('electron')
 const { registerHandlers } = require('./handlers')
+const { State } = require('./Models/State')
+const { ConfigService } = require('./Services/ConfigService')
 
 var mainWindow
+const configService = ConfigService.getService()
 
 const InitialState = () => {
     // loads the data and creates the state instance that is sent to the UI
@@ -34,8 +36,8 @@ const createWindow = () => {
     })
     win.once('ready-to-show', () => {
         win.show()
+        win.maximize()
     })
-    win.maximize()
     return win
 }
 

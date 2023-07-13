@@ -8,7 +8,7 @@ const clearAllLogs = () => {
     }
 }
 
-const populatePage = (dataset) => {
+const populatePage = dataset => {
     // populates the log page with items from the dataset
     for (var log of dataset) {
         addLogToUI(...log)
@@ -61,7 +61,7 @@ const toggleSideBar = (visible = undefined) => {
     state.notifyUIEvent(uiState)
 }
 
-const newLogInput = (event) => {
+const newLogInput = event => {
     // handles new entry made in the log page
     UItask = document.getElementById('newLogTask')
     task = UItask.value
@@ -84,7 +84,7 @@ const newLogInput = (event) => {
     }
 }
 
-const loadState = (state) => {
+const loadState = state => {
     uiState = state
     toggleSideBar(state.menuView)
 }
@@ -161,12 +161,12 @@ const addLogToUI = (date, project, task, progress) => {
     
     if (progress == 'done')
         logTask.classList.add('completed')
-    logTask.addEventListener('click', (event) => {
+    logTask.addEventListener('click', event => {
         taskClick(event, taskRow)
     })
 }
 
-const saveData = async () => {
+const saveData = data => {
     comms.saveData(
         data,
         result => {
@@ -189,12 +189,12 @@ const loadData = () => {
 }
 
 // connect UI functionality
-window.addEventListener('load', (event) => {
+window.addEventListener('load', event => {
     setDefaultDate()
-    document.getElementById('sideBar').addEventListener('click', (e) => toggleSideBar())
-    document.getElementById("sideHandle").addEventListener('click', (e) => toggleSideBar())
-    document.querySelectorAll('#sideBar li').forEach((item) => {
-        item.addEventListener('click', (e) => toggleSideBar())
+    document.getElementById('sideBar').addEventListener('click', e => toggleSideBar())
+    document.getElementById("sideHandle").addEventListener('click', e => toggleSideBar())
+    document.querySelectorAll('#sideBar li').forEach(item => {
+        item.addEventListener('click', e => toggleSideBar())
     })
     toggleSideBar(true)
 
