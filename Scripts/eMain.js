@@ -3,11 +3,13 @@ const { app, BrowserWindow, dialog } = require('electron')
 const { registerHandlers } = require('./handlers')
 const { State } = require('./Models/State')
 const { ConfigService } = require('./Services/ConfigService')
+const { DatabaseService } = require('./Services/DatabaseService')
 
 const debugMode = process.argv.some(arg => arg.includes('--inspect'))
 const configService = ConfigService.getService(
     debugMode ? { dbPath: 'proTracker.db' } : undefined
 )
+const dbService = DatabaseService.getService()
 var mainWindow
 
 const initialState = () => {
@@ -33,7 +35,7 @@ const createWindow = () => {
     registerHandlers(win)
     win.loadFile('./Screens/log.html')
     win.webContents.on('did-finish-load', () => {
-        win.webContents.openDevTools(); // TODO: REMOVE ON PRODUCTION
+        if (debugMode) win.webContents.openDevTools();
         state = initialState()
         mainWindow.webContents.send('updateUI', state)
     })

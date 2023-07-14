@@ -5,6 +5,10 @@ const TaskStatusChange = class {
         this.changeTo = changeTo
         this.dateTime = dateTime
     }
+
+    toContract () {
+        // TODO
+    }
 }
 
 module.exports = { TaskStatusChange }

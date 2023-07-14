@@ -29,6 +29,7 @@
     "electron-forge": "^5.2.4"
   },
   "dependencies": {
-    "fast-csv": "^4.3.6"
+    "fast-csv": "^4.3.6",
+    "sqlite3": "^5.1.6"
   }
 }

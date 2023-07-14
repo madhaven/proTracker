@@ -3,6 +3,10 @@ const Project = class {
         this.id = id
         this.name = name
     }
+
+    toContract () {
+        // TODO
+    }
 }
 
 module.exports = { Project }

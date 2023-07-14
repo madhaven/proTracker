@@ -44,14 +44,13 @@ const ConfigService = class {
     }
 
     save () {
-        fs.writeFile(this.filename, JSON.stringify(this.config), err => {
-            if (err) {
-                dialog.showErrorBox('Critical Error', 'proTracker is not able to save important configuration.\nYou might loose the changes made in this session')
-                console.error('error saving config')
-            } else {
-                console.info('Default Configs saved to', this.filename)
-            }
-        })
+        try {
+            fs.writeFileSync(this.filename, JSON.stringify(this.config))
+            console.info('Default Configs saved to', this.filename)
+        } catch (err) {
+            dialog.showErrorBox('Critical Error', 'proTracker is not able to save important configuration.\nYou might loose the changes made in this session')
+            console.error('error saving config')
+        }
     }
 
     get (key) {

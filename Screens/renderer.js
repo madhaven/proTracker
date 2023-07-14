@@ -11,7 +11,7 @@ const clearAllLogs = () => {
 const populatePage = dataset => {
     // populates the log page with items from the dataset
     for (var log of dataset) {
-        addLogToUI(...log)
+        addTaskToUI(...log)
     }
 }
 
@@ -63,25 +63,32 @@ const toggleSideBar = (visible = undefined) => {
 
 const newLogInput = event => {
     // handles new entry made in the log page
-    UItask = document.getElementById('newLogTask')
-    task = UItask.value
-    if (task == "") return
-    UIproject = document.getElementById('newLogProject')
+    var UIsummary = document.getElementById('newLogTask')
+    var UIproject = document.getElementById('newLogProject')
+    var UIdate = document.getElementById('newLogDate')
+    summary = UIsummary.value
     project = UIproject.value
-    if (project == "") return
-    UIdate = document.getElementById('newLogDate')
     date = UIdate.value
-    if (date == "") return
+    if (!summary) return false
+    if (!project) return false
+    if (!date) return false
     
-    // TODO: notify state change
-    if (true) {
-        // add stuff to log UI
-        addLogToUI(date, project, task)
-        
-        // clear input fields
-        UItask.value = UIproject.value = ""
-        setDefaultDate()
-    }
+    task = new Task(-1, date, project, summary, -1, -1)
+    comms.newTask(
+        task,
+        result => {
+            if (result) {
+                console.log(result)
+                addTaskToUI(result.date, result.project, result.summary, result.status)
+            }
+            
+            // clear input fields
+            UIsummary.value = UIproject.value = ""
+            setDefaultDate()
+        },
+        err => { console.error('newtask error', err) }
+    )
+    // todo notify state
 }
 
 const loadState = state => {
@@ -89,7 +96,7 @@ const loadState = state => {
     toggleSideBar(state.menuView)
 }
 
-const addLogToUI = (date, project, task, progress) => {
+const addTaskToUI = (date, project, task, progress) => {
     // adds a log to the log page UI
     latestDates = document.getElementsByClassName('stickyDate')
     if (latestDates.length > 0) {
@@ -159,8 +166,22 @@ const addLogToUI = (date, project, task, progress) => {
         targetContainer.appendChild(taskRow)
     }
     
-    if (progress == 'done')
-        logTask.classList.add('completed')
+    var classes = ['pending', 'in_progress', 'need_info', 'completed', 'waiting', 'wont_do']
+    classes.forEach(cls => {
+        logTask.classList.remove(cls)
+    });
+    switch (progress) {
+        case "PENDING":
+            logTask.classList.add('pending')
+            break
+        case "IN_PROGRESS": break
+        case "NEED_INFO": break
+        case "COMPLETED":
+            logTask.classList.add('completed')
+            break
+        case "WAITING": break
+        case "WONT_DO": break
+    }
     logTask.addEventListener('click', event => {
         taskClick(event, taskRow)
     })
@@ -188,18 +209,57 @@ const loadData = () => {
     comms.loadFile()
 }
 
-// connect UI functionality
+// COMMS
+
+const dataFromMainHandler = (event, logs) => {
+    // handles the data received from Main process and adds it to the log page
+    console.log('UI|DataPing ### REMOVE THIS THING')
+    logs.forEach(log => {
+        data.push(log)
+        addTaskToUI(log.date, log.project, log.task, log.status)
+    });
+    toggleSideBar(false)
+    document.getElementById('inputs').scrollIntoView()
+}
+
+const errFromMainHandler = (err, args) => {
+    // handles any error from the main process on ...?
+    console.log(args, err)
+    alert(args)
+}
+
+const recieveStateChanges = (event, state) => {
+    // TODO
+    console.log('UI|updateUI: recieved state change prompt', event, state)
+    if (typeof(state) != State){
+        console.log("state isn't of type State though", state)
+    } else {
+        loadState(state)
+    }
+}
+
+// event Listeners
 window.addEventListener('load', event => {
     setDefaultDate()
     document.getElementById('sideBar').addEventListener('click', e => toggleSideBar())
     document.getElementById("sideHandle").addEventListener('click', e => toggleSideBar())
-    document.querySelectorAll('#sideBar li').forEach(item => {
+    document.querySelectorAll('#sideBar li').forEach((item) => {
         item.addEventListener('click', e => toggleSideBar())
     })
     toggleSideBar(true)
 
     document.getElementById('inputs').scrollIntoView()
-    document.getElementById('newLogTask').addEventListener('change', newLogInput)
     document.getElementById('loadButton').addEventListener('click', loadData)
     document.getElementById('saveButton').addEventListener('click', event => { saveData(data) })
+    document.getElementById('newLogTask').addEventListener('change', newLogInput)
+    document.getElementById('newLogDate').addEventListener('change', newLogInput)
+    document.getElementById('newLogProject').addEventListener('change', newLogInput)
+    // ['newLogTask', 'newLogDate', 'newLogProject'].forEach(function (id) {
+    //     document.getElementById(id).addEventListener('change', newLogInput)
+    // }) // not working for some reason
+
+    // comm listeners
+    state.registerListener('updateUI', recieveStateChanges)
+    comms.registerListener('DataPing', dataFromMainHandler)
+    comms.registerListener('DataError', errFromMainHandler)
 })

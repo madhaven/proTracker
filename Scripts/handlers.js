@@ -2,6 +2,10 @@ const csv = require('fast-csv')
 const fs = require('fs')
 const { ipcMain } = require('electron')
 const { FileService } = require('./Services/FileService')
+const { Task } = require('./Models/Task')
+const { Status } = require('./Models/Status')
+const { ProjectProvider } = require('./Providers/ProjectProvider')
+const { TaskProvider } = require('./Providers/TaskProvider')
 
 const loadDataHandler = async (event, mainWindow) => {
     var { result, data } = await FileService.loadAFile(mainWindow)
@@ -28,6 +32,18 @@ const saveDataHandler = async (event, data, mainWindow) => {
     }
 }
 
+const newTaskHandler = async (event, obj) => {
+    console.info('newTaskRequest', obj)
+    var tp = new TaskProvider() // TODO DI ?
+    var pp = new ProjectProvider() // TODO DI ?
+    var project = await pp.getByNameOrCreate(obj.project)
+    var dummy = new Task(-1, obj.dateTime, project.id, obj.summary, Status.PENDING, -1)
+    var task = await tp.create(dummy)
+    var newTask = await task.toContract()
+    console.log('newTask', newTask)
+    return newTask
+}
+
 const taskToggleHandler = (event, id) => {
     // marks a task as completed or incomplete
     // TODO: this method should be handled by UI state change mechanism
@@ -52,6 +68,7 @@ const stateChangeRequestHandler = async (event, data) => {
 
 const registerHandlers = mainWindow => {
     // comms
+    ipcMain.handle('newTaskChannel', newTaskHandler)
     ipcMain.handle('taskClickChannel', taskToggleHandler)
     ipcMain.on('loadFileRequest', event => { loadDataHandler(event, mainWindow) })
     ipcMain.handle('saveDataRequest', (event, data) => { saveDataHandler(event, data, mainWindow) })

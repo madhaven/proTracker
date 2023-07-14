@@ -1,6 +1,7 @@
 const { contextBridge, ipcRenderer } = require('electron')
 
 contextBridge.exposeInMainWorld('comms', {
+    newTask: (obj, callback, err) => { ipcRenderer.invoke('newTaskChannel', obj).then(callback, err) },
     toggleTask: id => { ipcRenderer.invoke('taskClickChannel', id) },
     loadFile: () => { ipcRenderer.send('loadFileRequest') },
     saveData: (data, callback, err) => { ipcRenderer.invoke('saveDataRequest', data).then(callback, err) },

@@ -1,7 +1,8 @@
 const Task = class {
-    constructor (id, projectId, summary, status, parent){
+    constructor (id, dateTime, project, summary, status, parent){
         this.id = id
-        this.projectId = projectId
+        this.dateTime = dateTime,
+        this.project = project
         this.summary = summary
         this.status = status
         this.parent = parent

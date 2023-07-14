@@ -51,6 +51,10 @@ const FileService = class {
                 })
         })
     }
+
+    static fileExists = filePath => {
+        return fs.existsSync(filePath)
+    }
 }
 
 module.exports = { FileService }

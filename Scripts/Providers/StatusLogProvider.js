@@ -1,9 +1,11 @@
 const StatusLogProvider = class {
     // implement methods
     
-    create(taskId, status) {}
+    async create(taskId, status) {}
 
-    getTaskTimeline(taskId) {}
+    async getTaskTimeline(taskId) {}
 
-    delete(id) {}
+    async delete(id) {}
 }
+
+module.exports = { StatusLogProvider }
