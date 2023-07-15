@@ -1,11 +1,15 @@
 const csv = require('fast-csv')
 const fs = require('fs')
 const { ipcMain } = require('electron')
+
 const { FileService } = require('./Services/FileService')
 const { Task } = require('./Models/Task')
 const { Status } = require('./Models/Status')
+const { TaskStatusChange } = require('./Models/TaskStatusChange')
 const { ProjectProvider } = require('./Providers/ProjectProvider')
 const { TaskProvider } = require('./Providers/TaskProvider')
+const { StatusLogProvider } = require('./Providers/StatusLogProvider')
+var tp, pp, slp
 
 const loadDataHandler = async (event, mainWindow) => {
     var { result, data } = await FileService.loadAFile(mainWindow)
@@ -34,12 +38,11 @@ const saveDataHandler = async (event, data, mainWindow) => {
 
 const newTaskHandler = async (event, obj) => {
     console.info('newTaskRequest', obj)
-    var tp = new TaskProvider() // TODO DI ?
-    var pp = new ProjectProvider() // TODO DI ?
     var project = await pp.getByNameOrCreate(obj.project)
-    var dummy = new Task(-1, obj.dateTime, project.id, obj.summary, Status.PENDING, -1)
+    var dummy = new Task(-1, project.id, obj.summary, -1)
     var task = await tp.create(dummy)
-    var newTask = await task.toContract()
+    var taskLog = await slp.create(new TaskStatusChange(-1, task.id, Status.PENDING, obj.dateTime)) // TODO fetch status values from db ?
+    var newTask = await task.toContract(taskLog)
     console.log('newTask', newTask)
     return newTask
 }
@@ -67,6 +70,11 @@ const stateChangeRequestHandler = async (event, data) => {
 }
 
 const registerHandlers = mainWindow => {
+    // TODO DI ?
+    tp = new TaskProvider()
+    pp = new ProjectProvider()
+    slp = new StatusLogProvider()
+
     // comms
     ipcMain.handle('newTaskChannel', newTaskHandler)
     ipcMain.handle('taskClickChannel', taskToggleHandler)

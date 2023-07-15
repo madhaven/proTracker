@@ -33,10 +33,10 @@ const ConfigService = class {
         }
     }
 
-    static getService(config) {
+    static getService(customConfig=undefined) {
         if (!this.singleton) {
-            if (config)
-                this.singleton = new this(debugConfigFileName, config)
+            if (customConfig)
+                this.singleton = new this(debugConfigFileName, customConfig)
             else
                 this.singleton = new this(configFileName, defaultConfig)
         }

@@ -79,12 +79,12 @@ const newLogInput = event => {
         result => {
             if (result) {
                 console.log(result)
-                addTaskToUI(result.date, result.project, result.summary, result.status)
+                addTaskToUI(result.logs[0].dateTime, result.project.name, result.summary, result.status)
+
+                // clear inputs
+                UIsummary.value = UIproject.value = ""
+                setDefaultDate()
             }
-            
-            // clear input fields
-            UIsummary.value = UIproject.value = ""
-            setDefaultDate()
         },
         err => { console.error('newtask error', err) }
     )

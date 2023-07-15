@@ -10,8 +10,7 @@ const TaskProvider = class {
     }
 
     async create(task) {
-        // task.dateTime = 
-        var query = `INSERT INTO task (date_time, project_id, summary, status_id, parent_id) VALUES (${task.dateTime}, ${task.projectId}, '${task.summary}', ${task.status}, ${task.parent});`
+        var query = `INSERT INTO task (project_id, summary, parent_id) VALUES (${task.projectId}, '${task.summary}', ${task.parentId});`
         console.log('TaskProvider:creating', task)
         try {
             var res = await this.dbService.insertOne(query)

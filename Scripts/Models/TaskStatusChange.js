@@ -1,8 +1,8 @@
 const TaskStatusChange = class {
-    constructor (id, taskId, changeTo, dateTime){
+    constructor (id, taskId, status_id, dateTime){
         this.id = id
         this.taskId = taskId
-        this.changeTo = changeTo
+        this.statusId = status_id
         this.dateTime = dateTime
     }
 

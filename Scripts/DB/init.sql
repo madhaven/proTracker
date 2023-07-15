@@ -1,16 +1,14 @@
 CREATE TABLE status_log (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     task_id INTEGER NOT NULL REFERENCES task(id),
-    status_change_to INTEGER NOT NULL,
-    date_time DATE
+    status_id INTEGER NOT NULL REFERENCES status(id),
+    date_time INTEGER NOT NULL
 );
 
 CREATE TABLE task (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    date_time INTEGER NOT NULL,
     project_id INTEGER NOT NULL REFERENCES project(id),
     summary VARCHAR NOT NULL,
-    status_id INTEGER NOT NULL REFERENCES status(id),
     parent_id INTEGER NULL REFERENCES task(id)
 );
 
