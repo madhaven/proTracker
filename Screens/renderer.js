@@ -18,10 +18,12 @@ const populatePage = dataset => {
 const setDefaultDate = () => {
     // sets a default date client: recieved state change promptfor the input field
     const now = new Date()
-    const year = now.getFullYear();
-    const month = now.getMonth() + 1;
-    const day = now.getDate();
-    const dateString = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+    const year = now.getFullYear()
+    const month = (now.getMonth() + 1).toString().padStart(2, '0')
+    const day = now.getDate().toString().padStart(2, '0')
+    const hour = now.getHours().toString().padStart(2, '0')
+    const minute = now.getMinutes().toString().padStart(2, '0')
+    const dateString = `${year}-${month}-${day}T${hour}:${minute}`
 
     document.getElementById('newLogDate').value = dateString
 }
@@ -42,23 +44,23 @@ const taskClick = async (event, element) => {
 }
 
 const toggleSideBar = (visible = undefined) => {
-    // handles the open and close of the sidebar
-    const sidebar = document.getElementById('sideBar')
-    const handle = document.getElementById('sideHandle')
-    if ((visible==undefined && !sideBarState) || visible==true) {
-        // open side bar
-        sidebar.classList.add("sideBar_open");
-        sideBarState = true
-        document.body.classList.add('scrollLock')
-        uiState.menuVisible = true
-    } else if ((visible==undefined && sideBarState) || visible==false) {
-        // close side bar
-        sidebar.classList.remove("sideBar_open");
-        sideBarState = false
-        document.body.classList.remove('scrollLock')
-        uiState.menuVisible = false
-    }
-    state.notifyUIEvent(uiState)
+    // // handles the open and close of the sidebar
+    // const sidebar = document.getElementById('sideBar')
+    // const handle = document.getElementById('sideHandle')
+    // if ((visible==undefined && !sideBarState) || visible==true) {
+    //     // open side bar
+    //     sidebar.classList.add("sideBar_open")
+    //     sideBarState = true
+    //     document.body.classList.add('scrollLock')
+    //     uiState.menuVisible = true
+    // } else if ((visible==undefined && sideBarState) || visible==false) {
+    //     // close side bar
+    //     sidebar.classList.remove("sideBar_open")
+    //     sideBarState = false
+    //     document.body.classList.remove('scrollLock')
+    //     uiState.menuVisible = false
+    // }
+    // state.notifyUIEvent(uiState)
 }
 
 const newLogInput = event => {
@@ -96,7 +98,11 @@ const loadState = state => {
     toggleSideBar(state.menuView)
 }
 
-const addTaskToUI = (date, project, task, progress) => {
+const addTaskToUI = (task) => {
+    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    var date = new Date(task.date_time)
+    displayDate = `${date.getFullYear()} ${months[date.getMonth()]} ${date.getDate()}`
+
     // adds a log to the log page UI
     latestDates = document.getElementsByClassName('stickyDate')
     if (latestDates.length > 0) {
@@ -106,7 +112,7 @@ const addTaskToUI = (date, project, task, progress) => {
     }
     
     // TODO: compares current date with only the latest date
-    if (latestDate != date) {
+    if (latestDate != displayDate) {
         // add new date section
         var logDay = document.createElement('div')
         logDay.classList = 'logDay'
@@ -116,7 +122,7 @@ const addTaskToUI = (date, project, task, progress) => {
         
         var stickyDate = document.createElement('div')
         stickyDate.classList = "stickyDate"
-        stickyDate.innerHTML = date
+        stickyDate.innerHTML = displayDate
         
         var daysTasks = document.createElement('div')
         daysTasks.classList = "daysTasks"
@@ -126,11 +132,11 @@ const addTaskToUI = (date, project, task, progress) => {
         
         var logProject = document.createElement('div')
         logProject.classList = "logProject"
-        logProject.innerHTML = project
+        logProject.innerHTML = task.project_name
         
         var logTask = document.createElement('div')
         logTask.classList = "logTask"
-        logTask.innerHTML = task
+        logTask.innerHTML = task.summary
         
         logDate.appendChild(stickyDate)
         logDay.appendChild(logDate)
@@ -155,11 +161,11 @@ const addTaskToUI = (date, project, task, progress) => {
         
         var logProject = document.createElement('div')
         logProject.classList = "logProject"
-        logProject.innerHTML = project
+        logProject.innerHTML = task.project_name
         
         var logTask = document.createElement('div')
         logTask.classList = "logTask"
-        logTask.innerHTML = task
+        logTask.innerHTML = task.summary
         
         taskRow.appendChild(logProject)
         taskRow.appendChild(logTask)
@@ -169,8 +175,8 @@ const addTaskToUI = (date, project, task, progress) => {
     var classes = ['pending', 'in_progress', 'need_info', 'completed', 'waiting', 'wont_do']
     classes.forEach(cls => {
         logTask.classList.remove(cls)
-    });
-    switch (progress) {
+    })
+    switch (task.status_name) {
         case "PENDING":
             logTask.classList.add('pending')
             break
@@ -204,9 +210,19 @@ const saveData = data => {
     )
 }
 
-const loadData = () => {
+const loadLogs = () => {
+    console.log('clearing all logs')
     clearAllLogs()
-    comms.loadFile()
+    comms.loadLogs(
+        res => {
+            if (res){
+                console.log(res)
+                res.forEach(task => addTaskToUI(task))
+            } else
+                console.error('corrupt logs received')
+        },
+        err => console.log('error loading logs', err)
+    )
 }
 
 // COMMS
@@ -217,7 +233,7 @@ const dataFromMainHandler = (event, logs) => {
     logs.forEach(log => {
         data.push(log)
         addTaskToUI(log.date, log.project, log.task, log.status)
-    });
+    })
     toggleSideBar(false)
     document.getElementById('inputs').scrollIntoView()
 }
@@ -241,16 +257,17 @@ const recieveStateChanges = (event, state) => {
 // event Listeners
 window.addEventListener('load', event => {
     setDefaultDate()
-    document.getElementById('sideBar').addEventListener('click', e => toggleSideBar())
-    document.getElementById("sideHandle").addEventListener('click', e => toggleSideBar())
-    document.querySelectorAll('#sideBar li').forEach((item) => {
-        item.addEventListener('click', e => toggleSideBar())
-    })
-    toggleSideBar(true)
+    loadLogs()
+    // document.getElementById('sideBar').addEventListener('click', e => toggleSideBar())
+    // document.getElementById("sideHandle").addEventListener('click', e => toggleSideBar())
+    // document.querySelectorAll('#sideBar li').forEach((item) => {
+    //     item.addEventListener('click', e => toggleSideBar())
+    // })
+    // toggleSideBar(true)
 
     document.getElementById('inputs').scrollIntoView()
-    document.getElementById('loadButton').addEventListener('click', loadData)
-    document.getElementById('saveButton').addEventListener('click', event => { saveData(data) })
+    // document.getElementById('loadButton').addEventListener('click', loadLogs)
+    // document.getElementById('saveButton').addEventListener('click', event => { saveData(data) })
     document.getElementById('newLogTask').addEventListener('change', newLogInput)
     document.getElementById('newLogDate').addEventListener('change', newLogInput)
     document.getElementById('newLogProject').addEventListener('change', newLogInput)

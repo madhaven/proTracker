@@ -35,7 +35,7 @@ const createWindow = () => {
     registerHandlers(win)
     win.loadFile('./Screens/log.html')
     win.webContents.on('did-finish-load', () => {
-        if (debugMode) win.webContents.openDevTools();
+        if (debugMode) win.webContents.openDevTools()
         state = initialState()
         mainWindow.webContents.send('updateUI', state)
     })

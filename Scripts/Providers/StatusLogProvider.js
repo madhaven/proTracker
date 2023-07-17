@@ -39,6 +39,8 @@ const StatusLogProvider = class {
         return latestLog
     }
 
+    async updateStatus(taskId, statusId) {}
+
     async delete(id) {}
 }
 

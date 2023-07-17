@@ -45,11 +45,11 @@ const DatabaseService = class {
             var query = fs.readFileSync('./Scripts/DB/init.sql', 'utf8')
             var dataQuery = fs.readFileSync('./Scripts/DB/defaultData.sql', 'utf8')
             db.exec(query, err => {
-                if (err) console.error('DB init error', err);
+                if (err) console.error('DB init error', err)
                 else console.info("DB init success")
             })
             db.exec(dataQuery, err => {
-                if (err) console.error('DB data error', err);
+                if (err) console.error('DB data error', err)
                 else console.info("DB data loaded")
             })
         } catch (err) {

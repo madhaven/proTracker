@@ -13,7 +13,7 @@ const State = class {
             this.menuView != state2.menuView ||
             this.dataProfile != state2.dataFile ||
             this.dailyTodo != state2.dailyTodo)
-            return false;
-        return true;
+            return false
+        return true
     }
 }

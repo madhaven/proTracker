@@ -1,9 +1,9 @@
 :root{
     --bg: #181818ff;
-    --whiteLayer: #fff1;
+    --whiteLayer1: #fff1;
     --whiteLayer2: #fff2;
     --whiteLayer3: #fff4;
-    --blackLayer: #0003;
+    --blackLayer1: #0003;
     --blackLayer2: #0006;
     --blackLayer3: #000c;
     --fg-strong: white;
@@ -44,8 +44,7 @@ html.scrollLock, body.scrollLock{
     left: 0vw;
     z-index: 100;
     backdrop-filter: blur(5px);
-    background-color: var(--whiteLayer);
-    background-color: var(--blackLayer);
+    background-color: var(--blackLayer2);
     display: flex;
     visibility: hidden;
     opacity: 0;
@@ -67,10 +66,11 @@ html.scrollLock, body.scrollLock{
     cursor: pointer;
     user-select: none;
     z-index: 2000;
+    transition: .25s ease-out;
 }
 #sideHandle:hover{
     color: var(--fg-strong);
-    transition: .25s ease-out;
+    transition: .1s ease-out;
 }
 #sideBar .menu{
     position: fixed;
@@ -93,14 +93,15 @@ html.scrollLock, body.scrollLock{
     padding: .5em 2em;
     border: 2px solid transparent;
     background-color: transparent;
-    transition: .1s ease-out, border-left 0s ease-out;
+    transition: .1s ease-out, border-left 0s ease-out, color .25s ease-out;
     user-select: none;
 }
 #sideBar .menu li:hover, #sideBar .menu li:focus{
     border-left: 2px solid var(--whiteLayer3);
-    background-color: var(--whiteLayer);
+    background-color: var(--whiteLayer1);
     transition: .05s ease-out, border-left 0s ease-out;
     outline: none;
+    color: var(--fg-strong);
 }
 #sideBar .menu li:active{
     border-left: 2px solid green;
@@ -115,7 +116,7 @@ html.scrollLock, body.scrollLock{
     text-align: left;
 }
 .logChart .header{
-    border-bottom: 2px solid var(--whiteLayer) !important;
+    border-bottom: 2px solid var(--whiteLayer1) !important;
     font-weight: bold;
     position: sticky;
     top: 0em;
@@ -128,7 +129,7 @@ html.scrollLock, body.scrollLock{
 .logChart .logDay{
     width: 100%;
     display: flex;
-    border-bottom: 1px solid var(--whiteLayer);
+    border-bottom: 1px solid var(--whiteLayer1);
     padding: .5em 0;
 }
 .stickyDate{
@@ -159,10 +160,10 @@ html.scrollLock, body.scrollLock{
     transition: .2s ease-out;
     word-wrap: break-word;
     overflow-wrap: break-word;
-}
-.logChart :not(.header, .inputs) .logTask{
-    color: var(--red);
     cursor: pointer;
+}
+.logChart .logTask.pending{
+    color: var(--red)
 }
 .logChart .logTask.completed{
     color: var(--green);
@@ -175,7 +176,7 @@ html.scrollLock, body.scrollLock{
     transition: .1s linear;
 }
 .logChart .taskRow:hover{
-    background-color: var(--blackLayer);
+    background-color: var(--blackLayer1);
     transition-delay: .2s;
 }
 .logChart .logDay.inputs{
@@ -195,7 +196,7 @@ html.scrollLock, body.scrollLock{
     outline: none;
 }
 .logChart input:hover{
-    border-bottom: 2px solid var(--whiteLayer);
+    border-bottom: 2px solid var(--whiteLayer1);
     transition: .2s ease-out;
     outline: none;
 }
@@ -215,7 +216,7 @@ background: transparent;
 }
 /* Handle */
 ::-webkit-scrollbar-thumb {
-background: var(--whiteLayer);
+background: var(--whiteLayer1);
 }
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {

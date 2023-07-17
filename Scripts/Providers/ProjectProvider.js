@@ -37,7 +37,7 @@ const ProjectProvider = class {
         var query = `SELECT id, name FROM project WHERE name='${name}';`
         try {
             var res = await this.dbService.fetch(query)
-            console.log('ProjectProvider:projects fetched', res)
+            console.log('ProjectProvider:projects found', res)
             return res? res[0] : false
         } catch (err) {
             console.info("DB error while searching for project", err)

@@ -13,13 +13,13 @@ const FileService = class {
                 .then((cancelled, filePaths) => {
                     if (cancelled)
                         resolve([false, undefined])
-                    const data = [];
+                    const data = []
                     fs.createReadStream(filePaths[0])
                         .pipe(csv.parse({ headers: true }))
                         .on('data', row => { data.push(row) })
                         .on('end', () => { resolve([true, data])})
                         .on('error', error => {
-                            console.log("loadAFileError", error);
+                            console.log("loadAFileError", error)
                             // TODO logging
                             resolve([false, undefined])
                         })

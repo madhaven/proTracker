@@ -11,13 +11,9 @@ const { TaskProvider } = require('./Providers/TaskProvider')
 const { StatusLogProvider } = require('./Providers/StatusLogProvider')
 var tp, pp, slp
 
-const loadDataHandler = async (event, mainWindow) => {
-    var { result, data } = await FileService.loadAFile(mainWindow)
-    if (result){
-        event.reply('DataPing', data)
-    } else {
-        ipcMain.emit('DataError', 'something went wrong')
-    }
+const loadLogsHandler = async (event) => {
+    alltasks = await tp.getAllTasks()
+    return alltasks ? alltasks : false
 }
 
 const saveDataHandler = async (event, data, mainWindow) => {
@@ -30,18 +26,19 @@ const saveDataHandler = async (event, data, mainWindow) => {
     var result = await FileService.saveFile(mainWindow, csvData)
     console.log('handler: saveFile result received:', result)
     if (result){
-        return true;
+        return true
     } else {
         ipcMain.emit("DataError", "something went wrong, didn't save")
     }
 }
 
-const newTaskHandler = async (event, obj) => {
-    console.info('newTaskRequest', obj)
-    var project = await pp.getByNameOrCreate(obj.project)
-    var dummy = new Task(-1, project.id, obj.summary, -1)
+const newTaskHandler = async (event, newTask) => {
+    console.info('newTaskRequest', newTask)
+    newTask.dateTime = new Date(newTask.dateTime).getTime()
+    var project = await pp.getByNameOrCreate(newTask.project)
+    var dummy = new Task(-1, project.id, newTask.summary, -1)
     var task = await tp.create(dummy)
-    var taskLog = await slp.create(new TaskStatusChange(-1, task.id, Status.PENDING, obj.dateTime)) // TODO fetch status values from db ?
+    var taskLog = await slp.create(new TaskStatusChange(-1, task.id, Status.PENDING, newTask.dateTime)) // TODO fetch status values from db ?
     var newTask = await task.toContract(taskLog)
     console.log('newTask', newTask)
     return newTask
@@ -78,7 +75,7 @@ const registerHandlers = mainWindow => {
     // comms
     ipcMain.handle('newTaskChannel', newTaskHandler)
     ipcMain.handle('taskClickChannel', taskToggleHandler)
-    ipcMain.on('loadFileRequest', event => { loadDataHandler(event, mainWindow) })
+    ipcMain.handle('loadLogsRequest', loadLogsHandler)
     ipcMain.handle('saveDataRequest', (event, data) => { saveDataHandler(event, data, mainWindow) })
     console.log("save data registered")
 
@@ -87,4 +84,4 @@ const registerHandlers = mainWindow => {
     ipcMain.handle('UIEventRequests', stateChangeRequestHandler)
 }
 
-module.exports = { registerHandlers };
+module.exports = { registerHandlers }
