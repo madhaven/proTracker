@@ -12,9 +12,10 @@ const StatusProvider = class {
     async create(name) {}
 
     async get(id) {
-        var query = `SELECT id, status FROM status WHERE id=${id};`
+        var query = `SELECT id, status FROM status WHERE id=?;`
         try {
-            var res = await this.dbService.getOne(query)
+            var params = [id]
+            var res = await this.dbService.getOne(query, params)
             var status = new Status(res.id, res.status)
             console.debug('StatusProvider:get')
             return status ? status : false

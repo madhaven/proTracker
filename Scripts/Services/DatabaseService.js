@@ -66,10 +66,10 @@ const DatabaseService = class {
         return true
     }
 
-    insertOne(command) {
+    insertOne(command, params=[]) {
         return new Promise((resolve, reject) => {
             const db = new sql.Database(this.dbPath)
-            db.run (command, function (err) { // this syntax of function definition is necessary
+            db.run (command, params, function (err) { // this syntax of function definition is necessary
                 if (err) reject(err)
                 else resolve(this.lastID)
             })
@@ -77,10 +77,10 @@ const DatabaseService = class {
         })
     }
 
-    exec (command) {
+    exec (command, params=[]) {
         return new Promise((resolve, reject) => {
             const db = new sql.Database(this.dbPath)
-            db.exec (command, function (err) { // this syntax of function definition is necessary
+            db.exec (command, params, function (err) { // this syntax of function definition is necessary
                 if (err) reject(err)
                 else resolve(this.changes)
             })
@@ -88,10 +88,10 @@ const DatabaseService = class {
         })
     }
 
-    getOne (query) { 
+    getOne (query, params=[]) { 
         return new Promise((resolve, reject) => {
             const db = new sql.Database(this.dbPath)
-            db.get(query, function (err, res) { // this syntax of function definition is necessary
+            db.get(query, params, function (err, res) { // this syntax of function definition is necessary
                 if (err) reject(err)
                 else resolve(res)
             })
@@ -99,10 +99,10 @@ const DatabaseService = class {
         })
     }
     
-    fetch (query) {
+    fetch (query, params=[]) {
         return new Promise((resolve, reject) => {
             const db = new sql.Database(this.dbPath)
-            db.all(query, function (err, res) { // this syntax of function definition is necessary
+            db.all(query, params, function (err, res) { // this syntax of function definition is necessary
                 if (err) reject(err)
                 else resolve(res)
             })

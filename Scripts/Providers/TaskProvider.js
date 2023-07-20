@@ -11,10 +11,11 @@ const TaskProvider = class {
     }
 
     async create(task) {
-        var query = `INSERT INTO task (project_id, summary, parent_id) VALUES (${task.projectId}, '${task.summary}', ${task.parentId});`
+        var query = `INSERT INTO task (project_id, summary, parent_id) VALUES (?, ?, ?);`
+        var params = [task.projectId, task.summary, task.parentId]
         console.debug('TaskProvider:creating')
         try {
-            var id = await this.dbService.insertOne(query)
+            var id = await this.dbService.insertOne(query, params)
             task.id = id
             console.debug('TaskProvider:created')
             return id ? task : false

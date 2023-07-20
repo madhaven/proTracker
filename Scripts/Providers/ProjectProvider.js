@@ -10,10 +10,11 @@ const ProjectProvider = class {
     }
 
     async create(name) {
-        var query = `INSERT INTO project (name) VALUES ('${name}');`
+        var query = `INSERT INTO project (name) VALUES (?);`
         console.debug('ProjectProvider:creating')
         try {
-            var id = await this.dbService.insertOne(query)
+            var params = [name]
+            var id = await this.dbService.insertOne(query, params)
             var newProject = new Project(id, name)
             console.debug('ProjectProvider:created')
             return newProject
@@ -23,9 +24,10 @@ const ProjectProvider = class {
     }
 
     async get(id) {
-        var query = `SELECT id, name FROM project WHERE id=${id};`
-        try { 
-            var res = await this.dbService.getOne(query)
+        var query = `SELECT id, name FROM project WHERE id=?;`
+        try {
+            var params = [id]
+            var res = await this.dbService.getOne(query, params)
             var project = new Project(res.id, res.name)
             console.debug('ProjectProvider:get')
             return project ? project : false
@@ -35,9 +37,10 @@ const ProjectProvider = class {
     }
 
     async getByName(name) {
-        var query = `SELECT id, name FROM project WHERE name='${name}';`
+        var query = `SELECT id, name FROM project WHERE name=?;`
         try {
-            var res = await this.dbService.getOne(query)
+            var params = [name]
+            var res = await this.dbService.getOne(query, params)
             var project = new Project(res.id, res.name)
             console.debug('ProjectProvider:getByName')
             return project ? project : false

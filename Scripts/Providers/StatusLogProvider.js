@@ -10,10 +10,11 @@ const StatusLogProvider = class {
     }
     
     async create(statusLog) {
-        var query = `INSERT INTO status_log (task_id, status_id, date_time) VALUES (${statusLog.taskId}, ${statusLog.statusId}, ${statusLog.dateTime});`
+        var query = `INSERT INTO status_log (task_id, status_id, date_time) VALUES (?, ?, ?);`
         console.debug('StatusLogProvider:creating')
         try {
-            var id = await this.dbService.insertOne(query)
+            var params = [statusLog.taskId, statusLog.statusId, statusLog.dateTime]
+            var id = await this.dbService.insertOne(query, params)
             statusLog.id = id
             console.debug('StatusLogProvider:created')
             return id ? statusLog : false
@@ -23,8 +24,9 @@ const StatusLogProvider = class {
     }
 
     // async getTaskTimeline(taskId) {
-    //     var query = `SELECT sl.id, sl.task_id, sl.status_id, sl.date_time, s.status FROM status_log sl INNER JOIN status s ON sl.status_id=s.id WHERE task_id=${taskId}`
+    //     var query = `SELECT sl.id, sl.task_id, sl.status_id, sl.date_time, s.status FROM status_log sl INNER JOIN status s ON sl.status_id=s.id WHERE task_id=?`
     //     try {
+    //         var params = [taskId]
     //         var res = await this.dbService.fetch(query)
     //         console.debug('StatusLogProvider:getTaskTimeline', res.length)
     //         return res ? res : false
