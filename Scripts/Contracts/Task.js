@@ -1,10 +1,15 @@
-const Task = class {
-    constructor (id, dateTime, project, summary, status, parent){
+class Task {
+    constructor (
+        id = -1,
+        summary,
+        parentId = -1,
+        projectId,
+    ){
         this.id = id
-        this.dateTime = dateTime,
-        this.project = project
         this.summary = summary
-        this.status = status
-        this.parent = parent
+        this.parentId = parentId
+        this.projectId = projectId
     }
 }
+
+module.exports = { Task }

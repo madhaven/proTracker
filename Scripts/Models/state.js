@@ -16,10 +16,6 @@ const State = class {
             return false
         return true
     }
-
-    toContract () {
-        // TODO
-    }
 }
 
 module.exports = { State }

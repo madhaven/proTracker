@@ -11,43 +11,44 @@ const ProjectProvider = class {
 
     async create(name) {
         var query = `INSERT INTO project (name) VALUES ('${name}');`
-        console.log('ProjectProvider:creating', name)
+        console.debug('ProjectProvider:creating')
         try {
-            var res = await this.dbService.insertOne(query)
-            var newProject = new Project(res, name)
-            console.log('ProjectProvider:created', newProject)
+            var id = await this.dbService.insertOne(query)
+            var newProject = new Project(id, name)
+            console.debug('ProjectProvider:created')
             return newProject
         } catch (err) {
-            console.log('QUERY ERROR MONUUUSE', err)
+            console.error('ProjectProvider:create', err) // TODO remove error logs
         }
     }
 
     async get(id) {
-        var query = `SELECT * FROM project WHERE id=${id};`
+        var query = `SELECT id, name FROM project WHERE id=${id};`
         try { 
             var res = await this.dbService.getOne(query)
-            console.log('ProjectProvider:get', res)
-            return res? res : false
+            var project = new Project(res.id, res.name)
+            console.debug('ProjectProvider:get')
+            return project ? project : false
         } catch (err) {
-            console.info("DB error while getting project", err)
+            console.debug("ProjectProvider:get", err) // TODO remove error logs
         }
     }
 
     async getByName(name) {
         var query = `SELECT id, name FROM project WHERE name='${name}';`
         try {
-            var res = await this.dbService.fetch(query)
-            console.log('ProjectProvider:projects found', res)
-            return res? res[0] : false
+            var res = await this.dbService.getOne(query)
+            var project = new Project(res.id, res.name)
+            console.debug('ProjectProvider:getByName')
+            return project ? project : false
         } catch (err) {
-            console.info("DB error while searching for project", err)
+            console.error("ProjectProvider:getByName", err) // TODO remove error logs
         }
     }
 
-    async getByNameOrCreate(name) {
+    async getByNameOrCreate(name) { // TODO change the query in create() to handle this case
         var project = await this.getByName(name)
         if (project) {
-            console.log('returning project from db', project)
             return project
         } else {
             var newProject = await this.create(name)

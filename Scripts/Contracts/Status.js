@@ -6,3 +6,5 @@ const Status = class {
     static WAITING = 5
     static WONT_DO = 6
 }
+
+module.exports = { Status }

@@ -5,14 +5,16 @@ const { ipcMain } = require('electron')
 const { FileService } = require('./Services/FileService')
 const { Task } = require('./Models/Task')
 const { Status } = require('./Models/Status')
-const { TaskStatusChange } = require('./Models/TaskStatusChange')
+const { StatusLog } = require('./Models/StatusLog')
+const { TaskLog } = require('./Contracts/TaskLog')
 const { ProjectProvider } = require('./Providers/ProjectProvider')
 const { TaskProvider } = require('./Providers/TaskProvider')
+const { StatusProvider } = require('./Providers/StatusProvider')
 const { StatusLogProvider } = require('./Providers/StatusLogProvider')
-var tp, pp, slp
+var tp, pp, slp, sp
 
 const loadLogsHandler = async (event) => {
-    alltasks = await tp.getAllTasks()
+    alltasks = await tp.getAllTaskLogs()
     return alltasks ? alltasks : false
 }
 
@@ -33,15 +35,23 @@ const saveDataHandler = async (event, data, mainWindow) => {
 }
 
 const newTaskHandler = async (event, newTask) => {
-    console.info('newTaskRequest', newTask)
+    console.log('newTaskRequest', newTask)
     newTask.dateTime = new Date(newTask.dateTime).getTime()
     var project = await pp.getByNameOrCreate(newTask.project)
-    var dummy = new Task(-1, project.id, newTask.summary, -1)
-    var task = await tp.create(dummy)
-    var taskLog = await slp.create(new TaskStatusChange(-1, task.id, Status.PENDING, newTask.dateTime)) // TODO fetch status values from db ?
-    var newTask = await task.toContract(taskLog)
-    console.log('newTask', newTask)
-    return newTask
+    var task = await tp.create(new Task(-1, project.id, newTask.summary, -1)) // TODO: remove object and replace with direct params
+    var status = await sp.get(Status.PENDING)
+    var statusLog = await slp.create(new StatusLog(-1, task.id, status.id, newTask.dateTime)) // TODO fetch status values from db ?
+    var taskLog = new TaskLog(
+        task.id,
+        statusLog.dateTime,
+        task.summary,
+        task.parentId,
+        task.projectId,
+        project.name,
+        status.id,
+        status.name,
+    )
+    return taskLog
 }
 
 const taskToggleHandler = (event, id) => {
@@ -71,17 +81,19 @@ const registerHandlers = mainWindow => {
     tp = new TaskProvider()
     pp = new ProjectProvider()
     slp = new StatusLogProvider()
+    sp = new StatusProvider()
 
     // comms
     ipcMain.handle('newTaskChannel', newTaskHandler)
     ipcMain.handle('taskClickChannel', taskToggleHandler)
     ipcMain.handle('loadLogsRequest', loadLogsHandler)
     ipcMain.handle('saveDataRequest', (event, data) => { saveDataHandler(event, data, mainWindow) })
-    console.log("save data registered")
-
+    
     // state info exchange
     ipcMain.on('UIEventNotifications', stateEventHandler)
     ipcMain.handle('UIEventRequests', stateChangeRequestHandler)
+    
+    console.log("handlers registered")
 }
 
 module.exports = { registerHandlers }

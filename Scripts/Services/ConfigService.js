@@ -18,15 +18,15 @@ const ConfigService = class {
         this.filename = filename
         try {
             const savedConfig = JSON.parse(fs.readFileSync(filename, 'utf8'))
-            console.info('Config Read', savedConfig)
+            console.debug('ConfigService():read', savedConfig)
             this.config = savedConfig
         } catch (err) {
             if (err.code == 'ENOENT') {
-                console.info('No Config File, creating new')
+                console.debug('ConfigService:no file, creating')
                 this.config = defaultConfig
                 this.save()
             } else {
-                console.error('error reading config')
+                console.error('ConfigService: error reading config')
                 dialog.showErrorBox('File Read Error', 'proTracker was not able to read important configuration.\nThe app will close now.')
                 app.exit()
             }
@@ -46,10 +46,10 @@ const ConfigService = class {
     save () {
         try {
             fs.writeFileSync(this.filename, JSON.stringify(this.config))
-            console.info('Default Configs saved to', this.filename)
+            console.debug('ConfigService:save', this.filename)
         } catch (err) {
             dialog.showErrorBox('Critical Error', 'proTracker is not able to save important configuration.\nYou might loose the changes made in this session')
-            console.error('error saving config')
+            console.error('ConfigService: error saving config')
         }
     }
 

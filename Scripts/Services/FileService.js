@@ -6,7 +6,7 @@ const FileService = class {
     static options = [{ name: 'CSV Files', extensions: ['csv']}]
     static filters = { filters: this.options }
 
-    static loadAFile = async win => {
+    static loadAFile = async win => { // deprecated
         // TODO: verify if cSV is in prescribed format
         return new Promise((resolve, reject) => {
             dialog.showOpenDialog(win, this.options)
@@ -19,13 +19,13 @@ const FileService = class {
                         .on('data', row => { data.push(row) })
                         .on('end', () => { resolve([true, data])})
                         .on('error', error => {
-                            console.log("loadAFileError", error)
+                            console.error("FileService:fileLoad", error) // TODO remove error logs
                             // TODO logging
                             resolve([false, undefined])
                         })
                 })
                 .catch(error => {
-                    console.log("loadAFileDialogError", error)
+                    console.error("FileService:fileLoadDialogue", error) // TODO remove error logs
                     // TODO logging
                     resolve([false, undefined])
                 })
@@ -35,11 +35,6 @@ const FileService = class {
     static saveFile = async (win, data) => {
         return new Promise((resolve, reject) => {
             dialog.showSaveDialog(win, this.filters)
-                .catch(error => {
-                    console.log("saveFileDialogError", error)
-                    // TODO logging
-                    reject(false)
-                })
                 .then(({canceled, filePath}) => {
                     console.table({'canceled': canceled, 'filePath': filePath})
                     if (canceled) {
@@ -48,6 +43,11 @@ const FileService = class {
                         fs.writeFileSync(filePath, data)
                         resolve(true)
                     }
+                })
+                .catch(error => {
+                    console.error("FileService:fileSaveDialog", error) // TODO remove error logs
+                    // TODO logging
+                    reject(false)
                 })
         })
     }

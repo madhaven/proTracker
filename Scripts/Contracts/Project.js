@@ -5,3 +5,5 @@ const Project = class {
         this.tasks = tasks
     }
 }
+
+module.exports = { Project }

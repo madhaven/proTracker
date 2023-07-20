@@ -18,7 +18,7 @@ const initialState = () => {
         menuVisible=true,
         dataProfile=''
     )
-    console.log('main: Loading UI State', state)
+    console.debug('main: Loading UI State', state)
     return state
 }
 

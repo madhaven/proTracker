@@ -1,3 +1,4 @@
+const { Status } = require("../Models/Status")
 const { DatabaseService } = require("../Services/DatabaseService")
 
 const StatusProvider = class {
@@ -11,13 +12,14 @@ const StatusProvider = class {
     async create(name) {}
 
     async get(id) {
-        var query = `SELECT * FROM status WHERE id=${id};`
+        var query = `SELECT id, status FROM status WHERE id=${id};`
         try {
             var res = await this.dbService.getOne(query)
-            console.log('StatusProvider:get', res)
-            return res? res : false
+            var status = new Status(res.id, res.status)
+            console.debug('StatusProvider:get')
+            return status ? status : false
         } catch (err) {
-            console.info("DB error while getting status", err)
+            console.error("StatusProvider:get", err) // TODO remove error logs
         }
     }
 

@@ -75,20 +75,22 @@ const newLogInput = event => {
     if (!project) return false
     if (!date) return false
     
-    task = new Task(-1, date, project, summary, -1, -1)
+    task = { dateTime: date, project: project, summary: summary }
     comms.newTask(
         task,
         result => {
             if (result) {
                 console.log(result)
-                addTaskToUI(result.logs[0].dateTime, result.project.name, result.summary, result.status)
+                addTaskToUI(result)
 
                 // clear inputs
                 UIsummary.value = UIproject.value = ""
                 setDefaultDate()
             }
         },
-        err => { console.error('newtask error', err) }
+        err => {
+            console.error('newtask error', err) // TODO remove error logs
+        }
     )
     // todo notify state
 }
@@ -98,12 +100,11 @@ const loadState = state => {
     toggleSideBar(state.menuView)
 }
 
+// adds a log to the log page UI
 const addTaskToUI = (task) => {
     var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-    var date = new Date(task.date_time)
+    var date = new Date(task.dateTime)
     displayDate = `${date.getFullYear()} ${months[date.getMonth()]} ${date.getDate()}`
-
-    // adds a log to the log page UI
     latestDates = document.getElementsByClassName('stickyDate')
     if (latestDates.length > 0) {
         latestDate = latestDates[latestDates.length - 1].innerHTML.trim()
@@ -112,8 +113,8 @@ const addTaskToUI = (task) => {
     }
     
     // TODO: compares current date with only the latest date
+    // add new date section
     if (latestDate != displayDate) {
-        // add new date section
         var logDay = document.createElement('div')
         logDay.classList = 'logDay'
         
@@ -121,7 +122,7 @@ const addTaskToUI = (task) => {
         logDate.classList = 'logDate'
         
         var stickyDate = document.createElement('div')
-        stickyDate.classList = "stickyDate"
+        stickyDate.classList.add("stickyDate")
         stickyDate.innerHTML = displayDate
         
         var daysTasks = document.createElement('div')
@@ -132,7 +133,7 @@ const addTaskToUI = (task) => {
         
         var logProject = document.createElement('div')
         logProject.classList = "logProject"
-        logProject.innerHTML = task.project_name
+        logProject.innerHTML = task.projectName
         
         var logTask = document.createElement('div')
         logTask.classList = "logTask"
@@ -161,7 +162,7 @@ const addTaskToUI = (task) => {
         
         var logProject = document.createElement('div')
         logProject.classList = "logProject"
-        logProject.innerHTML = task.project_name
+        logProject.innerHTML = task.projectName
         
         var logTask = document.createElement('div')
         logTask.classList = "logTask"
@@ -172,11 +173,15 @@ const addTaskToUI = (task) => {
         targetContainer.appendChild(taskRow)
     }
     
-    var classes = ['pending', 'in_progress', 'need_info', 'completed', 'waiting', 'wont_do']
-    classes.forEach(cls => {
-        logTask.classList.remove(cls)
-    })
-    switch (task.status_name) {
+    [
+        'pending',
+        'in_progress',
+        'need_info',
+        'completed',
+        'waiting',
+        'wont_do'
+    ].forEach(cls => { logTask.classList.remove(cls) })
+    switch (task.statusName) {
         case "PENDING":
             logTask.classList.add('pending')
             break
@@ -211,13 +216,12 @@ const saveData = data => {
 }
 
 const loadLogs = () => {
-    console.log('clearing all logs')
     clearAllLogs()
     comms.loadLogs(
         res => {
             if (res){
-                console.log(res)
-                res.forEach(task => addTaskToUI(task))
+                console.log('logs', res)
+                res.forEach(task => { addTaskToUI(task) })
             } else
                 console.error('corrupt logs received')
         },

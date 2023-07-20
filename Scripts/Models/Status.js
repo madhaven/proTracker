@@ -5,6 +5,11 @@ const Status = class {
     static COMPLETED = 4
     static WAITING = 5
     static WONT_DO = 6
+
+    constructor (id, name) {
+        this.id = id
+        this.name = name
+    }
 }
 
 module.exports = { Status }

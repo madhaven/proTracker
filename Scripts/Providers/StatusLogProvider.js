@@ -9,35 +9,35 @@ const StatusLogProvider = class {
         this.dbService = dbService ? dbService : DatabaseService.getService()
     }
     
-    async create(taskLog) {
-        var query = `INSERT INTO status_log (task_id, status_id, date_time) VALUES (${taskLog.taskId}, ${taskLog.statusId}, ${taskLog.dateTime});`
-        console.log('StatusLogProvider:creating', taskLog)
+    async create(statusLog) {
+        var query = `INSERT INTO status_log (task_id, status_id, date_time) VALUES (${statusLog.taskId}, ${statusLog.statusId}, ${statusLog.dateTime});`
+        console.debug('StatusLogProvider:creating')
         try {
-            var res = await this.dbService.insertOne(query)
-            taskLog.id = res
-            console.log('StatusLogProvider:created', taskLog)
-            return taskLog
+            var id = await this.dbService.insertOne(query)
+            statusLog.id = id
+            console.debug('StatusLogProvider:created')
+            return id ? statusLog : false
         } catch (err) {
-            console.log('Query paali man', err)
+            console.debug('StatusLogProvider:create', err) // TODO remove error logs
         }
     }
 
-    async getTaskTimeline(taskId) {
-        var query = `SELECT id, task_id, status_id, date_time FROM status_log WHERE task_id=${taskId}`
-        try {
-            var res = await this.dbService.fetch(query)
-            console.log('StatusLogProvider:taskLogs', res)
-            return res ? res : false
-        } catch (err) {
-            console.error('Query scene ayi man')
-        }
-    }
+    // async getTaskTimeline(taskId) {
+    //     var query = `SELECT sl.id, sl.task_id, sl.status_id, sl.date_time, s.status FROM status_log sl INNER JOIN status s ON sl.status_id=s.id WHERE task_id=${taskId}`
+    //     try {
+    //         var res = await this.dbService.fetch(query)
+    //         console.debug('StatusLogProvider:getTaskTimeline', res.length)
+    //         return res ? res : false
+    //     } catch (err) {
+    //         console.error('StatusLogProvider:getTaskTimeline', err) // TODO remove error logs
+    //     }
+    // }
 
-    async getLatest(taskId) {
-        var logs = await this.getTaskTimeline(taskId)
-        var latestLog = logs.reduce((max, obj) => obj.dateTime>max.dateTime ? obj : max)
-        return latestLog
-    }
+    // async getLatest(taskId) { // TODO: implement query
+    //     var logs = await this.getTaskTimeline(taskId)
+    //     var latestLog = logs.reduce((max, obj) => obj.dateTime>max.dateTime ? obj : max)
+    //     return latestLog ? latestLog : false
+    // }
 
     async updateStatus(taskId, statusId) {}
 

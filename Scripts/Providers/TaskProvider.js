@@ -1,3 +1,4 @@
+const { TaskLog } = require('../Contracts/TaskLog')
 const { Task } = require('../Models/Task')
 const { DatabaseService } = require('../Services/DatabaseService')
 
@@ -11,43 +12,67 @@ const TaskProvider = class {
 
     async create(task) {
         var query = `INSERT INTO task (project_id, summary, parent_id) VALUES (${task.projectId}, '${task.summary}', ${task.parentId});`
-        console.log('TaskProvider:creating', task)
+        console.debug('TaskProvider:creating')
         try {
-            var res = await this.dbService.insertOne(query)
-            task.id = res
-            console.log('TaskProvider:created', task)
-            return task
+            var id = await this.dbService.insertOne(query)
+            task.id = id
+            console.debug('TaskProvider:created')
+            return id ? task : false
         } catch (err) {
-            console.log("QUery Moonchi monoose", err)
+            console.error("TaskProvider:create", err) // TODO remove error logs
         }
     }
 
     async get(id) {
-        var query = `SELECT * FROM task WHERE id=${id};`
+        var query = `SELECT id, project_id, summary, parent_id FROM task WHERE id=${id};`
         try {
             var res = await this.dbService.getOne(query)
-            console.log('TaskProvider:get', res)
-            return res? res : false
+            var task = new Task(res.id, res.project_id, res.summary, res.parent_id)
+            console.debug('TaskProvider:get')
+            return task ? task : false
         } catch (err) {
-            console.error("DB error while getting task", err)
+            console.error("TaskProvider:get", err) // TODO remove error logs
         }
     }
 
     async getAllTaskOfProject(projectId) {}
 
     async getAllTasks() {
-        var query = `SELECT t.id, t.summary, t.project_id as project_id, t.parent_id, p.name as project_name, sl.date_time as date_time, s.id as status_id, s.status as status_name FROM task t INNER JOIN project p ON t.project_id=p.id INNER JOIN (SELECT task_id, MAX(date_time) AS date_time, status_id FROM status_log GROUP BY task_id) sl ON t.id=sl.task_id INNER JOIN status s ON s.id=sl.status_id`
-
+        var query = `SELECT t.id as id, t.summary, t.project_id as project_id, t.parent_id, p.name as project_name, sl.date_time as date_time, s.id as status_id, s.status as status_name FROM task t INNER JOIN project p ON t.project_id=p.id INNER JOIN (SELECT task_id, MAX(date_time) AS date_time, status_id FROM status_log GROUP BY task_id) sl ON t.id=sl.task_id INNER JOIN status s ON s.id=sl.status_id`
         try {
             var res = await this.dbService.fetch(query)
-            console.log('TaskProvider:getall', res)
+            console.debug('TaskProvider:getallTasks', res.length)
             var result = res.map(task => new Task( // TODO std contracts
-                id=task.id,
-                summary=task.summary
+                task.id,
+                task.project_id,
+                task.summary,
+                task.parent_id
             ))
-            return res? res : false
+            return result ? result : false
         } catch (err) {
-            console.error("DB error while getting all tasks", err)
+            console.error("TaskProvider:getAllTasks", err) // TODO remove error logs
+        }
+    }
+
+    async getAllTaskLogs() {
+        var query = `SELECT t.id as id, t.summary, t.project_id as project_id, t.parent_id, p.name as project_name, sl.date_time as date_time, s.id as status_id, s.status as status_name, sl.task_id, sl.date_time FROM task t INNER JOIN project p ON t.project_id=p.id INNER JOIN status_log sl ON t.id=sl.task_id INNER JOIN status s ON s.id=sl.status_id`
+        try {
+            var res = await this.dbService.fetch(query)
+            console.debug('TaskProvider:allLogs', res.length)
+            var result = res.map(task => new TaskLog(
+                    task.id,
+                    task.date_time,
+                    task.summary,
+                    task.parent_id,
+                    task.project_id,
+                    task.project_name,
+                    task.status_id,
+                    task.status_name
+                )
+            )
+            return result ? result : false
+        } catch (err) {
+            console.error('TaskProvider:getAllTaskLogs', err) // TODO remove error logs
         }
     }
 
