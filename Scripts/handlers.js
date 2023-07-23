@@ -35,8 +35,10 @@ const saveDataHandler = async (event, data, mainWindow) => {
 }
 
 const newTaskHandler = async (event, newTask) => {
-    console.log('newTaskRequest', newTask)
     newTask.dateTime = new Date(newTask.dateTime).getTime()
+    newTask.project = newTask.project.trim()
+    newTask.summary = newTask.summary.trim()
+    console.log('newTask', newTask)
     var project = await pp.getByNameOrCreate(newTask.project)
     var task = await tp.create(new Task(-1, project.id, newTask.summary, -1)) // TODO: remove object and replace with direct params
     var status = await sp.get(Status.PENDING)

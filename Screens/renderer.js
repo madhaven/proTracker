@@ -63,6 +63,12 @@ const toggleSideBar = (visible = undefined) => {
     // state.notifyUIEvent(uiState)
 }
 
+const inputTrimmer = (event, leftAndRight=false) => {
+    event.srcElement.value = leftAndRight
+        ? event.srcElement.value.trim()
+        : event.srcElement.value.trimLeft()
+}
+
 const newLogInput = event => {
     // handles new entry made in the log page
     var UIsummary = document.getElementById('newLogTask')
@@ -272,6 +278,11 @@ window.addEventListener('load', event => {
     document.getElementById('inputs').scrollIntoView()
     // document.getElementById('loadButton').addEventListener('click', loadLogs)
     // document.getElementById('saveButton').addEventListener('click', event => { saveData(data) })
+    document.getElementById('newLogProject').addEventListener('input', event => { inputTrimmer(event, false) })
+    document.getElementById('newLogTask').addEventListener('input', event => { inputTrimmer(event, false) })
+    document.getElementById('newLogProject').addEventListener('change', event => { inputTrimmer(event, true)})
+    document.getElementById('newLogTask').addEventListener('change', event => { inputTrimmer(event, true)})
+    document.getElementById('newLogProject').addEventListener('change', newLogInput)
     document.getElementById('newLogTask').addEventListener('change', newLogInput)
     document.getElementById('newLogDate').addEventListener('change', newLogInput)
     document.getElementById('newLogProject').addEventListener('change', newLogInput)
