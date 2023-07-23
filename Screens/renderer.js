@@ -71,6 +71,8 @@ const inputTrimmer = (event, leftAndRight=false) => {
 
 const newLogInput = event => {
     // handles new entry made in the log page
+    
+    // validation
     var UIsummary = document.getElementById('newLogTask')
     var UIproject = document.getElementById('newLogProject')
     var UIdate = document.getElementById('newLogDate')
@@ -285,10 +287,9 @@ window.addEventListener('load', event => {
     document.getElementById('newLogProject').addEventListener('change', newLogInput)
     document.getElementById('newLogTask').addEventListener('change', newLogInput)
     document.getElementById('newLogDate').addEventListener('change', newLogInput)
-    document.getElementById('newLogProject').addEventListener('change', newLogInput)
-    // ['newLogTask', 'newLogDate', 'newLogProject'].forEach(function (id) {
-    //     document.getElementById(id).addEventListener('change', newLogInput)
-    // }) // not working for some reason
+    /* ['newLogTask', 'newLogDate', 'newLogProject'].forEach(function (id) {
+        document.getElementById(id).addEventListener('change', newLogInput)
+    }) // not working for some reason */
 
     // comm listeners
     state.registerListener('updateUI', recieveStateChanges)

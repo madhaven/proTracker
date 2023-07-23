@@ -11,15 +11,15 @@ const StatusLogProvider = class {
     
     async create(statusLog) {
         var query = `INSERT INTO status_log (task_id, status_id, date_time) VALUES (?, ?, ?);`
-        console.debug('StatusLogProvider:creating')
+        console.debug('StatusLogProvider: creating')
         try {
             var params = [statusLog.taskId, statusLog.statusId, statusLog.dateTime]
             var id = await this.dbService.insertOne(query, params)
             statusLog.id = id
-            console.debug('StatusLogProvider:created')
+            console.debug('StatusLogProvider: created')
             return id ? statusLog : false
         } catch (err) {
-            console.debug('StatusLogProvider:create', err) // TODO remove error logs
+            console.debug('StatusLogProvider: create', err) // TODO remove error logs
         }
     }
 
@@ -28,10 +28,10 @@ const StatusLogProvider = class {
     //     try {
     //         var params = [taskId]
     //         var res = await this.dbService.fetch(query)
-    //         console.debug('StatusLogProvider:getTaskTimeline', res.length)
+    //         console.debug('StatusLogProvider: getTaskTimeline', res.length)
     //         return res ? res : false
     //     } catch (err) {
-    //         console.error('StatusLogProvider:getTaskTimeline', err) // TODO remove error logs
+    //         console.error('StatusLogProvider: getTaskTimeline', err) // TODO remove error logs
     //     }
     // }
 

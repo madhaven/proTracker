@@ -16,11 +16,10 @@ const StatusProvider = class {
         try {
             var params = [id]
             var res = await this.dbService.getOne(query, params)
-            var status = new Status(res.id, res.status)
-            console.debug('StatusProvider:get')
-            return status ? status : false
+            console.debug('StatusProvider: get')
+            return res ? new Status(res.id, res.status) : false
         } catch (err) {
-            console.error("StatusProvider:get", err) // TODO remove error logs
+            console.error("StatusProvider: get", err) // TODO remove error logs
         }
     }
 

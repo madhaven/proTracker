@@ -22,7 +22,7 @@ const ConfigService = class {
             this.config = savedConfig
         } catch (err) {
             if (err.code == 'ENOENT') {
-                console.debug('ConfigService:no file, creating')
+                console.debug('ConfigService: no file, creating')
                 this.config = defaultConfig
                 this.save()
             } else {
@@ -46,7 +46,7 @@ const ConfigService = class {
     save () {
         try {
             fs.writeFileSync(this.filename, JSON.stringify(this.config))
-            console.debug('ConfigService:save', this.filename)
+            console.debug('ConfigService: save', this.filename)
         } catch (err) {
             dialog.showErrorBox('Critical Error', 'proTracker is not able to save important configuration.\nYou might loose the changes made in this session')
             console.error('ConfigService: error saving config')

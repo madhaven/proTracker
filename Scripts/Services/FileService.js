@@ -19,13 +19,13 @@ const FileService = class {
                         .on('data', row => { data.push(row) })
                         .on('end', () => { resolve([true, data])})
                         .on('error', error => {
-                            console.error("FileService:fileLoad", error) // TODO remove error logs
+                            console.error("FileService: fileLoad", error) // TODO remove error logs
                             // TODO logging
                             resolve([false, undefined])
                         })
                 })
                 .catch(error => {
-                    console.error("FileService:fileLoadDialogue", error) // TODO remove error logs
+                    console.error("FileService: fileLoadDialogue", error) // TODO remove error logs
                     // TODO logging
                     resolve([false, undefined])
                 })
@@ -45,7 +45,7 @@ const FileService = class {
                     }
                 })
                 .catch(error => {
-                    console.error("FileService:fileSaveDialog", error) // TODO remove error logs
+                    console.error("FileService: fileSaveDialog", error) // TODO remove error logs
                     // TODO logging
                     reject(false)
                 })
