@@ -1,17 +1,24 @@
 const path = require('path')
-const { app, BrowserWindow } = require('electron')
-const { State } = require('./Models/state')
-const { registerHandlers } = require('./hostHandlers')
+const { app, BrowserWindow, dialog } = require('electron')
+const { registerHandlers } = require('./handlers')
+const { State } = require('./Models/State')
+const { ConfigService } = require('./Services/ConfigService')
+const { DatabaseService } = require('./Services/DatabaseService')
 
+const debugMode = process.argv.some(arg => arg.includes('--inspect'))
+const configService = ConfigService.getService(
+    debugMode ? { dbPath: 'proTracker.db' } : undefined
+)
+const dbService = DatabaseService.getService()
 var mainWindow
 
-const InitialState = () => {
+const initialState = () => {
     // loads the data and creates the state instance that is sent to the UI
     var state = new State(
         menuVisible=true,
         dataProfile=''
     )
-    console.log('main: Loading UI State', state)
+    console.debug('main: Loading UI State', state)
     return state
 }
 
@@ -20,7 +27,7 @@ const createWindow = () => {
         width: 800,
         height: 600,
         webPreferences: {
-            preload: path.join(__dirname, './preloadElectron.js')
+            preload: path.join(__dirname, './ePreload.js')
         },
         show: false,
         autoHideMenuBar: true
@@ -28,14 +35,14 @@ const createWindow = () => {
     registerHandlers(win)
     win.loadFile('./Screens/log.html')
     win.webContents.on('did-finish-load', () => {
-        win.webContents.openDevTools(); // TODO: REMOVE ON PRODUCTION
-        state = InitialState()
+        if (debugMode) win.webContents.openDevTools()
+        state = initialState()
         mainWindow.webContents.send('updateUI', state)
     })
     win.once('ready-to-show', () => {
         win.show()
+        win.maximize()
     })
-    win.maximize()
     return win
 }
 

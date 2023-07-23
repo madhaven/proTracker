@@ -2,7 +2,7 @@
   "name": "protracker",
   "version": "1.0.0",
   "description": "app to track tasks",
-  "main": "./Scripts/mainElectron.js",
+  "main": "./Scripts/eMain.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron .",
@@ -29,6 +29,7 @@
     "electron-forge": "^5.2.4"
   },
   "dependencies": {
-    "fast-csv": "^4.3.6"
+    "fast-csv": "^4.3.6",
+    "sqlite3": "^5.1.6"
   }
 }

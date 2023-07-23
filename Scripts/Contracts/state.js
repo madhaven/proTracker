@@ -1,4 +1,4 @@
-class State {
+const State = class {
     // Intended to keep track of the Webpage state
     // All UI should be loadable from an instance of this class
 
@@ -13,7 +13,7 @@ class State {
             this.menuView != state2.menuView ||
             this.dataProfile != state2.dataFile ||
             this.dailyTodo != state2.dailyTodo)
-            return false;
-        return true;
+            return false
+        return true
     }
 }
