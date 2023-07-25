@@ -1,17 +1,9 @@
 var uiState = new State()
-var data = []
 
 const clearAllLogs = () => {
     // clears all logs
     for (var day of document.querySelectorAll('.logDay:not(.header)')) {
         day.remove()
-    }
-}
-
-const populatePage = dataset => {
-    // populates the log page with items from the dataset
-    for (var log of dataset) {
-        addTaskToUI(...log)
     }
 }
 
@@ -89,7 +81,9 @@ const newLogInput = event => {
         result => {
             if (result) {
                 console.log(result)
-                addTaskToUI(result)
+                // createLogOnUI(result)
+                uiState.addLog(result)
+                populatePageFromState()
 
                 // clear inputs
                 UIsummary.value = UIproject.value = ""
@@ -103,17 +97,20 @@ const newLogInput = event => {
     // todo notify state
 }
 
-const loadState = state => {
-    uiState = state
-    toggleSideBar(state.menuView)
+// populates the log page with items from the dataset
+const populatePageFromState = () => {
+    clearAllLogs()
+    for (var log of uiState.logs) {
+        createLogOnUI(log)
+    }
 }
 
 // adds a log to the log page UI
-const addTaskToUI = (task) => {
+const createLogOnUI = (task) => {
     var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
     var date = new Date(task.dateTime)
-    displayDate = `${date.getFullYear()} ${months[date.getMonth()]} ${date.getDate()}`
-    latestDates = document.getElementsByClassName('stickyDate')
+    var displayDate = `${date.getFullYear()} ${months[date.getMonth()]} ${date.getDate()}`
+    var latestDates = document.getElementsByClassName('stickyDate')
     if (latestDates.length > 0) {
         latestDate = latestDates[latestDates.length - 1].innerHTML.trim()
     } else {
@@ -223,18 +220,24 @@ const saveData = data => {
     )
 }
 
-const loadLogs = () => {
-    clearAllLogs()
+// loads logs from db
+const requestLogs = () => {
     comms.loadLogs(
         res => {
             if (res){
-                console.log('logs', res)
-                res.forEach(task => { addTaskToUI(task) })
+                console.log('logs', res) // TODO remove logs
+                uiState.replaceLogs(res)
+                populatePageFromState()
             } else
                 console.error('corrupt logs received')
         },
         err => console.log('error loading logs', err)
     )
+}
+
+const loadState = state => {
+    uiState = state
+    toggleSideBar(state.menuView)
 }
 
 // COMMS
@@ -243,8 +246,8 @@ const dataFromMainHandler = (event, logs) => {
     // handles the data received from Main process and adds it to the log page
     console.log('UI|DataPing ### REMOVE THIS THING')
     logs.forEach(log => {
-        data.push(log)
-        addTaskToUI(log.date, log.project, log.task, log.status)
+        uiState.newLog(log)
+        createLogOnUI(log.date, log.project, log.task, log.status)
     })
     toggleSideBar(false)
     document.getElementById('inputs').scrollIntoView()
@@ -269,7 +272,7 @@ const recieveStateChanges = (event, state) => {
 // event Listeners
 window.addEventListener('load', event => {
     setDefaultDate()
-    loadLogs()
+    requestLogs()
     // document.getElementById('sideBar').addEventListener('click', e => toggleSideBar())
     // document.getElementById("sideHandle").addEventListener('click', e => toggleSideBar())
     // document.querySelectorAll('#sideBar li').forEach((item) => {
@@ -278,7 +281,7 @@ window.addEventListener('load', event => {
     // toggleSideBar(true)
 
     document.getElementById('inputs').scrollIntoView()
-    // document.getElementById('loadButton').addEventListener('click', loadLogs)
+    // document.getElementById('loadButton').addEventListener('click', requestLogs)
     // document.getElementById('saveButton').addEventListener('click', event => { saveData(data) })
     document.getElementById('newLogProject').addEventListener('input', event => { inputTrimmer(event, false) })
     document.getElementById('newLogTask').addEventListener('input', event => { inputTrimmer(event, false) })
