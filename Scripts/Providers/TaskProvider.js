@@ -55,7 +55,7 @@ const TaskProvider = class {
     }
 
     async getAllTaskLogs() {
-        var query = `SELECT t.id as id, t.summary, t.project_id as project_id, t.parent_id, p.name as project_name, sl.date_time as date_time, s.id as status_id, s.status as status_name, sl.task_id, sl.date_time FROM task t INNER JOIN project p ON t.project_id=p.id INNER JOIN status_log sl ON t.id=sl.task_id INNER JOIN status s ON s.id=sl.status_id`
+        var query = `SELECT t.id as id, t.summary, t.project_id as project_id, t.parent_id, p.name as project_name, sl.date_time as date_time, s.id as status_id, s.status as status_name, sl.task_id, sl.date_time FROM task t INNER JOIN project p ON t.project_id=p.id INNER JOIN status_log sl ON t.id=sl.task_id INNER JOIN status s ON s.id=sl.status_id ORDER BY sl.date_time`
         try {
             var res = await this.dbService.fetch(query)
             console.debug('TaskProvider: allLogs', res.length)

@@ -1,5 +1,3 @@
-const csv = require('fast-csv')
-const fs = require('fs')
 const { ipcMain } = require('electron')
 
 const { FileService } = require('./Services/FileService')
