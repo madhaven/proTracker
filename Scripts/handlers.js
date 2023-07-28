@@ -23,7 +23,7 @@ const saveDataHandler = async (event, data, mainWindow) => {
         row => [row.data, row.project, row.task, row.status].join(',')
     ).join('\n')
 
-    var result = await FileService.saveFile(mainWindow, csvData)
+    const result = await FileService.saveFile(mainWindow, csvData)
     console.log('handler: saveFile result received:', result)
     if (result){
         return true
@@ -37,11 +37,11 @@ const newTaskHandler = async (event, newTask) => {
     newTask.project = newTask.project.trim()
     newTask.summary = newTask.summary.trim()
     console.log('newTask', newTask)
-    var project = await pp.getByNameOrCreate(newTask.project)
-    var task = await tp.create(new Task(-1, project.id, newTask.summary, -1)) // TODO: remove object and replace with direct params
-    var status = await sp.get(Status.PENDING)
-    var statusLog = await slp.create(new StatusLog(-1, task.id, status.id, newTask.dateTime)) // TODO fetch status values from db ?
-    var taskLog = new TaskLog(
+    const project = await pp.getByNameOrCreate(newTask.project)
+    const task = await tp.create(new Task(-1, project.id, newTask.summary, -1)) // TODO: remove object and replace with direct params
+    const status = await sp.get(Status.PENDING)
+    const statusLog = await slp.create(new StatusLog(-1, task.id, status.id, newTask.dateTime)) // TODO fetch status values from db ?
+    const taskLog = new TaskLog(
         task.id,
         statusLog.dateTime,
         task.summary,
@@ -51,17 +51,16 @@ const newTaskHandler = async (event, newTask) => {
         status.id,
         status.name,
     )
-    return taskLog
+    return taskLog ? taskLog : false
 }
 
-const taskToggleHandler = (event, id) => {
+const toggleTaskHandler = async (event, taskId, newStatusId, newTime) => {
     // marks a task as completed or incomplete
     // TODO: this method should be handled by UI state change mechanism
-    console.log('toggle task', id)
-    if (Math.random() >= 0.5)
-        return true
-    else 
-        return false
+    statusLog = await slp.create(new StatusLog(-1, taskId, newStatusId, newTime))
+    const status = await sp.get(statusLog.statusId)
+    statusLog.statusName = status.name
+    return statusLog.id>0 ? statusLog : false
 }
 
 /// STATE EVENTS
@@ -85,7 +84,7 @@ const registerHandlers = mainWindow => {
 
     // comms
     ipcMain.handle('newTaskChannel', newTaskHandler)
-    ipcMain.handle('taskClickChannel', taskToggleHandler)
+    ipcMain.handle('taskClickChannel', toggleTaskHandler)
     ipcMain.handle('loadLogsRequest', loadLogsHandler)
     ipcMain.handle('saveDataRequest', (event, data) => { saveDataHandler(event, data, mainWindow) })
     

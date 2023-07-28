@@ -2,7 +2,8 @@ const uiState = new State()
 
 const clearAllLogs = () => {
     // clears all logs
-    for (var day of document.querySelectorAll('.logDay:not(.header)')) {
+    const allLogs = document.querySelectorAll('.logDay:not(.header)')
+    for (var day of allLogs) {
         day.remove()
     }
 }
@@ -19,21 +20,6 @@ const setDefaultDate = () => {
     const dateString = `${year}-${month}-${day}T${hour}:${minute}:${second}`
 
     document.getElementById('newLogDate').value = dateString
-}
-
-const taskClick = async (event, element, task) => {
-    // handles the event when a task in the log page is clicked
-    task = element.getElementsByClassName('logTask')[0]
-    console.log(element, task)
-    taskid = 'x'
-    state = 'x'
-    const response = await comms.toggleTask(taskid)
-    // TODO: complete server response with state mechanism
-    console.log('response from server: ', typeof(response), response)
-    if (response == true)
-        task.classList.add('completed')
-    else if (response == false)
-        task.classList.remove('completed')
 }
 
 const toggleSideBar = (visible = undefined) => {
@@ -80,41 +66,63 @@ const newLogInput = event => {
     comms.newTask(
         task,
         result => {
-            if (result) {
-                console.log('newloginput result', result)
-                uiState.addLog(result)
-                populatePageFromState()
+            if (!result) return
+            uiState.addLog(result)
+            populatePageFromState()
 
-                // clear inputs
-                UIsummary.value = UIproject.value = ""
-                setDefaultDate()
-            }
+            UIsummary.value = UIproject.value = ""
+            setDefaultDate()
         },
         err => {
-            console.error('newtask error', err) // TODO remove error logs
+            console.error('server error while adding new task', err) // TODO remove error logs
         }
     )
-    // todo notify state
+}
+
+const taskClick = (event, element, taskLog) => {
+    const taskElement = element.querySelector('.logTask')
+    // TODO: setup more refined status change mechanism
+    const newState = taskLog.statusId == 1 ? 4 : 1
+    const currentTime = Date.now()
+    console.log('taskClick', element, taskLog)
+
+    comms.toggleTask(
+        taskLog.id, newState, currentTime,
+        res => {
+            const newTaskLog = { ...taskLog }
+            newTaskLog.dateTime = res.dateTime
+            newTaskLog.statusId = res.statusId
+            newTaskLog.statusName = res.statusName
+
+            uiState.addLog(newTaskLog)
+            populatePageFromState()
+        },
+        err => {
+            console.error('server error while updating task', err) // TODO remove error logs
+        }
+    )
 }
 
 const populatePageFromState = () => {
     clearAllLogs()
-    for (var taskLog of uiState.logs) {
-        const logDay = createOrFindDay(taskLog.dateTime)
-        const taskRow = createTaskOnDay(logDay, taskLog)
-        decorateTaskRow(taskRow, taskLog)
+    for (const day in uiState.logTree) {
+        const logDay = createOrFindDay(day)
+        for (const task in uiState.logTree[day]) {
+            const taskRow = createTaskOnDay(logDay, uiState.logTree[day][task])
+            decorateTaskRow(taskRow, uiState.logTree[day][task])
+        }
     }
 }
 
 const createOrFindDay = (date) => {
     const t = new Date(date)
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-    const displayDate = `${t.getFullYear()} ${months[t.getMonth()]} ${t.getDate()}`
+    const displayDate = `${t.getFullYear()} ${months[t.getMonth() + 1]} ${t.getDate()}`
     const allDays = document.querySelectorAll('.logDay:not(.header)')
 
     if (allDays.length > 0) {
         const latestDate = allDays[allDays.length - 1]
-        if (latestDate.getElementsByClassName('stickyDate')[0].innerHTML.trim() == displayDate)
+        if (latestDate.querySelector('.stickyDate').innerHTML.trim() == displayDate)
             return latestDate
     }
 
@@ -142,9 +150,18 @@ const createTaskOnDay = (logDay, task) => {
     const taskRow = document.createElement('div')
     const logProject = document.createElement('div')
     const logTask = document.createElement('div')
-    const daysTasks = logDay.getElementsByClassName('daysTasks')[0]
+    const daysTasks = logDay.querySelector('.daysTasks')
+    const stickyDate = logDay.querySelector('.stickyDate').innerHTML.replaceAll(' ', '')
+    const displayId = stickyDate + '_' + task.id
+    const allTasks = logDay.getElementsByClassName('taskRow')
+
+    for (log of allTasks) {
+        if (log.id == displayId)
+            return log
+    }
 
     taskRow.classList.add('taskRow')
+    taskRow.id = displayId
     logProject.classList.add('logProject')
     logTask.classList.add('logTask')
 
@@ -158,15 +175,15 @@ const createTaskOnDay = (logDay, task) => {
 }
 
 const decorateTaskRow = (taskRow, task) => {
-    const logTask = taskRow.getElementsByClassName('logTask')[0];
-    [
-        'pending',
-        'in_progress',
-        'need_info',
-        'completed',
-        'waiting',
-        'wont_do'
-    ].forEach(cls => { logTask.classList.remove(cls) })
+    const logTask = taskRow.querySelector('.logTask');
+    logTask.classList.remove(
+        'pending'
+        , 'in_progress'
+        , 'need_info'
+        , 'completed'
+        , 'waiting'
+        , 'wont_do'
+    )
     switch (task.statusName) {
         case "PENDING":
             logTask.classList.add('pending')
@@ -179,9 +196,11 @@ const decorateTaskRow = (taskRow, task) => {
         case "WAITING": break
         case "WONT_DO": break
     }
-    logTask.addEventListener('click', event => {
-        taskClick(event, taskRow, task)
-    }) // TODO: does this belong here?
+    if (new Date().toDateString() == new Date(task.dateTime).toDateString()) {
+        logTask.addEventListener('click', event => {
+            taskClick(event, taskRow, task)
+        }) // TODO: does this belong here?
+    }
 }
 
 const saveData = data => { // TODO ?
@@ -196,7 +215,7 @@ const saveData = data => { // TODO ?
             }
         },
         err => {
-            console.log('saveData ERROR', err)
+            console.log('saveData ERROR', err) // TODO: remove logs
         }
     )
 }
@@ -213,11 +232,6 @@ const requestLogs = () => {
         },
         err => console.log('server error while loading logs')
     )
-}
-
-const loadState = state => {
-    uiState = state
-    toggleSideBar(state.menuView)
 }
 
 // COMMS
@@ -244,7 +258,7 @@ const recieveStateChanges = (event, state) => {
     if (typeof(state) != State){
         console.log("state isn't of type State though", state)
     } else {
-        loadState(state)
+        // TODO
     }
 }
 

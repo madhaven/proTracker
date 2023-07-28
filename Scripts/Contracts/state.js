@@ -5,15 +5,14 @@ const State = class {
     constructor (
         menuVisible=true,
         dataProfile=true,
-        logs=[],
     ) {
         this.menuVisible = menuVisible
         this.dataProfile = dataProfile
-        this.logs = logs
+        this.logs = {}
         this.logTree = {}
     }
 
-    equals(state2) {
+    equals (state2) {
         if (typeof(state2) != typeof(this))
             return false
         if (this.menuView != state2.menuView 
@@ -28,7 +27,9 @@ const State = class {
         return true
     }
 
-    sortLogs () { return this.logs.sort((a, b) => a.dateTime - b.dateTime) }
+    sortLogs () {
+        return this.logs.sort((a, b) => a.dateTime - b.dateTime)
+    }
 
     replaceLogs (logs) {
         this.logs = logs

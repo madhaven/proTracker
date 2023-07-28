@@ -23,27 +23,23 @@ const StatusLogProvider = class {
         }
     }
 
-    // async getTaskTimeline(taskId) {
-    //     var query = `SELECT sl.id, sl.task_id, sl.status_id, sl.date_time, s.status FROM status_log sl INNER JOIN status s ON sl.status_id=s.id WHERE task_id=?`
-    //     try {
-    //         var params = [taskId]
-    //         var res = await this.dbService.fetch(query)
-    //         console.debug('StatusLogProvider: getTaskTimeline', res.length)
-    //         return res ? res : false
-    //     } catch (err) {
-    //         console.error('StatusLogProvider: getTaskTimeline', err) // TODO remove error logs
-    //     }
-    // }
+    /* async getTaskTimeline(taskId) {
+        var query = `SELECT sl.id, sl.task_id, sl.status_id, sl.date_time, s.status FROM status_log sl INNER JOIN status s ON sl.status_id=s.id WHERE task_id=?`
+        try {
+            var params = [taskId]
+            var res = await this.dbService.fetch(query)
+            console.debug('StatusLogProvider: getTaskTimeline', res.length)
+            return res ? res : false
+        } catch (err) {
+            console.error('StatusLogProvider: getTaskTimeline', err) // TODO remove error logs
+        }
+    } */
 
-    // async getLatest(taskId) { // TODO: implement query
-    //     var logs = await this.getTaskTimeline(taskId)
-    //     var latestLog = logs.reduce((max, obj) => obj.dateTime>max.dateTime ? obj : max)
-    //     return latestLog ? latestLog : false
-    // }
-
-    async updateStatus(taskId, statusId) {}
-
-    async delete(id) {}
+    /* async getLatest(taskId) { // TODO: implement query
+        var logs = await this.getTaskTimeline(taskId)
+        var latestLog = logs.reduce((max, obj) => obj.dateTime>max.dateTime ? obj : max)
+        return latestLog ? latestLog : false
+    } */
 }
 
 module.exports = { StatusLogProvider }
