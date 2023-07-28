@@ -1,4 +1,4 @@
-var uiState = new State()
+const uiState = new State()
 
 const clearAllLogs = () => {
     // clears all logs
@@ -15,12 +15,13 @@ const setDefaultDate = () => {
     const day = now.getDate().toString().padStart(2, '0')
     const hour = now.getHours().toString().padStart(2, '0')
     const minute = now.getMinutes().toString().padStart(2, '0')
-    const dateString = `${year}-${month}-${day}T${hour}:${minute}`
+    const second = now.getSeconds().toString().padStart(2, '0')
+    const dateString = `${year}-${month}-${day}T${hour}:${minute}:${second}`
 
     document.getElementById('newLogDate').value = dateString
 }
 
-const taskClick = async (event, element) => {
+const taskClick = async (event, element, task) => {
     // handles the event when a task in the log page is clicked
     task = element.getElementsByClassName('logTask')[0]
     console.log(element, task)
@@ -55,7 +56,7 @@ const toggleSideBar = (visible = undefined) => {
     // state.notifyUIEvent(uiState)
 }
 
-const inputTrimmer = (event, leftAndRight=false) => {
+const trimInput = (event, leftAndRight=false) => {
     event.srcElement.value = leftAndRight
         ? event.srcElement.value.trim()
         : event.srcElement.value.trimLeft()
@@ -80,8 +81,7 @@ const newLogInput = event => {
         task,
         result => {
             if (result) {
-                console.log(result)
-                // createLogOnUI(result)
+                console.log('newloginput result', result)
                 uiState.addLog(result)
                 populatePageFromState()
 
@@ -97,87 +97,68 @@ const newLogInput = event => {
     // todo notify state
 }
 
-// populates the log page with items from the dataset
 const populatePageFromState = () => {
     clearAllLogs()
-    for (var log of uiState.logs) {
-        createLogOnUI(log)
+    for (var taskLog of uiState.logs) {
+        const logDay = createOrFindDay(taskLog.dateTime)
+        const taskRow = createTaskOnDay(logDay, taskLog)
+        decorateTaskRow(taskRow, taskLog)
     }
 }
 
-// adds a log to the log page UI
-const createLogOnUI = (task) => {
-    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-    var date = new Date(task.dateTime)
-    var displayDate = `${date.getFullYear()} ${months[date.getMonth()]} ${date.getDate()}`
-    var latestDates = document.getElementsByClassName('stickyDate')
-    if (latestDates.length > 0) {
-        latestDate = latestDates[latestDates.length - 1].innerHTML.trim()
-    } else {
-        latestDate = 0
-    }
-    
-    // TODO: compares current date with only the latest date
-    // add new date section
-    if (latestDate != displayDate) {
-        var logDay = document.createElement('div')
-        logDay.classList = 'logDay'
-        
-        var logDate = document.createElement('div')
-        logDate.classList = 'logDate'
-        
-        var stickyDate = document.createElement('div')
-        stickyDate.classList.add("stickyDate")
-        stickyDate.innerHTML = displayDate
-        
-        var daysTasks = document.createElement('div')
-        daysTasks.classList = "daysTasks"
-        
-        var taskRow = document.createElement('div')
-        taskRow.classList = "taskRow"
-        
-        var logProject = document.createElement('div')
-        logProject.classList = "logProject"
-        logProject.innerHTML = task.projectName
-        
-        var logTask = document.createElement('div')
-        logTask.classList = "logTask"
-        logTask.innerHTML = task.summary
-        
-        logDate.appendChild(stickyDate)
-        logDay.appendChild(logDate)
-        logDay.appendChild(daysTasks)
-        daysTasks.append(taskRow)
-        taskRow.append(logProject)
-        taskRow.append(logTask)
-        
-        var chart = document.getElementsByClassName('logChart')[0]
-        inputs = document.getElementById('inputs')
-        inputs.remove()
-        chart.appendChild(logDay)
-        chart.appendChild(inputs)
-    } else {
-        // add new task row
-        var days = document.getElementsByClassName('logDay')
-        targetDay = days[days.length-2]
-        targetContainer = targetDay.getElementsByClassName('daysTasks')[0]
+const createOrFindDay = (date) => {
+    const t = new Date(date)
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    const displayDate = `${t.getFullYear()} ${months[t.getMonth()]} ${t.getDate()}`
+    const allDays = document.querySelectorAll('.logDay:not(.header)')
 
-        var taskRow = document.createElement('div')
-        taskRow.classList = "taskRow"
-        
-        var logProject = document.createElement('div')
-        logProject.classList = "logProject"
-        logProject.innerHTML = task.projectName
-        
-        var logTask = document.createElement('div')
-        logTask.classList = "logTask"
-        logTask.innerHTML = task.summary
-        
-        taskRow.appendChild(logProject)
-        taskRow.appendChild(logTask)
-        targetContainer.appendChild(taskRow)
+    if (allDays.length > 0) {
+        const latestDate = allDays[allDays.length - 1]
+        if (latestDate.getElementsByClassName('stickyDate')[0].innerHTML.trim() == displayDate)
+            return latestDate
     }
-    
+
+    const logDay = document.createElement('div')
+    const logDate = document.createElement('div')
+    const stickyDate = document.createElement('div')
+    const daysTasks = document.createElement('div')
+
+    logDay.classList.add('logDay')
+    logDay.id = t.getTime()
+    logDate.classList.add('logDate')
+    stickyDate.classList.add('stickyDate')
+    daysTasks.classList.add('daysTasks')
+
+    logDate.appendChild(stickyDate)
+    logDay.appendChild(logDate)
+    logDay.appendChild(daysTasks)
+    document.getElementById('inputs').before(logDay)
+
+    stickyDate.innerHTML = displayDate
+    return logDay
+}
+
+const createTaskOnDay = (logDay, task) => {
+    const taskRow = document.createElement('div')
+    const logProject = document.createElement('div')
+    const logTask = document.createElement('div')
+    const daysTasks = logDay.getElementsByClassName('daysTasks')[0]
+
+    taskRow.classList.add('taskRow')
+    logProject.classList.add('logProject')
+    logTask.classList.add('logTask')
+
+    logProject.innerHTML = task.projectName
+    logTask.innerHTML = task.summary
+
+    taskRow.append(logProject)
+    taskRow.append(logTask)
+    daysTasks.append(taskRow)
+    return taskRow
+}
+
+const decorateTaskRow = (taskRow, task) => {
+    const logTask = taskRow.getElementsByClassName('logTask')[0];
     [
         'pending',
         'in_progress',
@@ -199,11 +180,11 @@ const createLogOnUI = (task) => {
         case "WONT_DO": break
     }
     logTask.addEventListener('click', event => {
-        taskClick(event, taskRow)
-    })
+        taskClick(event, taskRow, task)
+    }) // TODO: does this belong here?
 }
 
-const saveData = data => {
+const saveData = data => { // TODO ?
     comms.saveData(
         data,
         result => {
@@ -225,13 +206,12 @@ const requestLogs = () => {
     comms.loadLogs(
         res => {
             if (res){
-                console.log('logs', res) // TODO remove logs
                 uiState.replaceLogs(res)
                 populatePageFromState()
             } else
                 console.error('corrupt logs received')
         },
-        err => console.log('error loading logs', err)
+        err => console.log('server error while loading logs')
     )
 }
 
@@ -247,7 +227,7 @@ const dataFromMainHandler = (event, logs) => {
     console.log('UI|DataPing ### REMOVE THIS THING')
     logs.forEach(log => {
         uiState.newLog(log)
-        createLogOnUI(log.date, log.project, log.task, log.status)
+        populatePageFromState()
     })
     toggleSideBar(false)
     document.getElementById('inputs').scrollIntoView()
@@ -255,8 +235,7 @@ const dataFromMainHandler = (event, logs) => {
 
 const errFromMainHandler = (err, args) => {
     // handles any error from the main process on ...?
-    console.log(args, err)
-    alert(args)
+    console.error(args, err)
 }
 
 const recieveStateChanges = (event, state) => {
@@ -283,10 +262,10 @@ window.addEventListener('load', event => {
     document.getElementById('inputs').scrollIntoView()
     // document.getElementById('loadButton').addEventListener('click', requestLogs)
     // document.getElementById('saveButton').addEventListener('click', event => { saveData(data) })
-    document.getElementById('newLogProject').addEventListener('input', event => { inputTrimmer(event, false) })
-    document.getElementById('newLogTask').addEventListener('input', event => { inputTrimmer(event, false) })
-    document.getElementById('newLogProject').addEventListener('change', event => { inputTrimmer(event, true)})
-    document.getElementById('newLogTask').addEventListener('change', event => { inputTrimmer(event, true)})
+    document.getElementById('newLogProject').addEventListener('input', event => { trimInput(event, false) })
+    document.getElementById('newLogTask').addEventListener('input', event => { trimInput(event, false) })
+    document.getElementById('newLogProject').addEventListener('change', event => { trimInput(event, true)})
+    document.getElementById('newLogTask').addEventListener('change', event => { trimInput(event, true)})
     document.getElementById('newLogProject').addEventListener('change', newLogInput)
     document.getElementById('newLogTask').addEventListener('change', newLogInput)
     document.getElementById('newLogDate').addEventListener('change', newLogInput)
