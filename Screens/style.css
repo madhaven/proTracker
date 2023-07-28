@@ -160,6 +160,8 @@ html.scrollLock, body.scrollLock{
     transition: .2s ease-out;
     word-wrap: break-word;
     overflow-wrap: break-word;
+}
+.logChart .logDay:nth-last-child(2) .logTask{
     cursor: pointer;
 }
 .logChart .logTask.pending{
