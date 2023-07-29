@@ -1,5 +1,3 @@
-const { ConfigService } = require("./ConfigService")
-
 const EncryptionService = class {
     // TODO implement valid encryption
 

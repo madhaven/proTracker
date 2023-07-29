@@ -8,7 +8,6 @@ const fs = require('fs')
 const DatabaseService = class {
     static singleton = undefined
     dbPath = ''
-    connectionString = ''
 
     constructor () {
         var configs = ConfigService.getService()
@@ -21,9 +20,7 @@ const DatabaseService = class {
             console.warn('DatabaseService: db version check || migrations')
         }
 
-        this.connectionString = EncryptionService.decrypt(configs.get('connectionString'))
-
-        if (!this.isConnectionValid(this.connectionString)) {
+        if (!this.isConnectionValid()) {
             dialog.showErrorBox('Database Connectivity Error', 'proTracker is not able to connect with database')
             console.error('DatabaseService: connection invalid')
             app.exit()
@@ -41,8 +38,8 @@ const DatabaseService = class {
         const db = new sql.Database(this.dbPath)
 
         try {
-            var query = fs.readFileSync('./Scripts/DB/init.sql', 'utf8')
-            var dataQuery = fs.readFileSync('./Scripts/DB/defaultData.sql', 'utf8')
+            const query = fs.readFileSync('./Scripts/DB/init.sql', 'utf8')
+            const dataQuery = fs.readFileSync('./Scripts/DB/defaultData.sql', 'utf8')
             db.exec(query, err => {
                 if (err) console.error('DB init error', err) // TODO remove error logs
                 else console.debug("DatabaseService: init complete")

@@ -40,7 +40,7 @@ const newTaskHandler = async (event, newTask) => {
     const project = await pp.getByNameOrCreate(newTask.project)
     const task = await tp.create(new Task(-1, project.id, newTask.summary, -1)) // TODO: remove object and replace with direct params
     const status = await sp.get(Status.PENDING)
-    const statusLog = await slp.create(new StatusLog(-1, task.id, status.id, newTask.dateTime)) // TODO fetch status values from db ?
+    const statusLog = await slp.create(new StatusLog(-1, task.id, status.id, newTask.dateTime))
     const taskLog = new TaskLog(
         task.id,
         statusLog.dateTime,
@@ -55,8 +55,6 @@ const newTaskHandler = async (event, newTask) => {
 }
 
 const toggleTaskHandler = async (event, taskId, newStatusId, newTime) => {
-    // marks a task as completed or incomplete
-    // TODO: this method should be handled by UI state change mechanism
     statusLog = await slp.create(new StatusLog(-1, taskId, newStatusId, newTime))
     const status = await sp.get(statusLog.statusId)
     statusLog.statusName = status.name

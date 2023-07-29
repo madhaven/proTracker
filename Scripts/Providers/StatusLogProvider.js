@@ -11,9 +11,9 @@ const StatusLogProvider = class {
     
     async create(statusLog) {
         var query = `INSERT INTO status_log (task_id, status_id, date_time) VALUES (?, ?, ?);`
+        var params = [statusLog.taskId, statusLog.statusId, statusLog.dateTime]
         console.debug('StatusLogProvider: creating')
         try {
-            var params = [statusLog.taskId, statusLog.statusId, statusLog.dateTime]
             var id = await this.dbService.insertOne(query, params)
             statusLog.id = id
             console.debug('StatusLogProvider: created')
@@ -24,11 +24,11 @@ const StatusLogProvider = class {
     }
 
     /* async getTaskTimeline(taskId) {
-        var query = `SELECT sl.id, sl.task_id, sl.status_id, sl.date_time, s.status FROM status_log sl INNER JOIN status s ON sl.status_id=s.id WHERE task_id=?`
+        const query = `SELECT sl.id, sl.task_id, sl.status_id, sl.date_time, s.status FROM status_log sl INNER JOIN status s ON sl.status_id=s.id WHERE task_id=?`
+        const params = [taskId]
+        console.debug('StatusLogProvider: getTaskTimeline', res.length)
         try {
-            var params = [taskId]
             var res = await this.dbService.fetch(query)
-            console.debug('StatusLogProvider: getTaskTimeline', res.length)
             return res ? res : false
         } catch (err) {
             console.error('StatusLogProvider: getTaskTimeline', err) // TODO remove error logs

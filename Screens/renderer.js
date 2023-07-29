@@ -215,7 +215,7 @@ const saveData = data => { // TODO ?
             }
         },
         err => {
-            console.log('saveData ERROR', err) // TODO: remove logs
+            console.error('saveData ERROR', err) // TODO: remove logs
         }
     )
 }

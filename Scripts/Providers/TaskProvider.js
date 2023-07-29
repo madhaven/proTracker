@@ -3,7 +3,6 @@ const { Task } = require('../Models/Task')
 const { DatabaseService } = require('../Services/DatabaseService')
 
 const TaskProvider = class {
-    // TODO: implement methods
     dbService = undefined
 
     constructor (dbService) {
@@ -11,11 +10,11 @@ const TaskProvider = class {
     }
 
     async create(task) {
-        var query = `INSERT INTO task (project_id, summary, parent_id) VALUES (?, ?, ?);`
-        var params = [task.projectId, task.summary, task.parentId]
+        const query = `INSERT INTO task (project_id, summary, parent_id) VALUES (?, ?, ?);`
+        const params = [task.projectId, task.summary, task.parentId]
         console.debug('TaskProvider: creating')
         try {
-            var id = await this.dbService.insertOne(query, params)
+            const id = await this.dbService.insertOne(query, params)
             task.id = id
             console.debug('TaskProvider: created')
             return id ? task : false
@@ -25,24 +24,38 @@ const TaskProvider = class {
     }
 
     async get(id) {
-        var query = `SELECT id, project_id, summary, parent_id FROM task WHERE id=${id};`
+        const query = `SELECT id, project_id, summary, parent_id FROM task WHERE id=?;`
+        const params = [id]
+        console.debug('TaskProvider: get')
         try {
-            var res = await this.dbService.getOne(query)
-            console.debug('TaskProvider: get')
+            const res = await this.dbService.getOne(query, params)
             return res ? new Task(res.id, res.project_id, res.summary, res.parent_id) : false
         } catch (err) {
             console.error("TaskProvider: get", err) // TODO remove error logs
         }
     }
 
-    async getAllTaskOfProject(projectId) {}
+    async getAllTaskOfProject(projectId) {
+        const query = `SELECT id, project_id, summary, parent_id FROM task WHERE project_id=?;`;
+        const params = [projectId]
+        console.debug('TaskProvider: tasksOfProject')
+        try { 
+            const res = await this.dbService.fetch(query, params)
+            const result = res.map(task => new Task(
+                task.id, task.project_id, task.summary, task.parent_id
+            ))
+            return res ? result : false
+        } catch (err) {
+            console.error('TaskProvider: tasksOfProject', err) // TODO remove error logs
+        }
+    }
 
     async getAllTasks() {
-        var query = `SELECT t.id as id, t.summary, t.project_id as project_id, t.parent_id, p.name as project_name, sl.date_time as date_time, s.id as status_id, s.status as status_name FROM task t INNER JOIN project p ON t.project_id=p.id INNER JOIN (SELECT task_id, MAX(date_time) AS date_time, status_id FROM status_log GROUP BY task_id) sl ON t.id=sl.task_id INNER JOIN status s ON s.id=sl.status_id`
+        const query = `SELECT t.id as id, t.summary, t.project_id as project_id, t.parent_id, p.name as project_name, sl.date_time as date_time, s.id as status_id, s.status as status_name FROM task t INNER JOIN project p ON t.project_id=p.id INNER JOIN (SELECT task_id, MAX(date_time) AS date_time, status_id FROM status_log GROUP BY task_id) sl ON t.id=sl.task_id INNER JOIN status s ON s.id=sl.status_id`
+        console.debug('TaskProvider: getallTasks', res.length)
         try {
-            var res = await this.dbService.fetch(query)
-            console.debug('TaskProvider: getallTasks', res.length)
-            var result = res.map(task => new Task( // TODO std contracts
+            const res = await this.dbService.fetch(query)
+            const result = res.map(task => new Task(
                 task.id,
                 task.project_id,
                 task.summary,
@@ -55,11 +68,11 @@ const TaskProvider = class {
     }
 
     async getAllTaskLogs() {
-        var query = `SELECT t.id as id, t.summary, t.project_id as project_id, t.parent_id, p.name as project_name, sl.date_time as date_time, s.id as status_id, s.status as status_name, sl.task_id, sl.date_time FROM task t INNER JOIN project p ON t.project_id=p.id INNER JOIN status_log sl ON t.id=sl.task_id INNER JOIN status s ON s.id=sl.status_id ORDER BY sl.date_time`
+        const query = `SELECT t.id as id, t.summary, t.project_id as project_id, t.parent_id, p.name as project_name, sl.date_time as date_time, s.id as status_id, s.status as status_name, sl.task_id, sl.date_time FROM task t INNER JOIN project p ON t.project_id=p.id INNER JOIN status_log sl ON t.id=sl.task_id INNER JOIN status s ON s.id=sl.status_id ORDER BY sl.date_time`
+        console.debug('TaskProvider: allTaskLogs', res.length)
         try {
-            var res = await this.dbService.fetch(query)
-            console.debug('TaskProvider: allLogs', res.length)
-            var result = res.map(task => new TaskLog(
+            const res = await this.dbService.fetch(query)
+            const result = res.map(task => new TaskLog(
                     task.id,
                     task.date_time,
                     task.summary,
@@ -76,9 +89,21 @@ const TaskProvider = class {
         }
     }
 
-    async updateSummary(id, summary) {}
+    async update(id, summary) {
+        const query = `UPDATE task SET summary=? WHERE id=?;`
+        const params = [summary, id]
+        console.debug('TaskProvider: udpate')
+        try {
+            const res = await this.dbService.exec(query, params)
+            return res==1 ? res : false
+        } catch (err) {
+            console.error('TaskProvider: update', err) // TODO remove error logs
+        }
+    }
 
-    async delete(id) {}
+    async delete(id) {
+        // TODO: make a delted field vs actually delete
+    }
 }
 
 module.exports = { TaskProvider }

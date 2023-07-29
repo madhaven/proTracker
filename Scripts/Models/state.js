@@ -5,14 +5,14 @@ const State = class {
     constructor (menuVisible=true, dataProfile=true) {
         this.menuVisible = menuVisible
         this.dataProfile = dataProfile
-        this.dailyTodo = [] // TODO: fetch from files
+        this.logs = [] // TODO UI requests for logs vs backend prompts UI with logs?
     }
 
     equals(state2) {
         if (
             this.menuView != state2.menuView ||
             this.dataProfile != state2.dataFile ||
-            this.dailyTodo != state2.dailyTodo)
+            this.logs != state2.logs)
             return false
         return true
     }

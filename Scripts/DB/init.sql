@@ -1,3 +1,7 @@
+CREATE TABLE master (
+    version VARCHAR NOT NULL
+)
+
 CREATE TABLE status_log (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     task_id INTEGER NOT NULL REFERENCES task(id),

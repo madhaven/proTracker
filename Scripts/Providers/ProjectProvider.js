@@ -2,7 +2,6 @@ const { Project } = require('../Models/Project')
 const { DatabaseService } = require('../Services/DatabaseService')
 
 const ProjectProvider = class {
-    // TODO: implement methods
     dbService = undefined
 
     constructor (dbService) {
@@ -10,12 +9,12 @@ const ProjectProvider = class {
     }
 
     async create(name) {
-        var query = `INSERT INTO project (name) VALUES (?);`
+        const query = `INSERT INTO project (name) VALUES (?);`
+        const params = [name]
         console.debug('ProjectProvider: creating')
         try {
-            var params = [name]
-            var id = await this.dbService.insertOne(query, params)
-            var newProject = new Project(id, name)
+            const id = await this.dbService.insertOne(query, params)
+            const newProject = new Project(id, name)
             console.debug('ProjectProvider: created')
             return newProject
         } catch (err) {
@@ -24,46 +23,72 @@ const ProjectProvider = class {
     }
 
     async get(id) {
-        var query = `SELECT id, name FROM project WHERE id=?;`
+        const query = `SELECT id, name FROM project WHERE id=?;`
+        const params = [id]
+        console.debug('ProjectProvider: get')
         try {
-            var params = [id]
-            var res = await this.dbService.getOne(query, params)
-            console.debug('ProjectProvider: get')
+            const res = await this.dbService.getOne(query, params)
             return res ? new Project(res.id, res.name) : false
         } catch (err) {
-            console.debug("ProjectProvider: get", err) // TODO remove error logs
+            console.error("ProjectProvider: get", err) // TODO remove error logs
         }
     }
 
     async getByName(name) {
-        var query = `SELECT id, name FROM project WHERE name=?;`
+        const query = `SELECT id, name FROM project WHERE name=?;`
+        const params = [name]
+        console.debug('ProjectProvider: getByName')
         try {
-            var params = [name]
-            var res = await this.dbService.getOne(query, params)
-            console.debug('ProjectProvider: getByName')
+            const res = await this.dbService.getOne(query, params)
             return res ? new Project(res.id, res.name) : false
         } catch (err) {
             console.error("ProjectProvider: getByName", err) // TODO remove error logs
         }
     }
 
-    async getByNameOrCreate(name) { // TODO change the query in create() to handle this case
-        var project = await this.getByName(name)
+    async getByNameOrCreate(name) {
+        // const query = `INSERT OR IGNORE INTO project (name)
+        // SELECT ? WHERE NOT EXISTS ( SELECT 1 FROM project WHERE name = ?);`
+        // console.debug('ProjectProvider: get/create')
+        const project = await this.getByName(name)
         if (project) {
             return project
         } else {
-            var newProject = await this.create(name)
+            const newProject = await this.create(name)
             return newProject
         }
     }
 
-    async getAllProjects() {}
+    async getAllProjects() {
+        const query = `SELECT id, name FROM project;`
+        console.debug('ProjectProvider: getAll')
+        try {
+            const res = await this.dbService.fetch(query)
+            const result = res.map(project => new Project (
+                project.id,
+                project.name
+            ))
+            return res ? result : false
+        } catch (err) {
+            console.debug('ProjectProvider: get', err) // TODO remove error logs
+        }
+    }
 
-    async getActiveProjectsInTime(startTime, endTime) {}
+    async update(id, name) {
+        const query = `UPDATE project SET name=? WHERE id=?;`
+        const params = [name, id]
+        console.debug('ProjectProvider: update')
+        try {
+            const res = await this.dbService.exec(query, params)
+            return res==1 ? true : false
+        } catch (err) {
+            console.error('ProjectProvider: update', err) // TODO remove error logs
+        }
+    }
 
-    async updateName(id, name) {}
-
-    async delete(id) {}
+    async delete(id) {
+        // TODO: make a deleted field vs actually delete
+    }
 }
 
 module.exports = { ProjectProvider }
