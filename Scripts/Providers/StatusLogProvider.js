@@ -26,7 +26,7 @@ const StatusLogProvider = class {
     /* async getTaskTimeline(taskId) {
         const query = `SELECT sl.id, sl.task_id, sl.status_id, sl.date_time, s.status FROM status_log sl INNER JOIN status s ON sl.status_id=s.id WHERE task_id=?`
         const params = [taskId]
-        console.debug('StatusLogProvider: getTaskTimeline', res.length)
+        console.debug('StatusLogProvider: getTaskTimeline')
         try {
             var res = await this.dbService.fetch(query)
             return res ? res : false

@@ -52,7 +52,7 @@ const TaskProvider = class {
 
     async getAllTasks() {
         const query = `SELECT t.id as id, t.summary, t.project_id as project_id, t.parent_id, p.name as project_name, sl.date_time as date_time, s.id as status_id, s.status as status_name FROM task t INNER JOIN project p ON t.project_id=p.id INNER JOIN (SELECT task_id, MAX(date_time) AS date_time, status_id FROM status_log GROUP BY task_id) sl ON t.id=sl.task_id INNER JOIN status s ON s.id=sl.status_id`
-        console.debug('TaskProvider: getallTasks', res.length)
+        console.debug('TaskProvider: getallTasks')
         try {
             const res = await this.dbService.fetch(query)
             const result = res.map(task => new Task(
@@ -69,7 +69,7 @@ const TaskProvider = class {
 
     async getAllTaskLogs() {
         const query = `SELECT t.id as id, t.summary, t.project_id as project_id, t.parent_id, p.name as project_name, sl.date_time as date_time, s.id as status_id, s.status as status_name, sl.task_id, sl.date_time FROM task t INNER JOIN project p ON t.project_id=p.id INNER JOIN status_log sl ON t.id=sl.task_id INNER JOIN status s ON s.id=sl.status_id ORDER BY sl.date_time`
-        console.debug('TaskProvider: allTaskLogs', res.length)
+        console.debug('TaskProvider: allTaskLogs')
         try {
             const res = await this.dbService.fetch(query)
             const result = res.map(task => new TaskLog(
@@ -92,7 +92,7 @@ const TaskProvider = class {
     async update(id, summary) {
         const query = `UPDATE task SET summary=? WHERE id=?;`
         const params = [summary, id]
-        console.debug('TaskProvider: udpate')
+        console.debug('TaskProvider: update')
         try {
             const res = await this.dbService.exec(query, params)
             return res==1 ? res : false
