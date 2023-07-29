@@ -1,6 +1,6 @@
 CREATE TABLE master (
     version VARCHAR NOT NULL
-)
+);
 
 CREATE TABLE status_log (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,

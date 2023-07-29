@@ -8,7 +8,7 @@ const State = class {
     ) {
         this.menuVisible = menuVisible
         this.dataProfile = dataProfile
-        this.logs = {}
+        this.logs = []
         this.logTree = {}
     }
 

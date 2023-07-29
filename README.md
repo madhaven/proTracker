@@ -12,7 +12,7 @@ The [Electron framework](https://www.electronjs.org/) as I understand works with
 
 In this project
 
-* The renderer makes use of a state data object to handle data processing before rendering.
+* The renderer makes use of a state data object to handle data processing before rendering.  
   This is just a Work in Progress and not a fully fledged state mechanism
 * The Electron / backend section has been modularized into a layered architecture format.
 
