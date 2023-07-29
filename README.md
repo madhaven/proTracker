@@ -10,13 +10,18 @@ The [Electron framework](https://www.electronjs.org/) as I understand works with
 * The preload: handles the bridge and permissions between the main world and the front render
 * The renderer: normal frontend script that handles logic on the front end
 
+In this project
+
+* The renderer makes use of a state data object to handle data processing before rendering.
+  This is just a Work in Progress and not a fully fledged state mechanism
+* The Electron / backend section has been modularized into a layered architecture format.
+
 ```text
-                                |--> log.html
-eMain.js <--ePreload_APIBridge--|--> renderer.js
-|                               |--> pageListeners.js
+eMain.js <--ePreload_APIBridge--|--> log.html
+|                               |--> renderer.js <---> state.js
 |
 |
-handlers.js  - handles IPC with renderer
+handlers.js  - handles IPC with renderer and delegates tasks
 Services     - handles Logic
 Providers    - provides Data connectivity
 DB
@@ -34,7 +39,5 @@ DB
 * It started out as an excel sheet which had two tabs for tasks that were pending and those that were completed  
 * The UI was next built and basic functionality added with the help of the [Electron framework](https://www.electronjs.org/)  
 * IPC calls were established and it all worked like a monolith
-* Thinking of setting up a
-  * layered architecture to handle the data flow
-  * db and tables to save stuff better
-  * Tests https://www.electronjs.org/docs/latest/tutorial/automated-testing
+* Thinking of setting up tests https://www.electronjs.org/docs/latest/tutorial/automated-testing
+  Feel free to contribute
