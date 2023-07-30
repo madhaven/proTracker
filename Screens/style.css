@@ -212,6 +212,28 @@ html.scrollLock, body.scrollLock{
     transition: .2s ease-out;
 }
 
+.projects ul{
+    transition: .5s;
+    list-style-type: none;
+    padding: 0px;
+    margin: 0px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    /* align-items: center; */
+}
+.projects ul li{
+    margin: .5em .5em .5em 0em;
+    padding: .5em 1em;
+    border-radius: .5em;
+    background-color: var(--blackLayer2);
+    cursor: pointer;
+    font-size: large;
+}
+.projects ul li:hover{
+    background-color: var(--blackLayer1);
+}
+
 /* width */
 ::-webkit-scrollbar {
     width: 10px;

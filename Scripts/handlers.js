@@ -12,8 +12,14 @@ const { StatusLogProvider } = require('./Providers/StatusLogProvider')
 var tp, pp, slp, sp
 
 const loadLogsHandler = async (event) => {
-    alltasks = await tp.getAllTaskLogs()
-    return alltasks ? alltasks : false
+    alltasks = await tp.getAllTasks()
+    allLogs = await slp.getAllLogs()
+    allProjects = await pp.getAllProjects()
+    return alltasks ? allLogs ? {
+        "tasks": alltasks,
+        "logs": allLogs,
+        "projects": allProjects
+    } : false : false
 }
 
 const saveDataHandler = async (event, mainWindow) => {
@@ -33,28 +39,21 @@ const newTaskHandler = async (event, newTask) => {
     newTask.project = newTask.project.trim()
     newTask.summary = newTask.summary.trim()
     console.log('newTask', newTask)
+
     const project = await pp.getByNameOrCreate(newTask.project)
     const task = await tp.create(new Task(-1, project.id, newTask.summary, -1)) // TODO: remove object and replace with direct params
     const status = await sp.get(Status.PENDING)
-    const statusLog = await slp.create(new StatusLog(-1, task.id, status.id, newTask.dateTime))
-    const taskLog = new TaskLog(
-        task.id,
-        statusLog.dateTime,
-        task.summary,
-        task.parentId,
-        task.projectId,
-        project.name,
-        status.id,
-        status.name,
-    )
-    return taskLog ? taskLog : false
+    const log = await slp.create(new StatusLog(-1, task.id, status.id, newTask.dateTime))
+    return (project && task && log) ? {
+        "task": task,
+        "log": log,
+        "project": project
+    } : false
 }
 
 const toggleTaskHandler = async (event, taskId, newStatusId, newTime) => {
     statusLog = await slp.create(new StatusLog(-1, taskId, newStatusId, newTime))
-    const status = await sp.get(statusLog.statusId)
-    statusLog.statusName = status.name
-    return statusLog.id>0 ? statusLog : false
+    return statusLog ? statusLog : false
 }
 
 /// STATE EVENTS
@@ -86,7 +85,7 @@ const registerHandlers = mainWindow => {
     ipcMain.on('UIEventNotifications', stateEventHandler)
     ipcMain.handle('UIEventRequests', stateChangeRequestHandler)
     
-    console.log("handlers registered")
+    console.debug("handlers registered")
 }
 
 module.exports = { registerHandlers }

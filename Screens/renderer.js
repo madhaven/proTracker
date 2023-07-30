@@ -70,10 +70,11 @@ const createTaskOnDay = (logDay, task) => {
     const stickyDate = logDay.querySelector('.stickyDate').innerHTML.replaceAll(' ', '')
     const displayId = stickyDate + '_' + task.id
     const allTasks = logDay.getElementsByClassName('taskRow')
+    const project = uiState.projects[task.projectId]
 
-    for (log of allTasks) {
-        if (log.id == displayId)
-            return log
+    for (row of allTasks) {
+        if (row.id == displayId)
+            return row
     }
 
     taskRow.classList.add('taskRow')
@@ -81,7 +82,7 @@ const createTaskOnDay = (logDay, task) => {
     logProject.classList.add('logProject')
     logTask.classList.add('logTask')
 
-    logProject.innerHTML = task.projectName
+    logProject.innerHTML = project.name
     logTask.innerHTML = task.summary
 
     taskRow.append(logProject)
@@ -90,7 +91,7 @@ const createTaskOnDay = (logDay, task) => {
     return taskRow
 }
 
-const decorateTaskRow = (taskRow, task) => {
+const decorateTaskRow = (taskRow, log, task) => {
     const logTask = taskRow.querySelector('.logTask');
     logTask.classList.remove(
         'pending'
@@ -100,23 +101,23 @@ const decorateTaskRow = (taskRow, task) => {
         , 'waiting'
         , 'wont_do'
     )
-    switch (task.statusName) {
-        case "PENDING":
+    switch (log.statusId) {
+        case 1: //PENDING
             logTask.classList.add('pending')
             break
-        case "IN_PROGRESS": break
-        case "NEED_INFO": break
-        case "COMPLETED":
+        case 2: //IN_PROGRESS
+        case 3: //NEED_INFO
+        case 4: //COMPLETED
             logTask.classList.add('completed')
             break
-        case "WAITING": break
-        case "WONT_DO": break
+        case 4: //WAITING
+        case 5: //WONT_DO
     }
-    if (new Date().toDateString() == new Date(task.dateTime).toDateString()) {
+    // if (new Date().toDateString() == new Date(task.dateTime).toDateString()) {
         logTask.addEventListener('click', event => {
-            taskClick(event, taskRow, task)
+            taskClick(event, taskRow, task, log)
         }) // TODO: does this belong here?
-    }
+    // }
 }
 
 // #endregion
@@ -158,9 +159,10 @@ const newLogInput = event => {
     task = { dateTime: date, project: project, summary: summary }
     comms.newTask(
         task,
-        result => {
-            if (!result) return
-            uiState.addLog(result)
+        res => {
+            if (!res) return
+            console.log('newTaskresult', res)
+            uiState.addData(res.log, res.task, res.project)
             populatePageFromState()
 
             UIsummary.value = UIproject.value = ""
@@ -172,22 +174,17 @@ const newLogInput = event => {
     )
 }
 
-const taskClick = (event, element, taskLog) => {
+const taskClick = (event, element, task, log) => {
     const taskElement = element.querySelector('.logTask')
     // TODO: setup more refined status change mechanism
-    const newState = taskLog.statusId == 1 ? 4 : 1
+    const newState = log.statusId == 1 ? 4 : 1
     const currentTime = Date.now()
-    console.log('taskClick', element, taskLog)
 
     comms.toggleTask(
-        taskLog.id, newState, currentTime,
+        task.id, newState, currentTime,
         res => {
-            const newTaskLog = { ...taskLog }
-            newTaskLog.dateTime = res.dateTime
-            newTaskLog.statusId = res.statusId
-            newTaskLog.statusName = res.statusName
-
-            uiState.addLog(newTaskLog)
+            console.log('taskclick result', res)
+            uiState.addLog(res)
             populatePageFromState()
         },
         err => {
@@ -200,9 +197,11 @@ const populatePageFromState = () => {
     clearAllLogs()
     for (const day in uiState.logTree) {
         const logDay = createOrFindDay(day)
-        for (const task in uiState.logTree[day]) {
-            const taskRow = createTaskOnDay(logDay, uiState.logTree[day][task])
-            decorateTaskRow(taskRow, uiState.logTree[day][task])
+        for (const taskId in uiState.logTree[day]) {
+            const log = uiState.logTree[day][taskId]
+            const task = uiState.tasks[taskId]
+            const taskRow = createTaskOnDay(logDay, task)
+            decorateTaskRow(taskRow, log, task)
         }
     }
 }
@@ -253,13 +252,13 @@ const requestLogsFromDb = () => {
     comms.loadLogs(
         res => {
             if (res){
-                uiState.replaceLogs(res)
+                uiState.replaceData(res.logs, res.tasks, res.projects)
                 populatePageFromState()
             } else {
                 console.error('corrupt logs received')
             }
         },
-        err => console.log('server error while loading logs')
+        err => console.error('server error while loading logs')
     )
 }
 

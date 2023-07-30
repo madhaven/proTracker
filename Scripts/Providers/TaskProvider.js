@@ -67,7 +67,7 @@ const TaskProvider = class {
         }
     }
 
-    async getAllTaskLogs() {
+    async getAllTaskLogs() { // deprecated
         const query = `SELECT t.id as id, t.summary, t.project_id as project_id, t.parent_id, p.name as project_name, sl.date_time as date_time, s.id as status_id, s.status as status_name, sl.task_id, sl.date_time FROM task t INNER JOIN project p ON t.project_id=p.id INNER JOIN status_log sl ON t.id=sl.task_id INNER JOIN status s ON s.id=sl.status_id ORDER BY sl.date_time`
         console.debug('TaskProvider: allTaskLogs')
         try {
@@ -83,7 +83,7 @@ const TaskProvider = class {
                     task.status_name
                 )
             )
-            return result ? result : false
+            return res ? result : false
         } catch (err) {
             console.error('TaskProvider: getAllTaskLogs', err) // TODO remove error logs
         }
