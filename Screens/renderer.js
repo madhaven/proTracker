@@ -113,7 +113,7 @@ const decorateTaskRow = (taskRow, log, task) => {
         case 4: //WAITING
         case 5: //WONT_DO
     }
-    if (new Date().toDateString() == new Date(task.dateTime).toDateString()) {
+    if (new Date().toDateString() == new Date(log.dateTime).toDateString()) {
         logTask.addEventListener('click', event => {
             taskClick(event, taskRow, task, log)
         }) // TODO: does this belong here?
@@ -165,8 +165,9 @@ const newLogInput = event => {
             uiState.addData(res.log, res.task, res.project)
             populatePageFromState()
 
-            UIsummary.value = UIproject.value = ""
             setDefaultDate()
+            UIsummary.value = UIproject.value = ""
+            UIproject.focus()
         },
         err => {
             console.error('server error while adding new task', err) // TODO remove error logs
