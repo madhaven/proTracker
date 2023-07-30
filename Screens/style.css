@@ -108,11 +108,15 @@ html.scrollLock, body.scrollLock{
     transition:  border-left none;
 }
 
-.logChart{
+.menuTab{
+    display: none;
     margin-top: 2em;
     margin-bottom: 10em;
     width: 100%;
     height: 100%;
+}
+
+.logChart{
     text-align: left;
 }
 .logChart .header{

@@ -16,20 +16,16 @@ const loadLogsHandler = async (event) => {
     return alltasks ? alltasks : false
 }
 
-const saveDataHandler = async (event, data, mainWindow) => {
+const saveDataHandler = async (event, mainWindow) => {
     // prompts user for file name and saves the data into the file
 
-    const csvData = "date,project,task,status\n" + data.map(
-        row => [row.data, row.project, row.task, row.status].join(',')
-    ).join('\n')
+    const csvData = "date,project,task,status\n"
 
     const result = await FileService.saveFile(mainWindow, csvData)
     console.log('handler: saveFile result received:', result)
-    if (result){
-        return true
-    } else {
-        ipcMain.emit("DataError", "something went wrong, didn't save")
-    }
+    return result 
+        ? result 
+        : ipcMain.emit("DataError", "something went wrong, didn't save")
 }
 
 const newTaskHandler = async (event, newTask) => {
@@ -65,7 +61,7 @@ const toggleTaskHandler = async (event, taskId, newStatusId, newTime) => {
 
 const stateEventHandler = async (event, data) => {
     // TODO
-    console.log('main: state event notified', data)
+    // console.log('main: state event notified')
 }
 
 const stateChangeRequestHandler = async (event, data) => {
@@ -84,7 +80,7 @@ const registerHandlers = mainWindow => {
     ipcMain.handle('newTaskChannel', newTaskHandler)
     ipcMain.handle('taskClickChannel', toggleTaskHandler)
     ipcMain.handle('loadLogsRequest', loadLogsHandler)
-    ipcMain.handle('saveDataRequest', (event, data) => { saveDataHandler(event, data, mainWindow) })
+    ipcMain.handle('saveDataRequest', () => { saveDataHandler(mainWindow) })
     
     // state info exchange
     ipcMain.on('UIEventNotifications', stateEventHandler)
