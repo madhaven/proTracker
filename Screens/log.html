@@ -11,21 +11,24 @@
     <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-    <!-- <div id="sideHandle">
+    <div id="sideHandle">
         ...
     </div>
     <aside id="sideBar">
         <div class="menu container">
             <ul>
-                <li id="loadButton" tabindex="1">
+                <!-- <li id="load_menuButton" tabindex="1">
                     OPEN FILE
                     <input type="file" accept=".xlsx, .xls, .csv" name="data" id="dataFile" hidden>
-                </li>
-                <li id="saveButton" tabindex="2">SAVE</li>
+                </li> -->
+                <!-- <li id="save_menuButton" tabindex="2">SAVE</li> -->
+                <li id="logChart_menuButton">LOGS</li>
+                <li id="projects_menuButton">PROJECTS</li>
             </ul>
         </div>
-    </aside> -->
-    <main class="container logChart">
+    </aside>
+    <main class="container menuTab logChart">
+        <h1>LOGS</h1>
         <div class="logDay header">
             <div class="logDate">Date</div>
             <div class="logProject">Project</div>
@@ -41,6 +44,36 @@
             <div class="logTask">
                 <input type="text" name="Task" id="newLogTask" title="Task">
             </div>
+        </div>
+    </main>
+    <main class="container menuTab projects">
+        <h1>PROJECTS</h1>
+        <div>
+            <ul>
+                <li>test1test1test1test1</li>
+                <li>test1test1</li>
+                <li>test1test1</li>
+                <li>test1</li>
+                <li>test1</li>
+                <li>test1</li>
+                <li>test1</li>
+                <li>test1test1test1test1</li>
+                <li>test1</li>
+                <li>test1</li>
+                <li>test1test1</li>
+                <li>test1</li>
+                <li>test1</li>
+                <li>test1</li>
+                <li>test1test1</li>
+                <li>test1</li>
+                <li>test1</li>
+                <li>test1</li>
+                <li>test1</li>
+                <li>test1</li>
+                <li>test1</li>
+                <li>test1</li>
+                <li>test1</li>
+            </ul>
         </div>
     </main>
     <script src="../Scripts/Contracts/State.js"></script>

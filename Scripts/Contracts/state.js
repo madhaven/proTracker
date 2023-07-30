@@ -8,7 +8,9 @@ const State = class {
     ) {
         this.menuVisible = menuVisible
         this.dataProfile = dataProfile
-        this.logs = []
+        this.logs = {}
+        this.tasks = {}
+        this.projects = {}
         this.logTree = {}
     }
 
@@ -27,25 +29,49 @@ const State = class {
         return true
     }
 
-    sortLogs () {
-        return this.logs.sort((a, b) => a.dateTime - b.dateTime)
-    }
-
-    replaceLogs (logs) {
-        this.logs = logs
-        this.sortLogs()
+    replaceData (logs, tasks, projects) {
+        this.projects = {}
+        this.tasks = {}
+        this.logs = {}
+        
+        for (var project of projects) {
+            this.projects[project.id] = project
+        }
+        for (var task of tasks) {
+            this.tasks[task.id] = task
+        }
+        for (var log of logs) {
+            this.logs[log.id] = log
+        }
         this.growTree()
+        console.debug('data replaced', this)
     }
 
-    addLog (taskLog) {
-        this.logs.push(taskLog)
-        this.sortLogs()
+    addData (log, task, project) {
+        if (this.tasks[task.id] == undefined) {
+            this.tasks[task.id] = task
+        }
+        if (this.projects[project.id] == undefined) {
+            this.projects[project.id] = project
+        }
+        this.addLog(log)
+        console.debug('data added', this)
+    }
+
+    addLog (log) {
+        this.logs[log.id] = log
         this.growTree()
+        console.log('log added', this)
     }
-
+    
     growTree () {
         this.logTree = {}
-        for (const log of this.logs) {
+        const orderredLogs = []
+        for (const log in this.logs) {
+            orderredLogs.push(this.logs[log])
+        }
+        orderredLogs.sort((a, b) => a.dateTime-b.dateTime)
+        for (const log of orderredLogs) {
             const t = new Date(log.dateTime)
                 , year = t.getFullYear()
                 , month = t.getMonth()
@@ -53,7 +79,7 @@ const State = class {
 
             if (this.logTree[[year, month, date]] == undefined)
                 this.logTree[[year, month, date]] = {}
-            this.logTree[[year, month, date]][log.id] = log
+            this.logTree[[year, month, date]][log.taskId] = log
         }
     }
 }

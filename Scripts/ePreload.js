@@ -7,14 +7,14 @@ contextBridge.exposeInMainWorld('comms', {
         ipcRenderer.invoke('taskClickChannel', taskId, statusId, time).then(callback, err) },
     loadLogs: (callback, err) => {
         ipcRenderer.invoke('loadLogsRequest').then(callback, err) },
-    saveData: (data, callback, err) => {
-        ipcRenderer.invoke('saveDataRequest', data).then(callback, err) },
+    saveData: (callback, err) => {
+        ipcRenderer.invoke('saveDataRequest').then(callback, err) },
     registerListener: (channel, callback) => {
         ipcRenderer.on(channel, callback) },
     // variables be also exposed, not just functions
 })
 
-contextBridge.exposeInMainWorld('state', {
+contextBridge.exposeInMainWorld('stateComm', {
     notifyUIEvent: state => {
         ipcRenderer.send('UIEventNotifications', state) },
     requestUIChange: (state, callback, err) => {

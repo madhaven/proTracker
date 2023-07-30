@@ -1,12 +1,6 @@
 const uiState = new State()
 
-const clearAllLogs = () => {
-    // clears all logs
-    const allLogs = document.querySelectorAll('.logDay:not(.header)')
-    for (var day of allLogs) {
-        day.remove()
-    }
-}
+// #region Helpers
 
 const setDefaultDate = () => {
     // sets a default date client: recieved state change promptfor the input field
@@ -22,96 +16,18 @@ const setDefaultDate = () => {
     document.getElementById('newLogDate').value = dateString
 }
 
-const toggleSideBar = (visible = undefined) => {
-    // // handles the open and close of the sidebar
-    // const sidebar = document.getElementById('sideBar')
-    // const handle = document.getElementById('sideHandle')
-    // if ((visible==undefined && !sideBarState) || visible==true) {
-    //     // open side bar
-    //     sidebar.classList.add("sideBar_open")
-    //     sideBarState = true
-    //     document.body.classList.add('scrollLock')
-    //     uiState.menuVisible = true
-    // } else if ((visible==undefined && sideBarState) || visible==false) {
-    //     // close side bar
-    //     sidebar.classList.remove("sideBar_open")
-    //     sideBarState = false
-    //     document.body.classList.remove('scrollLock')
-    //     uiState.menuVisible = false
-    // }
-    // state.notifyUIEvent(uiState)
+const clearAllLogs = () => {
+    // clears all logs
+    const allLogs = document.querySelectorAll('.logDay:not(.header)')
+    for (var day of allLogs) {
+        day.remove()
+    }
 }
 
 const trimInput = (event, leftAndRight=false) => {
     event.srcElement.value = leftAndRight
         ? event.srcElement.value.trim()
         : event.srcElement.value.trimLeft()
-}
-
-const newLogInput = event => {
-    // handles new entry made in the log page
-    
-    // validation
-    var UIsummary = document.getElementById('newLogTask')
-    var UIproject = document.getElementById('newLogProject')
-    var UIdate = document.getElementById('newLogDate')
-    summary = UIsummary.value
-    project = UIproject.value
-    date = UIdate.value
-    if (!summary) return false
-    if (!project) return false
-    if (!date) return false
-    
-    task = { dateTime: date, project: project, summary: summary }
-    comms.newTask(
-        task,
-        result => {
-            if (!result) return
-            uiState.addLog(result)
-            populatePageFromState()
-
-            UIsummary.value = UIproject.value = ""
-            setDefaultDate()
-        },
-        err => {
-            console.error('server error while adding new task', err) // TODO remove error logs
-        }
-    )
-}
-
-const taskClick = (event, element, taskLog) => {
-    const taskElement = element.querySelector('.logTask')
-    // TODO: setup more refined status change mechanism
-    const newState = taskLog.statusId == 1 ? 4 : 1
-    const currentTime = Date.now()
-    console.log('taskClick', element, taskLog)
-
-    comms.toggleTask(
-        taskLog.id, newState, currentTime,
-        res => {
-            const newTaskLog = { ...taskLog }
-            newTaskLog.dateTime = res.dateTime
-            newTaskLog.statusId = res.statusId
-            newTaskLog.statusName = res.statusName
-
-            uiState.addLog(newTaskLog)
-            populatePageFromState()
-        },
-        err => {
-            console.error('server error while updating task', err) // TODO remove error logs
-        }
-    )
-}
-
-const populatePageFromState = () => {
-    clearAllLogs()
-    for (const day in uiState.logTree) {
-        const logDay = createOrFindDay(day)
-        for (const task in uiState.logTree[day]) {
-            const taskRow = createTaskOnDay(logDay, uiState.logTree[day][task])
-            decorateTaskRow(taskRow, uiState.logTree[day][task])
-        }
-    }
 }
 
 const createOrFindDay = (date) => {
@@ -154,10 +70,11 @@ const createTaskOnDay = (logDay, task) => {
     const stickyDate = logDay.querySelector('.stickyDate').innerHTML.replaceAll(' ', '')
     const displayId = stickyDate + '_' + task.id
     const allTasks = logDay.getElementsByClassName('taskRow')
+    const project = uiState.projects[task.projectId]
 
-    for (log of allTasks) {
-        if (log.id == displayId)
-            return log
+    for (row of allTasks) {
+        if (row.id == displayId)
+            return row
     }
 
     taskRow.classList.add('taskRow')
@@ -165,7 +82,7 @@ const createTaskOnDay = (logDay, task) => {
     logProject.classList.add('logProject')
     logTask.classList.add('logTask')
 
-    logProject.innerHTML = task.projectName
+    logProject.innerHTML = project.name
     logTask.innerHTML = task.summary
 
     taskRow.append(logProject)
@@ -174,7 +91,7 @@ const createTaskOnDay = (logDay, task) => {
     return taskRow
 }
 
-const decorateTaskRow = (taskRow, task) => {
+const decorateTaskRow = (taskRow, log, task) => {
     const logTask = taskRow.querySelector('.logTask');
     logTask.classList.remove(
         'pending'
@@ -184,57 +101,136 @@ const decorateTaskRow = (taskRow, task) => {
         , 'waiting'
         , 'wont_do'
     )
-    switch (task.statusName) {
-        case "PENDING":
+    switch (log.statusId) {
+        case 1: //PENDING
             logTask.classList.add('pending')
             break
-        case "IN_PROGRESS": break
-        case "NEED_INFO": break
-        case "COMPLETED":
+        case 2: //IN_PROGRESS
+        case 3: //NEED_INFO
+        case 4: //COMPLETED
             logTask.classList.add('completed')
             break
-        case "WAITING": break
-        case "WONT_DO": break
+        case 4: //WAITING
+        case 5: //WONT_DO
     }
-    if (new Date().toDateString() == new Date(task.dateTime).toDateString()) {
+    // if (new Date().toDateString() == new Date(task.dateTime).toDateString()) {
         logTask.addEventListener('click', event => {
-            taskClick(event, taskRow, task)
+            taskClick(event, taskRow, task, log)
         }) // TODO: does this belong here?
-    }
+    // }
 }
 
-const saveData = data => { // TODO ?
-    comms.saveData(
-        data,
-        result => {
-            console.log('saveData result', result)
-            if (result === true) {
-                console.log('TODO: BUILD UI FOR SUCCESFUL SAVE')
-            } else {
-                console.log('TODO: BUILD UI FOR FAILED SAVE')
-            }
+// #endregion
+
+// #region Actions
+
+const toggleSideBar = (visible = undefined) => {
+    // handles the open and close of the sidebar
+    const sidebar = document.getElementById('sideBar')
+    const handle = document.getElementById('sideHandle')
+    if ((visible==undefined && !uiState.menuVisible) || visible==true) {
+        // open side bar
+        sidebar.classList.add("sideBar_open")
+        uiState.menuVisible = true
+        document.body.classList.add('scrollLock')
+    } else if ((visible==undefined && uiState.menuVisible) || visible==false) {
+        // close side bar
+        sidebar.classList.remove("sideBar_open")
+        uiState.menuVisible = false
+        document.body.classList.remove('scrollLock')
+    }
+    stateComm.notifyUIEvent(uiState) // needed ?
+}
+
+const newLogInput = event => {
+    // handles new entry made in the log page
+    
+    // validation
+    var UIsummary = document.getElementById('newLogTask')
+    var UIproject = document.getElementById('newLogProject')
+    var UIdate = document.getElementById('newLogDate')
+    summary = UIsummary.value
+    project = UIproject.value
+    date = UIdate.value
+    if (!summary) return false
+    if (!project) return false
+    if (!date) return false
+    
+    task = { dateTime: date, project: project, summary: summary }
+    comms.newTask(
+        task,
+        res => {
+            if (!res) return
+            console.log('newTaskresult', res)
+            uiState.addData(res.log, res.task, res.project)
+            populatePageFromState()
+
+            UIsummary.value = UIproject.value = ""
+            setDefaultDate()
         },
         err => {
-            console.error('saveData ERROR', err) // TODO: remove logs
+            console.error('server error while adding new task', err) // TODO remove error logs
         }
     )
 }
 
-// loads logs from db
-const requestLogs = () => {
-    comms.loadLogs(
+const taskClick = (event, element, task, log) => {
+    const taskElement = element.querySelector('.logTask')
+    // TODO: setup more refined status change mechanism
+    const newState = log.statusId == 1 ? 4 : 1
+    const currentTime = Date.now()
+
+    comms.toggleTask(
+        task.id, newState, currentTime,
         res => {
-            if (res){
-                uiState.replaceLogs(res)
-                populatePageFromState()
-            } else
-                console.error('corrupt logs received')
+            console.log('taskclick result', res)
+            uiState.addLog(res)
+            populatePageFromState()
         },
-        err => console.log('server error while loading logs')
+        err => {
+            console.error('server error while updating task', err) // TODO remove error logs
+        }
     )
 }
 
-// COMMS
+const populatePageFromState = () => {
+    clearAllLogs()
+    for (const day in uiState.logTree) {
+        const logDay = createOrFindDay(day)
+        for (const taskId in uiState.logTree[day]) {
+            const log = uiState.logTree[day][taskId]
+            const task = uiState.tasks[taskId]
+            const taskRow = createTaskOnDay(logDay, task)
+            decorateTaskRow(taskRow, log, task)
+        }
+    }
+}
+
+const switchToTab = (tabName) => {
+    const menuTabs = document.getElementsByClassName('menuTab')
+    for (tab of menuTabs) {
+        if (tab.classList.contains(tabName))
+            tab.style.display = "block";
+        else
+            tab.style.display = "none";
+    }
+}
+
+const saveData = () => { // TODO ?
+    comms.saveData(
+        result => {
+            console.log('saveData result', result)
+        },
+        err => {
+            alert('ProTracker ran Into an Error while trying to save')
+            console.error('ProTracker ran Into an Error while trying to save', err) // TODO: remove logs
+        }
+    )
+}
+
+// #endregion
+
+// #region COMMS
 
 const dataFromMainHandler = (event, logs) => {
     // handles the data received from Main process and adds it to the log page
@@ -252,43 +248,51 @@ const errFromMainHandler = (err, args) => {
     console.error(args, err)
 }
 
+const requestLogsFromDb = () => {
+    comms.loadLogs(
+        res => {
+            if (res){
+                uiState.replaceData(res.logs, res.tasks, res.projects)
+                populatePageFromState()
+            } else {
+                console.error('corrupt logs received')
+            }
+        },
+        err => console.error('server error while loading logs')
+    )
+}
+
 const recieveStateChanges = (event, state) => {
     // TODO
     console.log('UI|updateUI: recieved state change prompt', event, state)
-    if (typeof(state) != State){
-        console.log("state isn't of type State though", state)
-    } else {
-        // TODO
-    }
 }
 
-// event Listeners
+// #endregion
+
 window.addEventListener('load', event => {
-    setDefaultDate()
-    requestLogs()
-    // document.getElementById('sideBar').addEventListener('click', e => toggleSideBar())
-    // document.getElementById("sideHandle").addEventListener('click', e => toggleSideBar())
-    // document.querySelectorAll('#sideBar li').forEach((item) => {
-    //     item.addEventListener('click', e => toggleSideBar())
-    // })
-    // toggleSideBar(true)
+    document.getElementById('sideBar').addEventListener('click', e => toggleSideBar())
+    document.getElementById("sideHandle").addEventListener('click', e => toggleSideBar())
+
+    // document.getElementById('load_menuButton').addEventListener('click', requestLogsFromDb)
+    // document.getElementById('save_menuButton').addEventListener('click', event => { saveData() })
+    document.getElementById('logChart_menuButton').addEventListener('click', event => { switchToTab('logChart') })
+    document.getElementById('projects_menuButton').addEventListener('click', event => { switchToTab('projects') })
 
     document.getElementById('inputs').scrollIntoView()
-    // document.getElementById('loadButton').addEventListener('click', requestLogs)
-    // document.getElementById('saveButton').addEventListener('click', event => { saveData(data) })
     document.getElementById('newLogProject').addEventListener('input', event => { trimInput(event, false) })
-    document.getElementById('newLogTask').addEventListener('input', event => { trimInput(event, false) })
     document.getElementById('newLogProject').addEventListener('change', event => { trimInput(event, true)})
-    document.getElementById('newLogTask').addEventListener('change', event => { trimInput(event, true)})
     document.getElementById('newLogProject').addEventListener('change', newLogInput)
+    document.getElementById('newLogTask').addEventListener('input', event => { trimInput(event, false) })
+    document.getElementById('newLogTask').addEventListener('change', event => { trimInput(event, true)})
     document.getElementById('newLogTask').addEventListener('change', newLogInput)
     document.getElementById('newLogDate').addEventListener('change', newLogInput)
-    /* ['newLogTask', 'newLogDate', 'newLogProject'].forEach(function (id) {
-        document.getElementById(id).addEventListener('change', newLogInput)
-    }) // not working for some reason */
-
+    
     // comm listeners
-    state.registerListener('updateUI', recieveStateChanges)
+    stateComm.registerListener('updateUI', recieveStateChanges)
     comms.registerListener('DataPing', dataFromMainHandler)
     comms.registerListener('DataError', errFromMainHandler)
+
+    setDefaultDate()
+    requestLogsFromDb()
+    toggleSideBar(true)
 })

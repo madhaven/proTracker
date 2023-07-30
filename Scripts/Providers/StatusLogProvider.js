@@ -1,3 +1,4 @@
+const { StatusLog } = require("../Models/StatusLog")
 const { DatabaseService } = require("../Services/DatabaseService")
 
 const StatusLogProvider = class {
@@ -20,6 +21,23 @@ const StatusLogProvider = class {
             return id ? statusLog : false
         } catch (err) {
             console.debug('StatusLogProvider: create', err) // TODO remove error logs
+        }
+    }
+
+    async getAllLogs() {
+        const query = `SELECT id, task_id, status_id, date_time FROM status_log;`
+        console.debug('StatusLogProvider: getAllLogs')
+        try {
+            const res = await this.dbService.fetch(query)
+            const result = res.map(log => new StatusLog(
+                log.id,
+                log.task_id,
+                log.status_id,
+                log.date_time
+            ))
+            return res ? result : false
+        } catch (err) {
+            console.error('StatusLogProvider: getAllLogs', err) // TODO remove error logs
         }
     }
 
