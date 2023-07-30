@@ -113,11 +113,11 @@ const decorateTaskRow = (taskRow, log, task) => {
         case 4: //WAITING
         case 5: //WONT_DO
     }
-    // if (new Date().toDateString() == new Date(task.dateTime).toDateString()) {
+    if (new Date().toDateString() == new Date(task.dateTime).toDateString()) {
         logTask.addEventListener('click', event => {
             taskClick(event, taskRow, task, log)
         }) // TODO: does this belong here?
-    // }
+    }
 }
 
 // #endregion
