@@ -33,6 +33,7 @@ const createWindow = () => {
         autoHideMenuBar: true
     })
     registerHandlers(win)
+    win.removeMenu()
     win.loadFile('./Screens/log.html')
     win.webContents.on('did-finish-load', () => {
         if (debugMode) win.webContents.openDevTools()
