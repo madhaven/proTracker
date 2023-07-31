@@ -142,6 +142,16 @@ const toggleSideBar = (visible = undefined) => {
     stateComm.notifyUIEvent(uiState) // needed ?
 }
 
+const switchToTab = (tabName) => {
+    const menuTabs = document.getElementsByClassName('menuTab')
+    for (tab of menuTabs) {
+        if (tab.classList.contains(tabName))
+            tab.style.display = "block";
+        else
+            tab.style.display = "none";
+    }
+}
+
 const newLogInput = event => {
     // handles new entry made in the log page
     
@@ -207,16 +217,6 @@ const populatePageFromState = () => {
     }
 }
 
-const switchToTab = (tabName) => {
-    const menuTabs = document.getElementsByClassName('menuTab')
-    for (tab of menuTabs) {
-        if (tab.classList.contains(tabName))
-            tab.style.display = "block";
-        else
-            tab.style.display = "none";
-    }
-}
-
 const saveData = () => { // TODO ?
     comms.saveData(
         result => {
@@ -250,7 +250,7 @@ const errFromMainHandler = (err, args) => {
 }
 
 const requestLogsFromDb = () => {
-    comms.loadLogs(
+    comms.loadData(
         res => {
             if (res){
                 uiState.replaceData(res.logs, res.tasks, res.projects)

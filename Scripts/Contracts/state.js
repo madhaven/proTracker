@@ -67,19 +67,33 @@ const State = class {
     growTree () {
         this.logTree = {}
         const orderredLogs = []
+        const pendingLogs = new Map()
+
         for (const log in this.logs) {
             orderredLogs.push(this.logs[log])
         }
         orderredLogs.sort((a, b) => a.dateTime-b.dateTime)
+
         for (const log of orderredLogs) {
             const t = new Date(log.dateTime)
                 , year = t.getFullYear()
                 , month = t.getMonth()
                 , date = t.getDate()
-
             if (this.logTree[[year, month, date]] == undefined)
                 this.logTree[[year, month, date]] = {}
             this.logTree[[year, month, date]][log.taskId] = log
+            if (log.statusId == 1)
+                pendingLogs.set(log.taskId, log)
+            else
+                pendingLogs.delete(log.taskId)
+        }
+
+        const t2 = new Date()
+        const today = [t2.getFullYear(), t2.getMonth(), t2.getDate()]
+        for (const [taskId, log] of pendingLogs) {
+            if (this.logTree[today] == undefined)
+                this.logTree[today] = {}
+            this.logTree[today][taskId] = log
         }
     }
 }
