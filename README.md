@@ -39,5 +39,9 @@ DB
 * It started out as an excel sheet which had two tabs for tasks that were pending and those that were completed  
 * The UI was next built and basic functionality added with the help of the [Electron framework](https://www.electronjs.org/)  
 * IPC calls were established and it all worked like a monolith
+* Next a Layered Architecture was implemented  
+  Data now flowed from DB to providers to Services/handlers from where it is passed to front-end  
+  The Electron Preload script helped restrict the access that front-end had to native nodeJS functionality.
+  The renderer script coordinated all processes on the front end with the help of State.js which handled the data
 * Thinking of setting up tests https://www.electronjs.org/docs/latest/tutorial/automated-testing
   Feel free to contribute

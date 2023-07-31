@@ -185,7 +185,7 @@ html.scrollLock, body.scrollLock{
     background-color: var(--blackLayer1);
     transition-delay: .2s;
 }
-.logChart .logDay.inputs{
+#inputs{
     padding: 0 !important;
     border: none !important;
 }

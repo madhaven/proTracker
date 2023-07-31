@@ -5,7 +5,7 @@ contextBridge.exposeInMainWorld('comms', {
         ipcRenderer.invoke('newTaskChannel', obj).then(callback, err) },
     toggleTask: (taskId, statusId, time, callback, err) => {
         ipcRenderer.invoke('taskClickChannel', taskId, statusId, time).then(callback, err) },
-    loadLogs: (callback, err) => {
+    loadData: (callback, err) => {
         ipcRenderer.invoke('loadLogsRequest').then(callback, err) },
     saveData: (callback, err) => {
         ipcRenderer.invoke('saveDataRequest').then(callback, err) },
