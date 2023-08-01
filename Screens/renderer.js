@@ -117,6 +117,20 @@ const decorateTaskRow = (taskRow, log, task) => {
         logTask.addEventListener('click', event => {
             taskClick(event, taskRow, task, log)
         }) // TODO: does this belong here?
+}
+
+const loadProjects = () => {
+    const projectList = document.getElementById('projectList')
+    projectList.innerHTML = ""
+    for (const projectId in uiState.projects) {
+        const project = uiState.projects[projectId]
+        const projectNode = document.createElement('li')
+        projectNode.addEventListener('click', event => {
+            projectClick(event, projectNode, project)
+        })
+        projectNode.innerHTML = project.name
+        projectList.appendChild(projectNode)
+        console.log(uiState.projects)
     }
 }
 
@@ -194,7 +208,7 @@ const taskClick = (event, element, task, log) => {
     comms.toggleTask(
         task.id, newState, currentTime,
         res => {
-            console.log('taskclick result', res)
+            console.log('task click result', res)
             uiState.addLog(res)
             populatePageFromState()
         },
@@ -202,6 +216,11 @@ const taskClick = (event, element, task, log) => {
             console.error('server error while updating task', err) // TODO remove error logs
         }
     )
+}
+
+const projectClick = (event, element, project) => {
+    console.log(event, element, project)
+    // TODO
 }
 
 const populatePageFromState = () => {
@@ -215,6 +234,7 @@ const populatePageFromState = () => {
             decorateTaskRow(taskRow, log, task)
         }
     }
+    loadProjects()
 }
 
 const saveData = () => { // TODO ?
@@ -249,7 +269,7 @@ const errFromMainHandler = (err, args) => {
     console.error(args, err)
 }
 
-const requestLogsFromDb = () => {
+const requestDataFromDB = () => {
     comms.loadData(
         res => {
             if (res){
@@ -274,10 +294,10 @@ window.addEventListener('load', event => {
     document.getElementById('sideBar').addEventListener('click', e => toggleSideBar())
     document.getElementById("sideHandle").addEventListener('click', e => toggleSideBar())
 
-    // document.getElementById('load_menuButton').addEventListener('click', requestLogsFromDb)
+    // document.getElementById('load_menuButton').addEventListener('click', requestDataFromDB)
     // document.getElementById('save_menuButton').addEventListener('click', event => { saveData() })
     document.getElementById('logChart_menuButton').addEventListener('click', event => { switchToTab('logChart') })
-    document.getElementById('projects_menuButton').addEventListener('click', event => { switchToTab('projects') })
+    document.getElementById('projects_menuButton').addEventListener('click', event => { switchToTab('projectTab') })
 
     document.getElementById('inputs').scrollIntoView()
     document.getElementById('newLogProject').addEventListener('input', event => { trimInput(event, false) })
@@ -294,6 +314,6 @@ window.addEventListener('load', event => {
     comms.registerListener('DataError', errFromMainHandler)
 
     setDefaultDate()
-    requestLogsFromDb()
+    requestDataFromDB()
     toggleSideBar(true)
 })
