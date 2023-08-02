@@ -117,6 +117,7 @@ const decorateTaskRow = (taskRow, log, task) => {
         logTask.addEventListener('click', event => {
             taskClick(event, taskRow, task, log)
         }) // TODO: does this belong here?
+    }
 }
 
 const loadProjects = () => {
@@ -301,10 +302,10 @@ window.addEventListener('load', event => {
 
     document.getElementById('inputs').scrollIntoView()
     document.getElementById('newLogProject').addEventListener('input', event => { trimInput(event, false) })
-    document.getElementById('newLogProject').addEventListener('change', event => { trimInput(event, true)})
+    document.getElementById('newLogProject').addEventListener('change', event => { trimInput(event, true) })
     document.getElementById('newLogProject').addEventListener('change', newLogInput)
     document.getElementById('newLogTask').addEventListener('input', event => { trimInput(event, false) })
-    document.getElementById('newLogTask').addEventListener('change', event => { trimInput(event, true)})
+    document.getElementById('newLogTask').addEventListener('change', event => { trimInput(event, true) })
     document.getElementById('newLogTask').addEventListener('change', newLogInput)
     document.getElementById('newLogDate').addEventListener('change', newLogInput)
     
