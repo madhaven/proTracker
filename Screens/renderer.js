@@ -96,7 +96,7 @@ const createTaskOnDay = (logDay, task) => {
     return taskRow
 }
 
-const decorateTaskRow = (taskRow, log, task) => {
+const decorateTaskRow = (taskRow, log) => {
     const logTask = taskRow.querySelector('.logTask');
     logTask.classList.remove(
         'pending'
@@ -118,7 +118,12 @@ const decorateTaskRow = (taskRow, log, task) => {
         case 4: //WAITING
         case 5: //WONT_DO
     }
-    const itIsToday = new Date().toDateString() == new Date(log.dateTime).toDateString()
+}
+
+const addListeners = (day, taskRow, log, task) => {
+    const logTask = taskRow.querySelector('.logTask');
+    const [year, month, date] = day.split(',')
+    const itIsToday = new Date().toDateString() == new Date(year, month, date).toDateString()
     if (itIsToday || allowSuperpowers) {
         logTask.addEventListener('click', event => {
             taskClick(event, taskRow, task, log)
@@ -243,7 +248,8 @@ const populatePageFromState = () => {
             const log = uiState.logTree[day][taskId]
             const task = uiState.tasks[taskId]
             const taskRow = createTaskOnDay(logDay, task)
-            decorateTaskRow(taskRow, log, task)
+            decorateTaskRow(taskRow, log)
+            addListeners(day, taskRow, log, task)
         }
     }
     loadProjects()
