@@ -136,6 +136,9 @@ html.scrollLock, body.scrollLock{
     border-bottom: 1px solid var(--whiteLayer1);
     padding: .5em 0;
 }
+.logChart .logDay.today{
+    border-bottom: none;
+}
 .stickyDate{
     position: sticky;
     top: 3em;
@@ -212,7 +215,7 @@ html.scrollLock, body.scrollLock{
     transition: .2s ease-out;
 }
 
-.projects ul{
+.projectTab ul{
     transition: .5s;
     list-style-type: none;
     padding: 0px;
@@ -222,7 +225,7 @@ html.scrollLock, body.scrollLock{
     justify-content: flex-start;
     /* align-items: center; */
 }
-.projects ul li{
+.projectTab ul li{
     margin: .5em .5em .5em 0em;
     padding: .5em 1em;
     border-radius: .5em;
@@ -230,7 +233,7 @@ html.scrollLock, body.scrollLock{
     cursor: pointer;
     font-size: large;
 }
-.projects ul li:hover{
+.projectTab ul li:hover{
     background-color: var(--blackLayer1);
 }
 
@@ -251,6 +254,6 @@ background: var(--whiteLayer1);
 background: var(--whiteLayer2);
 }
 
-*{
-    /* outline: 1px solid green; */
-}
+/* *{
+    outline: 1px solid green;
+} */
