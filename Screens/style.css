@@ -136,6 +136,9 @@ html.scrollLock, body.scrollLock{
     border-bottom: 1px solid var(--whiteLayer1);
     padding: .5em 0;
 }
+.logChart .logDay.today{
+    border-bottom: none;
+}
 .stickyDate{
     position: sticky;
     top: 3em;
@@ -251,6 +254,6 @@ background: var(--whiteLayer1);
 background: var(--whiteLayer2);
 }
 
-*{
-    /* outline: 1px solid green; */
-}
+/* *{
+    outline: 1px solid green;
+} */

@@ -1,8 +1,10 @@
 const uiState = new State()
+const allowSuperpowers = false // for debugging
 
 // #region Helpers
 
 const setDefaultDate = () => {
+    if (!allowSuperpowers) return
     // sets a default date client: recieved state change promptfor the input field
     const now = new Date()
     const year = now.getFullYear()
@@ -19,7 +21,7 @@ const setDefaultDate = () => {
 const clearAllLogs = () => {
     // clears all logs
     const allLogs = document.querySelectorAll('.logDay:not(.header)')
-    for (var day of allLogs) {
+    for (const day of allLogs) {
         day.remove()
     }
 }
@@ -31,9 +33,11 @@ const trimInput = (event, leftAndRight=false) => {
 }
 
 const createOrFindDay = (date) => {
-    const t = new Date(date)
+    const [year, month, day] = date.split(',')
+    const t = new Date(year, month, day)
+    const itIsToday = new Date().toDateString() == t.toDateString()
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-    const displayDate = `${t.getFullYear()} ${months[t.getMonth() + 1]} ${t.getDate()}`
+    const displayDate = (itIsToday) ? 'Today' : `${year} ${months[month]} ${day}`
     const allDays = document.querySelectorAll('.logDay:not(.header)')
 
     if (allDays.length > 0) {
@@ -47,6 +51,7 @@ const createOrFindDay = (date) => {
     const stickyDate = document.createElement('div')
     const daysTasks = document.createElement('div')
 
+    if (itIsToday) logDay.classList.add('today')
     logDay.classList.add('logDay')
     logDay.id = t.getTime()
     logDate.classList.add('logDate')
@@ -113,7 +118,8 @@ const decorateTaskRow = (taskRow, log, task) => {
         case 4: //WAITING
         case 5: //WONT_DO
     }
-    if (new Date().toDateString() == new Date(log.dateTime).toDateString()) {
+    const itIsToday = new Date().toDateString() == new Date(log.dateTime).toDateString()
+    if (itIsToday || allowSuperpowers) {
         logTask.addEventListener('click', event => {
             taskClick(event, taskRow, task, log)
         }) // TODO: does this belong here?
@@ -168,20 +174,25 @@ const switchToTab = (tabName) => {
 }
 
 const newLogInput = event => {
-    // handles new entry made in the log page
-    
     // validation
-    var UIsummary = document.getElementById('newLogTask')
-    var UIproject = document.getElementById('newLogProject')
-    var UIdate = document.getElementById('newLogDate')
-    summary = UIsummary.value
-    project = UIproject.value
-    date = UIdate.value
+    const UIsummary = document.getElementById('newLogTask')
+    const UIproject = document.getElementById('newLogProject')
+    const summary = UIsummary.value
+    const project = UIproject.value
+    const date = new Date()
+
+    if (allowSuperpowers) {
+    	const UIdate = document.getElementById('newLogDate')
+	    const debugDate = new Date(UIdate.value)
+	    date.setDate(debugDate.getDate())
+	    date.setMonth(debugDate.getMonth())
+	    date.setYear(debugDate.setYear())
+    }
+    
     if (!summary) return false
     if (!project) return false
-    if (!date) return false
     
-    task = { dateTime: date, project: project, summary: summary }
+    const task = { dateTime: date, project: project, summary: summary }
     comms.newTask(
         task,
         res => {
@@ -307,7 +318,17 @@ window.addEventListener('load', event => {
     document.getElementById('newLogTask').addEventListener('input', event => { trimInput(event, false) })
     document.getElementById('newLogTask').addEventListener('change', event => { trimInput(event, true) })
     document.getElementById('newLogTask').addEventListener('change', newLogInput)
-    document.getElementById('newLogDate').addEventListener('change', newLogInput)
+    if (allowSuperpowers) {
+        const inputDiv = document.querySelector('#inputs .logDate')
+        const input = document.createElement('input')
+        input.type = 'datetime-local'
+        input.name = 'Date'
+        input.id = 'newLogDate'
+        input.required = true
+        input.placeholder = 'yyyy-mm-dd'
+        input.addEventListener('change', newLogInput)
+        inputDiv.appendChild(input)
+    }
     
     // comm listeners
     stateComm.registerListener('updateUI', recieveStateChanges)
