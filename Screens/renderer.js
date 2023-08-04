@@ -191,13 +191,14 @@ const newLogInput = event => {
 	    const debugDate = new Date(UIdate.value)
 	    date.setDate(debugDate.getDate())
 	    date.setMonth(debugDate.getMonth())
-	    date.setYear(debugDate.setYear())
+	    date.setYear(debugDate.getFullYear())
     }
     
+    if (!date) return false
     if (!summary) return false
     if (!project) return false
     
-    const task = { dateTime: date, project: project, summary: summary }
+    const task = { dateTime: date.getSeconds(), project: project, summary: summary }
     comms.newTask(
         task,
         res => {
