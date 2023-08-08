@@ -11,7 +11,8 @@ const State = class {
         this.logs = {}
         this.tasks = {}
         this.projects = {}
-        this.logTree = {}
+        this.logTree = {} // date > taskId > log
+        this.projectTree = {} // projectId > taskId > stateId
     }
 
     equals (state2) {
@@ -43,34 +44,30 @@ const State = class {
         for (var log of logs) {
             this.logs[log.id] = log
         }
-        this.growTree()
+        this.growTrees()
         console.debug('data replaced', this)
     }
 
     addData (log, task, project) {
-        if (this.tasks[task.id] == undefined) {
-            this.tasks[task.id] = task
-        }
-        if (this.projects[project.id] == undefined) {
-            this.projects[project.id] = project
-        }
+        this.tasks[task.id] = this.tasks[task.id] ?? task
+        this.projects[project.id] = this.projects[project.id] ?? project
         this.addLog(log)
         console.debug('data added', this)
     }
 
     addLog (log) {
         this.logs[log.id] = log
-        this.growTree()
-        console.log('log added', this)
+        this.growTrees()
     }
     
-    growTree () {
+    growTrees () {
         this.logTree = {}
+        this.projectTree = {}
         const orderredLogs = []
         const pendingLogs = new Map()
 
         for (const log in this.logs) {
-            orderredLogs.push(this.logs[log])
+            orderredLogs.push(this.logs[log]) // TODO: one-liner instead of looping
         }
         orderredLogs.sort((a, b) => a.dateTime-b.dateTime)
 
@@ -79,20 +76,24 @@ const State = class {
                 , year = t.getFullYear()
                 , month = t.getMonth()
                 , date = t.getDate()
-            if (this.logTree[[year, month, date]] == undefined)
-                this.logTree[[year, month, date]] = {}
-            this.logTree[[year, month, date]][log.taskId] = log
+                , taskId = log.taskId
+                , projectId = this.tasks[taskId].projectId
+            this.logTree[[year, month, date]] = this.logTree[[year, month, date]] ?? {}
+            this.logTree[[year, month, date]][taskId] = log
             if (log.statusId == 1)
-                pendingLogs.set(log.taskId, log)
+                pendingLogs.set(taskId, log)
             else
-                pendingLogs.delete(log.taskId)
+                pendingLogs.delete(taskId)
+
+            this.projectTree[projectId] = this.projectTree[projectId] ?? {}
+            this.projectTree[projectId][taskId] = log.statusId
         }
 
+        // show pending tasks on current date
         const t2 = new Date()
         const today = [t2.getFullYear(), t2.getMonth(), t2.getDate()]
         for (const [taskId, log] of pendingLogs) {
-            if (this.logTree[today] == undefined)
-                this.logTree[today] = {}
+            this.logTree[today] = this.logTree[today] ?? {}
             this.logTree[today][taskId] = log
         }
     }

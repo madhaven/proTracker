@@ -96,8 +96,7 @@ const createTaskOnDay = (logDay, task) => {
     return taskRow
 }
 
-const decorateTaskRow = (taskRow, log) => {
-    const logTask = taskRow.querySelector('.logTask');
+const decorateTaskRow = (logTask, log) => {
     logTask.classList.remove(
         'pending'
         , 'in_progress'
@@ -118,31 +117,52 @@ const decorateTaskRow = (taskRow, log) => {
         case 4: //WAITING
         case 5: //WONT_DO
     }
+    return logTask
 }
 
-const addListeners = (day, taskRow, log, task) => {
-    const logTask = taskRow.querySelector('.logTask');
-    const [year, month, date] = day.split(',')
-    const itIsToday = new Date().toDateString() == new Date(year, month, date).toDateString()
-    if (itIsToday || allowSuperpowers) {
+const addListeners = (logTask, log, task, day) => {
+    var itIsToday
+    if (day === false)
+        itIsToday = true
+    else {
+        const [year, month, date] = day.split(',')
+        itIsToday = new Date().toDateString() == new Date(year, month, date).toDateString()
+    }
+    if (allowSuperpowers || itIsToday ) {
         logTask.addEventListener('click', event => {
-            taskClick(event, taskRow, task, log)
+            taskClick(event, task, log)
         }) // TODO: does this belong here?
     }
 }
 
-const loadProjects = () => {
+const renderProjects = () => {
     const projectList = document.getElementById('projectList')
     projectList.innerHTML = ""
-    for (const projectId in uiState.projects) {
+    for (const projectId in uiState.projectTree) {
         const project = uiState.projects[projectId]
-        const projectNode = document.createElement('li')
-        projectNode.addEventListener('click', event => {
-            projectClick(event, projectNode, project)
+        const projectItem = document.createElement('li')
+        const projectHeader = document.createElement('h3')
+        const taskList = document.createElement('ul')
+
+        for (const taskId in uiState.projectTree[projectId]) {
+            const task = uiState.tasks[taskId]
+            const statusId = uiState.projectTree[projectId][taskId]
+            const taskItem = document.createElement('li')
+            taskItem.innerHTML = task.summary
+            const logTask = decorateTaskRow(taskItem, {'statusId': statusId}, task, true)
+            addListeners(logTask, {'statusId': statusId}, task, false)
+            taskList.appendChild(taskItem)
+        }
+        
+        taskList.classList.add('taskList')
+        projectHeader.innerHTML = project.name
+        projectHeader.addEventListener('click', event => {
+            projectItemClick(event, projectItem, project)
         })
-        projectNode.innerHTML = project.name
-        projectList.appendChild(projectNode)
-        console.log(uiState.projects)
+        
+        projectItem.appendChild(projectHeader)
+        projectItem.appendChild(taskList)
+        projectList.appendChild(projectItem)
     }
 }
 
@@ -198,7 +218,7 @@ const newLogInput = event => {
     if (!summary) return false
     if (!project) return false
     
-    const task = { dateTime: date.getSeconds(), project: project, summary: summary }
+    const task = { dateTime: date.getTime(), project: project, summary: summary }
     comms.newTask(
         task,
         res => {
@@ -217,8 +237,7 @@ const newLogInput = event => {
     )
 }
 
-const taskClick = (event, element, task, log) => {
-    const taskElement = element.querySelector('.logTask')
+const taskClick = (event, task, log) => {
     // TODO: setup more refined status change mechanism
     const newState = log.statusId == 1 ? 4 : 1
     const currentTime = Date.now()
@@ -236,9 +255,16 @@ const taskClick = (event, element, task, log) => {
     )
 }
 
-const projectClick = (event, element, project) => {
+const projectItemClick = (event, element, project) => {
     console.log(event, element, project)
-    // TODO
+    const taskList = element.querySelector('.taskList')
+    if (taskList.classList.contains('hidden')) { 
+        taskList.classList.remove('hidden')
+        element.classList.remove('emptyProject')
+    } else {
+        taskList.classList.add('hidden')
+        element.classList.add('emptyProject')
+    }
 }
 
 const populatePageFromState = () => {
@@ -249,11 +275,12 @@ const populatePageFromState = () => {
             const log = uiState.logTree[day][taskId]
             const task = uiState.tasks[taskId]
             const taskRow = createTaskOnDay(logDay, task)
-            decorateTaskRow(taskRow, log)
-            addListeners(day, taskRow, log, task)
+            const logTask = taskRow.querySelector('.logTask')
+            decorateTaskRow(logTask, log)
+            addListeners(logTask, log, task, day)
         }
     }
-    loadProjects()
+    renderProjects()
 }
 
 const saveData = () => { // TODO ?
