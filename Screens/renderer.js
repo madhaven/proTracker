@@ -198,7 +198,7 @@ const newLogInput = event => {
     if (!summary) return false
     if (!project) return false
     
-    const task = { dateTime: date.getSeconds(), project: project, summary: summary }
+    const task = { dateTime: date.getTime(), project: project, summary: summary }
     comms.newTask(
         task,
         res => {
