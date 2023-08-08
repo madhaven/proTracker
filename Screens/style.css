@@ -1,4 +1,4 @@
-:root{
+:root {
     --bg: #181818ff;
     --whiteLayer1: #fff1;
     --whiteLayer2: #fff2;
@@ -12,7 +12,8 @@
     --red: rgb(192, 0, 0);
 }
 
-html, body{
+html,
+body {
     color: var(--fg);
     background-color: var(--bg);
     margin: 0;
@@ -24,18 +25,19 @@ html, body{
     transition: .2s;
     /* font-weight: 600; */
 }
-html.scrollLock, body.scrollLock{
+html.scrollLock,
+body.scrollLock {
     overflow: hidden;
     height: 100%;
 }
-.mainContainer{
+.mainContainer {
     width: 100vw;
     min-height: 100vh;
     height: 100%;
     overflow-x: hidden;
 }
 
-#sideBar{
+#sideBar {
     transition: .5s ease, visibility 0s 0.5s;
     width: 100vw;
     height: 100vh;
@@ -51,12 +53,12 @@ html.scrollLock, body.scrollLock{
     text-align: center;
     justify-content: center;
 }
-#sideBar.sideBar_open{
+#sideBar.sideBar_open {
     transition: .5s ease, visibility 0s;
     opacity: 1;
     visibility: visible;
 }
-#sideHandle{
+#sideHandle {
     position: fixed;
     left: 0;
     top: 50%;
@@ -68,24 +70,24 @@ html.scrollLock, body.scrollLock{
     z-index: 2000;
     transition: .25s ease-out;
 }
-#sideHandle:hover{
+#sideHandle:hover {
     color: var(--fg-strong);
     transition: .1s ease-out;
 }
-#sideBar .menu{
+#sideBar .menu {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     display: flex;
 }
-#sideBar .menu ul{
+#sideBar .menu ul {
     list-style-type: none;
     padding: 0;
     margin: 0;
     /* display: flex; */
 }
-#sideBar .menu li{
+#sideBar .menu li {
     text-align: center;
     justify-content: center;
     vertical-align: center;
@@ -96,19 +98,19 @@ html.scrollLock, body.scrollLock{
     transition: .1s ease-out, border-left 0s ease-out, color .25s ease-out;
     user-select: none;
 }
-#sideBar .menu li:hover, #sideBar .menu li:focus{
+#sideBar .menu li:hover, #sideBar .menu li:focus {
     border-left: 2px solid var(--whiteLayer3);
     background-color: var(--whiteLayer1);
     transition: .05s ease-out, border-left 0s ease-out;
     outline: none;
     color: var(--fg-strong);
 }
-#sideBar .menu li:active{
+#sideBar .menu li:active {
     border-left: 2px solid green;
     transition:  border-left none;
 }
 
-.menuTab{
+.menuTab {
     display: none;
     margin-top: 2em;
     margin-bottom: 10em;
@@ -116,10 +118,10 @@ html.scrollLock, body.scrollLock{
     height: 100%;
 }
 
-.logChart{
+.logChart {
     text-align: left;
 }
-.logChart .header{
+.logChart .header {
     border-bottom: 2px solid var(--whiteLayer1) !important;
     font-weight: bold;
     position: sticky;
@@ -130,7 +132,7 @@ html.scrollLock, body.scrollLock{
 .logChart .header > *:not(:first-child), .logChart .taskRow > *{
     padding: 0 .5em 0 .5em;
 }
-.logChart .logDay{
+.logChart .logDay {
     width: 100%;
     display: flex;
     border-bottom: 1px solid var(--whiteLayer1);
@@ -139,61 +141,62 @@ html.scrollLock, body.scrollLock{
 .logChart .logDay.today{
     border-bottom: none;
 }
-.stickyDate{
+.stickyDate {
     position: sticky;
     top: 3em;
     padding-bottom: .25em;
 }
-.logChart .logDate{
+.logChart .logDate {
     width: 15%;
 }
-.logChart .logProject, .logProject input{
+.logChart .logProject,
+.logProject input {
     width: 35%;
     text-align: right;
 }
-.logChart .logTask{
+.logChart .logTask {
     width: 50%;
 }
-.logChart .daysTasks{
+.logChart .daysTasks {
     width: 85%;
     display: flex;
     flex-direction: column;
 }
-.logChart .daysTasks .logProject{
+.logChart .daysTasks .logProject {
     width: 41.1355%;
 }
-.logChart .daysTasks .logTask{
+.logChart .daysTasks .logTask {
     width: 58.82%;
     transition: .2s ease-out;
     word-wrap: break-word;
     overflow-wrap: break-word;
 }
-.logChart .logDay:nth-last-child(2) .logTask{
+.logChart .logDay:nth-last-child(2) .logTask {
     cursor: pointer;
 }
-.logChart .logTask.pending{
-    color: var(--red)
+.logChart .logTask.pending {
+    color: var(--red);
 }
-.logChart .logTask.completed{
+.logChart .logTask.completed {
     color: var(--green);
 }
-.logChart .taskRow{
+.logChart .taskRow {
     width: 100%;
     display: flex;
     flex-direction: row;
     border-radius: .5em;
     transition: .1s linear;
 }
-.logChart .taskRow:hover{
+.logChart .taskRow:hover {
     background-color: var(--blackLayer1);
     transition-delay: .2s;
 }
-#inputs{
+#inputs {
     padding: 0 !important;
     border: none !important;
 }
 
-.logChart input{
+.logChart input {
     background-color: transparent;
     border: 1px solid transparent;
     border-bottom: 2px solid transparent;
@@ -204,18 +207,19 @@ html.scrollLock, body.scrollLock{
     transition: .1s;
     outline: none;
 }
-.logChart input:hover{
+.logChart input:hover {
     border-bottom: 2px solid var(--whiteLayer1);
     transition: .2s ease-out;
     outline: none;
 }
-.logChart input:focus{
+.logChart input:focus {
     outline: none;
     border-bottom: 2px solid var(--whiteLayer3);
     transition: .2s ease-out;
 }
 
-.projectTab ul{
+#projectList,
+.taskList {
     transition: .5s;
     list-style-type: none;
     padding: 0px;
@@ -225,15 +229,44 @@ html.scrollLock, body.scrollLock{
     justify-content: flex-start;
     /* align-items: center; */
 }
-.projectTab ul li{
-    margin: .5em .5em .5em 0em;
+#projectList > li {
+    margin: .5em .5em 0em 0em;
     padding: .5em 1em;
     border-radius: .5em;
-    background-color: var(--blackLayer2);
-    cursor: pointer;
-    font-size: large;
+    /* background-color: var(--blackLayer1); */
 }
-.projectTab ul li:hover{
+#projectList > li h2,
+#projectList > li h3 {
+    cursor: pointer;
+}
+#projectList > li:not(.emptyProject) {
+    width: 100%;
+}
+#projectList > li:hover,
+#projectList > li.emptyProject {
+    background-color: var(--blackLayer1);
+}
+#projectList > li.emptyProject:hover {
+    background-color: var(--blackLayer2)
+}
+.taskList.hidden {
+    display: none;
+}
+.taskList > li {
+    width: 100%;
+    padding: 0em 1em;
+    border-top-right-radius: .5em;
+    border-bottom-right-radius: .5em;
+    border-left: 1px solid var(--whiteLayer2);
+    cursor: pointer;
+}
+.taskList > li.completed {
+    color: var(--green);
+}
+.taskList > li.pending { 
+    color: var(--red);
+}
+.taskList > li:hover {
     background-color: var(--blackLayer1);
 }
 
