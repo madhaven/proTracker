@@ -32,6 +32,18 @@ const trimInput = (event, leftAndRight=false) => {
         : event.srcElement.value.trimLeft()
 }
 
+const createDateTimeInput = () => {
+    const inputDiv = document.querySelector('#inputs .logDate')
+    const input = document.createElement('input')
+    input.type = 'datetime-local'
+    input.name = 'Date'
+    input.id = 'newLogDate'
+    input.required = true
+    input.placeholder = 'yyyy-mm-dd'
+    input.addEventListener('change', newLogInput)
+    inputDiv.appendChild(input)
+}
+
 const createOrFindDay = (date) => {
     const [year, month, day] = date.split(',')
     const t = new Date(year, month, day)
@@ -352,17 +364,7 @@ window.addEventListener('load', event => {
     document.getElementById('newLogTask').addEventListener('input', event => { trimInput(event, false) })
     document.getElementById('newLogTask').addEventListener('change', event => { trimInput(event, true) })
     document.getElementById('newLogTask').addEventListener('change', newLogInput)
-    if (allowSuperpowers) {
-        const inputDiv = document.querySelector('#inputs .logDate')
-        const input = document.createElement('input')
-        input.type = 'datetime-local'
-        input.name = 'Date'
-        input.id = 'newLogDate'
-        input.required = true
-        input.placeholder = 'yyyy-mm-dd'
-        input.addEventListener('change', newLogInput)
-        inputDiv.appendChild(input)
-    }
+    if (allowSuperpowers) createDateTimeInput()
     
     // comm listeners
     stateComm.registerListener('updateUI', recieveStateChanges)

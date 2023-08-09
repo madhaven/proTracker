@@ -238,11 +238,12 @@ body.scrollLock {
 #projectList > li h2,
 #projectList > li h3 {
     cursor: pointer;
+    margin: 0;
 }
 #projectList > li:not(.emptyProject) {
     width: 100%;
 }
-#projectList > li:hover,
+/* #projectList > li:hover, */
 #projectList > li.emptyProject {
     background-color: var(--blackLayer1);
 }
@@ -254,6 +255,7 @@ body.scrollLock {
 }
 .taskList > li {
     width: 100%;
+    margin-top: 4px;
     padding: 0em 1em;
     border-top-right-radius: .5em;
     border-bottom-right-radius: .5em;
