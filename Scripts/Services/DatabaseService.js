@@ -77,7 +77,7 @@ const DatabaseService = class {
     exec (command, params=[]) {
         return new Promise((resolve, reject) => {
             const db = new sql.Database(this.dbPath)
-            db.exec (command, params, function (err) { // this syntax of function definition is necessary
+            db.run (command, params, function (err) { // this syntax of function definition is necessary
                 if (err) reject(err)
                 else resolve(this.changes)
             })

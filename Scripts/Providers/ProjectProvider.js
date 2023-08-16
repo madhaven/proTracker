@@ -83,6 +83,7 @@ const ProjectProvider = class {
             return res==1 ? true : false
         } catch (err) {
             console.error('ProjectProvider: update', err) // TODO remove error logs
+            return false
         }
     }
 
