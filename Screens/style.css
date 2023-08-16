@@ -7,6 +7,7 @@
     --blackLayer2: #0006;
     --blackLayer3: #000c;
     --fg-strong: white;
+    --fg-weak: #fff8;
     --fg: grey;
     --green: rgb(0, 128, 0);
     --red: rgb(192, 0, 0);
@@ -129,7 +130,7 @@ body.scrollLock {
     background-color: var(--bg);
     z-index: 5;
 }
-.logChart .header > *:not(:first-child), .logChart .taskRow > *{
+.logChart .header > *:not(:first-child), .taskRow > *{
     padding: 0 .5em 0 .5em;
 }
 .logChart .logDay {
@@ -149,13 +150,15 @@ body.scrollLock {
 .logChart .logDate {
     width: 15%;
 }
-.logChart .logProject,
-.logProject input {
+.logChart .logProject {
     width: 35%;
-    text-align: right;
 }
-.logChart .logTask {
+.logDay.header .logTask {
     width: 50%;
+}
+.logProject,
+.logProject input {
+    text-align: right;
 }
 .logChart .daysTasks {
     width: 85%;
@@ -165,29 +168,60 @@ body.scrollLock {
 .logChart .daysTasks .logProject {
     width: 41.1355%;
 }
-.logChart .daysTasks .logTask {
-    width: 58.82%;
+.logTask {
     transition: .2s ease-out;
     word-wrap: break-word;
     overflow-wrap: break-word;
+    display: flex;
+    justify-content: space-between;
+    width: 58.82%;
 }
-.logChart .logDay:nth-last-child(2) .logTask {
+.logTask:not(.editable) .logTaskEditInput,
+.logTask.editable .logTaskContent {
+    display: none;
+}
+.logTask input.logTaskEditInput {
+    border: none;
+}
+.logTask .logTaskEditButton {
+    color: var(--whiteLayer2);
+    opacity: 0;
+    visibility: hidden;
+    cursor: pointer;
+    transition: opacity .1s ease-out, visibility 0s linear .8s;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+.logTask:not(.editable):hover .logTaskEditButton {
+    opacity: 1;
+    visibility: visible;
+    transition: .1s ease-out, opacity .4s ease-out .8s, visibility 0s linear .8s;
+}
+.logTask .logTaskEditButton:hover,
+.logTask .logTaskEditButton:focus {
+    color: var(--whiteLayer3);
+}
+.logTask .logTaskEditButton:active {
+    color: var(--fg-weak);
+}
+.logDay.today .logTask {
     cursor: pointer;
 }
-.logChart .logTask.pending {
+.logTask.pending {
     color: var(--red);
 }
-.logChart .logTask.completed {
+.logTask.completed {
     color: var(--green);
 }
-.logChart .taskRow {
+.taskRow {
     width: 100%;
     display: flex;
     flex-direction: row;
     border-radius: .5em;
     transition: .1s linear;
 }
-.logChart .taskRow:hover {
+.logDay:not(#inputs) .taskRow:hover,
+.logDay:not(#inputs) .taskRow:focus-within{
     background-color: var(--blackLayer1);
     transition-delay: .2s;
 }
@@ -196,7 +230,7 @@ body.scrollLock {
     border: none !important;
 }
 
-.logChart input {
+input {
     background-color: transparent;
     border: 1px solid transparent;
     border-bottom: 2px solid transparent;
@@ -207,12 +241,12 @@ body.scrollLock {
     transition: .1s;
     outline: none;
 }
-.logChart input:hover {
+input:hover {
     border-bottom: 2px solid var(--whiteLayer1);
     transition: .2s ease-out;
     outline: none;
 }
-.logChart input:focus {
+input:focus {
     outline: none;
     border-bottom: 2px solid var(--whiteLayer3);
     transition: .2s ease-out;
@@ -257,16 +291,9 @@ body.scrollLock {
     width: 100%;
     margin-top: 4px;
     padding: 0em 1em;
-    border-top-right-radius: .5em;
-    border-bottom-right-radius: .5em;
+    border-radius: 0 0.5em 0.5em 0;
     border-left: 1px solid var(--whiteLayer2);
     cursor: pointer;
-}
-.taskList > li.completed {
-    color: var(--green);
-}
-.taskList > li.pending { 
-    color: var(--red);
 }
 .taskList > li:hover {
     background-color: var(--blackLayer1);

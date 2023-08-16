@@ -79,17 +79,17 @@ const createOrFindDay = (date) => {
     return logDay
 }
 
-const createTaskOnDay = (logDay, task) => {
+const createRowOnDay = (logDay, task) => {
     const taskRow = document.createElement('div')
     const logProject = document.createElement('div')
     const logTask = document.createElement('div')
     const daysTasks = logDay.querySelector('.daysTasks')
     const stickyDate = logDay.querySelector('.stickyDate').innerHTML.replaceAll(' ', '')
     const displayId = stickyDate + '_' + task.id
-    const allTasks = logDay.getElementsByClassName('taskRow')
+    const tasksInDay = logDay.getElementsByClassName('taskRow')
     const project = uiState.projects[task.projectId]
 
-    for (row of allTasks) {
+    for (row of tasksInDay) {
         if (row.id == displayId)
             return row
     }
@@ -100,12 +100,40 @@ const createTaskOnDay = (logDay, task) => {
     logTask.classList.add('logTask')
 
     logProject.innerHTML = project.name
-    logTask.innerHTML = task.summary
-
-    taskRow.append(logProject)
-    taskRow.append(logTask)
-    daysTasks.append(taskRow)
+    taskRow.appendChild(logProject)
+    taskRow.appendChild(logTask)
+    daysTasks.appendChild(taskRow)
     return taskRow
+}
+
+const createTaskInRow = (logTask, task) => {
+    const editIconSVG = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16"><path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/></svg>'
+    const logTaskContent = document.createElement('div')
+    const logTaskEditInput = document.createElement('input')
+    const logTaskEditButton = document.createElement('span')
+
+    logTaskContent.classList.add('logTaskContent')
+    logTaskEditInput.classList.add('logTaskEditInput')
+    logTaskEditButton.classList.add('logTaskEditButton')
+
+    logTaskContent.innerHTML = task.summary
+    logTaskEditInput.value = task.summary
+    logTaskEditButton.innerHTML = editIconSVG
+    logTaskEditButton.addEventListener('click', event => {
+        makeTaskEditable(event, task, logTask)
+    })
+    logTaskEditInput.addEventListener('change', event => {
+        taskEditListener(event, task, logTaskEditInput.value, logTask)
+    })
+    logTaskEditInput.addEventListener('blur', event => {
+        taskEditListener(event, task, logTaskEditInput.value, logTask)
+    })
+
+    logTask.appendChild(logTaskContent)
+    logTask.appendChild(logTaskEditInput)
+    logTask.appendChild(logTaskEditButton)
+
+    return logTaskContent
 }
 
 const decorateTaskRow = (logTask, log) => {
@@ -132,7 +160,7 @@ const decorateTaskRow = (logTask, log) => {
     return logTask
 }
 
-const addListeners = (logTask, log, task, day) => {
+const addListeners = (taskElement, log, task, day) => {
     var itIsToday
     if (day === false)
         itIsToday = true
@@ -141,7 +169,7 @@ const addListeners = (logTask, log, task, day) => {
         itIsToday = new Date().toDateString() == new Date(year, month, date).toDateString()
     }
     if (allowSuperpowers || itIsToday ) {
-        logTask.addEventListener('click', event => {
+        taskElement.addEventListener('click', event => {
             taskClick(event, task, log)
         }) // TODO: does this belong here?
     }
@@ -160,9 +188,10 @@ const renderProjects = () => {
             const task = uiState.tasks[taskId]
             const statusId = uiState.projectTree[projectId][taskId]
             const taskItem = document.createElement('li')
-            taskItem.innerHTML = task.summary
-            const logTask = decorateTaskRow(taskItem, {'statusId': statusId}, task, true)
-            addListeners(logTask, {'statusId': statusId}, task, false)
+            taskItem.classList.add('taskRow', 'logTask')
+            const logTaskContent = createTaskInRow(taskItem, task)
+            decorateTaskRow(taskItem, {'statusId': statusId}, task, true)
+            addListeners(logTaskContent, {'statusId': statusId}, task, false)
             taskList.appendChild(taskItem)
         }
         
@@ -235,7 +264,6 @@ const newLogInput = event => {
         task,
         res => {
             if (!res) return
-            console.log('newTaskresult', res)
             uiState.addData(res.log, res.task, res.project)
             populatePageFromState()
 
@@ -253,11 +281,9 @@ const taskClick = (event, task, log) => {
     // TODO: setup more refined status change mechanism
     const newState = log.statusId == 1 ? 4 : 1
     const currentTime = Date.now()
-
     comms.toggleTask(
         task.id, newState, currentTime,
         res => {
-            console.log('task click result', res)
             uiState.addLog(res)
             populatePageFromState()
         },
@@ -267,8 +293,31 @@ const taskClick = (event, task, log) => {
     )
 }
 
+const makeTaskEditable = (event, task, logTask) => {
+    const logTaskEditInput = logTask.querySelector('.logTaskEditInput')
+    logTaskEditInput.value = task.summary
+    logTask.classList.add('editable')
+    logTaskEditInput.focus()
+}
+
+const taskEditListener = (event, task, newSummary, taskElement) => {
+    event.stopPropagation()
+    comms.editTask(
+        task.id, newSummary,
+        res => {
+            taskElement.classList.remove('editable')
+            if (!res) console.error('Unable to edit Task')
+            uiState.tasks[task.id].summary = newSummary
+            populatePageFromState()
+        },
+        err => {
+            console.error('Unable to edit Task due to an internal error')
+            taskElement.classList.remove('editable')
+        }
+    )
+}
+
 const projectItemClick = (event, element, project) => {
-    console.log(event, element, project)
     const taskList = element.querySelector('.taskList')
     if (taskList.classList.contains('hidden')) { 
         taskList.classList.remove('hidden')
@@ -286,10 +335,11 @@ const populatePageFromState = () => {
         for (const taskId in uiState.logTree[day]) {
             const log = uiState.logTree[day][taskId]
             const task = uiState.tasks[taskId]
-            const taskRow = createTaskOnDay(logDay, task)
+            const taskRow = createRowOnDay(logDay, task)
             const logTask = taskRow.querySelector('.logTask')
+            const logTaskContent = createTaskInRow(logTask, task)
             decorateTaskRow(logTask, log)
-            addListeners(logTask, log, task, day)
+            addListeners(logTaskContent, log, task, day)
         }
     }
     renderProjects()

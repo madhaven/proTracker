@@ -34,13 +34,33 @@
             <div class="logProject">Project</div>
             <div class="logTask">Task</div>
         </div>
+        <!-- demo task log 
+        <div class="logDay" id="1691001000000">
+            <div class="logDate">
+                <div class="stickyDate">2023 Aug 3</div>
+            </div>
+            <div class="daysTasks">
+                <div class="taskRow" id="2023Aug3_1">
+                    <div class="logProject">test</div>
+                    <div class="logTask pending">
+                        <div class="logTaskContent">test 1</div>
+                        <input class="logTaskEditInput">
+                        <span class="logTaskEditButton"><svg></svg></span>
+                    </div>
+                </div>
+            </div>
+        </div> -->
         <div class="logDay header inputs" id="inputs">
             <div class="logDate"></div>
-            <div class="logProject">
-                <input type="text" name="Project" id="newLogProject" autocomplete required title="Parent Task/Project">
-            </div>
-            <div class="logTask">
-                <input type="text" name="Task" id="newLogTask" title="Task">
+            <div class="daysTasks">
+                <div class="taskRow">
+                    <div class="logProject">
+                        <input type="text" name="Project" id="newLogProject" autocomplete required title="Parent Task/Project">
+                    </div>
+                    <div class="logTask">
+                        <input type="text" name="Task" id="newLogTask" title="Task">
+                    </div>
+                </div>
             </div>
         </div>
     </main>
@@ -52,12 +72,13 @@
                 <li>
                     <h3>header</h3>
                     <ul class="taskList">
-                        <li>task</li>
-                        <li>task2</li>
+                        <li class="completed">task</li>
+                        <li class="pending">task2</li>
                     </ul>
                 </li>
                 <li class="emptyProject">
                     <h3>header</h3>
+                    <ul class="taskList hidden">...</ul>
                 </li>
                 -->
             </ul>
