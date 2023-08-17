@@ -122,9 +122,7 @@ const createTaskInRow = (logTask, task) => {
     logTaskEditButton.addEventListener('click', event => {
         makeTaskEditable(event, task, logTask)
     })
-    logTaskEditInput.addEventListener('change', event => {
-        taskEditListener(event, task, logTaskEditInput.value, logTask)
-    })
+    logTaskEditInput.addEventListener('change', logTaskEditInput.blur)
     logTaskEditInput.addEventListener('blur', event => {
         taskEditListener(event, task, logTaskEditInput.value, logTask)
     })
@@ -301,7 +299,6 @@ const makeTaskEditable = (event, task, logTask) => {
 }
 
 const taskEditListener = (event, task, newSummary, taskElement) => {
-    event.stopPropagation()
     comms.editTask(
         task.id, newSummary,
         res => {
