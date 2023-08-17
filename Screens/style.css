@@ -130,7 +130,7 @@ body.scrollLock {
     background-color: var(--bg);
     z-index: 5;
 }
-.logChart .header > *:not(:first-child), .taskRow > *{
+.logChart .header > *:not(:first-child), .taskRow > * {
     padding: 0 .5em 0 .5em;
 }
 .logChart .logDay {
@@ -139,7 +139,7 @@ body.scrollLock {
     border-bottom: 1px solid var(--whiteLayer1);
     padding: .5em 0;
 }
-.logChart .logDay.today{
+.logChart .logDay.today {
     border-bottom: none;
 }
 .stickyDate {
@@ -155,6 +155,9 @@ body.scrollLock {
 }
 .logDay.header .logTask {
     width: 50%;
+}
+#inputs .logTask {
+    width: 60%;
 }
 .logProject,
 .logProject input {
@@ -221,7 +224,7 @@ body.scrollLock {
     transition: .1s linear;
 }
 .logDay:not(#inputs) .taskRow:hover,
-.logDay:not(#inputs) .taskRow:focus-within{
+.logDay:not(#inputs) .taskRow:focus-within {
     background-color: var(--blackLayer1);
     transition-delay: .2s;
 }
