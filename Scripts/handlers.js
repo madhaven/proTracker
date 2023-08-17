@@ -51,6 +51,11 @@ const newTaskHandler = async (event, newTask) => {
     } : false
 }
 
+const editTaskHandler = async (event, taskId, summary) => {
+    const result = tp.update(taskId, summary)
+    return result
+}
+
 const toggleTaskHandler = async (event, taskId, newStatusId, newTime) => {
     statusLog = await slp.create(new StatusLog(-1, taskId, newStatusId, newTime))
     return statusLog ? statusLog : false
@@ -77,6 +82,7 @@ const registerHandlers = mainWindow => {
 
     // comms
     ipcMain.handle('newTaskChannel', newTaskHandler)
+    ipcMain.handle('taskEditChannel', editTaskHandler)
     ipcMain.handle('taskClickChannel', toggleTaskHandler)
     ipcMain.handle('loadLogsRequest', loadLogsHandler)
     ipcMain.handle('saveDataRequest', () => { saveDataHandler(mainWindow) })

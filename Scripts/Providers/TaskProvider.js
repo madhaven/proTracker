@@ -95,9 +95,10 @@ const TaskProvider = class {
         console.debug('TaskProvider: update')
         try {
             const res = await this.dbService.exec(query, params)
-            return res==1 ? res : false
+            return res==1 ? true : false
         } catch (err) {
             console.error('TaskProvider: update', err) // TODO remove error logs
+            return false
         }
     }
 

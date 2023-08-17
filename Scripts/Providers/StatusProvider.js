@@ -43,6 +43,7 @@ const StatusProvider = class {
             return res==1 ? true : false
         } catch (err) {
             console.error('StatusProvider: update', err) // TODO remove error logs
+            return false
         }
     }
 
