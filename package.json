@@ -38,6 +38,7 @@
   },
   "dependencies": {
     "electron-squirrel-startup": "^1.0.0",
+    "exceljs": "^4.3.0",
     "fast-csv": "^4.3.6",
     "sqlite3": "^5.1.6"
   }
