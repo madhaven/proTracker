@@ -39,7 +39,7 @@ body.scrollLock {
 }
 
 #sideBar {
-    transition: .5s ease, visibility 0s 0.5s;
+    transition: opacity .5s ease, visibility 0s 0.5s;
     width: 100vw;
     height: 100vh;
     position: fixed;
@@ -55,7 +55,7 @@ body.scrollLock {
     justify-content: center;
 }
 #sideBar.sideBar_open {
-    transition: .5s ease, visibility 0s;
+    transition: opacity .5s ease, visibility 0s;
     opacity: 1;
     visibility: visible;
 }
@@ -81,17 +81,16 @@ body.scrollLock {
     left: 50%;
     transform: translate(-50%, -50%);
     display: flex;
+    justify-content: space-between;
+    transition: .5s ease-in-out;
 }
-#sideBar .menu ul {
+.menuButtons {
     list-style-type: none;
     padding: 0;
     margin: 0;
-    /* display: flex; */
 }
-#sideBar .menu li {
-    text-align: center;
-    justify-content: center;
-    vertical-align: center;
+.menuButton {
+    text-align: left;
     cursor: pointer;
     padding: .5em 2em;
     border: 2px solid transparent;
@@ -99,16 +98,31 @@ body.scrollLock {
     transition: .1s ease-out, border-left 0s ease-out, color .25s ease-out;
     user-select: none;
 }
-#sideBar .menu li:hover, #sideBar .menu li:focus {
+.menuButton:hover, .menuButton:focus {
     border-left: 2px solid var(--whiteLayer3);
     background-color: var(--whiteLayer1);
     transition: .05s ease-out, border-left 0s ease-out;
     outline: none;
     color: var(--fg-strong);
 }
-#sideBar .menu li:active {
+.menuButton:active {
     border-left: 2px solid green;
     transition:  border-left none;
+}
+.menuButton svg.bi {
+    margin-right: 1em;
+    font-size: 1.25em;
+    width: 1em;
+    height: 1em;
+}
+.menuTitle {
+    font-family: 'Courier New', Courier, monospace;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+.menuTitle h1 {
+    font-weight: bold;
 }
 
 .menuTab {

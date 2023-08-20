@@ -124,7 +124,7 @@ const createTaskInRow = (logTask, task) => {
     })
     logTaskEditInput.addEventListener('change', logTaskEditInput.blur)
     logTaskEditInput.addEventListener('blur', event => {
-        taskEditListener(event, task, logTaskEditInput.value, logTask)
+        taskEditHandler(event, task, logTaskEditInput.value, logTask)
     })
 
     logTask.appendChild(logTaskContent)
@@ -298,22 +298,6 @@ const makeTaskEditable = (event, task, logTask) => {
     logTaskEditInput.focus()
 }
 
-const taskEditListener = (event, task, newSummary, taskElement) => {
-    comms.editTask(
-        task.id, newSummary,
-        res => {
-            taskElement.classList.remove('editable')
-            if (!res) console.error('Unable to edit Task')
-            uiState.tasks[task.id].summary = newSummary
-            populatePageFromState()
-        },
-        err => {
-            console.error('Unable to edit Task due to an internal error')
-            taskElement.classList.remove('editable')
-        }
-    )
-}
-
 const projectItemClick = (event, element, project) => {
     const taskList = element.querySelector('.taskList')
     if (taskList.classList.contains('hidden')) { 
@@ -374,6 +358,22 @@ const errFromMainHandler = (err, args) => {
     console.error(args, err)
 }
 
+const taskEditHandler = (event, task, newSummary, taskElement) => {
+    comms.editTask(
+        task.id, newSummary,
+        res => {
+            taskElement.classList.remove('editable')
+            if (!res) console.error('Unable to edit Task')
+            uiState.tasks[task.id].summary = newSummary
+            populatePageFromState()
+        },
+        err => {
+            console.error('Unable to edit Task due to an internal error')
+            taskElement.classList.remove('editable')
+        }
+    )
+}
+
 const requestDataFromDB = () => {
     comms.loadData(
         res => {
@@ -399,10 +399,16 @@ window.addEventListener('load', event => {
     document.getElementById('sideBar').addEventListener('click', e => toggleSideBar())
     document.getElementById("sideHandle").addEventListener('click', e => toggleSideBar())
 
-    // document.getElementById('load_menuButton').addEventListener('click', requestDataFromDB)
-    // document.getElementById('save_menuButton').addEventListener('click', event => { saveData() })
-    document.getElementById('logChart_menuButton').addEventListener('click', event => { switchToTab('logChart') })
-    document.getElementById('projects_menuButton').addEventListener('click', event => { switchToTab('projectTab') })
+    // Menu Buttons
+    document.querySelector('#logChart.menuButton').addEventListener('click', event => { switchToTab('logChart') })
+    document.querySelector('#projects.menuButton').addEventListener('click', event => { switchToTab('projectTab') })
+    document.querySelector('#export.menuButton').addEventListener('click', event => {
+        console.log('export request', event, uiState.logTree, uiState.tasks, uiState.projects)
+        toggleSideBar()
+        comms.exportData(uiState.logTree, uiState.tasks, uiState.projects, res => {}, err => {} )
+    })
+    // document.querySelector('#load.menuButton').addEventListener('click', requestDataFromDB)
+    // document.querySelector('#save.menuButton').addEventListener('click', event => { saveData() })
 
     document.getElementById('inputs').scrollIntoView()
     document.getElementById('newLogProject').addEventListener('input', event => { trimInput(event, false) })
