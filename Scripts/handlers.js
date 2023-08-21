@@ -11,6 +11,25 @@ const { StatusProvider } = require('./Providers/StatusProvider')
 const { StatusLogProvider } = require('./Providers/StatusLogProvider')
 const ExcelJS = require('exceljs')
 
+const COLUMN_DATE = 1
+    , COLUMN_PROJECT = 2
+    , COLUMN_PENDING = 3
+    , COLUMN_DONE = 4
+    , BORDER_TOP_THIN = { top: { style: 'thin', color: 'black' }}
+    , BORDER_BOTTOM_THICC = { bottom: { style: 'thick', color: { argb: 'FF000000' } }}
+    , FONT_RED = { color: { argb: 'FF990033' }}
+    , FONT_GREEN = { color: { argb: 'FF006600' }}
+    , FONT_BOLD = { bold: true }
+    , FILL_HEAD_RED = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb:'FFFFC7CE' }
+    }
+    , FILL_HEAD_GREEN = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb:'FFC6EFCE' }
+    };
 var tp, pp, slp, sp
 
 const loadLogsHandler = async (event) => {
@@ -35,46 +54,39 @@ const exportDataHandler = async (event, mainWindow, logTree, tasks, projects) =>
 
     const wb = new ExcelJS.Workbook()
         , ws = wb.addWorksheet('Logs')
-        , COLUMN_DATE = 1
-        , COLUMN_PROJECT = 2
-        , COLUMN_PENDING = 3
-        , COLUMN_DONE = 4
-        , BORDER_TOP_THIN = { top: { style: 'thin', color: 'black' }}
-        , BORDER_LEFT_THIN = { left: { style: 'thin', color: 'black' }}
-        , BORDER_BOTTOM_THICC = { bottom: { style: 'thick', color: 'black' }}
-        , FONT_RED = { color: {argb: 'FF990033' }}
-        , FONT_GREEN = { color: {argb: 'FF006600' }}
 
     ws.getCell(1, 1).value = 'Date'
     ws.getCell(1, 2).value = 'Project'
     ws.getCell(1, 3).value = 'Blocker'
+    ws.getCell(1, 3).fill = FILL_HEAD_RED
     ws.getCell(1, 4).value = 'Achievemnt'
+    ws.getCell(1, 4).fill = FILL_HEAD_GREEN
+    ws.getColumn(3).font = FONT_RED // TODO: set bgcolor
+    ws.getColumn(4).font = FONT_GREEN // TODO: set bgcolor
+    ws.getRow(1).font = FONT_BOLD
     ws.getRow(1).border = BORDER_BOTTOM_THICC
-    // ws.row(1).freeze()
+    
     ws.views = [ {state: 'frozen', ySplit: 1} ]
     
     var currentRow = 2
     for (const day in logTree) {
         const [year, month, date] = day.split(',')
         ws.getCell(currentRow, COLUMN_DATE).value = `${year}-${month}-${date}`
-        ws.getRow(currentRow).border = BORDER_TOP_THIN
+        if (currentRow != 2) ws.getRow(currentRow).border = BORDER_TOP_THIN
         for (const taskId in logTree[day]) {
             const projectName = projects[tasks[taskId].projectId].name
             const summary = tasks[taskId].summary
             const log = logTree[day][taskId]
             ws.getCell(currentRow, COLUMN_PROJECT).value = projectName
 
-            var column = 0, font = undefined
+            var column = 0, style = undefined
             if (log.statusId == 1) {
                 column = COLUMN_PENDING
-                font = FONT_RED
             } else if (log.statusId == 4) {
                 column = COLUMN_DONE
-                font = FONT_GREEN
             }
             const cell = ws.getCell(currentRow, column)
             cell.value = summary
-            cell.font = font
             currentRow++
         }
     }
