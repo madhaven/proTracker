@@ -11,8 +11,8 @@ contextBridge.exposeInMainWorld('comms', {
         ipcRenderer.invoke('loadLogsRequest').then(callback, err) },
     saveData: (callback, err) => {
         ipcRenderer.invoke('saveDataRequest').then(callback, err) },
-    exportData: (logTree, tasks, projects, callback, err) => {
-        ipcRenderer.invoke('exportDataRequest', logTree, tasks, projects).then(callback, err) },
+    exportData: (logTree, tasks, projects, logs, callback, err) => {
+        ipcRenderer.invoke('exportDataRequest', logTree, tasks, projects, logs).then(callback, err) },
     registerListener: (channel, callback) => {
         ipcRenderer.on(channel, callback) },
 })

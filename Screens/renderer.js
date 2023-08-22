@@ -227,7 +227,7 @@ const toggleSideBar = (visible = undefined) => {
     stateComm.notifyUIEvent(uiState) // needed ?
 }
 
-const switchToTab = (tabName) => {
+const switchToTab = tabName => {
     const menuTabs = document.getElementsByClassName('menuTab')
     for (tab of menuTabs) {
         if (tab.classList.contains(tabName))
@@ -235,6 +235,19 @@ const switchToTab = (tabName) => {
         else
             tab.style.display = "none";
     }
+}
+
+const exportData = event => {
+    toggleSideBar()
+    comms.exportData(
+        uiState.logTree, uiState.tasks, uiState.projects, uiState.logs,
+        res => {
+            console.debug('Data exported successfully')
+        },
+        err => {
+            console.error('Error occurred on Data Export')
+        }
+    )
 }
 
 const newLogInput = event => {
@@ -402,11 +415,7 @@ window.addEventListener('load', event => {
     // Menu Buttons
     document.querySelector('#logChart.menuButton').addEventListener('click', event => { switchToTab('logChart') })
     document.querySelector('#projects.menuButton').addEventListener('click', event => { switchToTab('projectTab') })
-    document.querySelector('#export.menuButton').addEventListener('click', event => {
-        console.log('export request', event, uiState.logTree, uiState.tasks, uiState.projects)
-        toggleSideBar()
-        comms.exportData(uiState.logTree, uiState.tasks, uiState.projects, res => {}, err => {} )
-    })
+    document.querySelector('#export.menuButton').addEventListener('click', exportData)
     // document.querySelector('#load.menuButton').addEventListener('click', requestDataFromDB)
     // document.querySelector('#save.menuButton').addEventListener('click', event => { saveData() })
 

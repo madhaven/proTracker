@@ -34,35 +34,13 @@ const FileService = class {
         })
     }
 
-    // static saveFile = async (win, data) => {
-    //     return new Promise((resolve, reject) => {
-    //         dialog.showSaveDialog(win, this.csv_filters)
-    //             .then(({canceled, filePath}) => {
-    //                 console.table({'canceled': canceled, 'filePath': filePath})
-    //                 if (canceled) {
-    //                     resolve(false)
-    //                 } else {
-    //                     fs.writeFileSync(filePath, data)
-    //                     resolve(true)
-    //                 }
-    //             })
-    //             .catch(error => {
-    //                 console.error("FileService: fileSaveDialog", error) // TODO remove error logs
-    //                 // TODO logging
-    //                 reject(false)
-    //             })
-    //     })
-    // }
-
     static selectFileSaveName = async win => {
         return new Promise((resolve, reject) => {
             dialog.showSaveDialog(win, this.xl_filters)
                 .then(({canceled, filePath}) => {
                     console.log('canceled', canceled, 'filePath', filePath)
-                    if (canceled)
-                        resolve(false)
-                    else
-                        resolve(filePath)
+                    if (canceled) resolve(false)
+                    else resolve(filePath)
                 })
                 .catch(error => {
                     console.error('FileService: fileSaveDialog', error) // TODO remove error logs

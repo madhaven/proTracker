@@ -74,6 +74,29 @@ const ProjectProvider = class {
         }
     }
 
+    async getProjectTree(logs, tasks) {
+        const projectTree = {}, orderredLogs = []
+        for (const log in logs)
+            orderredLogs.push(logs[log]) // TODO: one-liner instead of looping
+        orderredLogs.sort((a, b) => a.dateTime-b.dateTime)
+
+        for (const log of orderredLogs) {
+            const taskId = log.taskId
+                , projectId = tasks[taskId].projectId
+
+            projectTree[projectId] = projectTree[projectId] ?? {}
+            if (projectTree[projectId][taskId] == undefined)
+                projectTree[projectId][taskId] = []
+            if (projectTree[projectId][taskId].length == 0)
+                projectTree[projectId][taskId].push(log)
+            else if (projectTree[projectId][taskId].length == 1)
+                projectTree[projectId][taskId].push(log)
+            else if (projectTree[projectId][taskId].length == 2)
+                projectTree[projectId][taskId][1] = log
+        }
+        return projectTree
+    }
+
     async update(id, name) {
         const query = `UPDATE project SET name=? WHERE id=?;`
         const params = [name, id]
