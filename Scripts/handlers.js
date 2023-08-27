@@ -47,16 +47,24 @@ const exportDataHandler = async (event, mainWindow, logTree, tasks, projects, lo
     // prompts user for file name and saves the data into the file
     // TODO: fetch from backend instead of front: shift logTree gen methods from front to back?
 
-    const workBook = new ExcelJS.Workbook()
-        , logSheet = workBook.addWorksheet('Logs')
-        , projectsSheet = workBook.addWorksheet('Project Overview')
-    renderExportLogSheet(logSheet, logTree, tasks, projects)
-    renderProjectsLogSheet(projectsSheet, projects, tasks, logs)
-    
-    const filename = await FileService.selectFileSaveName(mainWindow)
-    if (!filename) return false
-    await workBook.xlsx.writeFile(filename);
-    return true
+    try {
+        const workBook = new ExcelJS.Workbook()
+            , logSheet = workBook.addWorksheet('Logs')
+            , projectsSheet = workBook.addWorksheet('Project Overview')
+        renderExportLogSheet(logSheet, logTree, tasks, projects)
+        renderProjectsLogSheet(projectsSheet, projects, tasks, logs)
+        
+        const filename = await FileService.selectFileSaveName(mainWindow)
+        if (!filename) return false
+        await workBook.xlsx.writeFile(filename);
+        return true
+    } catch (err) {
+        console.log('export error', err)
+        if (err.code == 'EBUSY')
+            return 'noAccess'
+        else
+            return 'exportException' // TODO: logging
+    }
 }
 
 const renderExportLogSheet = async (ws, logTree, tasks, projects) => {
@@ -109,7 +117,6 @@ const renderProjectsLogSheet = async (ws, projects, tasks, logs) => { // is it b
     // const tasks = tp.getAllTasks()
     // const logs = slp.getAllLogs()
     const projectTree = await pp.getProjectTree(logs, tasks) // project > task > statusLog
-    console.log(projectTree)
 
     var sl = 1
     for (const projectId in projectTree) {
@@ -118,7 +125,6 @@ const renderProjectsLogSheet = async (ws, projects, tasks, logs) => { // is it b
             , endDate = -Infinity
             , complete = true
         for (const taskId in project) {
-            console.log('project[taskId]', project[taskId])
             if (project[taskId][0].dateTime < startDate)
                 startDate = project[taskId][0].dateTime
             if ((project[taskId][1] == undefined) || (project[taskId][1].statusId != 4))
@@ -150,7 +156,6 @@ const newTaskHandler = async (event, newTask) => {
     newTask.dateTime = new Date(newTask.dateTime).getTime()
     newTask.project = newTask.project.trim()
     newTask.summary = newTask.summary.trim()
-    console.log('newTask', newTask)
 
     const project = await pp.getByNameOrCreate(newTask.project)
     const task = await tp.create(new Task(-1, project.id, newTask.summary, -1)) // TODO: remove object and replace with direct params
@@ -197,7 +202,7 @@ const registerHandlers = mainWindow => {
     ipcMain.handle('taskEditChannel', editTaskHandler)
     ipcMain.handle('taskClickChannel', toggleTaskHandler)
     ipcMain.handle('loadLogsRequest', loadLogsHandler)
-    ipcMain.handle('exportDataRequest', (event, a, b, c, d) => { exportDataHandler(event, mainWindow, a, b, c, d) })
+    ipcMain.handle('exportDataRequest', (event, a, b, c, d) => { return exportDataHandler(event, mainWindow, a, b, c, d) })
     
     // state info exchange
     ipcMain.on('UIEventNotifications', stateEventHandler)

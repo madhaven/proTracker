@@ -38,9 +38,8 @@ const FileService = class {
         return new Promise((resolve, reject) => {
             dialog.showSaveDialog(win, this.xl_filters)
                 .then(({canceled, filePath}) => {
-                    console.log('canceled', canceled, 'filePath', filePath)
-                    if (canceled) resolve(false)
-                    else resolve(filePath)
+                    console.debug('FileService save canceled:', canceled, 'filePath', filePath)
+                    resolve(canceled ? false : filePath)
                 })
                 .catch(error => {
                     console.error('FileService: fileSaveDialog', error) // TODO remove error logs
