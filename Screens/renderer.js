@@ -238,14 +238,41 @@ const switchToTab = tabName => {
 }
 
 const exportData = event => {
+    var x = event.srcElement.querySelector('svg')
+        , source = x ? event.srcElement : event.srcElement.parentElement
+    const defaultIcon = source.querySelector('.defaultButton')
+        , loadingIcon = source.querySelector('.loadingButton')
+        , completeIcon = source.querySelector('.doneButton')
+        , failedIcon = source.querySelector('.cancelledButton')
+        , resultShowDuration = 2000
+    defaultIcon.classList.add('hidden')
+    loadingIcon.classList.remove('hidden')
     toggleSideBar()
+
+    const flashIcon = (selector, iconShowDuration, explanation=true) => {
+        loadingIcon.classList.add('hidden')
+        defaultIcon.classList.remove('hidden')
+        defaultIcon.classList.add(selector)
+        defaultIcon.parentElement.title = {
+            true: "Export Complete",
+            false: "the export action was cancelled",
+            "noAccess": "proTracker doesn't have access to the file at the moment",
+            "exportException": "an unhandled error occurred",
+        }[explanation] ?? ""
+        setTimeout(() => {
+            defaultIcon.classList.remove('success', 'failure')
+        }, iconShowDuration)
+    }
+
     comms.exportData(
         uiState.logTree, uiState.tasks, uiState.projects, uiState.logs,
         res => {
-            console.debug('Data exported successfully')
+            var selector = res == true ? 'success' : 'failure'
+            flashIcon(selector, resultShowDuration, res)
         },
         err => {
-            console.error('Error occurred on Data Export')
+            console.error('Unhandled Error occurred on Data Export') // TODO logs and error management
+            flashIcon('failure', resultShowDuration)
         }
     )
 }

@@ -101,7 +101,7 @@ body.scrollLock {
 .menuButton:hover, .menuButton:focus {
     border-left: 2px solid var(--whiteLayer3);
     background-color: var(--whiteLayer1);
-    transition: .05s ease-out, border-left 0s ease-out;
+    transition: .05s ease-out, border-left 0s ease-out, opacity .5s ease, visibility 0s, display 0s;
     outline: none;
     color: var(--fg-strong);
 }
@@ -109,11 +109,28 @@ body.scrollLock {
     border-left: 2px solid green;
     transition:  border-left none;
 }
-.menuButton svg.bi {
+.menuButton svg,
+.menuButton .spinner-grow {
     margin-right: 1em;
     font-size: 1.25em;
     width: 1em;
     height: 1em;
+    opacity: 1;
+    visibility: visible;
+    transition: inherit, opacity .5s ease, visibility 0s, display 0s;
+}
+.menuButton *.hidden {
+    display: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: inherit, opacity .5s ease, visibility 0s 0.5s, display 0s 0.5s;
+    color: transparent;
+}
+.menuButton .success {
+    color: var(--green);
+}
+.menuButton .failure {
+    color: var(--red)
 }
 .menuTitle {
     font-family: 'Courier New', Courier, monospace;
