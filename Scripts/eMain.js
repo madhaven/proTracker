@@ -4,13 +4,22 @@ const { registerHandlers } = require('./handlers')
 const { State } = require('./Models/State')
 const { ConfigService } = require('./Services/ConfigService')
 const { DatabaseService } = require('./Services/DatabaseService')
+const { LogService } = require('./Services/LogService')
+const fs = require('fs')
+const { FileService } = require('./Services/FileService')
 
+var mainWindow
 const debugMode = process.argv.some(arg => arg.includes('--inspect'))
+const userDataPath = debugMode ? '.' : path.join(app.getPath('appData'), 'proTracker')
+
+// logging
+const logStream = FileService.openStream(path.join(userDataPath, 'proTracker_logs.log'))
+LogService.addStream(logStream)
+
 const configService = ConfigService.getService(
     debugMode ? { dbPath: 'proTracker.db' } : undefined
 )
-const dbService = DatabaseService.getService()
-var mainWindow
+const dbService = DatabaseService.getService() // initialize prehand to avoid dependency issues
 
 const initialState = () => {
     // loads the data and creates the state instance that is sent to the UI
@@ -57,5 +66,7 @@ app.whenReady().then(() => {
 
 // quit the app when no windows are open on non-macOS platforms
 app.on('window-all-closed', () => {
+    console.logEnd()
+    FileService.closeAllStreams()
     if (process.platform !== 'darwin') app.quit()
 })

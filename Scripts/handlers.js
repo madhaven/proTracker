@@ -1,4 +1,5 @@
 const { ipcMain } = require('electron')
+const { dialog, app } = require('electron')
 
 const { FileService } = require('./Services/FileService')
 const { Task } = require('./Models/Task')
@@ -207,7 +208,7 @@ const registerHandlers = mainWindow => {
     // state info exchange
     ipcMain.on('UIEventNotifications', stateEventHandler)
     ipcMain.handle('UIEventRequests', stateChangeRequestHandler)
-    
+
     console.debug("handlers registered")
 }
 

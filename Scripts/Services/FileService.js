@@ -7,6 +7,11 @@ const FileService = class {
     static csv_filters = { filters: this.csv_options }
     static xl_options = [{ name: 'Excel Files', extensions: ['xlsx']}]
     static xl_filters = { filters: this.xl_options}
+    static streams = []
+
+    static fileExists = filePath => {
+        return fs.existsSync(filePath)
+    }
 
     static loadAFile = async win => { // deprecated
         // TODO: verify if cSV is in prescribed format
@@ -48,8 +53,15 @@ const FileService = class {
         })
     }
 
-    static fileExists = filePath => {
-        return fs.existsSync(filePath)
+    static openStream = (target) => {
+        const stream = fs.createWriteStream(target, { flags: 'a' })
+        this.streams.push(stream)
+        return stream
+    }
+
+    static closeAllStreams = () => {
+        this.streams.forEach(stream => stream.close())
+        this.streams = []
     }
 }
 
