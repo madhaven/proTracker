@@ -19,7 +19,7 @@ const TaskProvider = class {
             console.debug('TaskProvider: created')
             return id ? task : false
         } catch (err) {
-            console.error("TaskProvider: create", err) // TODO remove error logs
+            console.trace("TaskProvider: create", err)
         }
     }
 
@@ -31,7 +31,7 @@ const TaskProvider = class {
             const res = await this.dbService.getOne(query, params)
             return res ? new Task(res.id, res.project_id, res.summary, res.parent_id) : false
         } catch (err) {
-            console.error("TaskProvider: get", err) // TODO remove error logs
+            console.trace("TaskProvider: get", err)
         }
     }
 
@@ -46,7 +46,7 @@ const TaskProvider = class {
             ))
             return res ? result : false
         } catch (err) {
-            console.error('TaskProvider: tasksOfProject', err) // TODO remove error logs
+            console.trace('TaskProvider: tasksOfProject', err)
         }
     }
 
@@ -63,7 +63,7 @@ const TaskProvider = class {
             ))
             return result ? result : false
         } catch (err) {
-            console.error("TaskProvider: getAllTasks", err) // TODO remove error logs
+            console.trace("TaskProvider: getAllTasks", err)
         }
     }
 
@@ -85,7 +85,7 @@ const TaskProvider = class {
             )
             return res ? result : false
         } catch (err) {
-            console.error('TaskProvider: getAllTaskLogs', err) // TODO remove error logs
+            console.trace('TaskProvider: getAllTaskLogs', err)
         }
     }
 
@@ -97,7 +97,7 @@ const TaskProvider = class {
             const res = await this.dbService.exec(query, params)
             return res==1 ? true : false
         } catch (err) {
-            console.error('TaskProvider: update', err) // TODO remove error logs
+            console.trace('TaskProvider: update', err)
             return false
         }
     }

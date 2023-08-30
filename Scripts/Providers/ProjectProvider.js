@@ -18,7 +18,7 @@ const ProjectProvider = class {
             console.debug('ProjectProvider: created')
             return newProject
         } catch (err) {
-            console.error('ProjectProvider: create', err) // TODO remove error logs
+            console.trace('ProjectProvider: create', err)
         }
     }
 
@@ -30,7 +30,7 @@ const ProjectProvider = class {
             const res = await this.dbService.getOne(query, params)
             return res ? new Project(res.id, res.name) : false
         } catch (err) {
-            console.error("ProjectProvider: get", err) // TODO remove error logs
+            console.trace("ProjectProvider: get", err)
         }
     }
 
@@ -42,11 +42,12 @@ const ProjectProvider = class {
             const res = await this.dbService.getOne(query, params)
             return res ? new Project(res.id, res.name) : false
         } catch (err) {
-            console.error("ProjectProvider: getByName", err) // TODO remove error logs
+            console.trace("ProjectProvider: getByName", err)
         }
     }
 
     async getByNameOrCreate(name) {
+        // TODO:
         // const query = `INSERT OR IGNORE INTO project (name)
         // SELECT ? WHERE NOT EXISTS ( SELECT 1 FROM project WHERE name = ?);`
         // console.debug('ProjectProvider: get/create')
@@ -70,7 +71,7 @@ const ProjectProvider = class {
             ))
             return res ? result : false
         } catch (err) {
-            console.debug('ProjectProvider: get', err) // TODO remove error logs
+            console.trace('ProjectProvider: get', err)
         }
     }
 
@@ -105,7 +106,7 @@ const ProjectProvider = class {
             const res = await this.dbService.exec(query, params)
             return res==1 ? true : false
         } catch (err) {
-            console.error('ProjectProvider: update', err) // TODO remove error logs
+            console.trace('ProjectProvider: update', err)
             return false
         }
     }

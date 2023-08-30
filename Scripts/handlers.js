@@ -1,4 +1,5 @@
 const { ipcMain } = require('electron')
+const { dialog, app } = require('electron')
 
 const { FileService } = require('./Services/FileService')
 const { Task } = require('./Models/Task')
@@ -30,12 +31,12 @@ const COLUMN_DATE = 1
         pattern: 'solid',
         fgColor: { argb:'FFC6EFCE' }
     };
-var tp, pp, slp, sp
+var TP, PP, SLP, SP
 
 const loadLogsHandler = async (event) => {
-    alltasks = await tp.getAllTasks()
-    allLogs = await slp.getAllLogs()
-    allProjects = await pp.getAllProjects()
+    alltasks = await TP.getAllTasks()
+    allLogs = await SLP.getAllLogs()
+    allProjects = await PP.getAllProjects()
     return alltasks ? allLogs ? {
         "tasks": alltasks,
         "logs": allLogs,
@@ -59,11 +60,14 @@ const exportDataHandler = async (event, mainWindow, logTree, tasks, projects, lo
         await workBook.xlsx.writeFile(filename);
         return true
     } catch (err) {
-        console.log('export error', err)
-        if (err.code == 'EBUSY')
+        if (err.code == 'EBUSY') {
+            console.trace('export error handled: resource busy', err)
             return 'noAccess'
-        else
-            return 'exportException' // TODO: logging
+        }
+        else {
+            console.trace('export error unhandled', err) // TODO: report to server
+            return 'exportException'
+        }
     }
 }
 
@@ -116,7 +120,7 @@ const renderProjectsLogSheet = async (ws, projects, tasks, logs) => { // is it b
     ws.getRow(1).border = BORDER_BOTTOM_THICC
     // const tasks = tp.getAllTasks()
     // const logs = slp.getAllLogs()
-    const projectTree = await pp.getProjectTree(logs, tasks) // project > task > statusLog
+    const projectTree = await PP.getProjectTree(logs, tasks) // project > task > statusLog
 
     var sl = 1
     for (const projectId in projectTree) {
@@ -157,10 +161,10 @@ const newTaskHandler = async (event, newTask) => {
     newTask.project = newTask.project.trim()
     newTask.summary = newTask.summary.trim()
 
-    const project = await pp.getByNameOrCreate(newTask.project)
-    const task = await tp.create(new Task(-1, project.id, newTask.summary, -1)) // TODO: remove object and replace with direct params
-    const status = await sp.get(Status.PENDING)
-    const log = await slp.create(new StatusLog(-1, task.id, status.id, newTask.dateTime))
+    const project = await PP.getByNameOrCreate(newTask.project)
+    const task = await TP.create(new Task(-1, project.id, newTask.summary, -1)) // TODO: remove object and replace with direct params
+    const status = await SP.get(Status.PENDING)
+    const log = await SLP.create(new StatusLog(-1, task.id, status.id, newTask.dateTime))
     return (project && task && log) ? {
         "task": task,
         "log": log,
@@ -169,12 +173,12 @@ const newTaskHandler = async (event, newTask) => {
 }
 
 const editTaskHandler = async (event, taskId, summary) => {
-    const result = tp.update(taskId, summary)
+    const result = TP.update(taskId, summary)
     return result
 }
 
 const toggleTaskHandler = async (event, taskId, newStatusId, newTime) => {
-    statusLog = await slp.create(new StatusLog(-1, taskId, newStatusId, newTime))
+    statusLog = await SLP.create(new StatusLog(-1, taskId, newStatusId, newTime))
     return statusLog ? statusLog : false
 }
 
@@ -192,10 +196,10 @@ const stateChangeRequestHandler = async (event, data) => {
 
 const registerHandlers = mainWindow => {
     // TODO DI ?
-    tp = new TaskProvider()
-    pp = new ProjectProvider()
-    slp = new StatusLogProvider()
-    sp = new StatusProvider()
+    TP = new TaskProvider()
+    PP = new ProjectProvider()
+    SLP = new StatusLogProvider()
+    SP = new StatusProvider()
 
     // comms
     ipcMain.handle('newTaskChannel', newTaskHandler)
@@ -207,7 +211,7 @@ const registerHandlers = mainWindow => {
     // state info exchange
     ipcMain.on('UIEventNotifications', stateEventHandler)
     ipcMain.handle('UIEventRequests', stateChangeRequestHandler)
-    
+
     console.debug("handlers registered")
 }
 

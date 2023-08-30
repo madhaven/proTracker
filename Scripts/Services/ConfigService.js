@@ -1,29 +1,21 @@
 const { dialog, app } = require('electron')
 const fs = require('fs')
-const path = require('path')
-
-const userDataPath = app.getPath('appData')
-const configFileName = path.join(userDataPath, 'proTracker', 'appconfig.json')
-const debugConfigFileName = 'appconfig.json'
-const defaultConfig = {
-    dbPath: path.join(userDataPath, 'proTracker', 'proTracker.db'),
-}
 
 const ConfigService = class {
     static singleton = undefined
     config = undefined
     filename = ''
 
-    constructor (filename, defaultConfig) {
+    constructor (filename, config) {
         this.filename = filename
         try {
-            const savedConfig = JSON.parse(fs.readFileSync(filename, 'utf8'))
-            console.debug('ConfigService():read', savedConfig)
+            const savedConfig = JSON.parse(fs.readFileSync(filename, 'utf8')) // TODO: move to file service
             this.config = savedConfig
+            console.debug('ConfigService():read', savedConfig)
         } catch (err) {
             if (err.code == 'ENOENT') {
                 console.debug('ConfigService: no file, creating')
-                this.config = defaultConfig
+                this.config = config
                 this.save()
             } else {
                 console.error('ConfigService: error reading config')
@@ -33,20 +25,16 @@ const ConfigService = class {
         }
     }
 
-    static getService(customConfig=undefined) {
-        if (!this.singleton) {
-            if (customConfig)
-                this.singleton = new this(debugConfigFileName, customConfig)
-            else
-                this.singleton = new this(configFileName, defaultConfig)
-        }
+    static getService(config=undefined, configFileName=undefined) {
+        if (!this.singleton)
+            this.singleton = new this(configFileName, config)
         return this.singleton
     }
 
     save () {
         try {
             fs.writeFileSync(this.filename, JSON.stringify(this.config))
-            console.debug('ConfigService: save', this.filename)
+            console.debug('ConfigService: save', this.filename) // TODO: privacy violation!?
         } catch (err) {
             dialog.showErrorBox('Critical Error', 'proTracker is not able to save important configuration.\nYou might loose the changes made in this session')
             console.error('ConfigService: error saving config')
