@@ -9,7 +9,7 @@
     "make": "electron-forge make",
     "clean": "del proTracker.db appconfig.json",
     "debug": "electron . --inspect=5858",
-    "cleandebug": "del protracker.db appconfig.json && electron . --inspect=5858",
+    "cleandebug": "del proTracker.db appconfig.json proTracker.log && electron . --inspect=5858",
     "package": "electron-forge package"
   },
   "repository": {

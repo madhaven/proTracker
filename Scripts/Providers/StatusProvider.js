@@ -4,7 +4,7 @@ const { DatabaseService } = require("../Services/DatabaseService")
 const StatusProvider = class {
     dbService = undefined
 
-    constructor (dbService) {
+    constructor (dbService=undefined) {
         this.dbService = dbService ? dbService : DatabaseService.getService()
     }
 
@@ -18,7 +18,7 @@ const StatusProvider = class {
             console.debug('StatusProvider: created')
             return id ? status : false
         } catch (err) {
-            console.error('StatusProvider: create', err) // TODO remove error logs
+            console.trace('StatusProvider: create', err)
         }
     }
 
@@ -30,7 +30,7 @@ const StatusProvider = class {
             const res = await this.dbService.getOne(query, params)
             return res ? new Status(res.id, res.status) : false
         } catch (err) {
-            console.error("StatusProvider: get", err) // TODO remove error logs
+            console.trace("StatusProvider: get", err)
         }
     }
 
@@ -42,7 +42,7 @@ const StatusProvider = class {
             const res = await this.dbService.exec(query, params)
             return res==1 ? true : false
         } catch (err) {
-            console.error('StatusProvider: update', err) // TODO remove error logs
+            console.trace('StatusProvider: update', err)
             return false
         }
     }

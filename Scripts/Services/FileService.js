@@ -26,14 +26,12 @@ const FileService = class {
                         .on('data', row => { data.push(row) })
                         .on('end', () => { resolve([true, data])})
                         .on('error', error => {
-                            console.error("FileService: fileLoad", error) // TODO remove error logs
-                            // TODO logging
+                            console.trace("FileService: fileLoad", error)
                             resolve([false, undefined])
                         })
                 })
                 .catch(error => {
-                    console.error("FileService: fileLoadDialogue", error) // TODO remove error logs
-                    // TODO logging
+                    console.trace("FileService: fileLoadDialogue", error)
                     resolve([false, undefined])
                 })
         })
@@ -43,11 +41,11 @@ const FileService = class {
         return new Promise((resolve, reject) => {
             dialog.showSaveDialog(win, this.xl_filters)
                 .then(({canceled, filePath}) => {
-                    console.debug('FileService save canceled:', canceled, 'filePath', filePath)
+                    console.debug('FileService save canceled:', canceled)
                     resolve(canceled ? false : filePath)
                 })
                 .catch(error => {
-                    console.error('FileService: fileSaveDialog', error) // TODO remove error logs
+                    console.trace('FileService: fileSaveDialog', error)
                     reject(false)
                 })
         })

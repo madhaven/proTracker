@@ -34,22 +34,27 @@ const DatabaseService = class {
     }
 
     initializeDB () {
-        console.debug("DatabaseService: initializing DB", this.dbPath)
+        console.debug("DatabaseService: initializing DB", this.dbPath) // TODO: privacy violation?
         const db = new sql.Database(this.dbPath)
 
         try {
             const query = fs.readFileSync('./Scripts/DB/init.sql', 'utf8')
             const dataQuery = fs.readFileSync('./Scripts/DB/defaultData.sql', 'utf8')
             db.exec(query, err => {
-                if (err) console.error('DB init error', err) // TODO remove error logs
-                else console.debug("DatabaseService: init complete")
+                if (err) {
+                    console.error('DB init error')
+                    console.trace(err)
+                } else console.debug("DatabaseService: init complete")
             })
             db.exec(dataQuery, err => {
-                if (err) console.error('DB data error', err) // TODO remove error logs
-                else console.debug("DatabaseService: default data loaded")
+                if (err) {
+                    console.error('DB data error')
+                    console.trace(err)
+                } else console.debug("DatabaseService: default data loaded")
             })
         } catch (err) {
-            console.error('DatabaseService: error reading sql scripts', err) // TODO remove error logs
+            console.error('DatabaseService: error reading sql scripts')
+            console.trace(err)
             dialog.showErrorBox('Fatal Database Error', 'proTracker was unable to setup a database on the machine')
             app.exit()
         } finally {

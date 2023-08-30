@@ -249,7 +249,7 @@ const exportData = event => {
     loadingIcon.classList.remove('hidden')
     toggleSideBar()
 
-    const flashIcon = (selector, iconShowDuration, explanation=true) => {
+    const flashIcon = (selector, iconShowDuration, explanation='exportException') => {
         loadingIcon.classList.add('hidden')
         defaultIcon.classList.remove('hidden')
         defaultIcon.classList.add(selector)
@@ -310,7 +310,7 @@ const newLogInput = event => {
             UIproject.focus()
         },
         err => {
-            console.error('server error while adding new task', err) // TODO remove error logs
+            console.error('server error while adding new task')
         }
     )
 }
@@ -326,7 +326,7 @@ const taskClick = (event, task, log) => {
             populatePageFromState()
         },
         err => {
-            console.error('server error while updating task', err) // TODO remove error logs
+            console.error('server error while updating task') // TODO remove error logs
         }
     )
 }
@@ -373,7 +373,7 @@ const saveData = () => { // TODO ?
         },
         err => {
             alert('ProTracker ran Into an Error while trying to save')
-            console.error('ProTracker ran Into an Error while trying to save', err) // TODO: remove logs
+            console.error('ProTracker ran Into an Error while trying to save')
         }
     )
 }

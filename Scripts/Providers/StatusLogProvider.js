@@ -20,7 +20,7 @@ const StatusLogProvider = class {
             console.debug('StatusLogProvider: created')
             return id ? statusLog : false
         } catch (err) {
-            console.debug('StatusLogProvider: create', err) // TODO remove error logs
+            console.trace('StatusLogProvider: create', err)
         }
     }
 
@@ -37,7 +37,7 @@ const StatusLogProvider = class {
             ))
             return res ? result : false
         } catch (err) {
-            console.error('StatusLogProvider: getAllLogs', err) // TODO remove error logs
+            console.trace('StatusLogProvider: getAllLogs', err)
         }
     }
 
@@ -49,7 +49,7 @@ const StatusLogProvider = class {
             var res = await this.dbService.fetch(query)
             return res ? res : false
         } catch (err) {
-            console.error('StatusLogProvider: getTaskTimeline', err) // TODO remove error logs
+            console.trace('StatusLogProvider: getTaskTimeline', err)
         }
     } */
 
