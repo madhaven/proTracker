@@ -9,8 +9,6 @@ contextBridge.exposeInMainWorld('comms', {
         ipcRenderer.invoke('taskEditChannel', id, task).then(callback, err) },
     loadData: (callback, err) => {
         ipcRenderer.invoke('loadLogsRequest').then(callback, err) },
-    saveData: (callback, err) => {
-        ipcRenderer.invoke('saveDataRequest').then(callback, err) },
     exportData: (logTree, tasks, projects, logs, callback, err) => {
         ipcRenderer.invoke('exportDataRequest', logTree, tasks, projects, logs).then(callback, err) },
     registerListener: (channel, callback) => {
