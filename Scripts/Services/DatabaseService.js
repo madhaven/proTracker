@@ -42,19 +42,16 @@ const DatabaseService = class {
             const dataQuery = fs.readFileSync('./Scripts/DB/defaultData.sql', 'utf8')
             db.exec(query, err => {
                 if (err) {
-                    console.error('DB init error')
-                    console.trace(err)
+                    console.trace('DB init error', err)
                 } else console.debug("DatabaseService: init complete")
             })
             db.exec(dataQuery, err => {
                 if (err) {
-                    console.error('DB data error')
-                    console.trace(err)
+                    console.trace('DB data error', err)
                 } else console.debug("DatabaseService: default data loaded")
             })
         } catch (err) {
-            console.error('DatabaseService: error reading sql scripts')
-            console.trace(err)
+            console.trace('DatabaseService: error reading sql scripts', err)
             dialog.showErrorBox('Fatal Database Error', 'proTracker was unable to setup a database on the machine')
             app.exit()
         } finally {

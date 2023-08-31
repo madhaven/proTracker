@@ -181,9 +181,9 @@ body.scrollLock {
 .logChart .logDate {
     width: 15%;
 }
-.logChart .logProject {
-    width: 35%;
-}
+/* .logChart .logProject {
+    width: 35%; // overridden
+} */
 .logDay.header .logTask {
     width: 50%;
 }
@@ -201,6 +201,7 @@ body.scrollLock {
 }
 .logChart .daysTasks .logProject {
     width: 41.1355%;
+    cursor: pointer;
 }
 .logTask {
     transition: .2s ease-out;
