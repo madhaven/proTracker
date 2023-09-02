@@ -17,7 +17,7 @@ In this project
 * The Electron / backend section has been modularized into a layered architecture format.
 
 ```text
-eMain.js <--ePreload_APIBridge--|--> log.html
+eMain.js <--ePreload_APIBridge--|--> index.html
 |                               |--> renderer.js <---> state.js
 |
 |

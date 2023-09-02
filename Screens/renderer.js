@@ -302,7 +302,7 @@ const exportData = event => {
         defaultIcon.classList.add(selector)
         defaultIcon.parentElement.title = {
             true: "Export Complete",
-            false: "the export action was cancelled",
+            false: "the previous export action was cancelled",
             "noAccess": "proTracker doesn't have access to the file at the moment",
             "exportException": "an unhandled error occurred",
         }[explanation] ?? ""

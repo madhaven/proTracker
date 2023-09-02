@@ -239,7 +239,7 @@ body {
 .logTask .logTaskEditButton:active {
     color: var(--fg-weak);
 }
-.logDay.today .logTask {
+.logTaskContent {
     cursor: pointer;
 }
 .logTask.pending {
@@ -328,7 +328,6 @@ input:focus {
     padding: 0em 1em;
     border-radius: 0 0.5em 0.5em 0;
     border-left: 1px solid var(--whiteLayer2);
-    cursor: pointer;
 }
 .taskList > li:hover {
     background-color: var(--blackLayer1);

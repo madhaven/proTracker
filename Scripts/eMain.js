@@ -41,7 +41,7 @@ const createWindow = () => {
     })
     registerHandlers(win)
     win.removeMenu()
-    win.loadFile('./Screens/log.html')
+    win.loadFile('./Screens/index.html')
     win.webContents.on('did-finish-load', () => {
         state = initialState()
         mainWindow.webContents.send('updateUI', state)
