@@ -190,6 +190,33 @@ const addProjectListeners = (projectElement) => {
     })
 }
 
+const renderLogs = () => {
+    const projectField = document.querySelector('#newLogProject')
+        , taskField = document.querySelector('#newLogTask')
+    
+    clearAllLogs()
+    if (Object.keys(uiState.logTree).length == 0) {
+        projectField.placeholder = "Add a New Project"
+        taskField.placeholder = "or a new task"
+    } else {
+        projectField.placeholder = taskField.placeholder = ""
+        for (const day in uiState.logTree) {
+            const logDay = createOrFindDay(day)
+            for (const taskId in uiState.logTree[day]) {
+                const log = uiState.logTree[day][taskId]
+                    , task = uiState.tasks[taskId]
+                    , taskRow = createRowOnDay(logDay, task)
+                    , project = taskRow.querySelector('.logProject')
+                    , logTask = taskRow.querySelector('.logTask')
+                    , logTaskContent = createTaskInRow(logTask, task)
+                decorateTaskRow(logTask, log)
+                addTaskListeners(logTaskContent, log, task, day)
+                addProjectListeners(project)
+            }
+        }
+    }
+}
+
 const renderProjects = () => {
     const projectList = document.getElementById('projectList')
     projectList.innerHTML = ""
@@ -223,21 +250,7 @@ const renderProjects = () => {
 }
 
 const populatePageFromState = () => {
-    clearAllLogs()
-    for (const day in uiState.logTree) {
-        const logDay = createOrFindDay(day)
-        for (const taskId in uiState.logTree[day]) {
-            const log = uiState.logTree[day][taskId]
-                , task = uiState.tasks[taskId]
-                , taskRow = createRowOnDay(logDay, task)
-                , project = taskRow.querySelector('.logProject')
-                , logTask = taskRow.querySelector('.logTask')
-                , logTaskContent = createTaskInRow(logTask, task)
-            decorateTaskRow(logTask, log)
-            addTaskListeners(logTaskContent, log, task, day)
-            addProjectListeners(project)
-        }
-    }
+    renderLogs()
     renderProjects()
 }
 
