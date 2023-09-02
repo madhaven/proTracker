@@ -266,12 +266,10 @@ const toggleSideBar = (visible = undefined) => {
         // open side bar
         sidebar.classList.add("sideBar_open")
         uiState.menuVisible = true
-        document.body.classList.add('scrollLock')
     } else if ((visible==undefined && uiState.menuVisible) || visible==false) {
         // close side bar
         sidebar.classList.remove("sideBar_open")
         uiState.menuVisible = false
-        document.body.classList.remove('scrollLock')
     }
     stateComm.notifyUIEvent(uiState) // needed ?
 }
@@ -402,22 +400,6 @@ const projectItemClick = (event, element, project) => {
 
 // #region COMMS
 
-const dataFromMainHandler = (event, logs) => {
-    // handles the data received from Main process and adds it to the log page
-    console.log('UI|DataPing ### REMOVE THIS THING')
-    logs.forEach(log => {
-        uiState.newLog(log)
-        populatePageFromState()
-    })
-    toggleSideBar(false)
-    document.getElementById('inputs').scrollIntoView()
-}
-
-const errFromMainHandler = (err, args) => {
-    // handles any error from the main process on ...?
-    console.error(args, err)
-}
-
 const taskEditHandler = (event, task, newSummary, taskElement) => {
     comms.editTask(
         task.id, newSummary,
@@ -465,7 +447,7 @@ window.addEventListener('load', event => {
     document.querySelector('#export.menuButton').addEventListener('click', exportData)
     document.querySelector('#logChart.menuButton').addEventListener('click', event => {
         switchToTab('logChart')
-        document.getElementById('inputs').scrollIntoView()
+        document.getElementById('inputs').scrollIntoView({ behavior: 'smooth' })
     })
     // document.querySelector('#load.menuButton').addEventListener('click', requestDataFromDB)
 
@@ -479,8 +461,6 @@ window.addEventListener('load', event => {
     
     // comm listeners
     stateComm.registerListener('updateUI', recieveStateChanges)
-    comms.registerListener('DataPing', dataFromMainHandler)
-    comms.registerListener('DataError', errFromMainHandler)
 
     setDefaultDate()
     requestDataFromDB()
