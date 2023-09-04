@@ -28,13 +28,13 @@
   },
   "homepage": "https://github.com/madhaven/proTracker#readme",
   "devDependencies": {
-    "@electron-forge/cli": "^6.2.1",
+    "@electron-forge/cli": "^6.4.1",
     "@electron-forge/maker-deb": "^6.2.1",
     "@electron-forge/maker-rpm": "^6.2.1",
     "@electron-forge/maker-squirrel": "^6.2.1",
     "@electron-forge/maker-zip": "^6.2.1",
     "@electron-forge/plugin-auto-unpack-natives": "^6.2.1",
-    "electron": "^22.0.0"
+    "electron": "^26.1.0"
   },
   "dependencies": {
     "electron-squirrel-startup": "^1.0.0",
