@@ -89,7 +89,6 @@ const createRowOnDay = (logDay, task) => {
         , stickyDate = logDay.querySelector('.stickyDate').innerHTML.replaceAll(' ', '')
         , displayId = stickyDate + '_' + task.id
         , tasksInDay = logDay.getElementsByClassName('taskRow')
-        , project = uiState.projects[task.projectId]
 
     for (row of tasksInDay) {
         if (row.id == displayId)
@@ -101,11 +100,15 @@ const createRowOnDay = (logDay, task) => {
     logProject.classList.add('logProject')
     logTask.classList.add('logTask')
 
-    logProject.innerHTML = project.name
     taskRow.appendChild(logProject)
     taskRow.appendChild(logTask)
     daysTasks.appendChild(taskRow)
     return taskRow
+}
+
+const createProjectInRow = (logProject, project) => {
+    console.log(logProject, project)
+    logProject.innerHTML = project.name
 }
 
 const createTaskInRow = (logTask, task) => {
@@ -204,16 +207,20 @@ const renderLogs = () => {
         projectField.placeholder = taskField.placeholder = ""
         for (const day in uiState.logTree) {
             const logDay = createOrFindDay(day)
-            for (const taskId in uiState.logTree[day]) {
-                const log = uiState.logTree[day][taskId]
-                    , task = uiState.tasks[taskId]
-                    , taskRow = createRowOnDay(logDay, task)
-                    , project = taskRow.querySelector('.logProject')
-                    , logTask = taskRow.querySelector('.logTask')
-                    , logTaskContent = createTaskInRow(logTask, task)
-                decorateTaskRow(logTask, log)
-                addTaskListeners(logTaskContent, log, task, day)
-                addProjectListeners(project)
+            for (const projectId in uiState.logTree[day]) {
+                for (const taskId in uiState.logTree[day][projectId]) {
+                    const log = uiState.logTree[day][projectId][taskId]
+                        , task = uiState.tasks[taskId]
+                        , project = uiState.projects[projectId]
+                        , taskRow = createRowOnDay(logDay, task)
+                        , logProject = taskRow.querySelector('.logProject')
+                        , logTask = taskRow.querySelector('.logTask')
+                        , logProjectContent = createProjectInRow(logProject, project)
+                        , logTaskContent = createTaskInRow(logTask, task)
+                    decorateTaskRow(logTask, log)
+                    addTaskListeners(logTaskContent, log, task, day)
+                    addProjectListeners(logProject)
+                }
             }
         }
     }
