@@ -1,5 +1,7 @@
 const uiState = new State()
     , allowSuperpowers = false // for debugging
+uiState.inactiveDuration = 0
+uiState.inactivityTolerance = 60 // TODO: user preference
 
 // #region Helpers
 
@@ -258,7 +260,7 @@ const populatePageFromState = () => {
 
 // #region Actions
 
-const toggleSideBar = (visible = undefined) => {
+const toggleMenuBar = (visible = undefined) => {
     // handles the open and close of the sidebar
     const sidebar = document.getElementById('sideBar')
         , handle = document.getElementById('sideHandle')
@@ -294,7 +296,7 @@ const exportData = event => {
         , resultShowDuration = 2000
     defaultIcon.classList.add('hidden')
     loadingIcon.classList.remove('hidden')
-    toggleSideBar()
+    toggleMenuBar()
 
     const flashIcon = (selector, iconShowDuration, explanation='exportException') => {
         loadingIcon.classList.add('hidden')
@@ -396,6 +398,21 @@ const projectItemClick = (event, element, project) => {
     }
 }
 
+const startTrackingInactivity = () => {
+    ['mousemove', 'mousedown', 'drag', 'keypress', 'scroll'].forEach(event => {
+        document.addEventListener(event, () => { uiState.inactiveDuration = 0 })
+    });
+    setInterval(() => {
+        console.log('inactiveDuration', uiState.inactiveDuration)
+        uiState.inactiveDuration = ++uiState.inactiveDuration ?? 0 // TODO: ensure state is initialized
+        if (uiState.inactiveDuration>=uiState.inactivityTolerance && !uiState.menuVisible) {
+            toggleMenuBar(true)
+            console.info('MenuBar on inactivity')
+        }
+    }, 1000);
+    console.info('Inactivity tracking enabled')
+}
+
 // #endregion
 
 // #region COMMS
@@ -439,8 +456,8 @@ const recieveStateChanges = (event, state) => {
 
 window.addEventListener('load', event => {
     // Sidebar
-    document.getElementById('sideBar').addEventListener('click', e => toggleSideBar())
-    document.getElementById("sideHandle").addEventListener('click', e => toggleSideBar())
+    document.getElementById('sideBar').addEventListener('click', e => toggleMenuBar())
+    document.getElementById("sideHandle").addEventListener('click', e => toggleMenuBar())
 
     // Menu Buttons
     document.querySelector('#projects.menuButton').addEventListener('click', event => { switchToTab('projectTab') })
@@ -464,5 +481,6 @@ window.addEventListener('load', event => {
 
     setDefaultDate()
     requestDataFromDB()
-    toggleSideBar(true)
+    toggleMenuBar(true)
+    startTrackingInactivity()
 })
