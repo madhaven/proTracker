@@ -398,12 +398,11 @@ const projectItemClick = (event, element, project) => {
     }
 }
 
-const startTrackingInactivity = () => {
+const trackInactivity = () => {
     ['mousemove', 'mousedown', 'drag', 'keypress', 'scroll'].forEach(event => {
         document.addEventListener(event, () => { uiState.inactiveDuration = 0 })
     });
     setInterval(() => {
-        console.log('inactiveDuration', uiState.inactiveDuration)
         uiState.inactiveDuration = ++uiState.inactiveDuration ?? 0 // TODO: ensure state is initialized
         if (uiState.inactiveDuration>=uiState.inactivityTolerance && !uiState.menuVisible) {
             toggleMenuBar(true)
@@ -482,5 +481,5 @@ window.addEventListener('load', event => {
     setDefaultDate()
     requestDataFromDB()
     toggleMenuBar(true)
-    startTrackingInactivity()
+    trackInactivity()
 })
