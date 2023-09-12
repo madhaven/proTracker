@@ -22,7 +22,7 @@ const setDefaultDate = () => {
 
 const clearAllLogs = () => {
     // clears all logs
-    const allLogs = document.querySelectorAll('.logDay:not(.header)')
+    const allLogs = document.querySelectorAll('.logDay:not(.header, .inputs)')
     for (const day of allLogs) {
         day.remove()
     }
@@ -50,9 +50,9 @@ const createOrFindDay = (date) => {
     const [year, month, day] = date.split(',')
         , t = new Date(year, month, day)
         , itIsToday = new Date().toDateString() == t.toDateString()
-        , months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-        , displayDate = (itIsToday) ? 'Today' : `${year} ${months[month]} ${day}`
         , allDays = document.querySelectorAll('.logDay:not(.header)')
+        , months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        , displayDate = itIsToday ? 'Today' : `${year} ${months[month]} ${day}`
 
     if (allDays.length > 0) {
         const latestDate = allDays[allDays.length - 1]
@@ -63,57 +63,52 @@ const createOrFindDay = (date) => {
     const logDay = document.createElement('div')
         , logDate = document.createElement('div')
         , stickyDate = document.createElement('div')
-        , daysTasks = document.createElement('div')
+        , daysProjects = document.createElement('div')
 
     if (itIsToday) logDay.classList.add('today')
     logDay.classList.add('logDay')
     logDay.id = t.getTime()
     logDate.classList.add('logDate')
     stickyDate.classList.add('stickyDate')
-    daysTasks.classList.add('daysTasks')
+    daysProjects.classList.add('daysProjects')
 
     logDate.appendChild(stickyDate)
     logDay.appendChild(logDate)
-    logDay.appendChild(daysTasks)
+    logDay.appendChild(daysProjects)
     document.getElementById('inputs').before(logDay)
 
     stickyDate.innerHTML = displayDate
     return logDay
 }
 
-const createRowOnDay = (logDay, task) => {
-    const taskRow = document.createElement('div')
-        , logProject = document.createElement('div')
-        , logTask = document.createElement('div')
-        , daysTasks = logDay.querySelector('.daysTasks')
-        , stickyDate = logDay.querySelector('.stickyDate').innerHTML.replaceAll(' ', '')
-        , displayId = stickyDate + '_' + task.id
-        , tasksInDay = logDay.getElementsByClassName('taskRow')
-        , project = uiState.projects[task.projectId]
+const createProjectOnDay = (logDay, project) => {
+    const projectRow = document.createElement('div')
+        , projectContent = document.createElement('div')
+        , stickyProjectContent = document.createElement('div')
+        , projectsTasks = document.createElement('div')
+    
+    projectRow.classList.add('projectRow')
+    projectContent.classList.add('projectContent')
+    stickyProjectContent.classList.add('stickyProjectContent')
+    projectsTasks.classList.add('projectsTasks')
 
-    for (row of tasksInDay) {
-        if (row.id == displayId)
-            return row
-    }
+    projectRow.appendChild(projectContent)
+    projectContent.appendChild(stickyProjectContent)
+    projectRow.appendChild(projectsTasks)
+    logDay.querySelector('.daysProjects').appendChild(projectRow)
 
-    taskRow.classList.add('taskRow')
-    taskRow.id = displayId
-    logProject.classList.add('logProject')
-    logTask.classList.add('logTask')
-
-    logProject.innerHTML = project.name
-    taskRow.appendChild(logProject)
-    taskRow.appendChild(logTask)
-    daysTasks.appendChild(taskRow)
-    return taskRow
+    stickyProjectContent.innerHTML = project.name
+    return projectRow
 }
 
-const createTaskInRow = (logTask, task) => {
-    const editIconSVG = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16"><path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/></svg>'
+const createTaskInElement = (element, task) => {
+    const logTask = document.createElement('div')
         , logTaskContent = document.createElement('div')
         , logTaskEditInput = document.createElement('input')
         , logTaskEditButton = document.createElement('span')
+        , editIconSVG = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16"><path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/></svg>'
 
+    logTask.classList.add('logTask')
     logTaskContent.classList.add('logTaskContent')
     logTaskEditInput.classList.add('logTaskEditInput')
     logTaskEditButton.classList.add('logTaskEditButton')
@@ -132,11 +127,11 @@ const createTaskInRow = (logTask, task) => {
     logTask.appendChild(logTaskContent)
     logTask.appendChild(logTaskEditInput)
     logTask.appendChild(logTaskEditButton)
-
+    element.appendChild(logTask)
     return logTaskContent
 }
 
-const decorateTaskRow = (logTask, log) => {
+const decorateTaskContent = (logTask, log) => {
     logTask.classList.remove(
         'pending'
         , 'in_progress'
@@ -175,9 +170,9 @@ const addTaskListeners = (taskElement, log, task, day) => {
     }
 }
 
-const addProjectListeners = (projectElement) => {
-    const projectName = projectElement.innerHTML
-    projectElement.addEventListener('click', () => {
+const addProjectListeners = (stickySection) => {
+    const projectName = stickySection.innerHTML
+    stickySection.addEventListener('click', () => {
         const projectInput = document.querySelector('#newLogProject')
             , logInput = document.querySelector('#newLogTask')
             , printChars = (string, index=0) => {
@@ -204,16 +199,19 @@ const renderLogs = () => {
         projectField.placeholder = taskField.placeholder = ""
         for (const day in uiState.logTree) {
             const logDay = createOrFindDay(day)
-            for (const taskId in uiState.logTree[day]) {
-                const log = uiState.logTree[day][taskId]
-                    , task = uiState.tasks[taskId]
-                    , taskRow = createRowOnDay(logDay, task)
-                    , project = taskRow.querySelector('.logProject')
-                    , logTask = taskRow.querySelector('.logTask')
-                    , logTaskContent = createTaskInRow(logTask, task)
-                decorateTaskRow(logTask, log)
-                addTaskListeners(logTaskContent, log, task, day)
-                addProjectListeners(project)
+            for (const projectId in uiState.logTree[day]) {
+                const project = uiState.projects[projectId]
+                    , projectRow = createProjectOnDay(logDay, project)
+                    , projectStickyContent = projectRow.querySelector('.stickyProjectContent')
+                    , taskContainer = projectRow.querySelector('.projectsTasks')
+                addProjectListeners(projectStickyContent)
+                for (const taskId in uiState.logTree[day][projectId]) {
+                    const log = uiState.logTree[day][projectId][taskId]
+                        , task = uiState.tasks[taskId]
+                        , taskRow = createTaskInElement(taskContainer, task)
+                    decorateTaskContent(taskRow, log)
+                    addTaskListeners(taskRow, log, task, day)
+                }
             }
         }
     }
@@ -232,9 +230,8 @@ const renderProjects = () => {
             const task = uiState.tasks[taskId]
                 , statusId = uiState.projectTree[projectId][taskId]
                 , taskItem = document.createElement('li')
-            taskItem.classList.add('taskRow', 'logTask')
-            const logTaskContent = createTaskInRow(taskItem, task)
-            decorateTaskRow(taskItem, {'statusId': statusId}, task, true)
+                , logTaskContent = createTaskInElement(taskItem, task)
+            decorateTaskContent(logTaskContent, {'statusId': statusId}, task, true)
             addTaskListeners(logTaskContent, {'statusId': statusId}, task, false)
             taskList.appendChild(taskItem)
         }
@@ -465,7 +462,6 @@ window.addEventListener('load', event => {
         switchToTab('logChart')
         document.getElementById('inputs').scrollIntoView({ behavior: 'smooth' })
     })
-    // document.querySelector('#load.menuButton').addEventListener('click', requestDataFromDB)
 
     document.getElementById('newLogProject').addEventListener('input', event => { trimInput(event, false) })
     document.getElementById('newLogProject').addEventListener('change', event => { trimInput(event, true) })
@@ -480,6 +476,7 @@ window.addEventListener('load', event => {
 
     setDefaultDate()
     requestDataFromDB()
+    switchToTab('logChart')
     toggleMenuBar(true)
-    trackInactivity()
+    if (!allowSuperpowers) trackInactivity()
 })

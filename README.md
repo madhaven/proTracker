@@ -2,6 +2,16 @@
 
 a simple way of tracking progress
 
+## Usage
+
+* To debug, run `npm run debug`  
+  To debug with a clean slate, run `npm run cleandebug`  
+* To run from code, run `npm run start` or `npm start`
+* To build the project, run `npm run start` followed by `npm run make`  
+  A number of issues have come to notice: [#54](https://github.com/madhaven/proTracker/issues/54)  
+  * Sqlite db having access  
+  * electron and npm version mismatches  
+
 ## Architecture
 
 The [Electron framework](https://www.electronjs.org/) as I understand works with 3 components  
@@ -42,6 +52,17 @@ DB
 * Next a Layered Architecture was implemented  
   Data now flowed from DB to providers to Services/handlers from where it is passed to front-end  
   The Electron Preload script helped restrict the access that front-end had to native nodeJS functionality.
-  The renderer script coordinated all processes on the front end with the help of State.js which handled the data
+  The renderer script coordinated all processes on the front end with the help of State.js which handled the data  
+* Other perfection updates included
+  * editing tasks
+  * clicking on project names to autofill the project input, this keeps you up to speed
+  * a timeout that pulls up the Menu page after a minute
+  * Export to excel functionality
+* Logging was implemented to track issues across devices  
+
+
+## Future
+
+* Checkout the issues tab to see imperfections, features and their statuses.  
 * Thinking of setting up tests https://www.electronjs.org/docs/latest/tutorial/automated-testing
   Feel free to contribute
