@@ -161,9 +161,6 @@ body {
     background-color: var(--bg);
     z-index: 5;
 }
-.logChart .header > *:not(:first-child), .taskRow > * {
-    padding: 0 .5em 0 .5em;
-}
 .logChart .logDay {
     width: 100%;
     display: flex;
@@ -173,10 +170,9 @@ body {
 .logChart .logDay.today {
     border-bottom: none;
 }
-.stickyDate {
+.stickyDate, .stickyProjectContent {
     position: sticky;
     top: 3em;
-    padding-bottom: .25em;
 }
 .logChart .logDate {
     width: 15%;
@@ -184,32 +180,24 @@ body {
 .logChart .logProject {
     width: 35%;
 }
-.logDay.header .logTask {
-    width: 50%;
-}
-#inputs .logTask {
-    width: 60%;
-}
 .logProject,
 .logProject input {
     text-align: right;
+}
+.logChart .daysTasks .logProject {
+    width: 41.1355%;
+    cursor: pointer;
 }
 .logChart .daysTasks {
     width: 85%;
     display: flex;
     flex-direction: column;
 }
-.logChart .daysTasks .logProject {
-    width: 41.1355%;
-    cursor: pointer;
-}
 .logTask {
-    transition: .2s ease-out;
     word-wrap: break-word;
     overflow-wrap: break-word;
     display: flex;
     justify-content: space-between;
-    width: 58.82%;
 }
 .logTask:not(.editable) .logTaskEditInput,
 .logTask.editable .logTaskContent {
@@ -242,27 +230,64 @@ body {
 .logTaskContent {
     cursor: pointer;
 }
-.logTask.pending {
+.logTaskContent.pending {
     color: var(--red);
 }
-.logTask.completed {
+.logTaskContent.completed {
     color: var(--green);
 }
-.taskRow {
+#inputs {
+    padding: 0 !important;
+    border: none !important;
+}
+
+.projectRow {
     width: 100%;
     display: flex;
     flex-direction: row;
     border-radius: .5em;
     transition: .1s linear;
 }
-.logDay:not(#inputs) .taskRow:hover,
-.logDay:not(#inputs) .taskRow:focus-within {
+.daysProjects {
+    width: 85%;
+    display: flex;
+    flex-direction: column;
+}
+.daysProjects .logProject {
+    width: 41.1355%;
+    cursor: pointer;
+}
+.logDay:not(#inputs) .logTask:hover,
+.logDay:not(#inputs) .logTask:focus-within {
     background-color: var(--blackLayer1);
     transition-delay: .2s;
 }
-#inputs {
-    padding: 0 !important;
-    border: none !important;
+.projectsTasks {
+    width: 58.82%;
+}
+.logTask {
+    width: 100%;
+    transition: .2s ease-out;
+    border-radius: .5em;
+    padding: 0 .5em 0 .5em;
+}
+.logTaskContent {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+/* .header .projectContent {
+    width: 35%
+} */
+.projectContent {
+    width: 41.1355%;
+    text-align: right;
+    padding: 0 0.5em 0 0.5em;
+}
+.projectContent input {
+    text-align: right;
+}
+.stickyProjectContent {
+    cursor: pointer;
 }
 
 input {
@@ -325,7 +350,7 @@ input:focus {
 .taskList > li {
     width: 100%;
     margin-top: 4px;
-    padding: 0em 1em;
+    padding: 0em 0em 0em 1em;
     border-radius: 0 0.5em 0.5em 0;
     border-left: 1px solid var(--whiteLayer2);
 }
@@ -360,6 +385,6 @@ input:focus {
     color: var(--whiteLayer2);
 }
 
-/* *{
+*{
     outline: 1px solid green;
-} */
+}
