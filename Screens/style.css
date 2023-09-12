@@ -385,6 +385,6 @@ input:focus {
     color: var(--whiteLayer2);
 }
 
-*{
+/* *{
     outline: 1px solid green;
-}
+} */

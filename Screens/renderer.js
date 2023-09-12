@@ -170,9 +170,9 @@ const addTaskListeners = (taskElement, log, task, day) => {
     }
 }
 
-const addProjectListeners = (projectElement) => {
-    const projectName = projectElement.querySelector('.stickyProjectContent').innerHTML
-    projectElement.addEventListener('click', () => {
+const addProjectListeners = (stickySection) => {
+    const projectName = stickySection.innerHTML
+    stickySection.addEventListener('click', () => {
         const projectInput = document.querySelector('#newLogProject')
             , logInput = document.querySelector('#newLogTask')
             , printChars = (string, index=0) => {
@@ -202,14 +202,15 @@ const renderLogs = () => {
             for (const projectId in uiState.logTree[day]) {
                 const project = uiState.projects[projectId]
                     , projectRow = createProjectOnDay(logDay, project)
+                    , projectStickyContent = projectRow.querySelector('.stickyProjectContent')
                     , taskContainer = projectRow.querySelector('.projectsTasks')
+                addProjectListeners(projectStickyContent)
                 for (const taskId in uiState.logTree[day][projectId]) {
                     const log = uiState.logTree[day][projectId][taskId]
                         , task = uiState.tasks[taskId]
                         , taskRow = createTaskInElement(taskContainer, task)
                     decorateTaskContent(taskRow, log)
                     addTaskListeners(taskRow, log, task, day)
-                    addProjectListeners(projectRow)
                 }
             }
         }
