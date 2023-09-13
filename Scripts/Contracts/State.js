@@ -49,8 +49,8 @@ const State = class {
     }
 
     addData (log, task, project) {
-        this.tasks[task.id] = this.tasks[task.id] ?? task
-        this.projects[project.id] = this.projects[project.id] ?? project
+        this.tasks[task.id] ??= task
+        this.projects[project.id] ??= project
         this.addLog(log)
         console.debug('data added', this)
     }
@@ -78,15 +78,15 @@ const State = class {
                 , date = t.getDate()
                 , task = this.tasks[log.taskId]
                 , project = this.projects[task.projectId]
-            this.logTree[[year, month, date]] = this.logTree[[year, month, date]] ?? {}
-            this.logTree[[year, month, date]][project.id] = this.logTree[[year, month, date]][project.id] ?? {}
+            this.logTree[[year, month, date]] ??= {}
+            this.logTree[[year, month, date]][project.id] ??= {}
             this.logTree[[year, month, date]][project.id][task.id] = log
             if (log.statusId == 1)
                 pendingLogs.set(task, log)
             else
                 pendingLogs.delete(task)
     
-            this.projectTree[project.id] = this.projectTree[project.id] ?? {}
+            this.projectTree[project.id] ??= {}
             this.projectTree[project.id][task.id] = log.statusId
         }
 
@@ -94,8 +94,8 @@ const State = class {
         const t2 = new Date()
         const today = [t2.getFullYear(), t2.getMonth(), t2.getDate()]
         for (const [task, log] of pendingLogs) {
-            this.logTree[today] = this.logTree[today] ?? {}
-            this.logTree[today][task.projectId] = this.logTree[today][task.projectId] ?? {}
+            this.logTree[today] ??= {}
+            this.logTree[today][task.projectId] ??= {}
             this.logTree[today][task.projectId][task.id] = log
         }
     }

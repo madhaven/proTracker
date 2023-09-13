@@ -85,7 +85,7 @@ const ProjectProvider = class {
             const taskId = log.taskId
                 , projectId = tasks[taskId].projectId
 
-            projectTree[projectId] = projectTree[projectId] ?? {}
+            projectTree[projectId] ??= {}
             if (projectTree[projectId][taskId] == undefined)
                 projectTree[projectId][taskId] = []
             if (projectTree[projectId][taskId].length == 0)
