@@ -1,5 +1,5 @@
 const path = require('path')
-const { app, BrowserWindow, dialog } = require('electron')
+const { app, BrowserWindow } = require('electron')
 const { State } = require('./Models/State')
 const { ConfigService } = require('./Services/ConfigService')
 const { DatabaseService } = require('./Services/DatabaseService')
@@ -56,13 +56,19 @@ const createWindow = () => {
 
 // App Lifecycle
 
-app.whenReady().then(() => {
+if (!app.requestSingleInstanceLock()) {
+    console.warn('Multiple proTracker instances blocked')
+    app.quit()
+} else app.whenReady().then(() => {
     if (BrowserWindow.getAllWindows().length === 0)
         mainWindow ??= createWindow()
+    
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0)
             mainWindow ??= createWindow()
     })
+
+    app.on('second-instance', () => { console.error('Second instance was created') })
 })
 
 // quit the app when no windows are open on non-macOS platforms
