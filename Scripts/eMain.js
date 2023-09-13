@@ -54,11 +54,14 @@ const createWindow = () => {
     return win
 }
 
+// App Lifecycle
+
 app.whenReady().then(() => {
-    mainWindow = createWindow()
+    if (BrowserWindow.getAllWindows().length === 0)
+        mainWindow ??= createWindow()
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0)
-            mainWindow = createWindow()
+            mainWindow ??= createWindow()
     })
 })
 
