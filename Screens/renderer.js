@@ -1,5 +1,6 @@
 const uiState = new State()
     , allowSuperpowers = false // for debugging
+    , editIconSVG = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16"><path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/></svg>'
 uiState.inactiveDuration = 0
 uiState.inactivityTolerance = 60 // TODO: user preference
 
@@ -83,21 +84,42 @@ const createOrFindDay = (date) => {
 
 const createProjectOnDay = (logDay, project) => {
     const projectRow = document.createElement('div')
-        , projectContent = document.createElement('div')
-        , stickyProjectContent = document.createElement('div')
+        , projectColumn = document.createElement('div')
+        , stickyProjectStuff = document.createElement('div')
+        , logProjectContent = document.createElement('div')
+        , logProjectEditInput = document.createElement('input')
+        , logProjectEditButton = document.createElement('span')
         , projectsTasks = document.createElement('div')
     
     projectRow.classList.add('projectRow')
-    projectContent.classList.add('projectContent')
-    stickyProjectContent.classList.add('stickyProjectContent')
+    projectColumn.classList.add('projectColumn')
+    stickyProjectStuff.classList.add('stickyProjectStuff')
+    logProjectContent.classList.add('logProjectContent')
+    logProjectEditInput.classList.add('logProjectEditInput')
+    logProjectEditButton.classList.add('logProjectEditButton')
     projectsTasks.classList.add('projectsTasks')
+    
+    logProjectContent.innerHTML = project.name
+    logProjectEditInput.value = project.name
+    logProjectEditInput.type = 'text'
+    logProjectEditButton.innerHTML = editIconSVG
+    logProjectEditButton.addEventListener('click', event => {
+        makeProjectEditable(event, project, projectRow)
+    })
+    logProjectEditInput.addEventListener('input', event => { trimInput(event, false) })
+    logProjectEditInput.addEventListener('change', event => { trimInput(event, true) })
+    logProjectEditInput.addEventListener('change', logProjectEditInput.blur)
+    logProjectEditInput.addEventListener('blur', event => {
+        projectEditHandler(event, project, logProjectEditInput.value, logProjectContent)
+    })
 
-    projectRow.appendChild(projectContent)
-    projectContent.appendChild(stickyProjectContent)
+    projectRow.appendChild(projectColumn)
+    projectColumn.appendChild(stickyProjectStuff)
+    stickyProjectStuff.appendChild(logProjectEditButton)
+    stickyProjectStuff.appendChild(logProjectEditInput)
+    stickyProjectStuff.appendChild(logProjectContent)
     projectRow.appendChild(projectsTasks)
     logDay.querySelector('.daysProjects').appendChild(projectRow)
-
-    stickyProjectContent.innerHTML = project.name
     return projectRow
 }
 
@@ -106,7 +128,6 @@ const createTaskInElement = (element, task) => {
         , logTaskContent = document.createElement('div')
         , logTaskEditInput = document.createElement('input')
         , logTaskEditButton = document.createElement('span')
-        , editIconSVG = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16"><path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/></svg>'
 
     logTask.classList.add('logTask')
     logTaskContent.classList.add('logTaskContent')
@@ -115,10 +136,13 @@ const createTaskInElement = (element, task) => {
 
     logTaskContent.innerHTML = task.summary
     logTaskEditInput.value = task.summary
+    logTaskEditInput.type = 'text'
     logTaskEditButton.innerHTML = editIconSVG
     logTaskEditButton.addEventListener('click', event => {
         makeTaskEditable(event, task, logTask)
     })
+    logTaskEditInput.addEventListener('input', event => { trimInput(event, false) })
+    logTaskEditInput.addEventListener('change', event => { trimInput(event, true) })
     logTaskEditInput.addEventListener('change', logTaskEditInput.blur)
     logTaskEditInput.addEventListener('blur', event => {
         taskEditHandler(event, task, logTaskEditInput.value, logTask)
@@ -170,16 +194,15 @@ const addTaskListeners = (taskElement, log, task, day) => {
     }
 }
 
-const addProjectListeners = (stickySection) => {
-    const projectName = stickySection.innerHTML
-    stickySection.addEventListener('click', () => {
-        const projectInput = document.querySelector('#newLogProject')
-            , logInput = document.querySelector('#newLogTask')
-            , printChars = (string, index=0) => {
-            if (index < string.length) {
-                projectInput.value += string[index]
-                setTimeout(() => { printChars(string, index+1) }, 25);
-            }
+const addProjectListeners = (element) => {
+    const projectName = element.innerHTML
+        , projectInput = document.querySelector('#newLogProject')
+        , logInput = document.querySelector('#newLogTask')
+    element.addEventListener('click', () => {
+        const printChars = (characters, index=0) => {
+            if (index >= characters.length) return
+            projectInput.value += characters[index]
+            setTimeout(() => { printChars(characters, index+1) }, 25);
         }
         logInput.focus()
         projectInput.value = ""
@@ -202,9 +225,9 @@ const renderLogs = () => {
             for (const projectId in uiState.logTree[day]) {
                 const project = uiState.projects[projectId]
                     , projectRow = createProjectOnDay(logDay, project)
-                    , projectStickyContent = projectRow.querySelector('.stickyProjectContent')
+                    , logProjectContent = projectRow.querySelector('.logProjectContent')
                     , taskContainer = projectRow.querySelector('.projectsTasks')
-                addProjectListeners(projectStickyContent)
+                addProjectListeners(logProjectContent)
                 for (const taskId in uiState.logTree[day][projectId]) {
                     const log = uiState.logTree[day][projectId][taskId]
                         , task = uiState.tasks[taskId]
@@ -377,13 +400,6 @@ const taskClick = (event, task, log) => {
     )
 }
 
-const makeTaskEditable = (event, task, logTask) => {
-    const logTaskEditInput = logTask.querySelector('.logTaskEditInput')
-    logTaskEditInput.value = task.summary
-    logTask.classList.add('editable')
-    logTaskEditInput.focus()
-}
-
 const projectItemClick = (event, element, project) => {
     const taskList = element.querySelector('.taskList')
     if (taskList.classList.contains('hidden')) { 
@@ -393,6 +409,20 @@ const projectItemClick = (event, element, project) => {
         taskList.classList.add('hidden')
         element.classList.add('emptyProject')
     }
+}
+
+const makeProjectEditable = (event, project, projectRow) => {
+    const logProjectEditInput = projectRow.querySelector('.logProjectEditInput')
+    logProjectEditInput.value = project.name
+    projectRow.querySelector('.projectColumn').classList.add('editable')
+    logProjectEditInput.focus()
+}
+
+const makeTaskEditable = (event, task, logTask) => {
+    const logTaskEditInput = logTask.querySelector('.logTaskEditInput')
+    logTaskEditInput.value = task.summary
+    logTask.classList.add('editable')
+    logTaskEditInput.focus()
 }
 
 const trackInactivity = () => {
@@ -413,10 +443,26 @@ const trackInactivity = () => {
 
 // #region COMMS
 
+const projectEditHandler = (event, project, newName, projectElement) => {
+    comms.editProject(
+        project.id, newName,
+        res => { // TODO: document responses
+            projectElement.classList.remove('editable')
+            if (!res) console.error('Unable to edit Project')
+            uiState.projects[project.id].name = newName
+            populatePageFromState()
+        },
+        err => {
+            console.error('Unable to edit Project due to an internal error')
+            projectElement.classList.remove('editable')
+        }
+    )
+}
+
 const taskEditHandler = (event, task, newSummary, taskElement) => {
     comms.editTask(
         task.id, newSummary,
-        res => {
+        res => { // TODO: document responses
             taskElement.classList.remove('editable')
             if (!res) console.error('Unable to edit Task')
             uiState.tasks[task.id].summary = newSummary
