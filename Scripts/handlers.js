@@ -156,6 +156,11 @@ const renderProjectsLogSheet = async (ws, projects, tasks, logs) => { // is it b
     return ws
 }
 
+const editProjectHandler = async (event, projectId, projectName) => {
+    const result = PP.update(projectId, projectName)
+    return result
+}
+
 const newTaskHandler = async (event, newTask) => {
     newTask.dateTime = new Date(newTask.dateTime).getTime()
     newTask.project = newTask.project.trim()
@@ -202,6 +207,7 @@ const registerHandlers = mainWindow => {
     SP = new StatusProvider()
 
     // comms
+    ipcMain.handle('projectEditChannel', editProjectHandler)
     ipcMain.handle('newTaskChannel', newTaskHandler)
     ipcMain.handle('taskEditChannel', editTaskHandler)
     ipcMain.handle('taskClickChannel', toggleTaskHandler)

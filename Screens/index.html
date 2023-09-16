@@ -5,15 +5,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>proTracker</title>
-    <meta name="keywords" content="habit track progress evaluat ">
+    <meta name="keywords" content="habit track progress evaluat">
     <meta name="author" content="https://www.github.com/madhaven">
     <link rel="stylesheet" href="./bootstrap.min.css">
     <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-    <div id="sideHandle">
-        ...
-    </div>
+    <div id="sideHandle">...</div>
     <aside id="sideBar">
         <div class="menu container">
             <ul class="menuButtons">
@@ -55,7 +53,7 @@
                 <div class="logDate">Date</div>
                 <div class="daysProjects">
                     <div class="projectRow">
-                        <div class="projectContent">Project</div>
+                        <div class="projectColumn">Project</div>
                         <div class="projectsTasks">
                             <div class="logTask">Task</div>
                         </div>
@@ -63,30 +61,54 @@
                 </div>
             </div>
             <!-- demo task log
-            <div class="today logDay" id="1694457000000">
-                <div class="logDate">
-                    <div class="stickyDate">2023 Aug 3</div>
-                </div>
+            <div class="logDay" id="1691433000000">
+                <div class="logDate"><div class="stickyDate">2023 Aug 8</div></div>
                 <div class="daysProjects">
                     <div class="projectRow">
-                        <div class="projectContent">
-                            <div class="stickyProjectContent">projectName</div>
+                        <div class="projectColumn">
+                            <div class="stickyProjectStuff">
+                                <span class="logProjectEditButton"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16"></svg></span>
+                                <input class="logProjectEditInput" type="text">
+                                <div class="logProjectContent">test</div>
+                            </div>
                         </div>
                         <div class="projectsTasks">
                             <div class="logTask">
-                                <div class="logTaskContent completed">task</div>
-                                <input class="logTaskEditInput">
-                                <span class="logTaskEditButton"></span>
+                                <div class="logTaskContent completed">test 1 1 1</div>
+                                <input class="logTaskEditInput" type="text">
+                                <span class="logTaskEditButton"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16"></svg></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="projectRow">
+                        <div class="projectColumn">
+                            <div class="stickyProjectStuff">
+                                <span class="logProjectEditButton"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16"></svg></span>
+                                <input class="logProjectEditInput" type="text">
+                                <div class="logProjectContent">test 2</div>
+                            </div>
+                        </div>
+                        <div class="projectsTasks">
+                            <div class="logTask">
+                                <div class="logTaskContent completed">test 21</div>
+                                <input class="logTaskEditInput" type="text">
+                                <span class="logTaskEditButton"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16"></svg></span>
+                            </div>
+                            <div class="logTask">
+                                <div class="logTaskContent pending">test 22</div>
+                                <input class="logTaskEditInput" type="text">
+                                <span class="logTaskEditButton"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16"></svg></span>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div> -->
+            </div>
+            -->
             <div class="logDay header inputs" id="inputs">
                 <div class="logDate"></div>
                 <div class="daysProjects">
                     <div class="projectRow">
-                        <div class="projectContent">
+                        <div class="projectColumn">
                             <div class="sickyProjectContent">
                                 <input type="text" name="Project" id="newLogProject" autocomplete required title="Parent Task/Project">
                             </div>
@@ -108,15 +130,24 @@
                 <ul id="projectList">
                     <!-- demo project
                     <li>
-                        <h3>header</h3>
+                        <h3>test 2</h3>
                         <ul class="taskList">
-                            <li class="completed">task</li>
-                            <li class="pending">task2</li>
+                            <li><div class="logTask">
+                                <div class="logTaskContent completed">test 21</div>
+                                <input class="logTaskEditInput" type="text">
+                                <span class="logTaskEditButton"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16"></svg></span>
+                            </div></li>
                         </ul>
                     </li>
                     <li class="emptyProject">
-                        <h3>header</h3>
-                        <ul class="taskList hidden">...</ul>
+                        <h3>test 3 test 3</h3>
+                        <ul class="taskList hidden">
+                            <li><div class="logTask">
+                                <div class="logTaskContent completed">test 31</div>
+                                <input class="logTaskEditInput" type="text">
+                                <span class="logTaskEditButton"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16"></svg></span>
+                            </div></li>
+                        </ul>
                     </li>
                     -->
                 </ul>

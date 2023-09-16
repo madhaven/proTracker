@@ -33,6 +33,11 @@ body {
     overflow-x: hidden;
 }
 
+h1 {
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+}
+
 #sideBar {
     transition: opacity .5s ease, visibility 0s 0.5s;
     width: 100vw;
@@ -133,9 +138,6 @@ body {
     margin-left: auto;
     margin-right: auto;
 }
-.menuTitle h1 {
-    font-weight: bold;
-}
 
 .menuTab {
     display: none;
@@ -170,43 +172,44 @@ body {
 .logChart .logDay.today {
     border-bottom: none;
 }
-.stickyDate, .stickyProjectContent {
+.stickyDate, .stickyProjectStuff {
     position: sticky;
     top: 3em;
 }
 .logChart .logDate {
     width: 15%;
 }
-.logChart .logProject {
-    width: 35%;
-}
-.logProject,
-.logProject input {
-    text-align: right;
-}
-.logChart .daysTasks .logProject {
-    width: 41.1355%;
-    cursor: pointer;
-}
 .logChart .daysTasks {
     width: 85%;
     display: flex;
     flex-direction: column;
 }
-.logTask {
+.logTask,
+.stickyProjectStuff,
+.projectHeader {
     word-wrap: break-word;
     overflow-wrap: break-word;
     display: flex;
     justify-content: space-between;
 }
 .logTask:not(.editable) .logTaskEditInput,
-.logTask.editable .logTaskContent {
+.logTask.editable .logTaskContent,
+.projectColumn:not(.editable) .logProjectEditInput,
+.projectColumn.editable .logProjectContent,
+.projectHeader:not(.editable) .projectEditInput,
+.projectHeader.editable .projectHeaderContent {
     display: none;
 }
-.logTask input.logTaskEditInput {
+.logTask input.logTaskEditInput,
+.projectRow input.logProjectEditInput,
+.projectHeader input.projectEditInput {
     border: none;
+    padding: 0;
+    margin: auto;
 }
-.logTask .logTaskEditButton {
+.logTask .logTaskEditButton,
+.projectRow .logProjectEditButton,
+.projectHeader .projectEditButton {
     color: var(--whiteLayer2);
     opacity: 0;
     visibility: hidden;
@@ -215,19 +218,29 @@ body {
     margin-top: auto;
     margin-bottom: auto;
 }
-.logTask:not(.editable):hover .logTaskEditButton {
+.logTask:not(.editable):hover .logTaskEditButton,
+.projectRow:not(.editable):hover .logProjectEditButton,
+.projectHeader:not(.editable):hover .projectEditButton {
     opacity: 1;
     visibility: visible;
     transition: .1s ease-out, opacity .4s ease-out .8s, visibility 0s linear .8s;
 }
 .logTask .logTaskEditButton:hover,
-.logTask .logTaskEditButton:focus {
+.logTask .logTaskEditButton:focus,
+.projectRow .logProjectEditButton:hover,
+.projectRow .logProjectEditButton:focus,
+.projectHeader .projectEditButton:hover,
+.projectHeader .projectEditButton:focus {
     color: var(--whiteLayer3);
 }
-.logTask .logTaskEditButton:active {
+.logTask .logTaskEditButton:active,
+.projectRow .logProjectEditButton:active,
+.projectHeader .projectEditButton:active {
     color: var(--fg-weak);
 }
-.logTaskContent {
+.logTaskContent,
+.logProjectContent,
+.projectHeaderContent {
     cursor: pointer;
 }
 .logTaskContent.pending {
@@ -236,34 +249,10 @@ body {
 .logTaskContent.completed {
     color: var(--green);
 }
-#inputs {
-    padding: 0 !important;
-    border: none !important;
-}
-
-.projectRow {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    border-radius: .5em;
-    transition: .1s linear;
-}
-.daysProjects {
-    width: 85%;
-    display: flex;
-    flex-direction: column;
-}
-.daysProjects .logProject {
-    width: 41.1355%;
-    cursor: pointer;
-}
 .logDay:not(#inputs) .logTask:hover,
 .logDay:not(#inputs) .logTask:focus-within {
     background-color: var(--blackLayer1);
     transition-delay: .2s;
-}
-.projectsTasks {
-    width: 58.82%;
 }
 .logTask {
     width: 100%;
@@ -275,29 +264,43 @@ body {
     word-wrap: break-word;
     overflow-wrap: break-word;
 }
-/* .header .projectContent {
-    width: 35%
-} */
-.projectContent {
+
+.daysProjects {
+    width: 85%;
+    display: flex;
+    flex-direction: column;
+}
+.projectRow {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    border-radius: .5em;
+    transition: .1s linear;
+}
+.projectColumn {
     width: 41.1355%;
     text-align: right;
     padding: 0 0.5em 0 0.5em;
 }
-.projectContent input {
+.projectsTasks {
+    width: 58.82%;
+}
+.projectColumn input {
     text-align: right;
 }
-.stickyProjectContent {
-    cursor: pointer;
-}
 
+#inputs {
+    padding: 0 !important;
+    border: none !important;
+}
 input {
     background-color: transparent;
-    border: 1px solid transparent;
+    border: none;
     border-bottom: 2px solid transparent;
     color: var(--fg);
     height: 100%;
     width: 100%;
-    padding: .25em 0 .25em 0;
+    padding: .25em 0em;
     transition: .1s;
     outline: none;
 }
