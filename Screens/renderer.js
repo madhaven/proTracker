@@ -179,21 +179,6 @@ const decorateTaskContent = (logTask, log) => {
     return logTask
 }
 
-const addTaskListeners = (taskElement, log, task, day) => {
-    var itIsToday
-    if (day === false)
-        itIsToday = true
-    else {
-        const [year, month, date] = day.split(',')
-        itIsToday = new Date().toDateString() == new Date(year, month, date).toDateString()
-    }
-    if (allowSuperpowers || itIsToday ) {
-        taskElement.addEventListener('click', event => {
-            taskClick(event, task, log)
-        }) // TODO: does this belong here?
-    }
-}
-
 const addProjectListeners = (element) => {
     const projectName = element.innerHTML
         , projectInput = document.querySelector('#newLogProject')
@@ -210,7 +195,22 @@ const addProjectListeners = (element) => {
     })
 }
 
-const renderLogs = () => {
+const addTaskListeners = (taskElement, log, task, day) => {
+    var itIsToday
+    if (day === false)
+        itIsToday = true
+    else {
+        const [year, month, date] = day.split(',')
+        itIsToday = new Date().toDateString() == new Date(year, month, date).toDateString()
+    }
+    if (allowSuperpowers || itIsToday ) {
+        taskElement.addEventListener('click', event => {
+            taskClick(event, task, log)
+        }) // TODO: does this belong here?
+    }
+}
+
+const renderLogTab = () => {
     const projectField = document.querySelector('#newLogProject')
         , taskField = document.querySelector('#newLogTask')
     
@@ -240,13 +240,16 @@ const renderLogs = () => {
     }
 }
 
-const renderProjects = () => {
+const renderProjectTab = () => {
     const projectList = document.getElementById('projectList')
     projectList.innerHTML = ""
     for (const projectId in uiState.projectTree) {
         const project = uiState.projects[projectId]
             , projectItem = document.createElement('li')
             , projectHeader = document.createElement('h3')
+            , projectHeaderContent = document.createElement('div')
+            , projectEditButton = document.createElement('span')
+            , projectEditInput = document.createElement('input')
             , taskList = document.createElement('ul')
 
         for (const taskId in uiState.projectTree[projectId]) {
@@ -260,20 +263,41 @@ const renderProjects = () => {
         }
         
         taskList.classList.add('taskList')
-        projectHeader.innerHTML = project.name
-        projectHeader.addEventListener('click', event => {
+        projectHeader.classList.add('projectHeader')
+        projectHeaderContent.classList.add('projectHeaderContent')
+        projectEditButton.classList.add('projectEditButton')
+        projectEditInput.classList.add('projectEditInput')
+
+        projectHeaderContent.innerHTML = project.name
+        projectHeaderContent.addEventListener('click', event => {
             projectItemClick(event, projectItem, project)
+        })
+        projectEditInput.value = project.name
+        projectEditInput.type = 'text'
+        projectEditButton.innerHTML = editIconSVG
+        projectEditButton.addEventListener('click', event => {
+            makeProjectTitleEditable(event, project, projectHeader) // TODO
+        })
+        projectEditInput.addEventListener('input', event => { trimInput(event, false) })
+        projectEditInput.addEventListener('change', event => { trimInput(event, true) })
+        projectEditInput.addEventListener('change', projectEditInput.blur)
+        projectEditInput.addEventListener('blur', event => {
+            projectEditHandler(event, project, projectEditInput.value, projectHeaderContent)
         })
         
         projectItem.appendChild(projectHeader)
+        projectHeader.appendChild(projectHeaderContent)
+        projectHeader.appendChild(projectEditInput)
+        projectHeader.appendChild(projectEditButton)
         projectItem.appendChild(taskList)
         projectList.appendChild(projectItem)
     }
+    return projectList
 }
 
 const populatePageFromState = () => {
-    renderLogs()
-    renderProjects()
+    renderLogTab()
+    renderProjectTab()
 }
 
 // #endregion
@@ -411,6 +435,13 @@ const projectItemClick = (event, element, project) => {
     }
 }
 
+const makeProjectTitleEditable = (event, project, projectHeader) => {
+    const projectEditInput = projectHeader.querySelector('.projectEditInput')
+    projectEditInput.value = project.name
+    projectHeader.classList.add('editable')
+    projectEditInput.focus()
+}
+
 const makeProjectEditable = (event, project, projectRow) => {
     const logProjectEditInput = projectRow.querySelector('.logProjectEditInput')
     logProjectEditInput.value = project.name
@@ -443,18 +474,18 @@ const trackInactivity = () => {
 
 // #region COMMS
 
-const projectEditHandler = (event, project, newName, projectElement) => {
+const projectEditHandler = (event, project, newName, editableElement) => {
     comms.editProject(
         project.id, newName,
         res => { // TODO: document responses
-            projectElement.classList.remove('editable')
+            editableElement.classList.remove('editable')
             if (!res) console.error('Unable to edit Project')
             uiState.projects[project.id].name = newName
             populatePageFromState()
         },
         err => {
             console.error('Unable to edit Project due to an internal error')
-            projectElement.classList.remove('editable')
+            editableElement.classList.remove('editable')
         }
     )
 }

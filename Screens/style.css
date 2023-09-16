@@ -185,7 +185,8 @@ h1 {
     flex-direction: column;
 }
 .logTask,
-.stickyProjectStuff {
+.stickyProjectStuff,
+.projectHeader {
     word-wrap: break-word;
     overflow-wrap: break-word;
     display: flex;
@@ -194,15 +195,21 @@ h1 {
 .logTask:not(.editable) .logTaskEditInput,
 .logTask.editable .logTaskContent,
 .projectColumn:not(.editable) .logProjectEditInput,
-.projectColumn.editable .logProjectContent {
+.projectColumn.editable .logProjectContent,
+.projectHeader:not(.editable) .projectEditInput,
+.projectHeader.editable .projectHeaderContent {
     display: none;
 }
 .logTask input.logTaskEditInput,
-.projectRow input.logProjectEditInput {
+.projectRow input.logProjectEditInput,
+.projectHeader input.projectEditInput {
     border: none;
+    padding: 0;
+    margin: auto;
 }
 .logTask .logTaskEditButton,
-.projectRow .logProjectEditButton {
+.projectRow .logProjectEditButton,
+.projectHeader .projectEditButton {
     color: var(--whiteLayer2);
     opacity: 0;
     visibility: hidden;
@@ -212,7 +219,8 @@ h1 {
     margin-bottom: auto;
 }
 .logTask:not(.editable):hover .logTaskEditButton,
-.projectRow:not(.editable):hover .logProjectEditButton {
+.projectRow:not(.editable):hover .logProjectEditButton,
+.projectHeader:not(.editable):hover .projectEditButton {
     opacity: 1;
     visibility: visible;
     transition: .1s ease-out, opacity .4s ease-out .8s, visibility 0s linear .8s;
@@ -220,15 +228,19 @@ h1 {
 .logTask .logTaskEditButton:hover,
 .logTask .logTaskEditButton:focus,
 .projectRow .logProjectEditButton:hover,
-.projectRow .logProjectEditButton:focus {
+.projectRow .logProjectEditButton:focus,
+.projectHeader .projectEditButton:hover,
+.projectHeader .projectEditButton:focus {
     color: var(--whiteLayer3);
 }
 .logTask .logTaskEditButton:active,
-.projectRow .logProjectEditButton:active {
+.projectRow .logProjectEditButton:active,
+.projectHeader .projectEditButton:active {
     color: var(--fg-weak);
 }
 .logTaskContent,
-.logProjectContent {
+.logProjectContent,
+.projectHeaderContent {
     cursor: pointer;
 }
 .logTaskContent.pending {
