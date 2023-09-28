@@ -88,21 +88,23 @@ const renderExportLogSheet = async (ws, logTree, tasks, projects) => {
         const [year, month, date] = day.split(',')
         ws.getCell(currentRow, COLUMN_DATE).value = `${year}-${month}-${date}`
         if (currentRow != 2) ws.getRow(currentRow).border = BORDER_TOP_THIN
-        for (const taskId in logTree[day]) {
-            const projectName = projects[tasks[taskId].projectId].name
-            const summary = tasks[taskId].summary
-            const log = logTree[day][taskId]
-            ws.getCell(currentRow, COLUMN_PROJECT).value = projectName
+        for (const projectId in logTree[day]) {
+            for (const taskId in logTree[day][projectId]) {
+                const projectName = projects[projectId].name
+                const summary = tasks[taskId].summary
+                const log = logTree[day][projectId][taskId]
+                ws.getCell(currentRow, COLUMN_PROJECT).value = projectName
 
-            var column = 0, style = undefined
-            if (log.statusId == 1) {
-                column = COLUMN_PENDING
-            } else if (log.statusId == 4) {
-                column = COLUMN_DONE
+                var column = 0, style = undefined
+                if (log.statusId == 1) {
+                    column = COLUMN_PENDING
+                } else if (log.statusId == 4) {
+                    column = COLUMN_DONE
+                }
+                const cell = ws.getCell(currentRow, column)
+                cell.value = summary
+                currentRow++
             }
-            const cell = ws.getCell(currentRow, column)
-            cell.value = summary
-            currentRow++
         }
     }
     const focus = ws.getRow(currentRow).getCell(3).fullAddress.address
