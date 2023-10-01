@@ -342,7 +342,8 @@ const exportData = event => {
     loadingIcon.classList.remove('hidden')
     toggleMenuBar()
 
-    const flashIcon = (selector, iconShowDuration, explanation='exportException') => {
+    const flashIcon = (iconShowDuration, response='exportException') => {
+        const selector = response == true ? 'success' : 'failure'
         loadingIcon.classList.add('hidden')
         defaultIcon.classList.remove('hidden')
         defaultIcon.classList.add(selector)
@@ -351,7 +352,7 @@ const exportData = event => {
             false: "the previous export action was cancelled",
             "noAccess": "proTracker doesn't have access to the file at the moment",
             "exportException": "an unhandled error occurred",
-        }[explanation] ?? ""
+        }[response] ?? ""
         setTimeout(() => {
             defaultIcon.classList.remove('success', 'failure')
         }, iconShowDuration)
@@ -360,12 +361,11 @@ const exportData = event => {
     comms.exportData(
         uiState.logTree, uiState.tasks, uiState.projects, uiState.logs,
         res => {
-            var selector = res == true ? 'success' : 'failure'
-            flashIcon(selector, resultShowDuration, res)
+            flashIcon(resultShowDuration, res)
         },
         err => {
-            console.error('Unhandled Error occurred on Data Export') // TODO logs and error management
-            flashIcon('failure', resultShowDuration)
+            console.error('Unhandled Error occurred on Data Export', err) // TODO logs and error management
+            flashIcon(resultShowDuration)
         }
     )
 }
