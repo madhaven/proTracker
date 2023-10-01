@@ -49,22 +49,21 @@ const exportDataHandler = async (event, mainWindow, logTree, tasks, projects, lo
     // TODO: fetch from backend instead of front: shift logTree gen methods from front to back?
 
     try {
-        const workBook = new ExcelJS.Workbook()
+        const filename = await FileService.selectFileSaveName(mainWindow)
+            , workBook = new ExcelJS.Workbook()
             , logSheet = workBook.addWorksheet('Logs')
             , projectsSheet = workBook.addWorksheet('Project Overview')
-        renderExportLogSheet(logSheet, logTree, tasks, projects)
-        renderProjectsLogSheet(projectsSheet, projects, tasks, logs)
-        
-        const filename = await FileService.selectFileSaveName(mainWindow)
+
         if (!filename) return false
+        await renderExportLogSheet(logSheet, logTree, tasks, projects)
+        await renderProjectsLogSheet(projectsSheet, projects, tasks, logs)
         await workBook.xlsx.writeFile(filename);
         return true
     } catch (err) {
         if (err.code == 'EBUSY') {
             console.trace('export error handled: resource busy', err)
             return 'noAccess'
-        }
-        else {
+        } else {
             console.trace('export error unhandled', err) // TODO: report to server
             return 'exportException'
         }

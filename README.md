@@ -5,7 +5,8 @@ a simple way of tracking progress
 ## Usage
 
 * To debug, run `npm run debug`  
-  To debug with a clean slate, run `npm run cleandebug`  
+  To debug with a clean slate, `npm run cleandebug`  
+  To clean all debug configs and db data, `npm run clean`
 * To run from code, run `npm run start` or `npm start`
 * To build the project, run `npm run start` followed by `npm run make`  
   A number of issues have come to notice: [#54](https://github.com/madhaven/proTracker/issues/54)  
@@ -60,9 +61,9 @@ DB
   * Export to excel functionality
 * Logging was implemented to track issues across devices  
 
-
 ## Future
 
 * Checkout the issues tab to see imperfections, features and their statuses.  
-* Thinking of setting up tests https://www.electronjs.org/docs/latest/tutorial/automated-testing
+* Thinking of setting up tests  
+  [Here's a document](https://www.electronjs.org/docs/latest/tutorial/automated-testing) on electron testing  
   Feel free to contribute
