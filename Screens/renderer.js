@@ -90,6 +90,8 @@ const createProjectOnDay = (logDay, project) => {
         , logProjectEditInput = document.createElement('input')
         , logProjectEditButton = document.createElement('span')
         , projectsTasks = document.createElement('div')
+        , projectInput = document.querySelector('#newLogProject')
+        , logInput = document.querySelector('#newLogTask')
     
     projectRow.classList.add('projectRow')
     projectColumn.classList.add('projectColumn')
@@ -111,6 +113,11 @@ const createProjectOnDay = (logDay, project) => {
     logProjectEditInput.addEventListener('change', logProjectEditInput.blur)
     logProjectEditInput.addEventListener('blur', event => {
         projectEditHandler(event, project, logProjectEditInput.value, logProjectContent)
+    })
+    logProjectContent.addEventListener('click', () => {
+        logInput.focus()
+        projectInput.value = ""
+        setTimeout(() => { autoTypeProject(project.name, projectInput) }, 250);
     })
 
     projectRow.appendChild(projectColumn)
@@ -179,20 +186,10 @@ const decorateTaskContent = (logTask, log) => {
     return logTask
 }
 
-const addProjectListeners = (element) => {
-    const projectName = element.innerHTML
-        , projectInput = document.querySelector('#newLogProject')
-        , logInput = document.querySelector('#newLogTask')
-    element.addEventListener('click', () => {
-        const printChars = (characters, index=0) => {
-            if (index >= characters.length) return
-            projectInput.value += characters[index]
-            setTimeout(() => { printChars(characters, index+1) }, 25);
-        }
-        logInput.focus()
-        projectInput.value = ""
-        setTimeout(() => { printChars(projectName) }, 250);
-    })
+const autoTypeProject = (characters, inputField, index=0) => {
+    if (index >= characters.length) return
+    inputField.value += characters[index]
+    setTimeout(() => { autoTypeProject(characters, inputField, index+1) }, 25);
 }
 
 const addTaskListeners = (taskElement, log, task, day) => {
@@ -225,9 +222,7 @@ const renderLogTab = () => {
             for (const projectId in uiState.logTree[day]) {
                 const project = uiState.projects[projectId]
                     , projectRow = createProjectOnDay(logDay, project)
-                    , logProjectContent = projectRow.querySelector('.logProjectContent')
                     , taskContainer = projectRow.querySelector('.projectsTasks')
-                addProjectListeners(logProjectContent)
                 for (const taskId in uiState.logTree[day][projectId]) {
                     const log = uiState.logTree[day][projectId][taskId]
                         , task = uiState.tasks[taskId]
