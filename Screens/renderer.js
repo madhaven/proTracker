@@ -237,6 +237,9 @@ const renderLogTab = () => {
 
 const renderProjectTab = () => {
     const projectList = document.getElementById('projectList')
+        , foldedProjects = JSON.parse(localStorage.getItem('foldedProjects')) ?? {}
+    // TODO handle saved data loads in OO strategy
+    
     projectList.innerHTML = ""
     for (const projectId in uiState.projectTree) {
         const project = uiState.projects[projectId]
@@ -257,6 +260,11 @@ const renderProjectTab = () => {
             taskList.appendChild(taskItem)
         }
         
+        foldedProjects[projectId] ??= false
+        if (foldedProjects[projectId]) {
+            projectItem.classList.add('emptyProject')
+            taskList.classList.add('hidden')
+        }
         taskList.classList.add('taskList')
         projectHeader.classList.add('projectHeader')
         projectHeaderContent.classList.add('projectHeaderContent')
@@ -287,6 +295,9 @@ const renderProjectTab = () => {
         projectItem.appendChild(taskList)
         projectList.appendChild(projectItem)
     }
+    uiState.foldedProjects = foldedProjects
+    localStorage.setItem('foldedProjects', JSON.stringify(foldedProjects))
+    console.log('set local Storage', foldedProjects)
     return projectList
 }
 
@@ -424,10 +435,13 @@ const projectItemClick = (event, element, project) => {
     if (taskList.classList.contains('hidden')) { 
         taskList.classList.remove('hidden')
         element.classList.remove('emptyProject')
+        uiState.foldedProjects[project.id] = false
     } else {
         taskList.classList.add('hidden')
         element.classList.add('emptyProject')
+        uiState.foldedProjects[project.id] = true
     }
+    localStorage.setItem('foldedProjects', JSON.stringify(uiState.foldedProjects))
 }
 
 const makeProjectTitleEditable = (event, project, projectHeader) => {
