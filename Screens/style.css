@@ -238,7 +238,7 @@ h1 {
 .projectHeader .projectEditButton:active {
     color: var(--fg-weak);
 }
-.logTaskContent,
+.today .logTaskContent,
 .logProjectContent,
 .projectHeaderContent {
     cursor: pointer;
