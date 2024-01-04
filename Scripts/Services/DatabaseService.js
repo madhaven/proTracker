@@ -2,15 +2,16 @@ const { dialog, app } = require("electron")
 const { ConfigService } = require("./ConfigService")
 const { EncryptionService } = require("./EncryptionService")
 const { FileService } = require("./FileService")
+const { SingletonServiceBase } = require("./SingletonServiceBase")
 const sql = require('sqlite3').verbose()
 const fs = require('fs')
 const path = require("path")
 
-const DatabaseService = class {
-    static singleton = undefined
+const DatabaseService = class extends SingletonServiceBase{
     dbPath = ''
 
     constructor () {
+        super()
         var configs = ConfigService.getService()
         this.dbPath = configs.get('dbPath')
 
@@ -32,12 +33,6 @@ const DatabaseService = class {
             console.error('DatabaseService: connection invalid')
             app.exit()
         }
-    }
-    
-    static getService () {
-        if (!this.singleton)
-            this.singleton = new this()
-        return this.singleton
     }
 
     initializeDB () {

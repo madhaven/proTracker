@@ -6,7 +6,10 @@ const Status = class {
     static WAITING = 5
     static WONT_DO = 6
 
-    constructor (id, name) {
+    constructor (
+        id
+        , name
+    ) {
         this.id = id
         this.name = name
     }
