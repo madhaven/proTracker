@@ -582,6 +582,7 @@ window.addEventListener('load', event => {
     // Menu Buttons
     document.querySelector('#projects.menuButton').addEventListener('click', event => { switchToTab('projectTab') })
     document.querySelector('#export.menuButton').addEventListener('click', exportData)
+    document.querySelector('#habits.menuButton').addEventListener('click', event => { switchToTab('habitTab')})
     document.querySelector('#logChart.menuButton').addEventListener('click', event => {
         switchToTab('logChart')
         document.getElementById('inputs').scrollIntoView({ behavior: 'smooth' })

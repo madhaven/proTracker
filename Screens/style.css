@@ -367,6 +367,16 @@ input:focus {
     background-color: var(--blackLayer1);
 }
 
+.habitList ul {
+    list-style-type: none;
+}
+.habitItem {
+    border: 1px solid var(--whiteLayer1);
+    margin-bottom: 1em;
+    margin-right: 1em;
+    padding: 1em .5em;
+}
+
 /* width */
 ::-webkit-scrollbar {
     width: 10px;
