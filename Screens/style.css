@@ -41,6 +41,20 @@ h1, h2 {
     text-align: center;
 }
 
+button {
+    transition: .5s ease-out;
+    padding: .5em 1em;
+    background-color: transparent;
+    color: var(--fg-weak);
+    border-radius: .5em;
+    border: 0;
+}
+button:hover {
+    transition: .25s ease-out;
+    background-color: var(--whiteLayer1);
+    color: var(--fg-strong);
+}
+
 #sideBar {
     transition: opacity .5s ease, visibility 0s 0.5s;
     width: 100vw;
@@ -367,15 +381,34 @@ input:focus {
     background-color: var(--blackLayer1);
 }
 
-.habitList ul {
+.habitList {
     list-style-type: none;
+    margin: 0;
+    padding: 0;
 }
 .habitItem {
     border: 1px solid var(--whiteLayer1);
     margin-bottom: 1em;
     margin-right: 1em;
-    padding: 1em .5em;
+    padding: .5em 1em;
+    transition: .5s ease-out;
+    border-radius: .5em;
+    display: flex;
+    justify-content: space-between;
 }
+.habitItem:hover {
+    border: 1px solid var(--whiteLayer2);
+}
+.habitTitle {
+    font-size: 1.5em;
+}
+/* .habitItem:not(:hover) .habitControls button {
+    display: none;
+    visibility: hidden;
+}
+button.habitDoneButton {
+    display: inline-block !important;
+} */
 
 /* width */
 ::-webkit-scrollbar {
