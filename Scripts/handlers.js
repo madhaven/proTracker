@@ -11,6 +11,7 @@ const { TaskProvider } = require('./Providers/TaskProvider')
 const { StatusProvider } = require('./Providers/StatusProvider')
 const { StatusLogProvider } = require('./Providers/StatusLogProvider')
 const ExcelJS = require('exceljs')
+const { Project } = require('./Models/Project')
 
 const COLUMN_DATE = 1
     , COLUMN_PROJECT = 2
@@ -157,8 +158,9 @@ const renderProjectsLogSheet = async (ws, projects, tasks, logs) => { // is it b
     return ws
 }
 
-const editProjectHandler = async (event, projectId, projectName) => {
-    const result = PP.update(projectId, projectName)
+const editProjectHandler = async (event, project) => {
+    projectModel = new Project(project.id, project.name)
+    const result = PP.update(projectModel)
     return result
 }
 
