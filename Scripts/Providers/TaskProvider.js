@@ -23,7 +23,7 @@ const TaskProvider = class {
         }
     }
 
-    async get(id) {
+    async getById(id) {
         const query = `SELECT id, project_id, summary, parent_id FROM task WHERE id=?;`
         const params = [id]
         console.debug('TaskProvider: get')
@@ -89,9 +89,9 @@ const TaskProvider = class {
         }
     }
 
-    async update(id, summary) {
+    async update(task) {
         const query = `UPDATE task SET summary=? WHERE id=?;`
-        const params = [summary, id]
+        const params = [task.summary, task.id]
         console.debug('TaskProvider: update')
         try {
             const res = await this.dbService.exec(query, params)
@@ -102,7 +102,7 @@ const TaskProvider = class {
         }
     }
 
-    async delete(id) {
+    async delete(task) {
         // TODO: make a delted field vs actually delete
     }
 }

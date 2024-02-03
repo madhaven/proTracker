@@ -501,7 +501,7 @@ const projectEditHandler = (event, project, newName, editableElement) => {
 
 const taskEditHandler = (event, task, newSummary, taskElement) => {
     comms.editTask(
-        task.id, newSummary,
+        {id: task.id, summary: newSummary},
         res => { // TODO: document responses
             taskElement.classList.remove('editable')
             if (!res) console.error('Unable to edit Task')

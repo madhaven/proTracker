@@ -180,8 +180,8 @@ const newTaskHandler = async (event, newTask) => {
     } : false
 }
 
-const editTaskHandler = async (event, taskId, summary) => {
-    const result = TP.update(taskId, summary)
+const editTaskHandler = async (event, task) => {
+    const result = TP.update(task)
     return result
 }
 
