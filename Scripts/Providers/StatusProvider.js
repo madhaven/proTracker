@@ -22,7 +22,7 @@ const StatusProvider = class {
         }
     }
 
-    async get(id) {
+    async getById(id) {
         const query = `SELECT id, status FROM status WHERE id=?;`
         const params = [id]
         console.debug('StatusProvider: get')
@@ -34,9 +34,9 @@ const StatusProvider = class {
         }
     }
 
-    async update(id, name) {
+    async update(status) {
         const query = `UPDATE status SET status=? WHERE id=?;`;
-        const params = [name, id]
+        const params = [status.name, status.id]
         console.debug('StatusProvider: update')
         try {
             const res = await this.dbService.exec(query, params)
@@ -47,7 +47,7 @@ const StatusProvider = class {
         }
     }
 
-    async delete(id) {
+    async delete(status) {
         // TODO: make a delted field vs actually delete
     }
 }

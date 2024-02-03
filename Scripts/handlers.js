@@ -171,7 +171,7 @@ const newTaskHandler = async (event, newTask) => {
 
     const project = await PP.getByNameOrCreate(newTask.project)
     const task = await TP.create(new Task(-1, project.id, newTask.summary, -1)) // TODO: remove object and replace with direct params
-    const status = await SP.get(Status.PENDING)
+    const status = await SP.getById(Status.PENDING)
     const log = await SLP.create(new StatusLog(-1, task.id, status.id, newTask.dateTime))
     return (project && task && log) ? {
         "task": task,
