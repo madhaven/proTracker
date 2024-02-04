@@ -37,6 +37,9 @@ h1 {
     font-family: 'Courier New', Courier, monospace;
     font-weight: bold;
 }
+h1, h2 {
+    text-align: center;
+}
 
 #sideBar {
     transition: opacity .5s ease, visibility 0s 0.5s;
