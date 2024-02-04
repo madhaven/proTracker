@@ -137,6 +137,7 @@ const createTaskInElement = (element, task) => {
         , logTaskEditButton = document.createElement('span')
 
     logTask.classList.add('logTask')
+    logTask.classList.add('logTask_' + task.id)
     logTaskContent.classList.add('logTaskContent')
     logTaskEditInput.classList.add('logTaskEditInput')
     logTaskEditButton.classList.add('logTaskEditButton')
@@ -207,6 +208,18 @@ const addTaskListeners = (taskElement, log, task, day) => {
     }
 }
 
+const addTaskLocators = (taskElement, task) => {
+    taskElement.addEventListener('click', event => {
+        const logs = document.querySelector('.logChart')
+            , tasksOnLog = logs.querySelectorAll('.logTask_' + task.id)
+            , taskLogToFocus = tasksOnLog[tasksOnLog.length - 1]
+
+        switchToTab('logChart')
+        taskLogToFocus.scrollIntoView()
+        // TODO: highlight task on redirect
+    })
+}
+
 const renderLogTab = () => {
     const projectField = document.querySelector('#newLogProject')
         , taskField = document.querySelector('#newLogTask')
@@ -255,8 +268,8 @@ const renderProjectTab = () => {
                 , statusId = uiState.projectTree[projectId][taskId]
                 , taskItem = document.createElement('li')
                 , logTaskContent = createTaskInElement(taskItem, task)
-            decorateTaskContent(logTaskContent, {'statusId': statusId}, task, true)
-            addTaskListeners(logTaskContent, {'statusId': statusId}, task, false)
+            decorateTaskContent(logTaskContent, {'statusId': statusId})
+            addTaskLocators(logTaskContent, task)
             taskList.appendChild(taskItem)
         }
         
