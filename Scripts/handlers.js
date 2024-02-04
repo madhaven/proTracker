@@ -85,7 +85,10 @@ const renderExportLogSheet = async (ws, logTree, tasks, projects) => {
 
     var currentRow = 2
     for (const day in logTree) {
-        const [year, month, date] = day.split(',')
+        var [year, month, date] = day.split(',')
+        year = year.padStart(4, '0')
+        month = (parseInt(month)+1).toString().padStart(2, '0')
+        date = date.padStart(2, '0')
         ws.getCell(currentRow, COLUMN_DATE).value = `${year}-${month}-${date}`
         if (currentRow != 2) ws.getRow(currentRow).border = BORDER_TOP_THIN
         for (const projectId in logTree[day]) {
@@ -127,29 +130,37 @@ const renderProjectsLogSheet = async (ws, projects, tasks, logs) => { // is it b
     var sl = 1
     for (const projectId in projectTree) {
         const project = projectTree[projectId]
-        var startDate = Infinity
-            , endDate = -Infinity
+        var startDay = Infinity
+            , endDay = -Infinity
             , complete = true
         for (const taskId in project) {
-            if (project[taskId][0].dateTime < startDate)
-                startDate = project[taskId][0].dateTime
+            if (project[taskId][0].dateTime < startDay)
+                startDay = project[taskId][0].dateTime
             if ((project[taskId][1] == undefined) || (project[taskId][1].statusId != 4))
                 complete = false
-            else if (project[taskId][1].dateTime > endDate)
-                endDate = project[taskId][1].dateTime
+            else if (project[taskId][1].dateTime > endDay)
+                endDay = project[taskId][1].dateTime
         }
-        startDate = new Date(startDate)
-        endDate = (complete) ? new Date(endDate) : new Date()
-        const diff = Math.floor((endDate - startDate)/(24*60*60*1000)) + ' days'
+        startDay = new Date(startDay)
+        endDay = (complete) ? new Date(endDay) : new Date()
+        const diff = Math.floor((endDay - startDay)/(24*60*60*1000)) + ' days'
+        var [startYear, startMonth, startDate, endYear, endMonth, endDate] = [
+            startDay.getFullYear().toString().padStart(4, '0'),
+            (startDay.getMonth()+1).toString().padStart(2, '0'),
+            startDay.getDate().toString().padStart(2, '0'),
+            endDay.getFullYear().toString().padStart(4, '0'),
+            (endDay.getMonth()+1).toString().padStart(2, '0'),
+            endDay.getDate().toString().padStart(2, '0'),
+        ]
 
         const currentRow = sl + 1
         ws.getCell(currentRow, 1).value = sl
         ws.getCell(currentRow, 2).value = projects[projectId].name
-        ws.getCell(currentRow, 3).value = `${startDate.getFullYear()}-${startDate.getMonth()}-${startDate.getDate()}`
+        ws.getCell(currentRow, 3).value = `${startYear}-${startMonth}-${startDate}`
         ws.getCell(currentRow, 5).value = diff
         if (complete) {
             ws.getCell(currentRow, 2).fill = FILL_HEAD_GREEN
-            ws.getCell(currentRow, 4).value = `${endDate.getFullYear()}-${endDate.getMonth()}-${endDate.getDate()}`
+            ws.getCell(currentRow, 4).value = `${endYear}-${endMonth}-${endDate}`
         }
         sl++
     }
