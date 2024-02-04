@@ -485,7 +485,7 @@ const trackInactivity = () => {
 
 const projectEditHandler = (event, project, newName, editableElement) => {
     comms.editProject(
-        project.id, newName,
+        {id:project.id, name:newName},
         res => { // TODO: document responses
             editableElement.classList.remove('editable')
             if (!res) console.error('Unable to edit Project')
@@ -501,7 +501,7 @@ const projectEditHandler = (event, project, newName, editableElement) => {
 
 const taskEditHandler = (event, task, newSummary, taskElement) => {
     comms.editTask(
-        task.id, newSummary,
+        {id: task.id, summary: newSummary},
         res => { // TODO: document responses
             taskElement.classList.remove('editable')
             if (!res) console.error('Unable to edit Task')

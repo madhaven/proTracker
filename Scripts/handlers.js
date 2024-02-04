@@ -11,6 +11,7 @@ const { TaskProvider } = require('./Providers/TaskProvider')
 const { StatusProvider } = require('./Providers/StatusProvider')
 const { StatusLogProvider } = require('./Providers/StatusLogProvider')
 const ExcelJS = require('exceljs')
+const { Project } = require('./Models/Project')
 
 const COLUMN_DATE = 1
     , COLUMN_PROJECT = 2
@@ -157,8 +158,9 @@ const renderProjectsLogSheet = async (ws, projects, tasks, logs) => { // is it b
     return ws
 }
 
-const editProjectHandler = async (event, projectId, projectName) => {
-    const result = PP.update(projectId, projectName)
+const editProjectHandler = async (event, project) => {
+    projectModel = new Project(project.id, project.name)
+    const result = PP.update(projectModel)
     return result
 }
 
@@ -169,7 +171,7 @@ const newTaskHandler = async (event, newTask) => {
 
     const project = await PP.getByNameOrCreate(newTask.project)
     const task = await TP.create(new Task(-1, project.id, newTask.summary, -1)) // TODO: remove object and replace with direct params
-    const status = await SP.get(Status.PENDING)
+    const status = await SP.getById(Status.PENDING)
     const log = await SLP.create(new StatusLog(-1, task.id, status.id, newTask.dateTime))
     return (project && task && log) ? {
         "task": task,
@@ -178,8 +180,8 @@ const newTaskHandler = async (event, newTask) => {
     } : false
 }
 
-const editTaskHandler = async (event, taskId, summary) => {
-    const result = TP.update(taskId, summary)
+const editTaskHandler = async (event, task) => {
+    const result = TP.update(task)
     return result
 }
 

@@ -22,7 +22,7 @@ const ProjectProvider = class {
         }
     }
 
-    async get(id) {
+    async getById(id) {
         const query = `SELECT id, name FROM project WHERE id=?;`
         const params = [id]
         console.debug('ProjectProvider: get')
@@ -47,7 +47,7 @@ const ProjectProvider = class {
     }
 
     async getByNameOrCreate(name) {
-        // TODO:
+        // TODO: OPTIMIZE
         // const query = `INSERT OR IGNORE INTO project (name)
         // SELECT ? WHERE NOT EXISTS ( SELECT 1 FROM project WHERE name = ?);`
         // console.debug('ProjectProvider: get/create')
@@ -98,9 +98,9 @@ const ProjectProvider = class {
         return projectTree
     }
 
-    async update(id, name) {
+    async update(project) {
         const query = `UPDATE project SET name=? WHERE id=?;`
-        const params = [name, id]
+        const params = [project.name, project.id]
         console.debug('ProjectProvider: update')
         try {
             const res = await this.dbService.exec(query, params)
@@ -111,7 +111,7 @@ const ProjectProvider = class {
         }
     }
 
-    async delete(id) {
+    async delete(project) {
         // TODO: make a deleted field vs actually delete
     }
 }
