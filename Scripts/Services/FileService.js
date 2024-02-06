@@ -67,6 +67,20 @@ const FileService = class {
         this.streams.forEach(stream => stream.close())
         this.streams = []
     }
+
+    static copyOrReplace = (fromPath, toPath) => {
+        if (!fromPath || !toPath) return false
+        fs.copyFileSync(fromPath, toPath)
+        return true
+    }
+
+    static getFilesInDir = (path) => {
+        if (!path) return []
+        try {
+            const filesInDir = fs.readdirSync(path)
+            return filesInDir
+        } catch { return [] }
+    }
 }
 
 module.exports = { FileService }
