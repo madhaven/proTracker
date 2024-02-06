@@ -1,12 +1,15 @@
 const LogService = class {
 
     static addStream(stream) {
+
+        // save default logging
         const debug = console.debug
             , error = console.error
             , info = console.info
             , log = console.log
             , warn = console.warn
 
+        // add stream to default implementation
         console.debug = (...args) => {
             debug(...args)
             stream.write(`${new Date().toISOString()} DEBUG: ${args.join(' ')}\n`)

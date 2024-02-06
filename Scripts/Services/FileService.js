@@ -13,6 +13,12 @@ const FileService = class {
         return fs.existsSync(filePath)
     }
 
+    static readFile = (file, format) => {
+        if (!file) return false
+        format ??= 'utf8' // sus formal parameter
+        return fs.readFileSync(file, format)
+    }
+
     static loadAFile = async win => { // deprecated
         // TODO: verify if cSV is in prescribed format
         return new Promise((resolve, reject) => {

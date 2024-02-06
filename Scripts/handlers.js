@@ -232,7 +232,7 @@ const registerHandlers = mainWindow => {
     ipcMain.on('UIEventNotifications', stateEventHandler)
     ipcMain.handle('UIEventRequests', stateChangeRequestHandler)
 
-    console.debug("handlers registered")
+    console.debug("backend event handlers registered")
 }
 
 module.exports = { registerHandlers }

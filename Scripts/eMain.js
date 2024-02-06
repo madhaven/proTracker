@@ -14,10 +14,10 @@ const debugMode = process.argv.some(arg => arg.includes('--inspect'))
     , config = debugMode ? { dbPath: 'proTracker.db' } : { dbPath: path.join(userDataPath, 'proTracker.db') }
     , logStream = FileService.openStream(path.join(userDataPath, 'proTracker.log'))
 
-// Services
+// Initialize Services
 LogService.addStream(logStream)
 ConfigService.getService(config, configFileName)
-DatabaseService.getService()
+databaseService = DatabaseService.getService()
 
 const initialState = () => {
     // loads the data and creates the state instance that is sent to the UI

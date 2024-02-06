@@ -38,8 +38,8 @@ const DatabaseService = class {
         const db = new sql.Database(this.dbPath)
 
         try {
-            const query = fs.readFileSync('./Scripts/DB/init.sql', 'utf8')
-            const dataQuery = fs.readFileSync('./Scripts/DB/defaultData.sql', 'utf8')
+            const query = FileService.readFile('./Scripts/DB/init.sql')
+            const dataQuery = FileService.readFile('./Scripts/DB/defaultData.sql')
             db.exec(query, err => {
                 if (err) {
                     console.trace('DB init error', err)
