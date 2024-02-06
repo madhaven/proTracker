@@ -4,6 +4,7 @@ const { EncryptionService } = require("./EncryptionService")
 const { FileService } = require("./FileService")
 const sql = require('sqlite3').verbose()
 const fs = require('fs')
+const path = require("path")
 
 const DatabaseService = class {
     static singleton = undefined
@@ -11,13 +12,19 @@ const DatabaseService = class {
 
     constructor () {
         var configs = ConfigService.getService()
-
         this.dbPath = configs.get('dbPath')
-        if (!FileService.fileExists(this.dbPath)) {
-            this.initializeDB()
+
+        // try to restore if no DB file is found otherwise setup new
+        if (FileService.fileExists(this.dbPath)) {
+            this.tryMigrate()
         } else {
-            // TODO: check db version and migrations
-            console.warn('DatabaseService: db version check || migrations')
+            const restoreFile = this._getLatestBackupFile()
+            if (restoreFile) {
+                console.log("DatabaseService: DB missing, restoring from backup")
+                this.restore(restoreFile)
+            } else {
+                this.initializeDB()
+            }
         }
 
         if (!this.isConnectionValid()) {
@@ -38,8 +45,8 @@ const DatabaseService = class {
         const db = new sql.Database(this.dbPath)
 
         try {
-            const query = fs.readFileSync('./Scripts/DB/init.sql', 'utf8')
-            const dataQuery = fs.readFileSync('./Scripts/DB/defaultData.sql', 'utf8')
+            const query = FileService.readFile('./Scripts/DB/init.sql')
+            const dataQuery = FileService.readFile('./Scripts/DB/defaultData.sql')
             db.exec(query, err => {
                 if (err) {
                     console.trace('DB init error', err)
@@ -107,6 +114,72 @@ const DatabaseService = class {
             })
             db.close()
         })
+    }
+
+    backup (filePath) {
+        var backupPath = filePath ?? this._getBackupPath()
+        if (!backupPath) return false
+        
+        try {
+            FileService.copyOrReplace(this.dbPath, backupPath)
+            console.debug('DatabaseService: DB backup completed')
+            return backupPath
+        } catch {
+            console.error('DatabaseService: DB backup failed')
+            return false
+        }
+    }
+
+    restore (filePath) {
+        var backupPath = filePath ?? this._getLatestBackupFile()
+        if (!backupPath) return false
+
+        try {
+            FileService.copyOrReplace(backupPath, this.dbPath)
+            console.debug('DatabaseService: DB restore completed')
+            return true
+        } catch {
+            console.error('DatabaseService: DB restore failed')
+            return false
+        }
+    }
+
+    tryMigrate () {
+        const backupFilePath = this.backup()
+        if (!backupFilePath) {
+            console.trace("DatabaseService: Unable to backup DB on startup.")
+            throw Error('DatabaseService: Unable to backup DB on startup.', backupFilePath) // TODO: error handling mechanism
+        }
+
+        // TODO: check db version and migrations
+        console.warn('DatabaseService: db version check || migrations')
+        const migrationSucceeded = true
+
+        if (!migrationSucceeded) {
+            console.log('DatabaseService: Migration failed, Restoring DB')
+            this.restore(backupFilePath)
+        }
+    }
+
+    _getBackupPath () {
+        const configs = ConfigService.getService()
+            , date = new Date()
+            , year = date.getFullYear()
+            , month = (date.getMonth() + 1).toString().padStart(2, '0')
+            , day = date.getDate().toString().padStart(2, '0' )
+            , hour = date.getHours().toString().padStart(2, '0')
+            , minute = date.getMinutes().toString().padStart(2, '0')
+            , fileName = `proTrackerBackup_${year}${month}${day}${hour}${minute}.db` // TODO: remove hardcoded values
+            , backupPath = path.join(path.dirname(this.dbPath), fileName)
+        return backupPath
+    }
+
+    _getLatestBackupFile () {
+        var dirName = path.dirname(this.dbPath)
+            , backupFiles = FileService.getFilesInDir(dirName)
+            , filteredFiles = backupFiles.filter( x => x.endsWith('.db') && x.startsWith('proTrackerBackup_'))
+            , latestFile = filteredFiles[filteredFiles.length-1]
+        return latestFile
     }
 }
 
