@@ -2,7 +2,7 @@ const uiState = new State()
     , allowSuperpowers = false // for debugging
     , editIconSVG = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16"><path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/></svg>'
 uiState.inactiveDuration = 0
-uiState.inactivityTolerance = 60 // TODO: user preference
+uiState.inactivityTolerance = 60 // TODO: user preference. -1 for disabled
 
 // #region Helpers
 
@@ -220,7 +220,7 @@ const addTaskLocators = (taskElement, task) => {
     })
 }
 
-const renderLogTab = () => {
+const renderLogTab = async () => {
     const projectField = document.querySelector('#newLogProject')
         , taskField = document.querySelector('#newLogTask')
     
@@ -248,7 +248,7 @@ const renderLogTab = () => {
     }
 }
 
-const renderProjectTab = () => {
+const renderProjectTab = async () => {
     const projectList = document.getElementById('projectList')
         , foldedProjects = JSON.parse(localStorage.getItem('foldedProjects')) ?? {}
     // TODO handle saved data loads in OO strategy
@@ -314,7 +314,7 @@ const renderProjectTab = () => {
     return projectList
 }
 
-const populatePageFromState = () => {
+const render = async () => {
     renderLogTab()
     renderProjectTab()
 }
@@ -336,6 +336,7 @@ const toggleMenuBar = (visible = undefined) => {
         sidebar.classList.remove("sideBar_open")
         uiState.menuVisible = false
     }
+    render()
     stateComm.notifyUIEvent(uiState) // needed ?
 }
 
@@ -415,7 +416,7 @@ const newLogInput = event => {
         res => {
             if (!res) return
             uiState.addData(res.log, res.task, res.project)
-            populatePageFromState()
+            render()
 
             setDefaultDate()
             UIsummary.value = UIproject.value = ""
@@ -435,7 +436,7 @@ const taskClick = (event, task, log) => {
         task.id, newState, currentTime,
         res => {
             uiState.addLog(res)
-            populatePageFromState()
+            render()
         },
         err => {
             console.error('server error while updating task') // TODO remove error logs
@@ -478,18 +479,20 @@ const makeTaskEditable = (event, task, logTask) => {
     logTaskEditInput.focus()
 }
 
-const trackInactivity = () => {
+const trackIdle = () => {
     ['mousemove', 'mousedown', 'drag', 'keypress', 'scroll'].forEach(event => {
         document.addEventListener(event, () => { uiState.inactiveDuration = 0 })
     });
     setInterval(() => {
         uiState.inactiveDuration = ++uiState.inactiveDuration ?? 0 // TODO: ensure state is initialized
-        if (uiState.inactiveDuration>=uiState.inactivityTolerance && !uiState.menuVisible) {
+        if (uiState.inactiveDuration >= uiState.inactivityTolerance
+            && uiState.inactivityTolerance >= -1
+            && !uiState.menuVisible) {
             toggleMenuBar(true)
-            console.info('MenuBar on inactivity')
+            console.info('MenuBar on idle')
         }
     }, 1000);
-    console.info('Inactivity tracking enabled')
+    console.info('Idle tracking enabled')
 }
 
 // #endregion
@@ -503,7 +506,7 @@ const projectEditHandler = (event, project, newName, editableElement) => {
             editableElement.classList.remove('editable')
             if (!res) console.error('Unable to edit Project')
             uiState.projects[project.id].name = newName
-            populatePageFromState()
+            render()
         },
         err => {
             console.error('Unable to edit Project due to an internal error')
@@ -519,7 +522,7 @@ const taskEditHandler = (event, task, newSummary, taskElement) => {
             taskElement.classList.remove('editable')
             if (!res) console.error('Unable to edit Task')
             uiState.tasks[task.id].summary = newSummary
-            populatePageFromState()
+            render()
         },
         err => {
             console.error('Unable to edit Task due to an internal error')
@@ -533,7 +536,7 @@ const requestDataFromDB = () => {
         res => {
             if (res){
                 uiState.replaceData(res.logs, res.tasks, res.projects)
-                populatePageFromState()
+                render()
             } else {
                 console.error('corrupt logs received')
             }
@@ -550,6 +553,7 @@ const recieveStateChanges = (event, state) => {
 // #endregion
 
 window.addEventListener('load', event => {
+
     // Sidebar
     document.getElementById('sideBar').addEventListener('click', e => toggleMenuBar())
     document.getElementById("sideHandle").addEventListener('click', e => toggleMenuBar())
@@ -562,6 +566,7 @@ window.addEventListener('load', event => {
         document.getElementById('inputs').scrollIntoView({ behavior: 'smooth' })
     })
 
+    // logs page inputs
     document.getElementById('newLogProject').addEventListener('input', event => { trimInput(event, false) })
     document.getElementById('newLogProject').addEventListener('change', event => { trimInput(event, true) })
     document.getElementById('newLogProject').addEventListener('change', newLogInput)
@@ -569,6 +574,9 @@ window.addEventListener('load', event => {
     document.getElementById('newLogTask').addEventListener('change', event => { trimInput(event, true) })
     document.getElementById('newLogTask').addEventListener('change', newLogInput)
     if (allowSuperpowers) createDateTimeInput()
+
+    // window listeners
+    window.addEventListener('pageshow', event => { render(); toggleMenuBar(true) })
     
     // comm listeners
     stateComm.registerListener('updateUI', recieveStateChanges)
@@ -577,5 +585,5 @@ window.addEventListener('load', event => {
     requestDataFromDB()
     switchToTab('logChart')
     toggleMenuBar(true)
-    if (!allowSuperpowers) trackInactivity()
+    if (!allowSuperpowers) trackIdle()
 })
