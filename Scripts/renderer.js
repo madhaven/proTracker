@@ -502,10 +502,15 @@ const trackIdle = () => {
 const projectEditHandler = (event, project, newName, editableElement) => {
     comms.editProject(
         {id:project.id, name:newName},
-        res => { // TODO: document responses
+        res => {
+            if (res) {
+                uiState.projects[project.id].name = newName
+            } else {
+                // TODO: create structured responses, false values limits the reasons for failure
+                console.warn('Yo wtf, that name already exists!')
+                alert(`A project with the name '${newName}' already exists`) // TODO: CREATE APP NOTIFICATION
+            }
             editableElement.classList.remove('editable')
-            if (!res) console.error('Unable to edit Project')
-            uiState.projects[project.id].name = newName
             render()
         },
         err => {
