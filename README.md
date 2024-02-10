@@ -15,7 +15,7 @@ a simple way of tracking progress
 
 ## Architecture
 
-The [Electron framework](https://www.electronjs.org/) as I understand works with 3 components  
+[The Electron framework](https://www.electronjs.org/) as I understand works with 3 components  
 
 * The main: handles all the local components of the program  
 * The preload: handles the bridge and permissions between the main world and the front render
@@ -67,3 +67,6 @@ DB
 * Thinking of setting up tests  
   [Here's a document](https://www.electronjs.org/docs/latest/tutorial/automated-testing) on electron testing  
   Feel free to contribute
+* Since no tests exist as of now, A good logging strategy could help resolve issues faster  
+  Always think about the scenario when things don't go well and make sure these cases are properly logged so tracing the down to a functionality becomes easier.  
+  Try to avoid user data inside logs as this can be a security vulnerability.
