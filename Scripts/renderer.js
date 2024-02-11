@@ -208,15 +208,31 @@ const addTaskListeners = (taskElement, log, task, day) => {
     }
 }
 
-const addTaskLocators = (taskElement, task) => {
+const addTaskLocatorsOnProjectPage = (taskElement, task) => {
     taskElement.addEventListener('click', event => {
         const logs = document.querySelector('.logChart')
             , tasksOnLog = logs.querySelectorAll('.logTask_' + task.id)
             , taskLogToFocus = tasksOnLog[tasksOnLog.length - 1]
 
         switchToTab('logChart')
-        taskLogToFocus.scrollIntoView()
-        // TODO: highlight task on redirect
+        highlightTask(task.id)
+        setTimeout(() => { deHighlightTask(task.id) }, 5000);
+        taskLogToFocus.scrollIntoView({ behavior: 'smooth'})
+    })
+}
+
+
+const highlightTask = (taskId) => {
+    tasks = document.querySelectorAll(`.logChart .logTask_${taskId}`)
+    tasks.forEach(task => {
+        task.classList.add('flashedTask')
+    })
+}
+
+const deHighlightTask = (taskId) => {
+    tasks = document.querySelectorAll(`.logChart .logTask_${taskId}`)
+    tasks.forEach(task => {
+        task.classList.remove('flashedTask')
     })
 }
 
@@ -269,7 +285,7 @@ const renderProjectTab = async () => {
                 , taskItem = document.createElement('li')
                 , logTaskContent = createTaskInElement(taskItem, task)
             decorateTaskContent(logTaskContent, {'statusId': statusId})
-            addTaskLocators(logTaskContent, task)
+            addTaskLocatorsOnProjectPage(logTaskContent, task)
             taskList.appendChild(taskItem)
         }
         
