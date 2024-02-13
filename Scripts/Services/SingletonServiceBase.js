@@ -1,9 +1,9 @@
 const SingletonServiceBase = class {
     static singleton = undefined
 
-    static getService() {
+    static getService(...params) {
         if (!this.singleton)
-            this.singleton = new this()
+            this.singleton = new this(...params)
         return this.singleton
     }
 }

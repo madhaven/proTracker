@@ -13,6 +13,7 @@ const { StatusLogProvider } = require('./Providers/StatusLogProvider')
 const ExcelJS = require('exceljs')
 const { Project } = require('./Models/Project')
 
+// TODO: move export colors to seperate class / Service
 const COLUMN_DATE = 1
     , COLUMN_PROJECT = 2
     , COLUMN_PENDING = 3
@@ -34,15 +35,17 @@ const COLUMN_DATE = 1
     };
 var TP, PP, SLP, SP
 
-const loadLogsHandler = async (event) => {
-    alltasks = await TP.getAllTasks()
-    allLogs = await SLP.getAllLogs()
-    allProjects = await PP.getAllProjects()
-    return alltasks ? allLogs ? {
+const DataRequestHandler = async (event) => {
+    const alltasks = await TP.getAllTasks() ?? false
+        , allTaskLogs = await SLP.getAllLogs() ?? false
+        , allProjects = await PP.getAllProjects() ?? false
+    if (!alltasks || !allTaskLogs || !allProjects) // || !allHabits || !allHabitLogs)
+        return false
+    return {
         "tasks": alltasks,
-        "logs": allLogs,
-        "projects": allProjects
-    } : false : false
+        "taskLogs": allTaskLogs,
+        "projects": allProjects,
+    }
 }
 
 const exportDataHandler = async (event, mainWindow, logTree, tasks, projects, logs) => {
@@ -229,7 +232,7 @@ const registerHandlers = mainWindow => {
     ipcMain.handle('newTaskChannel', newTaskHandler)
     ipcMain.handle('taskEditChannel', editTaskHandler)
     ipcMain.handle('taskClickChannel', toggleTaskHandler)
-    ipcMain.handle('loadLogsRequest', loadLogsHandler)
+    ipcMain.handle('loadDataRequest', DataRequestHandler)
     ipcMain.handle('exportDataRequest', (event, a, b, c, d) => { return exportDataHandler(event, mainWindow, a, b, c, d) })
     
     // state info exchange

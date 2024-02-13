@@ -326,7 +326,6 @@ const renderProjectTab = async () => {
     }
     uiState.foldedProjects = foldedProjects
     localStorage.setItem('foldedProjects', JSON.stringify(foldedProjects))
-    console.log('set local Storage', foldedProjects)
     return projectList
 }
 
@@ -556,7 +555,7 @@ const requestDataFromDB = () => {
     comms.loadData(
         res => {
             if (res){
-                uiState.replaceData(res.logs, res.tasks, res.projects)
+                uiState.replaceData(res.taskLogs, res.tasks, res.projects)
                 render()
             } else {
                 console.error('corrupt logs received')

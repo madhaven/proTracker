@@ -1,12 +1,13 @@
 const { dialog, app } = require('electron')
 const fs = require('fs')
+const { SingletonServiceBase } = require('./SingletonServiceBase')
 
-const ConfigService = class {
-    static singleton = undefined
+const ConfigService = class extends SingletonServiceBase {
     config = undefined
     filename = ''
 
-    constructor (filename, config) {
+    constructor (defaultConfig, filename) {
+        super()
         this.filename = filename
         try {
             const savedConfig = JSON.parse(fs.readFileSync(filename, 'utf8')) // TODO: move to file service
@@ -15,7 +16,7 @@ const ConfigService = class {
         } catch (err) {
             if (err.code == 'ENOENT') {
                 console.debug('ConfigService: no file, creating')
-                this.config = config
+                this.config = defaultConfig
                 this.save()
             } else {
                 console.error('ConfigService: error reading config')
@@ -23,12 +24,6 @@ const ConfigService = class {
                 app.exit()
             }
         }
-    }
-
-    static getService(config=undefined, configFileName=undefined) {
-        if (!this.singleton)
-            this.singleton = new this(configFileName, config)
-        return this.singleton
     }
 
     save () {

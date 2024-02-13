@@ -7,7 +7,7 @@ const sql = require('sqlite3').verbose()
 const fs = require('fs')
 const path = require("path")
 
-const DatabaseService = class extends SingletonServiceBase{
+const DatabaseService = class extends SingletonServiceBase {
     dbPath = ''
 
     constructor () {
@@ -67,7 +67,7 @@ const DatabaseService = class extends SingletonServiceBase{
         return true
     }
 
-    insertOne(command, params=[]) {
+    async insertOne(command, params=[]) {
         return new Promise((resolve, reject) => {
             const db = new sql.Database(this.dbPath)
             db.run (command, params, function (err) { // this syntax of function definition is necessary
@@ -78,7 +78,7 @@ const DatabaseService = class extends SingletonServiceBase{
         })
     }
 
-    exec (command, params=[]) {
+    async exec (command, params=[]) {
         return new Promise((resolve, reject) => {
             const db = new sql.Database(this.dbPath)
             db.run (command, params, function (err) { // this syntax of function definition is necessary
@@ -89,7 +89,7 @@ const DatabaseService = class extends SingletonServiceBase{
         })
     }
 
-    getOne (query, params=[]) { 
+    async getOne (query, params=[]) { 
         return new Promise((resolve, reject) => {
             const db = new sql.Database(this.dbPath)
             db.get(query, params, function (err, res) { // this syntax of function definition is necessary
@@ -100,9 +100,9 @@ const DatabaseService = class extends SingletonServiceBase{
         })
     }
     
-    fetch (query, params=[]) {
+    async fetch (query, params=[]) {
         return new Promise((resolve, reject) => {
-            const db = new sql.Database(this.dbPath)
+            const db = new sql.Database(this.dbPath) // TODO: move db objects into class-avoid re-instantiation
             db.all(query, params, function (err, res) { // this syntax of function definition is necessary
                 if (err) reject(err)
                 else resolve(res)
@@ -147,13 +147,25 @@ const DatabaseService = class extends SingletonServiceBase{
         }
 
         // TODO: check db version and migrations
-        console.warn('DatabaseService: db version check || migrations')
-        const migrationSucceeded = true
+        const query = `SELECT version FROM master`
+        
+        // GET DB VERSION
+        const db = new sql.Database(this.dbPath)
+        db.get(query, (err, res) => {
+            if (err) {
+                console.error('DatabaseService: Migration failed, Restoring DB')
+                this.restore(backupFilePath)
+                return false
+            }
+            if (!res) { console.error('DatabaseService: Unable to access core DB values') }
 
-        if (!migrationSucceeded) {
-            console.log('DatabaseService: Migration failed, Restoring DB')
-            this.restore(backupFilePath)
-        }
+            const dbVersion = res.version
+            console.debug(`DatabaseService: master DB version found: ${dbVersion}`)
+            // TODO
+            console.log('DatabaseService: Migration checks complete')
+            return true
+        })
+        db.close()
     }
 
     _getBackupPath () {
