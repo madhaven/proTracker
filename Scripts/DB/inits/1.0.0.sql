@@ -24,4 +24,17 @@ CREATE TABLE project (
 CREATE TABLE status (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     status VARCHAR NOT NULL
-)
+);
+
+-- DEFAULT DATA
+
+INSERT INTO status (status)
+VALUES
+('PENDING'),
+('IN_PROGRESS'),
+('NEED_INFO'),
+('COMPLETED'),
+('WAITING'),
+('WONT_DO');
+
+INSERT INTO master(version) VALUES ('1.0.0');

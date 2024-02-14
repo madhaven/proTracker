@@ -5,13 +5,19 @@ const { FileService } = require("./FileService")
 const sql = require('sqlite3').verbose()
 const fs = require('fs')
 const path = require("path")
+const { DBVersionService } = require("./DBVersionService")
 
 const DatabaseService = class extends SingletonServiceBase {
     dbPath = ''
 
-    constructor () {
-        var configs = ConfigService.getService()
-        this.dbPath = configs.get('dbPath')
+    constructor (
+        dbVersionService,
+        configService
+    ) {
+        super()
+        this.configService = configService ?? ConfigService.getService()
+        this.dbVersionService = dbVersionService ?? DBVersionService.getService()
+        this.dbPath = this.configService.get('dbPath')
 
         // try to restore if no DB file is found otherwise setup new
         if (FileService.fileExists(this.dbPath)) {
@@ -41,20 +47,15 @@ const DatabaseService = class extends SingletonServiceBase {
 
     initializeDB () {
         console.debug("DatabaseService: initializing DB", this.dbPath) // TODO: privacy violation?
-        const db = new sql.Database(this.dbPath)
+        const db = new sql.Database(this.dbPath) // TODO: change to common method
+            , initScript = this.dbVersionService.getLatestInitScript()
 
         try {
-            const query = FileService.readFile('./Scripts/DB/init.sql')
-            const dataQuery = FileService.readFile('./Scripts/DB/defaultData.sql')
+            const query = FileService.readFile(initScript)
             db.exec(query, err => {
                 if (err) {
                     console.trace('DB init error', err)
                 } else console.debug("DatabaseService: init complete")
-            })
-            db.exec(dataQuery, err => {
-                if (err) {
-                    console.trace('DB data error', err)
-                } else console.debug("DatabaseService: default data loaded")
             })
         } catch (err) {
             console.trace('DatabaseService: error reading sql scripts', err)

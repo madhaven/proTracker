@@ -1,0 +1,55 @@
+CREATE TABLE master (
+    version VARCHAR NOT NULL
+);
+
+CREATE TABLE status_log (
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    task_id INTEGER NOT NULL REFERENCES task(id),
+    status_id INTEGER NOT NULL REFERENCES status(id),
+    date_time INTEGER NOT NULL
+);
+
+CREATE TABLE task (
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    project_id INTEGER NOT NULL REFERENCES project(id),
+    summary VARCHAR NOT NULL,
+    parent_id INTEGER NULL REFERENCES task(id)
+);
+
+CREATE TABLE project (
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    name VARCHAR
+);
+
+CREATE TABLE status (
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    status VARCHAR NOT NULL
+);
+
+CREATE TABLE habit (
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    name VARCHAR NOT NULL,
+    removed BOOLEAN,
+    start_time INTEGER NOT NULL,
+    end_time INTEGER,
+    days INTEGER NOT NULL
+);
+
+CREATE TABLE habit_log (
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    habit_id INTEGER REFERENCES habit(id),
+    date_time INTEGER NOT NULL
+);
+
+-- DEFAULT DATA
+
+INSERT INTO status (status)
+VALUES
+('PENDING'),
+('IN_PROGRESS'),
+('NEED_INFO'),
+('COMPLETED'),
+('WAITING'),
+('WONT_DO');
+
+INSERT INTO master(version) VALUES ('2.0.0');
