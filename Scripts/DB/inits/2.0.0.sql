@@ -39,4 +39,17 @@ CREATE TABLE habit_log (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     habit_id INTEGER REFERENCES habit(id),
     date_time INTEGER NOT NULL
-)
+);
+
+-- DEFAULT DATA
+
+INSERT INTO status (status)
+VALUES
+('PENDING'),
+('IN_PROGRESS'),
+('NEED_INFO'),
+('COMPLETED'),
+('WAITING'),
+('WONT_DO');
+
+INSERT INTO master(version) VALUES ('2.0.0');

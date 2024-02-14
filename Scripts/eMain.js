@@ -6,6 +6,7 @@ const { DatabaseService } = require('./Services/DatabaseService')
 const { LogService } = require('./Services/LogService')
 const { FileService } = require('./Services/FileService')
 const { registerHandlers } = require('./handlers')
+const { DBVersionService } = require('./Services/DBVersionService')
 
 var mainWindow
 const debugMode = process.argv.some(arg => arg.includes('--inspect'))
@@ -17,7 +18,8 @@ const debugMode = process.argv.some(arg => arg.includes('--inspect'))
 // Initialize Services
 LogService.addStream(logStream)
 ConfigService.getService(config, configFileName)
-databaseService = DatabaseService.getService()
+DBVersionService.getService(FileService)
+DatabaseService.getService()
 
 const initialState = () => {
     // loads the data and creates the state instance that is sent to the UI
