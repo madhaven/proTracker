@@ -60,6 +60,9 @@ DB
   * a timeout that pulls up the Menu page after a minute
   * Export to excel functionality
 * Logging was implemented to track issues across devices  
+* Migration Services were added to automatically handle DB versions  
+  Migrations became a necassity when Habit tracking features were planned and it required the db to be automatically updated  
+  with a lack of test cases, the efficacy of this logic can be glitchy  
 
 ## Future
 
@@ -67,3 +70,5 @@ DB
 * Thinking of setting up tests  
   [Here's a document](https://www.electronjs.org/docs/latest/tutorial/automated-testing) on electron testing  
   Feel free to contribute
+* Setup a better migration strategy  
+  The one in use currently works within the DBService and the DBVersionService  

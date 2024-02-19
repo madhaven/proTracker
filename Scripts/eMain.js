@@ -13,13 +13,17 @@ const debugMode = process.argv.some(arg => arg.includes('--inspect'))
     , userDataPath = debugMode ? '.' : path.join(app.getPath('appData'), 'proTracker')
     , configFileName = debugMode ? 'appconfig.json' : path.join(userDataPath, 'appconfig.json')
     , config = debugMode ? { dbPath: 'proTracker.db' } : { dbPath: path.join(userDataPath, 'proTracker.db') }
-    , logStream = FileService.openStream(path.join(userDataPath, 'proTracker.log'))
+    , logFile = FileService.openStream(path.join(userDataPath, 'proTracker.log'))
 
-// Initialize Services
-LogService.addStream(logStream)
-ConfigService.getService(config, configFileName)
-DBVersionService.getService(FileService)
-DatabaseService.getService()
+const setupServices = () => {
+    // PS: order of services does matter
+    LogService.addStream(logFile)
+    ConfigService.getService(config, configFileName)
+    DBVersionService.getService(FileService)
+    var dbService = DatabaseService.getService()
+    console.debug('Services initialized')
+    dbService.tryMigrate()
+}
 
 const initialState = () => {
     // loads the data and creates the state instance that is sent to the UI
@@ -41,6 +45,7 @@ const createWindow = () => {
         show: false,
         autoHideMenuBar: true
     })
+    setupServices()
     registerHandlers(win)
     win.removeMenu()
     win.loadFile('./Screens/index.html')
