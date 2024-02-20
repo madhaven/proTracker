@@ -19,7 +19,7 @@ const ConfigService = class extends SingletonServiceBase {
                 this.config = defaultConfig
                 this.save()
             } else {
-                console.error('ConfigService: error reading config')
+                console.error('ConfigService: error reading config', err)
                 dialog.showErrorBox('File Read Error', 'proTracker was not able to read important configuration.\nThe app will close now.')
                 app.exit()
             }

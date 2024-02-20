@@ -10,8 +10,10 @@ const { ProjectProvider } = require('./Providers/ProjectProvider')
 const { TaskProvider } = require('./Providers/TaskProvider')
 const { StatusProvider } = require('./Providers/StatusProvider')
 const { StatusLogProvider } = require('./Providers/StatusLogProvider')
+const { HabitProvider } = require('./Providers/HabitProvider')
 const ExcelJS = require('exceljs')
 const { Project } = require('./Models/Project')
+const { HabitLogProvider } = require('./Providers/HabitLogProvider')
 
 // TODO: move export colors to seperate class / Service
 const COLUMN_DATE = 1
@@ -33,18 +35,23 @@ const COLUMN_DATE = 1
         pattern: 'solid',
         fgColor: { argb:'FFC6EFCE' }
     };
-var TP, PP, SLP, SP
+var TP, PP, SLP, SP, HP, HLP
 
 const DataRequestHandler = async (event) => {
     const alltasks = await TP.getAllTasks() ?? false
         , allTaskLogs = await SLP.getAllLogs() ?? false
         , allProjects = await PP.getAllProjects() ?? false
-    if (!alltasks || !allTaskLogs || !allProjects) // || !allHabits || !allHabitLogs)
+        , allHabits = await HP.getAllHabits() ?? false
+        , allHabitLogs = await HLP.getAllLogs() ?? false
+
+    if (!alltasks || !allTaskLogs || !allProjects  || !allHabits || !allHabitLogs)
         return false
     return {
         "tasks": alltasks,
         "taskLogs": allTaskLogs,
         "projects": allProjects,
+        "habits": allHabits,
+        "habitLogs": allHabitLogs
     }
 }
 
@@ -226,6 +233,8 @@ const registerHandlers = mainWindow => {
     PP = new ProjectProvider()
     SLP = new StatusLogProvider()
     SP = new StatusProvider()
+    HP = new HabitProvider()
+    HLP = new HabitLogProvider
 
     // comms
     ipcMain.handle('projectEditChannel', editProjectHandler)

@@ -59,7 +59,7 @@ const HabitProvider = class {
         // TODO: implement
     }
 
-    async getAllLogs() {
+    async getAllHabits() {
         const query = `SELECT * from habit;`
         console.debug('HabitProvider: getAllLogs')
         try {

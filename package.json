@@ -7,9 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron .",
     "make": "electron-forge make",
-    "clean": "del proTracker.db appconfig.json",
+    "clean": "del proTracker*.db appconfig.json proTracker.log",
     "debug": "electron . --inspect=5858",
-    "cleandebug": "del proTracker.db appconfig.json proTracker.log && electron . --inspect=5858",
+    "cleandebug": "del proTracker*.db appconfig.json proTracker.log && electron . --inspect=5858",
     "package": "electron-forge package"
   },
   "repository": {

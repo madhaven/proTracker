@@ -15,3 +15,5 @@ const Habit = class {
         this.days = days
     }
 }
+
+module.exports = { Habit }
