@@ -34,10 +34,10 @@ body {
 }
 
 h1 {
-    font-family: 'Courier New', Courier, monospace;
     font-weight: bold;
 }
 h1, h2 {
+    font-family: 'Courier New', Courier, monospace;
     text-align: center;
 }
 
@@ -389,7 +389,7 @@ input:focus {
 .habitItem {
     border: 1px solid var(--whiteLayer1);
     margin-bottom: 1em;
-    margin-right: 1em;
+    /* margin-left: 1em; */
     padding: .5em 1em;
     transition: .5s ease-out;
     border-radius: .5em;
@@ -399,8 +399,16 @@ input:focus {
 .habitItem:hover {
     border: 1px solid var(--whiteLayer2);
 }
+.newHabitItem {
+    flex-direction: column;
+}
 .habitTitle {
     font-size: 1.5em;
+}
+.newHabitItem .newHabitFrequency {
+    width: 2em;
+    margin-right: 1em;
+    text-align: right;  
 }
 /* .habitItem:not(:hover) .habitControls button {
     display: none;
@@ -435,6 +443,13 @@ button.habitDoneButton {
 }
 ::placeholder {
     color: var(--whiteLayer2);
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 /* *{

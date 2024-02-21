@@ -11,6 +11,8 @@ const { DBVersionService } = require("./DBVersionService")
 const DatabaseService = class extends SingletonServiceBase {
     dbPath = ''
 
+    // TODO arrange methods
+
     constructor (
         dbVersionService,
         configService,
@@ -64,8 +66,7 @@ const DatabaseService = class extends SingletonServiceBase {
     }
 
     isConnectionValid (testConString) {
-        // TODO
-        return true
+        return true // TODO
     }
 
     async insertOne(command, params=[]) {

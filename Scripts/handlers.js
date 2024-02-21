@@ -1,18 +1,21 @@
 const { ipcMain } = require('electron')
 const { dialog, app } = require('electron')
+const ExcelJS = require('exceljs')
 
 const { FileService } = require('./Services/FileService')
 const { Task } = require('./Models/Task')
-const { Status } = require('./Models/Status')
-const { StatusLog } = require('./Models/StatusLog')
 const { TaskLog } = require('./Contracts/TaskLog')
-const { ProjectProvider } = require('./Providers/ProjectProvider')
+const { Project } = require('./Models/Project')
+const { Status } = require('./Models/Status')
+const { Habit } = require('./Models/Habit')
+const { HabitLog } = require('./Models/HabitLog')
+const { StatusLog } = require('./Models/StatusLog')
+
 const { TaskProvider } = require('./Providers/TaskProvider')
+const { ProjectProvider } = require('./Providers/ProjectProvider')
 const { StatusProvider } = require('./Providers/StatusProvider')
 const { StatusLogProvider } = require('./Providers/StatusLogProvider')
 const { HabitProvider } = require('./Providers/HabitProvider')
-const ExcelJS = require('exceljs')
-const { Project } = require('./Models/Project')
 const { HabitLogProvider } = require('./Providers/HabitLogProvider')
 
 // TODO: move export colors to seperate class / Service
@@ -215,6 +218,15 @@ const toggleTaskHandler = async (event, taskId, newStatusId, newTime) => {
     return statusLog ? statusLog : false
 }
 
+const habitDoneHandler = async (event, habitId, time) => {
+    habitLog = await HLP.create(new HabitLog(-1, habitId, time))
+    return habitLog ? habitLog : false
+}
+
+const deleteHabitHandler = async (event, habitId, time) => {
+    // TODO
+}
+
 /// STATE EVENTS
 
 const stateEventHandler = async (event, data) => {
@@ -241,6 +253,8 @@ const registerHandlers = mainWindow => {
     ipcMain.handle('newTaskChannel', newTaskHandler)
     ipcMain.handle('taskEditChannel', editTaskHandler)
     ipcMain.handle('taskClickChannel', toggleTaskHandler)
+    ipcMain.handle('habitDoneChannel', habitDoneHandler)
+    ipcMain.handle('deleteHabitChannel', deleteHabitHandler)
     ipcMain.handle('loadDataRequest', DataRequestHandler)
     ipcMain.handle('exportDataRequest', (event, a, b, c, d) => { return exportDataHandler(event, mainWindow, a, b, c, d) })
     

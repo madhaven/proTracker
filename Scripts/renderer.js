@@ -1,6 +1,8 @@
 const uiState = new State()
     , allowSuperpowers = false // for debugging
     , editIconSVG = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16"><path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/></svg>'
+    , trashIconSVG = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16"><path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"/></svg>'
+    , doneIconSVG = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16"><path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/></svg>'
 uiState.inactiveDuration = 0
 uiState.inactivityTolerance = 60 // TODO: user preference. -1 for disabled
 
@@ -221,7 +223,6 @@ const addTaskLocatorsOnProjectPage = (taskElement, task) => {
     })
 }
 
-
 const highlightTask = (taskId) => {
     tasks = document.querySelectorAll(`.logChart .logTask_${taskId}`)
     tasks.forEach(task => {
@@ -233,6 +234,21 @@ const deHighlightTask = (taskId) => {
     tasks = document.querySelectorAll(`.logChart .logTask_${taskId}`)
     tasks.forEach(task => {
         task.classList.remove('flashedTask')
+    })
+}
+
+const addHabitListeners = (newHabitButton) => {
+    console.log('newHabitButton', newHabitButton)
+    const habitTitle = newHabitButton.querySelector('.newHabitTitle')
+        , habitFrequency = newHabitButton.querySelector('.newHabitFrequency')
+    
+    [habitTitle, habitFrequency].forEach((input) => {
+        input.addEventListener('change', (event) => {
+            
+            if (habitTitle.value && habitFrequency.value && habitFrequency.value>=1 && habitFrequency.value<=7) {
+                newHabit(habitTitle.value, habitFrequency.value)
+            } 
+        })
     })
 }
 
@@ -329,9 +345,81 @@ const renderProjectTab = async () => {
     return projectList
 }
 
+const renderHabitsTab = () => {
+    const habitList = document.querySelector('.habitList')
+        , pendingHabits = document.querySelector('.pendingHabits')
+    
+    habitList.innerHTML = ""
+    for (const habitId in uiState.habits) {
+
+        // create Habit Quickie
+        const habit = uiState.habits[habitId]
+            , habitItem = document.createElement('li')
+            , habitTitle = document.createElement('div')
+            , habitControls = document.createElement('div')
+            , editButton = document.createElement('button')
+            , trashButton = document.createElement('button')
+            , doneButton = document.createElement('button')
+        
+        habitItem.classList.add('habitItem')
+        habitTitle.classList.add('habitTitle')
+        habitControls.classList.add('habitControls')
+
+        editButton.innerHTML = editIconSVG
+        trashButton.innerHTML = trashIconSVG
+        doneButton.innerHTML = doneIconSVG
+        habitTitle.innerHTML = habit.name
+        // TODO: add graphs
+
+        doneButton.addEventListener('click', event => {
+            console.log('habitLog')
+            markHabitDone(habit.id, Date.now())
+        })
+        trashButton.addEventListener('click', event => {
+            console.log('habitdelete')
+            deleteHabit(habit.id, Date.now())
+        })
+        
+        console.log('habitList', habitList)
+        habitList.appendChild(habitItem)
+        habitItem.appendChild(habitTitle)
+        habitItem.appendChild(habitControls)
+        habitControls.appendChild(editButton)
+        habitControls.appendChild(trashButton)
+        habitControls.appendChild(doneButton)
+    }
+
+    // options for adding habit
+    const newHabitButton = document.createElement('li')
+        , newHabitTitle = document.createElement('input')
+        , newHabitFrequencyContainer = document.createElement('div')
+        , newHabitFrequency = document.createElement('input')
+    
+    newHabitButton.classList.add('newHabitItem', 'habitItem')
+    newHabitTitle.classList.add('newHabitTitle')
+    newHabitFrequencyContainer.classList.add('newHabitFrequencyContainer')
+    newHabitFrequency.classList.add('newHabitFrequency')
+
+    newHabitTitle.placeholder = "I want to ... ?"
+    newHabitFrequency.type = "number"
+    newHabitFrequency.min = 1
+    newHabitFrequency.max = 7
+    newHabitFrequency.placeholder = "x"
+
+    newHabitButton.appendChild(newHabitTitle)
+    newHabitButton.appendChild(newHabitFrequencyContainer)
+    newHabitFrequencyContainer.appendChild(newHabitFrequency)
+    newHabitFrequencyContainer.innerHTML += "times a week"
+    
+    habitList.appendChild(newHabitButton)
+    console.log('THEnewhabitbutton', newHabitButton)
+    addHabitListeners(newHabitButton)
+}
+
 const render = async () => {
     renderLogTab()
     renderProjectTab()
+    renderHabitsTab()
 }
 
 // #endregion
@@ -357,7 +445,7 @@ const toggleMenuBar = (visible = undefined) => {
 
 const switchToTab = tabName => {
     const menuTabs = document.getElementsByClassName('menuTab')
-    for (tab of menuTabs) {
+    for (const tab of menuTabs) {
         if (tab.classList.contains(tabName))
             tab.style.display = "block";
         else
@@ -393,7 +481,7 @@ const exportData = event => {
         }, iconShowDuration)
     }
 
-    comms.exportData(
+    comms.exportData (
         uiState.logTree, uiState.tasks, uiState.projects, uiState.logs,
         res => {
             flashIcon(resultShowDuration, res)
@@ -426,11 +514,11 @@ const newLogInput = event => {
     if (!project) return false
     
     const task = { dateTime: date.getTime(), project: project, summary: summary }
-    comms.newTask(
+    comms.newTask (
         task,
         res => {
             if (!res) return
-            uiState.addData(res.log, res.task, res.project)
+            uiState.taskLog(res.log, res.task, res.project)
             render()
 
             setDefaultDate()
@@ -447,7 +535,7 @@ const taskClick = (event, task, log) => {
     // TODO: setup more refined status change mechanism
     const newState = log.statusId == 1 ? 4 : 1
         , currentTime = Date.now()
-    comms.toggleTask(
+    comms.toggleTask (
         task.id, newState, currentTime,
         res => {
             uiState.addLog(res)
@@ -455,6 +543,36 @@ const taskClick = (event, task, log) => {
         },
         err => {
             console.error('server error while updating task') // TODO remove error logs
+        }
+    )
+}
+
+const newHabit = (title, frequency) => {
+    console.log('new habit', title, frequency)
+}
+
+const markHabitDone = (habitId, time) => {
+    comms.habitDone (
+        habitId, time,
+        res => {
+            console.log('logdoneresult', res)
+            // TODO
+        },
+        err => {
+            console.error('server error while updating habit', err) // TODO remove error logs
+        }
+    )
+}
+
+const deleteHabit = (habitId, time) => {
+    comms.deleteHabit (
+        habitId, time,
+        res => {
+            console.log('logdeleteresult', res)
+            // TODO
+        },
+        err => {
+            console.error('server error while updating habit') // TODO remove error logs
         }
     )
 }
@@ -555,13 +673,15 @@ const requestDataFromDB = () => {
     comms.loadData(
         res => {
             if (res){
-                uiState.replaceData(res.taskLogs, res.tasks, res.projects)
+                console.log('data recieved from db', res)
+                uiState.replaceData(res.tasks, res.taskLogs, res.projects, res.habits, res.habitLogs)
                 render()
             } else {
-                console.error('corrupt logs received')
+                console.error('corrupt data received', res)
+                // TODO: notification ?
             }
         },
-        err => console.error('server error while loading logs')
+        err => console.error('server error while loading data')
     )
 }
 
