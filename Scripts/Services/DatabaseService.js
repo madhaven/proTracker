@@ -179,7 +179,8 @@ const DatabaseService = class {
             , backupFiles = FileService.getFilesInDir(dirName)
             , filteredFiles = backupFiles.filter( x => x.endsWith('.db') && x.startsWith('proTrackerBackup_'))
             , latestFile = filteredFiles[filteredFiles.length-1]
-        return latestFile
+            , latestFilePath = path.join(dirName, latestFile)
+        return latestFilePath
     }
 }
 

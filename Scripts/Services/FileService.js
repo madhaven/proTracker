@@ -69,7 +69,11 @@ const FileService = class {
     }
 
     static copyOrReplace = (fromPath, toPath) => {
-        if (!fromPath || !toPath) return false
+        if (
+            !fromPath 
+            || !toPath
+            || !FileService.fileExists(fromPath))
+            return false
         fs.copyFileSync(fromPath, toPath)
         return true
     }
