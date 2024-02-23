@@ -6,6 +6,7 @@ const Habit = class {
         , startTime
         , endTime
         , days
+        , lastLogTime
     ) {
         this.id = id
         this.name = name
@@ -13,6 +14,7 @@ const Habit = class {
         this.startTime = startTime
         this.endTime = endTime
         this.days = days
+        this.lastLogTime = lastLogTime
     }
 }
 

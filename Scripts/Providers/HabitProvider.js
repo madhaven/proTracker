@@ -60,8 +60,18 @@ const HabitProvider = class {
     }
 
     async getAllHabits() {
-        const query = `SELECT * from habit;`
-        console.debug('HabitProvider: getAllLogs')
+        const query = `
+        SELECT 
+            habit.id
+            , MAX(hlog.date_time) as latest_log_time
+            , habit.name
+            , habit.removed
+            , habit.start_time
+            , habit.end_time
+            , habit.days
+        FROM habit LEFT JOIN habit_log hlog
+        ON habit.id=hlog.habit_id GROUP BY habit_id;`
+        console.debug('HabitProvider: getAllHabits')
         try {
             const res = await this.dbService.fetch(query)
             const result = res.map(habit => new Habit(
@@ -70,11 +80,12 @@ const HabitProvider = class {
                 habit.removed,
                 habit.startTime,
                 habit.endTime,
-                habit.days
+                habit.days,
+                habit.latest_log_time
             ))
             return res ? result : false
         } catch (err) {
-            console.trace('HabitProvider: getAllLogs', err)
+            console.trace('HabitProvider: getAllHabits', err)
         }
     }
 }

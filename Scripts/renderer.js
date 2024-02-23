@@ -344,46 +344,72 @@ const renderProjectTab = async () => {
     return projectList
 }
 
-const renderHabitsTab = () => {
+const renderHabitsTab = (now = new Date()) => {
     const habitList = document.querySelector('.habitList')
-        , pendingHabits = document.querySelector('.pendingHabits')
+        , pendingHabitList = document.querySelector('.pendingHabits')
+        , today = [now.getFullYear(), now.getMonth(), now.getDate()]
     
     habitList.innerHTML = ""
+    pendingHabitList.innerHTML = ""
     for (const habitId in uiState.habits) {
 
-        // create Habit Quickie
+        // create Habit item
         const habit = uiState.habits[habitId]
+            , lastLog = new Date(habit.lastLogTime ?? 0)
+            , lastLogDate = [lastLog.getFullYear(), lastLog.getMonth(), lastLog.getDate()]
             , habitItem = document.createElement('li')
             , habitTitle = document.createElement('div')
             , habitControls = document.createElement('div')
             , editButton = document.createElement('button')
             , trashButton = document.createElement('button')
-            , doneButton = document.createElement('button')
         
+        // add design classes
         habitItem.classList.add('habitItem')
         habitTitle.classList.add('habitTitle')
         habitControls.classList.add('habitControls')
 
+        // fill content
         editButton.innerHTML = editIconSVG
         trashButton.innerHTML = trashIconSVG
-        doneButton.innerHTML = doneIconSVG
         habitTitle.innerHTML = habit.name
         // TODO: add graphs
 
-        doneButton.addEventListener('click', event => {
-            markHabitDone(habit.id, Date.now())
-        })
+        // give life
         trashButton.addEventListener('click', event => {
             console.log('habitdelete')
             deleteHabit(habit.id, Date.now())
         })
         
+        // add to UI
         habitList.appendChild(habitItem)
         habitItem.appendChild(habitTitle)
         habitItem.appendChild(habitControls)
         habitControls.appendChild(editButton)
         habitControls.appendChild(trashButton)
-        habitControls.appendChild(doneButton)
+
+        if (today[0]!=lastLogDate[0] || today[1]!=lastLogDate[1] || today[2]!=lastLogDate[2]) {
+            console.log('adding to pending list')
+            
+            const habitItem = document.createElement('li')
+                , habitTitle = document.createElement('div')
+                , habitControls = document.createElement('div')
+                , doneButton = document.createElement('button')
+            habitItem.classList.add('habitItem')
+            habitTitle.classList.add('habitTitle')
+            habitControls.classList.add('habitControls')
+            habitTitle.innerHTML = habit.name
+            doneButton.innerHTML = doneIconSVG
+            doneButton.addEventListener('click', event => {
+                markHabitDone(habit.id, Date.now())
+            })
+            pendingHabitList.appendChild(habitItem)
+            habitItem.appendChild(habitTitle)
+            habitItem.appendChild(habitControls)
+            habitControls.appendChild(doneButton)
+        }
+
+        if (pendingHabitList.length > 0)
+            pendingHabitList.appendChild(document.createElement('hr'))
     }
 
     // options for adding habit
@@ -561,6 +587,7 @@ const markHabitDone = (habitId, time) => {
         habitId, time,
         res => {
             uiState.addHabitLog(res)
+            uiState.habits[res.habitId].lastLogTime = res.dateTime
             render()
         },
         err => {
@@ -573,7 +600,7 @@ const deleteHabit = (habitId, time) => {
     comms.deleteHabit (
         habitId, time,
         res => {
-            console.log('logdeleteresult', res)
+            console.log('logdeletehabitresult', res)
             // TODO
         },
         err => {

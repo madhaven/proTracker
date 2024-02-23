@@ -46,9 +46,12 @@ const DataRequestHandler = async (event) => {
         , allProjects = await PP.getAllProjects() ?? false
         , allHabits = await HP.getAllHabits() ?? false
         , allHabitLogs = await HLP.getAllLogs() ?? false
+        
+    // TODO: convertModelToContract
 
     if (!alltasks || !allTaskLogs || !allProjects  || !allHabits || !allHabitLogs)
         return false
+
     return {
         "tasks": alltasks,
         "taskLogs": allTaskLogs,
@@ -215,7 +218,7 @@ const editTaskHandler = async (event, task) => {
 
 const toggleTaskHandler = async (event, taskId, newStatusId, newTime) => {
     statusLog = await SLP.create(new StatusLog(-1, taskId, newStatusId, newTime))
-    return statusLog ? statusLog : false
+    return statusLog ?? false
 }
 
 const createHabitHandler = async (event, title, startTime, endTime, frequency) => {
@@ -228,7 +231,7 @@ const createHabitHandler = async (event, title, startTime, endTime, frequency) =
 
 const habitDoneHandler = async (event, habitId, time) => {
     habitLog = await HLP.create(new HabitLog(-1, habitId, time))
-    return habitLog ? habitLog : false
+    return habitLog ?? false
 }
 
 const deleteHabitHandler = async (event, habitId, time) => {
