@@ -9,3 +9,5 @@ const HabitLog = class {
         this.dateTime = dateTime
     }
 }
+
+module.exports = { HabitLog }

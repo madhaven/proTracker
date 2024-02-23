@@ -237,17 +237,16 @@ const deHighlightTask = (taskId) => {
     })
 }
 
-const addHabitListeners = (newHabitButton) => {
-    console.log('newHabitButton', newHabitButton)
-    const habitTitle = newHabitButton.querySelector('.newHabitTitle')
-        , habitFrequency = newHabitButton.querySelector('.newHabitFrequency')
+const addHabitListeners = (newHabitItem) => {
+    const habitTitle = newHabitItem.querySelector('input.newHabitTitle')
+        , habitFreq = newHabitItem.querySelector('input.newHabitFrequency')
+        , arr = [habitTitle, habitFreq]
     
-    [habitTitle, habitFrequency].forEach((input) => {
-        input.addEventListener('change', (event) => {
-            
-            if (habitTitle.value && habitFrequency.value && habitFrequency.value>=1 && habitFrequency.value<=7) {
-                newHabit(habitTitle.value, habitFrequency.value)
-            } 
+    arr.forEach(item => {
+        item.addEventListener('change', (event) => {
+            if (habitTitle.value && habitFreq.value && habitFreq.value>=1 && habitFreq.value<=7) {
+                newHabit(habitTitle.value, habitFreq.value)
+            }
         })
     })
 }
@@ -372,7 +371,6 @@ const renderHabitsTab = () => {
         // TODO: add graphs
 
         doneButton.addEventListener('click', event => {
-            console.log('habitLog')
             markHabitDone(habit.id, Date.now())
         })
         trashButton.addEventListener('click', event => {
@@ -380,7 +378,6 @@ const renderHabitsTab = () => {
             deleteHabit(habit.id, Date.now())
         })
         
-        console.log('habitList', habitList)
         habitList.appendChild(habitItem)
         habitItem.appendChild(habitTitle)
         habitItem.appendChild(habitControls)
@@ -390,12 +387,12 @@ const renderHabitsTab = () => {
     }
 
     // options for adding habit
-    const newHabitButton = document.createElement('li')
+    const newHabitItem = document.createElement('li')
         , newHabitTitle = document.createElement('input')
         , newHabitFrequencyContainer = document.createElement('div')
         , newHabitFrequency = document.createElement('input')
     
-    newHabitButton.classList.add('newHabitItem', 'habitItem')
+    newHabitItem.classList.add('newHabitItem', 'habitItem')
     newHabitTitle.classList.add('newHabitTitle')
     newHabitFrequencyContainer.classList.add('newHabitFrequencyContainer')
     newHabitFrequency.classList.add('newHabitFrequency')
@@ -406,14 +403,13 @@ const renderHabitsTab = () => {
     newHabitFrequency.max = 7
     newHabitFrequency.placeholder = "x"
 
-    newHabitButton.appendChild(newHabitTitle)
-    newHabitButton.appendChild(newHabitFrequencyContainer)
+    newHabitItem.appendChild(newHabitTitle)
+    newHabitItem.appendChild(newHabitFrequencyContainer)
     newHabitFrequencyContainer.appendChild(newHabitFrequency)
-    newHabitFrequencyContainer.innerHTML += "times a week"
+    newHabitFrequencyContainer.innerHTML += "days a week"
     
-    habitList.appendChild(newHabitButton)
-    console.log('THEnewhabitbutton', newHabitButton)
-    addHabitListeners(newHabitButton)
+    habitList.appendChild(newHabitItem)
+    addHabitListeners(newHabitItem)
 }
 
 const render = async () => {
@@ -548,15 +544,24 @@ const taskClick = (event, task, log) => {
 }
 
 const newHabit = (title, frequency) => {
-    console.log('new habit', title, frequency)
+    comms.createHabit(
+        title, Date.now(), Infinity, frequency,
+        res => {
+            uiState.addHabit(res)
+            render()
+        },
+        err => {
+            console.error('servor errored while adding habit') // TODO notification
+        }
+    )
 }
 
 const markHabitDone = (habitId, time) => {
     comms.habitDone (
         habitId, time,
         res => {
-            console.log('logdoneresult', res)
-            // TODO
+            uiState.addHabitLog(res)
+            render()
         },
         err => {
             console.error('server error while updating habit', err) // TODO remove error logs

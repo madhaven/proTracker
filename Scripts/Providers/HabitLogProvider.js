@@ -11,7 +11,7 @@ const HabitLogProvider = class {
     }
     
     async create(habitLog) {
-        var query = `INSERT INTO status_log (habit_id, date_time) VALUES (?, ?);`
+        var query = `INSERT INTO habit_log (habit_id, date_time) VALUES (?, ?);`
         var params = [habitLog.habitId, habitLog.dateTime]
         console.debug('HabitLogProvider: creating')
         try {

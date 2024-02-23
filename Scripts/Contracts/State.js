@@ -60,6 +60,14 @@ const State = class {
         this.logs[log.id] = log
         this.growTrees()
     }
+
+    addHabit (habit) {
+        this.habits[habit.id] = habit
+    }
+
+    addHabitLog (habitLog) {
+        this.habitLogs[habitLog.id] = habitLog
+    }
     
     growTrees () {
         this.logTree = {}
