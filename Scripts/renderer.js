@@ -376,20 +376,18 @@ const renderHabitsTab = (now = new Date()) => {
 
         // give life
         trashButton.addEventListener('click', event => {
-            console.log('habitdelete')
+            console.log('habitdeleteClicked') // TODO remove
             deleteHabit(habit.id, Date.now())
         })
         
         // add to UI
         habitList.appendChild(habitItem)
         habitItem.appendChild(habitTitle)
-        habitItem.appendChild(habitControls)
+        // habitItem.appendChild(habitControls)
         habitControls.appendChild(editButton)
         habitControls.appendChild(trashButton)
 
         if (today[0]!=lastLogDate[0] || today[1]!=lastLogDate[1] || today[2]!=lastLogDate[2]) {
-            console.log('adding to pending list')
-            
             const habitItem = document.createElement('li')
                 , habitTitle = document.createElement('div')
                 , habitControls = document.createElement('div')
@@ -548,7 +546,7 @@ const newLogInput = event => {
             UIproject.focus()
         },
         err => {
-            console.error('server error while adding new task')
+            console.error('server error while adding new task') // TODO notification
         }
     )
 }
@@ -591,7 +589,7 @@ const markHabitDone = (habitId, time) => {
             render()
         },
         err => {
-            console.error('server error while updating habit', err) // TODO remove error logs
+            console.error('server error while updating habit', err) // TODO notification
         }
     )
 }
@@ -604,7 +602,7 @@ const deleteHabit = (habitId, time) => {
             // TODO
         },
         err => {
-            console.error('server error while updating habit') // TODO remove error logs
+            console.error('server error while updating habit') // TODO notification
         }
     )
 }
@@ -690,12 +688,12 @@ const taskEditHandler = (event, task, newSummary, taskElement) => {
         {id: task.id, summary: newSummary},
         res => { // TODO: document responses
             taskElement.classList.remove('editable')
-            if (!res) console.error('Unable to edit Task')
+            if (!res) console.error('Unable to edit Task') // TODO notification
             uiState.tasks[task.id].summary = newSummary
             render()
         },
         err => {
-            console.error('Unable to edit Task due to an internal error')
+            console.error('Unable to edit Task due to an internal error') // TODO notification
             taskElement.classList.remove('editable')
         }
     )
@@ -713,7 +711,7 @@ const requestDataFromDB = () => {
                 // TODO: notification ?
             }
         },
-        err => console.error('server error while loading data')
+        err => console.error('server error while loading data') // TODO notification
     )
 }
 

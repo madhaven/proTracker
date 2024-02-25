@@ -24,7 +24,18 @@ const HabitProvider = class {
     }
 
     async get(id) {
-        const query = `SELECT * FROM habit WHERE id=?;`
+        const query = `
+        SELECT 
+            habit.id
+            , MAX(hlog.date_time) as latest_log_time
+            , habit.name
+            , habit.removed
+            , habit.start_time
+            , habit.end_time
+            , habit.days
+        FROM habit LEFT JOIN habit_log hlog
+        ON habit.id=hlog.habit_id GROUP BY habit_id
+        WHERE habitd.id=?;`
         const params = [id]
         console.debug('HabitProvider: get')
         try {
@@ -35,7 +46,8 @@ const HabitProvider = class {
                 habit.removed,
                 habit.startTime,
                 habit.endTime,
-                habit.days
+                habit.days,
+                habit.latest_log_time
             ) : false
         } catch (err) {
             console.trace("Habit: get", err)

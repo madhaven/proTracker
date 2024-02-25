@@ -2,21 +2,20 @@ const { ipcMain } = require('electron')
 const { dialog, app } = require('electron')
 const ExcelJS = require('exceljs')
 
+const { StatusLogProvider } = require('./Providers/StatusLogProvider')
+const { HabitLogProvider } = require('./Providers/HabitLogProvider')
+const { ProjectProvider } = require('./Providers/ProjectProvider')
+const { StatusProvider } = require('./Providers/StatusProvider')
+const { HabitProvider } = require('./Providers/HabitProvider')
+const { TaskProvider } = require('./Providers/TaskProvider')
 const { FileService } = require('./Services/FileService')
-const { Task } = require('./Models/Task')
-const { TaskLog } = require('./Contracts/TaskLog')
+const { StatusLog } = require('./Models/StatusLog')
+const { HabitLog } = require('./Models/HabitLog')
 const { Project } = require('./Models/Project')
 const { Status } = require('./Models/Status')
 const { Habit } = require('./Models/Habit')
-const { HabitLog } = require('./Models/HabitLog')
-const { StatusLog } = require('./Models/StatusLog')
+const { Task } = require('./Models/Task')
 
-const { TaskProvider } = require('./Providers/TaskProvider')
-const { ProjectProvider } = require('./Providers/ProjectProvider')
-const { StatusProvider } = require('./Providers/StatusProvider')
-const { StatusLogProvider } = require('./Providers/StatusLogProvider')
-const { HabitProvider } = require('./Providers/HabitProvider')
-const { HabitLogProvider } = require('./Providers/HabitLogProvider')
 
 // TODO: move export colors to seperate class / Service
 const COLUMN_DATE = 1
@@ -223,15 +222,24 @@ const toggleTaskHandler = async (event, taskId, newStatusId, newTime) => {
 
 const createHabitHandler = async (event, title, startTime, endTime, frequency) => {
     habit = await HP.create(
-        new Habit(-1, title, false, startTime, endTime, frequency)
+        new Habit(-1, title, false, startTime, endTime, frequency, 0)
     )
     return habit ?? false
 
 }
 
 const habitDoneHandler = async (event, habitId, time) => {
-    habitLog = await HLP.create(new HabitLog(-1, habitId, time))
-    return habitLog ?? false
+    const habit = await HP.get(habitId)
+        , lastDay = new Date(habit.lastLogTime)
+        , today = new Date()
+
+    if (today[0]!=lastDay[0] || today[1]!=lastDay[1] || today[2]!=lastDay[2]) {
+        habitLog = await HLP.create(new HabitLog(-1, habitId, time))
+        return habitLog ?? false
+    } else {
+        throw Error("Already Logged Habit for the day") // TODO Notification
+    }
+        
 }
 
 const deleteHabitHandler = async (event, habitId, time) => {
