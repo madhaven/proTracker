@@ -163,14 +163,14 @@ const DatabaseService = class extends SingletonServiceBase {
             })
         }).then((currentDBVersion) => {
             const migFiles = this.dbVersionService.getMigrationFiles(currentDBVersion)
-            if (!migFiles)
-                return false
+            if (!migFiles) return false
 
             const upgradeQueries = migFiles.map(file => this.fileService.readFile(file))
             if (!upgradeQueries) return false
 
             return upgradeQueries.join('')
         }).then((migrationScript) => {
+            if (!migrationScript) return false
             db.exec(migrationScript, (err) => {
                 if (err) {
                     console.log('DatabaseService: Migration failed')
