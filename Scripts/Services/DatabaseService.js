@@ -5,25 +5,29 @@ const { FileService } = require("./FileService")
 const sql = require('sqlite3').verbose()
 const fs = require('fs')
 const path = require("path")
+const { DBVersionService } = require("./DBVersionService")
 
-const DatabaseService = class {
-    static singleton = undefined
+const DatabaseService = class extends SingletonServiceBase {
     dbPath = ''
 
-    constructor () {
-        var configs = ConfigService.getService()
-        this.dbPath = configs.get('dbPath')
+    constructor (
+        dbVersionService,
+        configService,
+        fileService
+    ) {
+        super()
+        this.configService = configService ?? ConfigService.getService()
+        this.dbVersionService = dbVersionService ?? DBVersionService.getService()
+        this.fileService = fileService ?? FileService
+        this.dbPath = this.configService.get('dbPath')
 
-        // try to restore if no DB file is found otherwise setup new
-        if (FileService.fileExists(this.dbPath)) {
-            this.tryMigrate()
+        if (!this.fileService.fileExists(this.dbPath)) {
+            if (!this.tryRestore())
+                this.initializeNewDB()
         } else {
-            const restoreFile = this._getLatestBackupFile()
-            if (restoreFile) {
-                console.log("DatabaseService: DB missing, restoring from backup")
-                this.restore(restoreFile)
-            } else {
-                this.initializeDB()
+            if (!this.tryBackup()) {
+                console.trace("DatabaseService: Unable to backup DB on startup.")
+                throw Error('DatabaseService: Unable to backup DB on startup.') // TODO: error handling mechanism
             }
         }
 
@@ -40,26 +44,23 @@ const DatabaseService = class {
         return this.singleton
     }
 
-    initializeDB () {
-        console.debug("DatabaseService: initializing DB", this.dbPath) // TODO: privacy violation?
-        const db = new sql.Database(this.dbPath)
+    initializeNewDB () {
+        const db = new sql.Database(this.dbPath) // TODO: change to common method
+            , initScript = this.dbVersionService.getLatestInitScript()
 
         try {
-            const query = FileService.readFile('./Scripts/DB/init.sql')
-            const dataQuery = FileService.readFile('./Scripts/DB/defaultData.sql')
+            const query = this.fileService.readFile(initScript)
             db.exec(query, err => {
                 if (err) {
-                    console.trace('DB init error', err)
-                } else console.debug("DatabaseService: init complete")
+                    console.error('DatabaseService: initialization error', err)
+                } else {
+                    console.debug("DatabaseService: DB initialized")
+                }
             })
-            db.exec(dataQuery, err => {
-                if (err) {
-                    console.trace('DB data error', err)
-                } else console.debug("DatabaseService: default data loaded")
-            })
-        } catch (err) {
-            console.trace('DatabaseService: error reading sql scripts', err)
-            dialog.showErrorBox('Fatal Database Error', 'proTracker was unable to setup a database on the machine')
+        } catch {
+            console.trace('DatabaseService: error while DB initialization')
+            dialog.showErrorBox('Fatal Database Error', 'proTracker was unable to setup a database on this machine')
+            db.close()
             app.exit()
         } finally {
             db.close()
@@ -72,7 +73,7 @@ const DatabaseService = class {
         return true
     }
 
-    insertOne(command, params=[]) {
+    async insertOne(command, params=[]) {
         return new Promise((resolve, reject) => {
             const db = new sql.Database(this.dbPath)
             db.run (command, params, function (err) { // this syntax of function definition is necessary
@@ -83,7 +84,7 @@ const DatabaseService = class {
         })
     }
 
-    exec (command, params=[]) {
+    async exec (command, params=[]) {
         return new Promise((resolve, reject) => {
             const db = new sql.Database(this.dbPath)
             db.run (command, params, function (err) { // this syntax of function definition is necessary
@@ -94,7 +95,7 @@ const DatabaseService = class {
         })
     }
 
-    getOne (query, params=[]) { 
+    async getOne (query, params=[]) { 
         return new Promise((resolve, reject) => {
             const db = new sql.Database(this.dbPath)
             db.get(query, params, function (err, res) { // this syntax of function definition is necessary
@@ -105,9 +106,9 @@ const DatabaseService = class {
         })
     }
     
-    fetch (query, params=[]) {
+    async fetch (query, params=[]) {
         return new Promise((resolve, reject) => {
-            const db = new sql.Database(this.dbPath)
+            const db = new sql.Database(this.dbPath) // TODO: move db objects into class-avoid re-instantiation
             db.all(query, params, function (err, res) { // this syntax of function definition is necessary
                 if (err) reject(err)
                 else resolve(res)
@@ -116,12 +117,12 @@ const DatabaseService = class {
         })
     }
 
-    backup (filePath) {
+    tryBackup (filePath) {
         var backupPath = filePath ?? this._getBackupPath()
         if (!backupPath) return false
         
         try {
-            FileService.copyOrReplace(this.dbPath, backupPath)
+            this.fileService.copyOrReplace(this.dbPath, backupPath)
             console.debug('DatabaseService: DB backup completed')
             return backupPath
         } catch {
@@ -130,12 +131,12 @@ const DatabaseService = class {
         }
     }
 
-    restore (filePath) {
+    tryRestore (filePath) {
         var backupPath = filePath ?? this._getLatestBackupFile()
         if (!backupPath) return false
 
         try {
-            FileService.copyOrReplace(backupPath, this.dbPath)
+            this.fileService.copyOrReplace(backupPath, this.dbPath)
             console.debug('DatabaseService: DB restore completed')
             return true
         } catch {
@@ -144,26 +145,50 @@ const DatabaseService = class {
         }
     }
 
-    tryMigrate () {
-        const backupFilePath = this.backup()
-        if (!backupFilePath) {
-            console.trace("DatabaseService: Unable to backup DB on startup.")
-            throw Error('DatabaseService: Unable to backup DB on startup.', backupFilePath) // TODO: error handling mechanism
-        }
+    tryMigrate (backupFilePath) {
+        backupFilePath ??= this._getBackupPath()
+        const db = new sql.Database(this.dbPath)
+        var migrationResult = false
+        
+        new Promise((resolve, reject) => {
+            // get current db
+            const query = `SELECT version FROM master`
+            db.get(query, (err, res)=> {
+                if (err || !res || !res.version) {
+                    console.error('DatabaseService: Unable to access core DB data')
+                    reject('err/no version access')
+                } else {
+                    resolve(res.version)
+                }
+            })
+        }).then((currentDBVersion) => {
+            const migFiles = this.dbVersionService.getMigrationFiles(currentDBVersion)
+            if (!migFiles) return false
 
-        // TODO: check db version and migrations
-        console.warn('DatabaseService: db version check || migrations')
-        const migrationSucceeded = true
+            const upgradeQueries = migFiles.map(file => this.fileService.readFile(file))
+            if (!upgradeQueries) return false
 
-        if (!migrationSucceeded) {
-            console.log('DatabaseService: Migration failed, Restoring DB')
-            this.restore(backupFilePath)
-        }
+            return upgradeQueries.join('')
+        }).then((migrationScript) => {
+            if (!migrationScript) return false
+            db.exec(migrationScript, (err) => {
+                if (err) {
+                    console.log('DatabaseService: Migration failed')
+                    throw Error('migrationFailed')
+                } else {
+                    console.log('DatabaseService: Successfully Migrated to', this.dbVersionService.getLatestVersion())
+                }
+            })
+        }).catch((err) => {
+            console.log('DatabaseService: Migration failed')
+            this.tryRestore() // TODO: causes clash with DB process ?
+        }).finally(() => {
+            db.close()
+        })
     }
 
     _getBackupPath () {
-        const configs = ConfigService.getService()
-            , date = new Date()
+        const date = new Date()
             , year = date.getFullYear()
             , month = (date.getMonth() + 1).toString().padStart(2, '0')
             , day = date.getDate().toString().padStart(2, '0' )
