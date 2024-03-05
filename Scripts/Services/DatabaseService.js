@@ -1,12 +1,14 @@
-const { dialog, app } = require("electron")
-const { ConfigService } = require("./ConfigService")
-const { EncryptionService } = require("./EncryptionService")
-const { FileService } = require("./FileService")
-const { SingletonServiceBase } = require("./SingletonServiceBase")
-const sql = require('sqlite3').verbose()
 const fs = require('fs')
+const sql = require('sqlite3').verbose()
 const path = require("path")
+const { dialog, app } = require("electron")
+
+const { FileService } = require("./FileService")
+const { ConfigService } = require("./ConfigService")
 const { DBVersionService } = require("./DBVersionService")
+const { EncryptionService } = require("./EncryptionService")
+const { SingletonServiceBase } = require("./SingletonServiceBase")
+
 
 const DatabaseService = class extends SingletonServiceBase {
     dbPath = ''

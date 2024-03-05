@@ -1,6 +1,7 @@
-const { dialog } = require("electron")
-const csv = require('fast-csv')
 const fs = require('fs')
+const csv = require('fast-csv')
+const { dialog } = require("electron")
+
 
 const FileService = class {
     static csv_options = [{ name: 'CSV Files', extensions: ['csv']}]

@@ -1,6 +1,8 @@
-const { dialog, app } = require('electron')
 const fs = require('fs')
+const { dialog, app } = require('electron')
+
 const { SingletonServiceBase } = require('./SingletonServiceBase')
+
 
 const ConfigService = class extends SingletonServiceBase {
     config = undefined
