@@ -35,19 +35,19 @@ const HabitProvider = class {
             , habit.days
         FROM habit LEFT JOIN habit_log hlog
         ON habit.id=hlog.habit_id GROUP BY habit_id
-        WHERE habitd.id=?;`
+        HAVING habit.id=?;`
         const params = [id]
         console.debug('HabitProvider: get')
         try {
             const res = await this.dbService.getOne(query, params)
             return res ? new Habit(
-                habit.id,
-                habit.name,
-                habit.removed,
-                habit.startTime,
-                habit.endTime,
-                habit.days,
-                habit.latest_log_time
+                res.id,
+                res.name,
+                res.removed,
+                res.startTime,
+                res.endTime,
+                res.days,
+                res.latest_log_time
             ) : false
         } catch (err) {
             console.trace("Habit: get", err)

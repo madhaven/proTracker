@@ -11,6 +11,8 @@
     --fg: grey;
     --green: rgb(0, 128, 0);
     --red: rgb(192, 0, 0);
+    --red1: #f001;
+    --red2: #f002;
 }
 
 html,
@@ -381,6 +383,26 @@ input:focus {
     background-color: var(--blackLayer1);
 }
 
+.pendingHabits {
+    list-style-type: none;
+    margin-bottom: 1em;
+    padding: 0;
+}
+.pendingHabitItem {
+    border: 1px solid transparent;
+    background-color: var(--red2);
+    margin-bottom: 1em;
+    padding: .5em 1em;
+    transition: .5s ease-out;
+    display: flex;
+    justify-content: space-between;
+}
+.pendingHabitItem:hover {
+    border: 1px solid var(--red);
+    transition: 0;
+    cursor: pointer;
+    color: var(--fg-strong);
+}
 .habitList {
     list-style-type: none;
     margin: 0;

@@ -116,6 +116,8 @@ const createProjectOnDay = (logDay, project) => {
     logProjectEditInput.addEventListener('blur', event => {
         projectEditHandler(event, project, logProjectEditInput.value, logProjectContent)
     })
+
+    // autoType projectName for new Log entry
     logProjectContent.addEventListener('click', () => {
         logInput.focus()
         projectInput.value = ""
@@ -235,6 +237,40 @@ const deHighlightTask = (taskId) => {
     tasks.forEach(task => {
         task.classList.remove('flashedTask')
     })
+}
+
+const getEditableInput = (parentElement, content, config={
+    itemType: 'div',
+    itemContentType: 'div',
+    buttonFirst: false
+}) => {
+    const editableItem = document.createElement(itemType)
+        , editableItemContent = document.createElement(itemContentType)
+        , editableItemInput = document.createElement('input')
+        , editableItemEditButton = document.createElement('span')
+        , makeItemEditable = item => {}
+    
+    editableItem.classList.add('editableItem')
+    editableItemContent.classList.add('editableItemContent')
+    editableItemInput.classList.add('editableItemInput')
+    editableItemEditButton.classList.add('editableItemEditButton')
+
+    editableItemContent.innerHTML = content
+    editableItemInput.value = content
+    editableItemInput.type = "text"
+    editableItemEditButton.innerHTML = editIconSVG
+    editableItemEditButton.addEventListener('click', event => {
+        makeItemEditable(item)
+    })
+    editableItemInput.addEventListener('input', event => { trimInput(event, false) })
+    editableItemInput.addEventListener('change', event => { trimInput(event, true) })
+    editableItemInput.addEventListener('change', editableItemInput.blur)
+    editableItemInput.addEventListener('blur', event => {
+        // edit handler
+    })
+
+    editableItem.appendChild(editableItemEditButton)
+    editableItem.appendChild()
 }
 
 const addHabitListeners = (newHabitItem) => {
@@ -387,23 +423,24 @@ const renderHabitsTab = (now = new Date()) => {
         habitControls.appendChild(editButton)
         habitControls.appendChild(trashButton)
 
+        // populate pending list
         if (today[0]!=lastLogDate[0] || today[1]!=lastLogDate[1] || today[2]!=lastLogDate[2]) {
             const habitItem = document.createElement('li')
                 , habitTitle = document.createElement('div')
                 , habitControls = document.createElement('div')
-                , doneButton = document.createElement('button')
-            habitItem.classList.add('habitItem')
+                // , doneButton = document.createElement('button')
+            habitItem.classList.add('pendingHabitItem')
             habitTitle.classList.add('habitTitle')
             habitControls.classList.add('habitControls')
             habitTitle.innerHTML = habit.name
-            doneButton.innerHTML = doneIconSVG
-            doneButton.addEventListener('click', event => {
+            // doneButton.innerHTML = doneIconSVG
+            habitItem.addEventListener('click', event => {
                 markHabitDone(habit.id, Date.now())
             })
             pendingHabitList.appendChild(habitItem)
             habitItem.appendChild(habitTitle)
             habitItem.appendChild(habitControls)
-            habitControls.appendChild(doneButton)
+            // habitControls.appendChild(doneButton)
         }
 
         if (pendingHabitList.length > 0)
@@ -585,7 +622,9 @@ const markHabitDone = (habitId, time) => {
         habitId, time,
         res => {
             uiState.addHabitLog(res)
+            console.log('reading last log tiem')
             uiState.habits[res.habitId].lastLogTime = res.dateTime
+            console.log('reading last log tiem complete')
             render()
         },
         err => {
