@@ -231,16 +231,18 @@ const createHabitHandler = async (event, title, startTime, endTime, frequency) =
 
 const habitDoneHandler = async (event, habitId, time) => {
     const habit = await HP.get(habitId)
-        , lastDay = new Date(habit.lastLogTime)
+        , lastDayLogged = new Date(habit.lastLogTime)
         , today = new Date()
 
-    if (today[0]!=lastDay[0] || today[1]!=lastDay[1] || today[2]!=lastDay[2]) {
+    if (today.getFullYear() == lastDayLogged.getFullYear()
+        && today.getMonth() == lastDayLogged.getMonth()
+        && today.getDate() == lastDayLogged.getDate()
+    ) {
+        throw Error("Already Logged Habit for the day") // TODO Notification
+    } else {
         habitLog = await HLP.create(new HabitLog(-1, habitId, time))
         return habitLog ?? false
-    } else {
-        throw Error("Already Logged Habit for the day") // TODO Notification
     }
-        
 }
 
 const deleteHabitHandler = async (event, habitId, time) => {
