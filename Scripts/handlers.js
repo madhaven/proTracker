@@ -186,7 +186,8 @@ const renderProjectsLogSheet = async (ws, projects, tasks, logs) => { // is it b
 
 const editProjectHandler = async (event, project) => {
     projectModel = new Project(project.id, project.name)
-    if (PP.getByName(project.name)) {
+    var projectInDB = await PP.getByName(projectModel.name)
+    if (projectInDB) {
         // TODO: create structured responses, false values limits the reasons for failure
         return false
     }
