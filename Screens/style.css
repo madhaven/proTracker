@@ -203,60 +203,6 @@ button:hover {
     display: flex;
     flex-direction: column;
 }
-.logTask,
-.stickyProjectStuff,
-.projectHeader {
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    display: flex;
-    justify-content: space-between;
-}
-.logTask:not(.editable) .logTaskEditInput,
-.logTask.editable .logTaskContent,
-.projectColumn:not(.editable) .logProjectEditInput,
-.projectColumn.editable .logProjectContent,
-.projectHeader:not(.editable) .projectEditInput,
-.projectHeader.editable .projectHeaderContent {
-    display: none;
-}
-.logTask input.logTaskEditInput,
-.projectRow input.logProjectEditInput,
-.projectHeader input.projectEditInput {
-    border: none;
-    padding: 0;
-    margin: auto;
-}
-.logTask .logTaskEditButton,
-.projectRow .logProjectEditButton,
-.projectHeader .projectEditButton {
-    color: var(--whiteLayer2);
-    opacity: 0;
-    visibility: hidden;
-    cursor: pointer;
-    transition: opacity .1s ease-out, visibility 0s linear .8s;
-    margin-top: auto;
-    margin-bottom: auto;
-}
-.logTask:not(.editable):hover .logTaskEditButton,
-.projectRow:not(.editable):hover .logProjectEditButton,
-.projectHeader:not(.editable):hover .projectEditButton {
-    opacity: 1;
-    visibility: visible;
-    transition: .1s ease-out, opacity .4s ease-out .8s, visibility 0s linear .8s;
-}
-.logTask .logTaskEditButton:hover,
-.logTask .logTaskEditButton:focus,
-.projectRow .logProjectEditButton:hover,
-.projectRow .logProjectEditButton:focus,
-.projectHeader .projectEditButton:hover,
-.projectHeader .projectEditButton:focus {
-    color: var(--whiteLayer3);
-}
-.logTask .logTaskEditButton:active,
-.projectRow .logProjectEditButton:active,
-.projectHeader .projectEditButton:active {
-    color: var(--fg-weak);
-}
 .today .logTaskContent,
 .logProjectContent,
 .projectHeaderContent {
@@ -281,10 +227,6 @@ button:hover {
 }
 .flashedTask {
     background-color: var(--whiteLayer1);
-}
-.logTaskContent {
-    word-wrap: break-word;
-    overflow-wrap: break-word;
 }
 
 .daysProjects {
@@ -336,6 +278,47 @@ input:focus {
     border-bottom: 2px solid var(--whiteLayer3);
     transition: .2s ease-out;
 }
+
+/* #region editableItem */
+
+.editableItem {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    display: flex;
+    justify-content: space-between;
+}
+.editableItem.editable .editableItemContent,
+.editableItem:not(.editable) .editableItemInput {
+    display: none;
+}
+input.editableItemInput {
+    border: none;
+    padding: 0;
+    margin: auto;
+}
+.editableItemEditButton {
+    color: var(--whiteLayer2);
+    opacity: 0;
+    visibility: hidden;
+    cursor: pointer;
+    transition: opacity .1s ease-out, visibility 0s linear .8s;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+.editableItem:not(.editable):hover .editableItemEditButton {
+    opacity: 1;
+    visibility: visible;
+    transition: .1s ease-out, opacity .4s ease-out .8s, visibility 0s linear .8s;
+}
+.editableItemEditButton:hover,
+.editableItemEditButton:focus {
+    color: var(--whiteLayer3);
+}
+.editableItemEditButton:active {
+    color: var(--fg-weak);
+}
+
+/* #endregion */
 
 #projectList,
 .taskList {

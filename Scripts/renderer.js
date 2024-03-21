@@ -87,84 +87,54 @@ const createOrFindDay = (date) => {
 const createProjectOnDay = (logDay, project) => {
     const projectRow = document.createElement('div')
         , projectColumn = document.createElement('div')
-        , stickyProjectStuff = document.createElement('div')
-        , logProjectContent = document.createElement('div')
-        , logProjectEditInput = document.createElement('input')
-        , logProjectEditButton = document.createElement('span')
-        , projectsTasks = document.createElement('div')
-        , projectInput = document.querySelector('#newLogProject')
+        , tasksColumn = document.createElement('div')
+        , newProjectInput = document.querySelector('#newLogProject')
         , logInput = document.querySelector('#newLogTask')
+        , stickyProjectStuff = makeEditableInput({
+            value: project.name,
+            editButtonFirst: true,
+            itemClasses: ["stickyProjectStuff"],
+            itemContentClasses: ["logProjectContent"],
+            itemInputClasses: ["logProjectEditInput"],
+            itemButtonClasses: ["logProjectEditButton"],
+            eventListeners: {
+                // autoType projectName for new Log entry
+                'click': event => {
+                    logInput.focus()
+                    newProjectInput.value = ""
+                    setTimeout(() => { autoTypeProject(project.name, newProjectInput) }, 250);
+                }
+            },
+            editHandler: (event, input, uiUpdater) => {
+                projectEditHandler(event, project, input, uiUpdater)
+            }
+        })
     
     projectRow.classList.add('projectRow')
     projectColumn.classList.add('projectColumn')
-    stickyProjectStuff.classList.add('stickyProjectStuff')
-    logProjectContent.classList.add('logProjectContent')
-    logProjectEditInput.classList.add('logProjectEditInput')
-    logProjectEditButton.classList.add('logProjectEditButton')
-    projectsTasks.classList.add('projectsTasks')
-    
-    logProjectContent.innerHTML = project.name
-    logProjectEditInput.value = project.name
-    logProjectEditInput.type = 'text'
-    logProjectEditButton.innerHTML = editIconSVG
-    logProjectEditButton.addEventListener('click', event => {
-        makeProjectEditable(event, project, projectRow)
-    })
-    logProjectEditInput.addEventListener('input', event => { trimInput(event, false) })
-    logProjectEditInput.addEventListener('change', event => { trimInput(event, true) })
-    logProjectEditInput.addEventListener('change', logProjectEditInput.blur)
-    logProjectEditInput.addEventListener('blur', event => {
-        projectEditHandler(event, project, logProjectEditInput.value, logProjectContent)
-    })
-
-    // autoType projectName for new Log entry
-    logProjectContent.addEventListener('click', () => {
-        logInput.focus()
-        projectInput.value = ""
-        setTimeout(() => { autoTypeProject(project.name, projectInput) }, 250);
-    })
+    tasksColumn.classList.add('projectsTasks')
 
     projectRow.appendChild(projectColumn)
     projectColumn.appendChild(stickyProjectStuff)
-    stickyProjectStuff.appendChild(logProjectEditButton)
-    stickyProjectStuff.appendChild(logProjectEditInput)
-    stickyProjectStuff.appendChild(logProjectContent)
-    projectRow.appendChild(projectsTasks)
+    projectRow.appendChild(tasksColumn)
     logDay.querySelector('.daysProjects').appendChild(projectRow)
     return projectRow
 }
 
 const createTaskInElement = (element, task) => {
-    const logTask = document.createElement('div')
-        , logTaskContent = document.createElement('div')
-        , logTaskEditInput = document.createElement('input')
-        , logTaskEditButton = document.createElement('span')
-
-    logTask.classList.add('logTask')
-    logTask.classList.add('logTask_' + task.id)
-    logTaskContent.classList.add('logTaskContent')
-    logTaskEditInput.classList.add('logTaskEditInput')
-    logTaskEditButton.classList.add('logTaskEditButton')
-
-    logTaskContent.innerHTML = task.summary
-    logTaskEditInput.value = task.summary
-    logTaskEditInput.type = 'text'
-    logTaskEditButton.innerHTML = editIconSVG
-    logTaskEditButton.addEventListener('click', event => {
-        makeTaskEditable(event, task, logTask)
-    })
-    logTaskEditInput.addEventListener('input', event => { trimInput(event, false) })
-    logTaskEditInput.addEventListener('change', event => { trimInput(event, true) })
-    logTaskEditInput.addEventListener('change', logTaskEditInput.blur)
-    logTaskEditInput.addEventListener('blur', event => {
-        taskEditHandler(event, task, logTaskEditInput.value, logTask)
+    const logTask = makeEditableInput({
+        value: task.summary,
+        itemClasses: ['logTask', 'logTask_'+task.id],
+        itemContentClasses: ['logTaskContent'],
+        itemInputClasses: ['logTaskEditInput'],
+        itemButtonClasses: ['logTaskEditButton'],
+        editHandler: (event, input, UiUpdater) => {
+            taskEditHandler(event, task, input, UiUpdater)
+        }
     })
 
-    logTask.appendChild(logTaskContent)
-    logTask.appendChild(logTaskEditInput)
-    logTask.appendChild(logTaskEditButton)
     element.appendChild(logTask)
-    return logTaskContent
+    return logTask
 }
 
 const decorateTaskContent = (logTask, log) => {
@@ -239,38 +209,68 @@ const deHighlightTask = (taskId) => {
     })
 }
 
-const getEditableInput = (parentElement, content, config={
+const makeEditableInput = (config={
+    value: 'editable stuff',
     itemType: 'div',
+    itemClasses: [],
     itemContentType: 'div',
-    buttonFirst: false
+    itemContentClasses: [],
+    itemInputClasses: [],
+    itemButtonClasses: [],
+    editButtonFirst: false,
+    eventListeners: {},
+    editHandler: (event, newValue, uiUpdater) => { return false }
 }) => {
-    const editableItem = document.createElement(itemType)
-        , editableItemContent = document.createElement(itemContentType)
+    const editableItem = document.createElement(config.itemType ?? 'div')
+        , editableItemContent = document.createElement(config.itemContentType ?? 'div')
         , editableItemInput = document.createElement('input')
         , editableItemEditButton = document.createElement('span')
-        , makeItemEditable = item => {}
+        , uiUpdater = () => { editableItem.classList.remove('editable') }
+        , makeItemEditable = () => {
+            editableItemInput.value = editableItemContent.innerHTML
+            editableItem.classList.add('editable')
+            editableItemInput.focus()
+        }
+    
+    config.itemClasses ??= []
+    config.itemContentClasses ??= []
+    config.itemInputClasses ??= []
+    config.itemButtonClasses ??= []
+    config.eventListeners ??= {}
     
     editableItem.classList.add('editableItem')
+    config.itemClasses.forEach(x => { editableItem.classList.add(x) })
     editableItemContent.classList.add('editableItemContent')
+    config.itemContentClasses.forEach(x => { editableItemContent.classList.add(x) })
     editableItemInput.classList.add('editableItemInput')
+    config.itemInputClasses.forEach(x => { editableItemInput.classList.add(x) })
     editableItemEditButton.classList.add('editableItemEditButton')
+    config.itemButtonClasses.forEach(x => { editableItemEditButton.classList.add(x) });
 
-    editableItemContent.innerHTML = content
-    editableItemInput.value = content
+    editableItemContent.innerHTML = config.value
+    editableItemInput.value = config.value
     editableItemInput.type = "text"
     editableItemEditButton.innerHTML = editIconSVG
     editableItemEditButton.addEventListener('click', event => {
-        makeItemEditable(item)
+        makeItemEditable()
     })
     editableItemInput.addEventListener('input', event => { trimInput(event, false) })
     editableItemInput.addEventListener('change', event => { trimInput(event, true) })
     editableItemInput.addEventListener('change', editableItemInput.blur)
     editableItemInput.addEventListener('blur', event => {
-        // edit handler
+        config.editHandler(event, editableItemInput.value, uiUpdater)
     })
+    for (var event in config.eventListeners) {
+        editableItemContent.addEventListener(event, config.eventListeners[event])
+    }
 
-    editableItem.appendChild(editableItemEditButton)
-    editableItem.appendChild()
+    editableItem.appendChild(editableItemContent)
+    editableItem.appendChild(editableItemInput)
+    config.editButtonFirst ?? false
+        ? editableItem.insertBefore(editableItemEditButton, editableItemContent)
+        : editableItem.appendChild(editableItemEditButton)
+
+    return editableItem
 }
 
 const addHabitListeners = (newHabitItem) => {
@@ -307,8 +307,9 @@ const renderLogTab = async () => {
                     const log = uiState.logTree[day][projectId][taskId]
                         , task = uiState.tasks[taskId]
                         , taskRow = createTaskInElement(taskContainer, task)
-                    decorateTaskContent(taskRow, log)
-                    addTaskListeners(taskRow, log, task, day)
+                        , taskRowContent = taskRow.querySelector('.editableItemContent')
+                    decorateTaskContent(taskRowContent, log)
+                    addTaskListeners(taskRowContent, log, task, day)
                 }
             }
         }
@@ -324,17 +325,14 @@ const renderProjectTab = async () => {
     for (const projectId in uiState.projectTree) {
         const project = uiState.projects[projectId]
             , projectItem = document.createElement('li')
-            , projectHeader = document.createElement('h3')
-            , projectHeaderContent = document.createElement('div')
-            , projectEditButton = document.createElement('span')
-            , projectEditInput = document.createElement('input')
             , taskList = document.createElement('ul')
 
         for (const taskId in uiState.projectTree[projectId]) {
             const task = uiState.tasks[taskId]
                 , statusId = uiState.projectTree[projectId][taskId]
                 , taskItem = document.createElement('li')
-                , logTaskContent = createTaskInElement(taskItem, task)
+                , logTask = createTaskInElement(taskItem, task)
+                , logTaskContent = logTask.querySelector('.editableItemContent')
             decorateTaskContent(logTaskContent, {'statusId': statusId})
             addTaskLocatorsOnProjectPage(logTaskContent, task)
             taskList.appendChild(taskItem)
@@ -346,32 +344,21 @@ const renderProjectTab = async () => {
             taskList.classList.add('hidden')
         }
         taskList.classList.add('taskList')
-        projectHeader.classList.add('projectHeader')
-        projectHeaderContent.classList.add('projectHeaderContent')
-        projectEditButton.classList.add('projectEditButton')
-        projectEditInput.classList.add('projectEditInput')
-
-        projectHeaderContent.innerHTML = project.name
-        projectHeaderContent.addEventListener('click', event => {
-            projectItemClick(event, projectItem, project)
+        const projectHeader = makeEditableInput({
+            value: project.name,
+            itemType: 'h3',
+            itemClasses: ['projectHeader'],
+            itemContentType: 'div',
+            itemContentClasses: ['projectHeaderContent'],
+            editButtonFirst: false,
+            eventListeners: {
+                'click': event => { projectItemClick(event, projectItem, project) }
+            },
+            editHandler: (event, input, UiUpdater) => {
+                projectEditHandler(event, project, input, UiUpdater)
+            }
         })
-        projectEditInput.value = project.name
-        projectEditInput.type = 'text'
-        projectEditButton.innerHTML = editIconSVG
-        projectEditButton.addEventListener('click', event => {
-            makeProjectTitleEditable(event, project, projectHeader) // TODO
-        })
-        projectEditInput.addEventListener('input', event => { trimInput(event, false) })
-        projectEditInput.addEventListener('change', event => { trimInput(event, true) })
-        projectEditInput.addEventListener('change', projectEditInput.blur)
-        projectEditInput.addEventListener('blur', event => {
-            projectEditHandler(event, project, projectEditInput.value, projectHeaderContent)
-        })
-        
         projectItem.appendChild(projectHeader)
-        projectHeader.appendChild(projectHeaderContent)
-        projectHeader.appendChild(projectEditInput)
-        projectHeader.appendChild(projectEditButton)
         projectItem.appendChild(taskList)
         projectList.appendChild(projectItem)
     }
@@ -660,27 +647,6 @@ const projectItemClick = (event, element, project) => {
     localStorage.setItem('foldedProjects', JSON.stringify(uiState.foldedProjects))
 }
 
-const makeProjectTitleEditable = (event, project, projectHeader) => {
-    const projectEditInput = projectHeader.querySelector('.projectEditInput')
-    projectEditInput.value = project.name
-    projectHeader.classList.add('editable')
-    projectEditInput.focus()
-}
-
-const makeProjectEditable = (event, project, projectRow) => {
-    const logProjectEditInput = projectRow.querySelector('.logProjectEditInput')
-    logProjectEditInput.value = project.name
-    projectRow.querySelector('.projectColumn').classList.add('editable')
-    logProjectEditInput.focus()
-}
-
-const makeTaskEditable = (event, task, logTask) => {
-    const logTaskEditInput = logTask.querySelector('.logTaskEditInput')
-    logTaskEditInput.value = task.summary
-    logTask.classList.add('editable')
-    logTaskEditInput.focus()
-}
-
 const trackIdle = () => {
     ['mousemove', 'mousedown', 'drag', 'keypress', 'scroll'].forEach(event => {
         document.addEventListener(event, () => { uiState.inactiveDuration = 0 })
@@ -701,7 +667,7 @@ const trackIdle = () => {
 
 // #region COMMS
 
-const projectEditHandler = (event, project, newName, editableElement) => {
+const projectEditHandler = (event, project, newName, uiUpdater) => {
     comms.editProject(
         {id:project.id, name:newName},
         res => {
@@ -709,31 +675,34 @@ const projectEditHandler = (event, project, newName, editableElement) => {
                 uiState.projects[project.id].name = newName
             } else {
                 // TODO: create structured responses, false values limits the reasons for failure
-                console.warn('Yo wtf, that name already exists!')
-                alert(`A project with the name '${newName}' already exists`) // TODO: CREATE APP NOTIFICATION
+                // console.warn('Yo wtf, that name already exists!')
+                alert(`Something went wrong.`) // TODO: CREATE APP NOTIFICATION
             }
-            editableElement.classList.remove('editable')
+            uiUpdater()
             render()
         },
         err => {
             console.error('Unable to edit Project due to an internal error')
-            editableElement.classList.remove('editable')
+            uiUpdater()
         }
     )
 }
 
-const taskEditHandler = (event, task, newSummary, taskElement) => {
+const taskEditHandler = (event, task, newSummary, uiUpdater) => {
     comms.editTask(
         {id: task.id, summary: newSummary},
         res => { // TODO: document responses
-            taskElement.classList.remove('editable')
-            if (!res) console.error('Unable to edit Task') // TODO notification
-            uiState.tasks[task.id].summary = newSummary
+            if (res) {
+                uiState.tasks[task.id].summary = newSummary
+            } else {
+                console.error('Something went wrong.') // TODO notification
+            }
+            uiUpdater()
             render()
         },
         err => {
             console.error('Unable to edit Task due to an internal error') // TODO notification
-            taskElement.classList.remove('editable')
+            uiUpdater()
         }
     )
 }
