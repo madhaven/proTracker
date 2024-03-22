@@ -374,8 +374,8 @@ const renderHabitsTab = (now = new Date()) => {
     
     habitList.innerHTML = ""
     pendingHabitList.innerHTML = ""
-    for (const habitId in uiState.habits) {
 
+    for (const habitId in uiState.habits) {
         // create Habit item
         const habit = uiState.habits[habitId]
             , lastLog = new Date(habit.lastLogTime ?? 0)

@@ -81,12 +81,12 @@ const HabitProvider = class {
             , habit.start_time
             , habit.end_time
             , habit.days
-        FROM habit LEFT JOIN habit_log hlog
-        ON habit.id=hlog.habit_id GROUP BY habit_id;`
+        FROM habit LEFT JOIN habit_log hlog ON habit.id=hlog.habit_id
+        GROUP BY habit_id;`
         console.debug('HabitProvider: getAllHabits')
         try {
             const res = await this.dbService.fetch(query)
-            const result = res.map(habit => new Habit(
+            return res ? res.map(habit => new Habit(
                 habit.id,
                 habit.name,
                 habit.removed,
@@ -94,8 +94,7 @@ const HabitProvider = class {
                 habit.endTime,
                 habit.days,
                 habit.latest_log_time
-            ))
-            return res ? result : false
+            )) : false
         } catch (err) {
             console.trace('HabitProvider: getAllHabits', err)
         }

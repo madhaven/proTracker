@@ -382,7 +382,7 @@ input.editableItemInput {
 }
 .pendingHabitItem:hover {
     border: 1px solid var(--red);
-    transition: 0;
+    transition: .1s;
     cursor: pointer;
     color: var(--fg-strong);
 }
