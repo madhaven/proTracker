@@ -4,13 +4,21 @@
   "description": "app to track tasks",
   "main": "./Scripts/eMain.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "cd pUIng && npm run build",
+    "buildnstart": "cd pUIng && npm run build && cd .. && npm run start",
     "start": "electron .",
-    "make": "electron-forge make",
-    "clean": "del proTracker*.db appconfig.json proTracker.log",
+    
     "debug": "electron . --inspect=5858",
-    "cleandebug": "del proTracker*.db appconfig.json proTracker.log && electron . --inspect=5858",
-    "package": "electron-forge package"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    
+    "clean": "del proTracker*.db appconfig.json proTracker.log",
+    "cleandebug": "del proTracker*.db appconfig.json proTracker.log && npm run debug",
+
+    "make": "electron-forge make",
+    "package": "electron-forge package",
+    
+    "postinstall": "npm install ./pUIng/package.json",
+    "install:pUIng": "cd pUIng && npm install"
   },
   "repository": {
     "type": "git",
