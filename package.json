@@ -7,18 +7,13 @@
     "build": "cd pUIng && npm run build",
     "buildnstart": "cd pUIng && npm run build && cd .. && npm run start",
     "start": "electron .",
-    
     "debug": "electron . --inspect=5858",
     "test": "echo \"Error: no test specified\" && exit 1",
-    
     "clean": "del proTracker*.db appconfig.json proTracker.log",
     "cleandebug": "del proTracker*.db appconfig.json proTracker.log && npm run debug",
-
     "make": "electron-forge make",
     "package": "electron-forge package",
-    
-    "postinstall": "npm install ./pUIng/package.json",
-    "install:pUIng": "cd pUIng && npm install"
+    "postinstall": "npm install ./pUIng/"
   },
   "repository": {
     "type": "git",
@@ -48,6 +43,7 @@
     "electron-squirrel-startup": "^1.0.0",
     "exceljs": "^4.3.0",
     "fast-csv": "^4.3.6",
+    "pUIng": "file:pUIng",
     "sqlite3": "^5.1.6"
   }
 }
