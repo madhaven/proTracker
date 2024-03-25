@@ -45,11 +45,15 @@ const createWindow = () => {
         show: false,
         autoHideMenuBar: true
     })
+    
     setupServices()
     registerHandlers(win)
     win.removeMenu()
-    // win.loadFile('./Screens/index.html')
-    win.loadFile("./pUIng/dist/pUIng/browser/index.html")
+    if (debugMode)
+        win.loadURL("http://localhost:4200")
+    else
+        win.loadFile("./pUIng/dist/pUIng/browser/index.html")
+        // win.loadFile('./Screens/index.html')
     win.webContents.on('did-finish-load', () => {
         state = initialState()
         mainWindow.webContents.send('updateUI', state)
