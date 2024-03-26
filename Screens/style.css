@@ -15,32 +15,11 @@
     --red2: #f002;
 }
 
-html,
-body {
-    color: var(--fg);
-    background-color: var(--bg);
-    margin: 0;
-    padding: 0;
-    top: 0;
-    left: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    scroll-behavior: smooth;
-    transition: .2s;
-    overflow: hidden;
-}
 .mainContainer {
     width: 100vw;
     min-height: 100vh;
     height: 100%;
     overflow-x: hidden;
-}
-
-h1 {
-    font-weight: bold;
-}
-h1, h2 {
-    font-family: 'Courier New', Courier, monospace;
-    text-align: center;
 }
 
 button {

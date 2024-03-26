@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'pui-main-menu',
@@ -9,4 +9,17 @@ import { Component } from '@angular/core';
 })
 export class MainMenuComponent {
 
+  menuVisible: boolean;
+  uiState = input({menuVisible: false})
+
+  constructor() {
+    this.menuVisible = true; // TODO: ng get state variables
+  }
+
+  // handles the open and close of the sidebar
+  toggleMenuBar(visible:boolean|null = null) {
+    this.menuVisible = visible == null
+      ? !this.menuVisible
+      : visible
+  }
 }

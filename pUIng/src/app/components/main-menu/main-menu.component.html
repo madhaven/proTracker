@@ -1,5 +1,5 @@
-<div id="sideHandle">...</div>
-<aside id="sideBar">
+<div id="sideHandle" (click)="toggleMenuBar()">...</div>
+<aside id="sideBar" [class.sideBar_open]="menuVisible">
     <div class="menu container">
         <ul class="menuButtons">
             <!-- <li id="load" class="menuButton" tabindex="1">
