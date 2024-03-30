@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { UiStateService } from '../../services/ui-state.service';
 
 @Component({
   selector: 'pui-tabs-log',
@@ -9,4 +10,9 @@ import { Component } from '@angular/core';
 })
 export class TabsLogComponent {
 
+  uiStateService:UiStateService
+
+  constructor(uiStateService: UiStateService) {
+    this.uiStateService = uiStateService
+  }
 }
