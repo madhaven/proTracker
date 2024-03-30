@@ -1,0 +1,25 @@
+.projectRow {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    border-radius: .5em;
+    transition: .1s linear;
+}
+.projectColumn {
+    width: 41.1355%;
+    text-align: right;
+    padding: 0 0.5em 0 0.5em;
+}
+.projectColumn input {
+    text-align: right;
+}
+.stickyProjectStuff {
+    position: sticky;
+    top: 3em;
+}
+.logProjectContent {
+    cursor: pointer;
+}
+.projectsTasks {
+    width: 58.82%;
+}

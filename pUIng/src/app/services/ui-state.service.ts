@@ -50,6 +50,10 @@ export class UiStateService {
       ["2024,2,21", new Map([[1, new Map([[2, {"id":13,"taskId":2,"statusId":1,"dateTime":1711032863583}]])]])],
       ["2024,2,30", new Map([[1, new Map([[2, {"id":13,"taskId":2,"statusId":1,"dateTime":1711032863583}]])]])],
     ])
+    this.tasks = new Map<number, Task>([
+      [1, {"id":1,"projectId":1,"summary":"aa","parentId":-1}],
+      [2, {"id":2,"projectId":1,"summary":"llkjhasdf","parentId":-1}],
+    ])
   }
 
   getLogTree() {

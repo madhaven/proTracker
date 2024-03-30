@@ -1,0 +1,13 @@
+<div class="projectRow">
+    <div class="projectColumn">
+        <div class="stickyProjectStuff">
+            <span class="logProjectEditButton"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16"></svg></span>
+            <input class="logProjectEditInput" type="text">
+            <div class="logProjectContent">TODO</div>
+        </div>
+    </div>
+    <div class="projectsTasks">
+        <pui-task-row *ngFor="let taskLog of tree | keyvalue" [taskId]="taskLog.key" [taskLog]="taskLog.value"></pui-task-row>
+    </div>
+</div>
+

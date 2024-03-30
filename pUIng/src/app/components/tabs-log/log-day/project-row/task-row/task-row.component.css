@@ -1,0 +1,54 @@
+.logTask:hover,
+.logTask:focus-within {
+    background-color: var(--blackLayer1);
+    transition-delay: .2s;
+}
+.logTask {
+    width: 100%;
+    transition: .2s ease-out;
+    border-radius: .5em;
+    padding: 0 .5em 0 .5em;
+}
+.logTaskContent.pending {
+    color: var(--red);
+}
+.logTaskContent.completed {
+    color: var(--green);
+}
+
+.editableItem {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    display: flex;
+    justify-content: space-between;
+}
+.editableItem.editable .editableItemContent,
+.editableItem:not(.editable) .editableItemInput {
+    display: none;
+}
+input.editableItemInput {
+    border: none;
+    padding: 0;
+    margin: auto;
+}
+.editableItemEditButton {
+    color: var(--whiteLayer2);
+    opacity: 0;
+    visibility: hidden;
+    cursor: pointer;
+    transition: opacity .1s ease-out, visibility 0s linear .8s;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+.editableItem:not(.editable):hover .editableItemEditButton {
+    opacity: 1;
+    visibility: visible;
+    transition: .1s ease-out, opacity .4s ease-out .8s, visibility 0s linear .8s;
+}
+.editableItemEditButton:hover,
+.editableItemEditButton:focus {
+    color: var(--whiteLayer3);
+}
+.editableItemEditButton:active {
+    color: var(--fg-weak);
+}
