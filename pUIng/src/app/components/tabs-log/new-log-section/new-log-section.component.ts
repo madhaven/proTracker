@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'pui-new-log-section',
@@ -8,5 +8,7 @@ import { Component } from '@angular/core';
   styleUrl: './new-log-section.component.css'
 })
 export class NewLogSectionComponent {
+
+  @Input() logsExist:boolean = false
 
 }
