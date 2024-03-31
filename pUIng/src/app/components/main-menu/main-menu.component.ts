@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, input, Optional, SkipSelf, ViewChild } from '@angular/core';
+import { Component, ElementRef, Output, ViewChild, EventEmitter } from '@angular/core';
 import { UiStateService } from '../../services/ui-state.service';
 import { MenuTabs } from '../common/menu-tabs';
 
@@ -14,11 +14,27 @@ export class MainMenuComponent {
   uiStateService:UiStateService
   
   @ViewChild("inputsArea") inputsArea!: ElementRef;
+  @Output() tabSwitch: EventEmitter<MenuTabs> = new EventEmitter(true)
   logChart: MenuTabs = MenuTabs.TaskLogs
+  habits: MenuTabs = MenuTabs.Habits
+  projects: MenuTabs = MenuTabs.Projects
+  export: MenuTabs = MenuTabs.Export
 
   constructor(uistateService: UiStateService) {
     this.uiStateService = uistateService
     this.menuVisible = true; // TODO: ng get state variables
+  }
+
+  switchToTab(tab:MenuTabs) {
+    
+    if (tab == MenuTabs.Export) {
+      ;// TODO: ng Export
+    } else {
+      this.uiStateService.switchTab(tab)
+      this.tabSwitch.emit(tab)
+      if (tab == MenuTabs.TaskLogs)
+        this.inputsArea.nativeElement.scrollIntoView({ behavior: "smooth" })
+    }
   }
 
   // handles the open and close of the sidebar
@@ -26,17 +42,5 @@ export class MainMenuComponent {
     this.menuVisible = visible == null
       ? !this.menuVisible
       : visible
-  }
-
-  switchToTab(tab:MenuTabs) {
-    if (tab == MenuTabs.TaskLogs) {
-      console.log(this.inputsArea)
-      this.inputsArea.nativeElement.scrollIntoView({ behavior: "smooth", block: "start" })
-      this.uiStateService.switchTab(MenuTabs.TaskLogs)
-    // } else if (tab == MenuTabs.Export) {
-    //   ;// TODO: ng Export
-    } else {
-      this.uiStateService.switchTab(MenuTabs.Habits)
-    }
   }
 }

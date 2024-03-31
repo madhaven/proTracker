@@ -15,8 +15,4 @@ export class ProjectRowComponent {
   @Input() projectId!: number
   @Input() tree!: Map<number, TaskLog>
 
-  ngOnInit() {
-    console.log('projectrow tree', this.tree)
-    console.log('projectrow [projetid', this.projectId)
-  }
 }
