@@ -3,7 +3,7 @@
     <div class="daysProjects">
         <div class="projectRow">
             <div class="projectColumn">
-                <div class="sickyProjectContent">
+                <div class="stickyProjectContent">
                     <input
                     type="text"
                     name="Project"
@@ -11,7 +11,10 @@
                     autocomplete
                     required
                     title="Parent Task/Project"
-                    placeholder="{{logsExist ? '' : 'Add a New Project'}}">
+                    placeholder="{{logsExist ? '' : 'Add a New Project'}}"
+                    #newLogProject
+                    (input)="trimInput(newLogProject, false)"
+                    (change)="trimInput(newLogProject, true)">
                 </div>
             </div>
             <div class="projectsTasks">
@@ -21,7 +24,10 @@
                     name="Task"
                     id="newLogTask"
                     title="Task"
-                    placeholder="{{logsExist ? '' : 'with a new task'}}">
+                    placeholder="{{logsExist ? '' : 'with a new task'}}"
+                    #newLogTask
+                    (input)="trimInput(newLogTask, false)"
+                    (change)="trimInput(newLogTask, true)">
                 </div>
             </div>
         </div>

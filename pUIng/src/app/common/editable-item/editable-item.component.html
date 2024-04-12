@@ -7,6 +7,7 @@
     #editableInput
     type="text"
     class="editableItemInput"
+    [class.alignRight]="isButtonOnLeft"
     (change)="inputChanged($event)"
     (blur)="tryUpdate($event)"
     value="{{content}}"

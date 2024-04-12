@@ -12,8 +12,8 @@ import { FormsModule } from '@angular/forms';
 })
 export class EditableItemComponent {
   @Input() content!: string
+  @Input() isButtonOnLeft: boolean = false
   isItemEditable: boolean = false
-  isButtonOnLeft: boolean = false
   @ViewChild('editableInput') inputItem!: ElementRef;
 
   tryUpdate(event: Event): void {

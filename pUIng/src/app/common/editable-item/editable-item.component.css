@@ -34,3 +34,13 @@ input.editableItemInput {
 .editableItemEditButton:active {
     color: var(--fg-weak);
 }
+
+.editableItem:hover,
+.editableItem:focus-within {
+    background-color: var(--blackLayer1);
+    transition-delay: .2s;
+}
+
+.alignRight {
+    text-align: right;
+}

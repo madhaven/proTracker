@@ -11,4 +11,9 @@ export class NewLogSectionComponent {
 
   @Input() logsExist:boolean = false
 
+  trimInput(target: HTMLInputElement, leftOrRight: boolean): void {
+    target.value = leftOrRight
+      ? target.value.trim()
+      : target.value.trimStart()
+  }
 }
