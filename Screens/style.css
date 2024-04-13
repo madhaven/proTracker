@@ -1,20 +1,3 @@
-:root {
-    --bg: #181818ff;
-    --whiteLayer1: #fff1;
-    --whiteLayer2: #fff2;
-    --whiteLayer3: #fff4;
-    --blackLayer1: #0003;
-    --blackLayer2: #0006;
-    --blackLayer3: #000c;
-    --fg-strong: white;
-    --fg-weak: #fff8;
-    --fg: grey;
-    --green: rgb(0, 128, 0);
-    --red: rgb(192, 0, 0);
-    --red1: #f001;
-    --red2: #f002;
-}
-
 .mainContainer {
     width: 100vw;
     min-height: 100vh;
@@ -34,19 +17,6 @@ button:hover {
     transition: .25s ease-out;
     background-color: var(--whiteLayer1);
     color: var(--fg-strong);
-}
-
-.menuTab {
-    display: none;
-    width: 100%;
-    height: 100vh;
-    overflow-y: auto;
-}
-.menuTab > :first-child {
-    margin-top: 2em;
-}
-.menuTab > :last-child {
-    margin-bottom: 10em;
 }
 
 .logChart {
@@ -69,10 +39,6 @@ button:hover {
 .logChart .logDay.today {
     border-bottom: none;
 }
-.stickyDate, .stickyProjectStuff {
-    position: sticky;
-    top: 3em;
-}
 .logChart .logDate {
     width: 15%;
 }
@@ -82,7 +48,6 @@ button:hover {
     flex-direction: column;
 }
 .today .logTaskContent,
-.logProjectContent,
 .projectHeaderContent {
     cursor: pointer;
 }
@@ -91,11 +56,6 @@ button:hover {
 }
 .logTaskContent.completed {
     color: var(--green);
-}
-.logDay:not(#inputs) .logTask:hover,
-.logDay:not(#inputs) .logTask:focus-within {
-    background-color: var(--blackLayer1);
-    transition-delay: .2s;
 }
 .logTask {
     width: 100%;
@@ -135,68 +95,6 @@ button:hover {
     padding: 0 !important;
     border: none !important;
 }
-input {
-    background-color: transparent;
-    border: none;
-    border-bottom: 2px solid transparent;
-    color: var(--fg);
-    height: 100%;
-    width: 100%;
-    padding: .25em 0em;
-    transition: .1s;
-    outline: none;
-}
-input:hover {
-    border-bottom: 2px solid var(--whiteLayer1);
-    transition: .2s ease-out;
-    outline: none;
-}
-input:focus {
-    outline: none;
-    border-bottom: 2px solid var(--whiteLayer3);
-    transition: .2s ease-out;
-}
-
-/* #region editableItem */
-
-.editableItem {
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    display: flex;
-    justify-content: space-between;
-}
-.editableItem.editable .editableItemContent,
-.editableItem:not(.editable) .editableItemInput {
-    display: none;
-}
-input.editableItemInput {
-    border: none;
-    padding: 0;
-    margin: auto;
-}
-.editableItemEditButton {
-    color: var(--whiteLayer2);
-    opacity: 0;
-    visibility: hidden;
-    cursor: pointer;
-    transition: opacity .1s ease-out, visibility 0s linear .8s;
-    margin-top: auto;
-    margin-bottom: auto;
-}
-.editableItem:not(.editable):hover .editableItemEditButton {
-    opacity: 1;
-    visibility: visible;
-    transition: .1s ease-out, opacity .4s ease-out .8s, visibility 0s linear .8s;
-}
-.editableItemEditButton:hover,
-.editableItemEditButton:focus {
-    color: var(--whiteLayer3);
-}
-.editableItemEditButton:active {
-    color: var(--fg-weak);
-}
-
-/* #endregion */
 
 #projectList,
 .taskList {

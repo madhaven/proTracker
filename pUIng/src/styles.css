@@ -1,1 +1,60 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+    --bg: #181818ff;
+    --whiteLayer1: #fff1;
+    --whiteLayer2: #fff2;
+    --whiteLayer3: #fff4;
+    --blackLayer1: #0003;
+    --blackLayer2: #0006;
+    --blackLayer3: #000c;
+    --fg-strong: white;
+    --fg-weak: #fff8;
+    --fg: grey;
+    --green: rgb(0, 128, 0);
+    --red: rgb(192, 0, 0);
+    --red1: #f001;
+    --red2: #f002;
+}
+
+html,
+body {
+    color: var(--fg);
+    background-color: var(--bg);
+    margin: 0;
+    padding: 0;
+    top: 0;
+    left: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    scroll-behavior: smooth;
+    transition: .2s;
+    overflow: hidden;
+}
+
+h1 {
+    font-weight: bold;
+}
+h1, h2 {
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+}
+
+input {
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--fg);
+    height: 100%;
+    width: 100%;
+    padding: .25em 0em;
+    transition: .1s;
+    outline: none;
+}
+input:hover {
+    border-bottom: 2px solid var(--whiteLayer1);
+    transition: .2s ease-out;
+    outline: none;
+}
+input:focus {
+    outline: none;
+    border-bottom: 2px solid var(--whiteLayer3);
+    transition: .2s ease-out;
+}

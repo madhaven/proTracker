@@ -54,6 +54,10 @@ export class UiStateService {
       [1, {"id":1,"projectId":1,"summary":"aa","parentId":-1}],
       [2, {"id":2,"projectId":1,"summary":"llkjhasdf","parentId":-1}],
     ])
+    this.projects = new Map<number, Project>([
+      [1, {"id": 1, "name": "test Project 1", "tasks": []}],
+      [2, {"id": 2, "name": "test Project 2", "tasks": []}]
+    ])
   }
 
   getLogTree() {
@@ -68,7 +72,11 @@ export class UiStateService {
     this.currentTab = tab
   }
 
-  getTask(taskId: number): Task|undefined {
+  getTask(taskId: number): Task | undefined {
     return this.tasks.get(taskId)
+  }
+
+  getProject(projectId: number): Project | undefined {
+    return this.projects.get(projectId)
   }
 }

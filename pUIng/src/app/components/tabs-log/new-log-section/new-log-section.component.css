@@ -46,6 +46,6 @@
     padding: 0 !important;
     border: none !important;
 }
-input {
+.projectColumn input {
     text-align: right;
 }

@@ -31,12 +31,6 @@ const clearAllLogs = () => {
     }
 }
 
-const trimInput = (event, leftAndRight=false) => {
-    event.srcElement.value = leftAndRight
-        ? event.srcElement.value.trim()
-        : event.srcElement.value.trimLeft()
-}
-
 const createDateTimeInput = () => {
     const inputDiv = document.querySelector('#inputs .logDate')
         , input = document.createElement('input')
@@ -254,8 +248,6 @@ const makeEditableInput = (config={
     editableItemEditButton.addEventListener('click', event => {
         makeItemEditable()
     })
-    editableItemInput.addEventListener('input', event => { trimInput(event, false) })
-    editableItemInput.addEventListener('change', event => { trimInput(event, true) })
     editableItemInput.addEventListener('change', editableItemInput.blur)
     editableItemInput.addEventListener('blur', event => {
         config.editHandler(event, editableItemInput.value, uiUpdater)
@@ -746,11 +738,7 @@ window.addEventListener('load', event => {
     })
 
     // logs page inputs
-    document.getElementById('newLogProject').addEventListener('input', event => { trimInput(event, false) })
-    document.getElementById('newLogProject').addEventListener('change', event => { trimInput(event, true) })
     document.getElementById('newLogProject').addEventListener('change', newLogInput)
-    document.getElementById('newLogTask').addEventListener('input', event => { trimInput(event, false) })
-    document.getElementById('newLogTask').addEventListener('change', event => { trimInput(event, true) })
     document.getElementById('newLogTask').addEventListener('change', newLogInput)
     if (allowSuperpowers) createDateTimeInput()
 

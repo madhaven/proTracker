@@ -1,9 +1,9 @@
-.logTask:hover,
-.logTask:focus-within {
+::ng-deep .editableItem:hover,
+::ng-deep .editableItem:focus-within {
     background-color: var(--blackLayer1);
     transition-delay: .2s;
 }
-.logTask {
+::ng-deep .editableItem {
     width: 100%;
     transition: .2s ease-out;
     border-radius: .5em;
