@@ -38,9 +38,4 @@ export class AppComponent {
   ngOnInit() {
     this.currentTab = this.uiStateService.currentTab
   }
-
-  onTabSwitch(destination: MenuTabs) {
-    this.uiStateService.switchTab(destination)
-    this.currentTab = destination
-  }
 }

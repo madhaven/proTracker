@@ -3,12 +3,6 @@
     height: 100vh;
     overflow-y: auto;
 }
-.menuTab > :first-child {
-    margin-top: 2em;
-}
-.menuTab > :last-child {
-    margin-bottom: 10em;
-}
 
 .logChart {
     text-align: left;

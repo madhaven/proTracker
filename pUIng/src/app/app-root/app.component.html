@@ -1,4 +1,2 @@
-<pui-main-menu (tabSwitch)="onTabSwitch($event)"></pui-main-menu>
-<pui-tabs-log *ngIf="currentTab == logsTab"></pui-tabs-log>
-<pui-tabs-habit *ngIf="currentTab == habitsTab"></pui-tabs-habit>
-<pui-tabs-project *ngIf="currentTab == projectsTab"></pui-tabs-project>
+<pui-main-menu></pui-main-menu>
+<router-outlet></router-outlet>

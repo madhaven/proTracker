@@ -29,6 +29,11 @@ body {
     overflow: hidden;
 }
 
+main.container {
+    margin-top: 2em;
+    margin-bottom: 10em;
+}
+
 h1 {
     font-weight: bold;
 }
