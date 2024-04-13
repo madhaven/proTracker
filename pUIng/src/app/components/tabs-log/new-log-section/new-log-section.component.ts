@@ -16,4 +16,6 @@ export class NewLogSectionComponent {
       ? target.value.trim()
       : target.value.trimStart()
   }
+
+  // TODO : ng new task logic
 }

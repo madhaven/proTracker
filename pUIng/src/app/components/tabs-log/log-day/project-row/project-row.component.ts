@@ -26,7 +26,6 @@ export class ProjectRowComponent {
 
   ngOnInit() {
     this.project = this.uiStateService.getProject(this.projectId) // TODO: ng if service error
-    console.log(this.uiStateService, 'uistateservice')
   }
 
 }

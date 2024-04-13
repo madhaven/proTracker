@@ -3,7 +3,7 @@ import { TaskLog } from '../../../../../models/task-log.model';
 import { Task } from '../../../../../models/task.model';
 import { UiStateService } from '../../../../../services/ui-state.service';
 import { EditableItemComponent } from "../../../../../common/editable-item/editable-item.component";
-import { TaskStatus } from '../../../../../task-status';
+import { TaskStatus } from '../../../../../common/task-status';
 
 @Component({
   selector: 'pui-task-row',

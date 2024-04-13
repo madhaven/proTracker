@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { TabsHabitComponent } from './../components/tabs-habit/tabs-habit.component';
-import { TabsLogComponent } from './../components/tabs-log/tabs-log.component';
-import { MainMenuComponent } from './../components/main-menu/main-menu.component';
-import { TabsProjectComponent } from './../components/tabs-project/tabs-project.component';
-import { UiStateService } from '../services/ui-state.service';
-import { MenuTabs } from '../components/common/menu-tabs';
+import { TabsHabitComponent } from '../tabs-habit/tabs-habit.component';
+import { TabsLogComponent } from '../tabs-log/tabs-log.component';
+import { MainMenuComponent } from '../main-menu/main-menu.component';
+import { TabsProjectComponent } from '../tabs-project/tabs-project.component';
+import { UiStateService } from '../../services/ui-state.service';
+import { MenuTabs } from '../../common/menu-tabs';
 import { CommonModule } from '@angular/common';
 
 @Component({

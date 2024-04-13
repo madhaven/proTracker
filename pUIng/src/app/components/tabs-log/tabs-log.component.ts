@@ -1,4 +1,4 @@
-import { Component, ElementRef, input, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { UiStateService } from '../../services/ui-state.service';
 import { NewLogSectionComponent } from './new-log-section/new-log-section.component';
 import { LogDayComponent } from "./log-day/log-day.component";
@@ -18,14 +18,14 @@ import { CommonModule, NgForOf } from '@angular/common';
 })
 export class TabsLogComponent {
 
-  @ViewChild("inputsArea") inputsArea!: ElementRef;
-  uiStateService:UiStateService
+  @ViewChild('scrollAnchor') scrollAnchor!: ElementRef;
+  uiStateService: UiStateService
 
   constructor(uiStateService: UiStateService) {
     this.uiStateService = uiStateService
   }
 
-  ngOnInit() {
-    this.inputsArea.nativeElement.scrollIntoView({ behavior: "smooth" })
+  ngAfterViewInit() {
+    this.scrollAnchor.nativeElement.scrollIntoView({ behavior: "smooth" })
   }
 }

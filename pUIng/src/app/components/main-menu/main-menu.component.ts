@@ -1,7 +1,7 @@
 import { Component, ElementRef, Output, ViewChild, EventEmitter } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { UiStateService } from '../../services/ui-state.service';
-import { MenuTabs } from '../common/menu-tabs';
+import { MenuTabs } from '../../common/menu-tabs';
 
 @Component({
   selector: 'pui-main-menu',
