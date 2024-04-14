@@ -16,6 +16,7 @@ export class TaskRowComponent {
 
   @Input() taskId!: number;
   @Input() taskLog!: TaskLog;
+  @Input() highlightedTask: number = -1;
   task?: Task;
   uiStateService!: UiStateService;
   taskStatus!: TaskStatus;

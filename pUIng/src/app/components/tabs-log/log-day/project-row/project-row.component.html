@@ -7,7 +7,11 @@
         ></pui-editable-item>
     </div>
     <div class="projectsTasks">
-        <pui-task-row *ngFor="let taskLog of tree | keyvalue" [taskId]="taskLog.key" [taskLog]="taskLog.value"></pui-task-row>
+        <pui-task-row
+        *ngFor="let taskLog of tree | keyvalue"
+        [taskId]="taskLog.key"
+        [taskLog]="taskLog.value"
+        [highlightedTask]="highlightedTask"></pui-task-row>
     </div>
 </div>
 

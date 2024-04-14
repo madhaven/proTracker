@@ -63,9 +63,6 @@ button:hover {
     border-radius: .5em;
     padding: 0 .5em 0 .5em;
 }
-.flashedTask {
-    background-color: var(--whiteLayer1);
-}
 
 .daysProjects {
     width: 85%;

@@ -14,6 +14,7 @@ export class LogDayComponent {
 
   @Input() logDay: string = ""
   @Input() tree: Map<number, Map<number, TaskLog>> = new Map();
+  @Input() highlightedTask: number = -1
   itIsToday: boolean = false
   id: number = 0
   displayDate: string = ""

@@ -17,6 +17,7 @@ export class ProjectRowComponent {
 
   @Input() projectId!: number
   @Input() tree!: Map<number, TaskLog>
+  @Input() highlightedTask: number = -1
   project?: Project
   uiStateService!: UiStateService
 
