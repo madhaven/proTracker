@@ -1,0 +1,13 @@
+<li>
+    <h3 class="projectHeader" (click)="foldProject()">
+        <pui-editable-item
+        [content]="project?.name ?? 'ERROR'"></pui-editable-item>
+    </h3>
+    <ul class="taskList"
+    *ngIf="taskTree.size > 0">
+        <pui-project-task
+        *ngFor="let item of taskTree | keyvalue"
+        [taskId]="item.key"
+        [statusId]="item.value"></pui-project-task>
+    </ul>
+</li>

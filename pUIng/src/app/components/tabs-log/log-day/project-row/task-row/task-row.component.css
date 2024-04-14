@@ -9,10 +9,3 @@
     border-radius: .5em;
     padding: 0 .5em 0 .5em;
 }
-
-::ng-deep pui-editable-item.pending {
-    color: var(--red);
-}
-::ng-deep pui-editable-item.completed {
-    color: var(--green);
-}

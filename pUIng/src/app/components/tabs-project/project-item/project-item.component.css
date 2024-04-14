@@ -1,0 +1,23 @@
+.taskList {
+    transition: .5s;
+    list-style-type: none;
+    padding: 0px;
+    margin: 0px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    /* align-items: center; */
+}
+
+::ng-deep li h2,
+::ng-deep li h3 {
+    cursor: pointer;
+    margin: 0;
+}
+
+:host {
+    margin: .5em .5em 0em 0em;
+    padding: .5em 1em;
+    border-radius: .5em;
+    /* background-color: var(--blackLayer1); */
+}

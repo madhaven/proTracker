@@ -4,7 +4,7 @@ import { Habit } from '../models/habit.model';
 import { Project } from '../models/project.model';
 import { TaskLog } from '../models/task-log.model';
 import { HabitLog } from '../models/habit-log.model';
-import { MenuTabs } from '../components/common/menu-tabs';
+import { MenuTabs } from '../common/menu-tabs';
 
 @Injectable({
   providedIn: 'root'
@@ -58,10 +58,19 @@ export class UiStateService {
       [1, {"id": 1, "name": "test Project 1", "tasks": []}],
       [2, {"id": 2, "name": "test Project 2", "tasks": []}]
     ])
+    this.projectTree = new Map<number, Map<number, number>>([
+      [1, new Map<number, number>([[1, 1], [2, 4]])],
+      [2, new Map<number, number>()]
+    ])
+    this.foldedProjects = new Map<number, boolean>();
   }
 
   getLogTree() {
     return this.logTree
+  }
+
+  getProjectTree() {
+    return this.projectTree
   }
 
   logsExist() {
@@ -70,6 +79,12 @@ export class UiStateService {
 
   switchTab(tab: MenuTabs) {
     this.currentTab = tab
+  }
+
+  toggleFold(projectId: number): boolean {
+    var currentFold = this.foldedProjects.get(projectId) ?? false
+    this.foldedProjects.set(projectId, !currentFold)
+    return !currentFold
   }
 
   getTask(taskId: number): Task | undefined {

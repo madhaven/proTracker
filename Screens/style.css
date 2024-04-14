@@ -96,51 +96,7 @@ button:hover {
     border: none !important;
 }
 
-#projectList,
-.taskList {
-    transition: .5s;
-    list-style-type: none;
-    padding: 0px;
-    margin: 0px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    /* align-items: center; */
-}
-#projectList > li {
-    margin: .5em .5em 0em 0em;
-    padding: .5em 1em;
-    border-radius: .5em;
-    /* background-color: var(--blackLayer1); */
-}
-#projectList > li h2,
-#projectList > li h3 {
-    cursor: pointer;
-    margin: 0;
-}
-#projectList > li:not(.emptyProject) {
-    width: 100%;
-}
 /* #projectList > li:hover, */
-#projectList > li.emptyProject {
-    background-color: var(--blackLayer1);
-}
-#projectList > li.emptyProject:hover {
-    background-color: var(--blackLayer2)
-}
-.taskList.hidden {
-    display: none;
-}
-.taskList > li {
-    width: 100%;
-    margin-top: 4px;
-    padding: 0em 0em 0em 1em;
-    border-radius: 0 0.5em 0.5em 0;
-    border-left: 1px solid var(--whiteLayer2);
-}
-.taskList > li:hover {
-    background-color: var(--blackLayer1);
-}
 
 .pendingHabits {
     list-style-type: none;

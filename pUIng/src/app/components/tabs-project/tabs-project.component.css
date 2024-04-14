@@ -1,0 +1,23 @@
+#projectList {
+    transition: .5s;
+    list-style-type: none;
+    padding: 0px;
+    margin: 0px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    /* align-items: center; */
+}
+
+pui-project-item:not(.emptyProject) {
+    width: 100%;
+}
+pui-project-item.emptyProject {
+    background-color: var(--blackLayer1);
+}
+::ng-deep pui-project-item.emptyProject .taskList {
+    display: none;
+}
+pui-project-item.emptyProject:hover {
+    background-color: var(--blackLayer2)
+}
