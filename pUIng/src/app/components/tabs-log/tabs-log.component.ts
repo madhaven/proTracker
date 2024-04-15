@@ -36,15 +36,24 @@ export class TabsLogComponent {
   }
 
   ngOnInit() {
+    this.scrollIntoView()
+  }
+  
+  ngAfterViewInit() {
+    this.scrollIntoView()
+  }
+
+  scrollIntoView() {
     var task = Number.parseInt(this.route.snapshot.paramMap.get('task') ?? '0');
     if (task) {
       this.flashTask(task)
     } else {
-      this.scrollAnchor.nativeElement.scrollIntoView({ behavior: "smooth" })
+      try {
+        this.scrollAnchor.nativeElement.scrollIntoView({ behavior: "smooth" })
+      } catch {
+        ;
+      }
     }
-  }
-  
-  ngAfterViewInit() {
   }
 
   flashTask(taskId: number) {

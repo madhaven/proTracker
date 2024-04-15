@@ -24,12 +24,12 @@
             ],
             "tsConfig": "tsconfig.app.json",
             "assets": [
-              "src/favicon.ico",
+              "src/assets/favicon.ico",
               "src/assets"
             ],
             "styles": [
-              "src/bootstrap.min.css",
-              "src/styles.css"
+              "src/assets/bootstrap.min.css",
+              "src/assets/styles.css"
             ],
             "scripts": [],
             "server": "src/main.server.ts",
@@ -89,11 +89,12 @@
             ],
             "tsConfig": "tsconfig.spec.json",
             "assets": [
-              "src/favicon.ico",
+              "src/assets/favicon.ico",
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/assets/styles.css",
+              "src/assets/bootstrap.min.css"
             ],
             "scripts": []
           }

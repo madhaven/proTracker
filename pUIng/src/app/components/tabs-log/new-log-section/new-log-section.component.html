@@ -12,9 +12,10 @@
                     required
                     title="Parent Task/Project"
                     placeholder="{{logsExist ? '' : 'Add a New Project'}}"
+                    [(ngModel)]="newProjectValue"
                     #newLogProject
                     (input)="trimInput(newLogProject, false)"
-                    (change)="trimInput(newLogProject, true)">
+                    (change)="newTask()">
                 </div>
             </div>
             <div class="projectsTasks">
@@ -25,11 +26,13 @@
                     id="newLogTask"
                     title="Task"
                     placeholder="{{logsExist ? '' : 'with a new task'}}"
+                    [(ngModel)]="newTaskValue"
                     #newLogTask
                     (input)="trimInput(newLogTask, false)"
-                    (change)="trimInput(newLogTask, true)">
+                    (change)="newTask()">
                 </div>
             </div>
+            <p>project: {{newProjectValue}} task: {{newTaskValue}}</p>
         </div>
     </div>
 </div>

@@ -5,7 +5,6 @@ import { Project } from '../models/project.model';
 import { TaskLog } from '../models/task-log.model';
 import { HabitLog } from '../models/habit-log.model';
 import { MenuTabs } from '../common/menu-tabs';
-import { type } from 'os';
 
 @Injectable({
   providedIn: 'root'
