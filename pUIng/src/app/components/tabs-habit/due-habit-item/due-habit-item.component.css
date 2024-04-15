@@ -1,0 +1,21 @@
+.duehabitItem {
+    border: 1px solid var(--whiteLayer1);
+    margin-bottom: 1em;
+    /* margin-left: 1em; */
+    padding: .5em 1em;
+    transition: .5s ease-out;
+    border-radius: .5em;
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.5em;
+    cursor: pointer;
+    background-color: var(--whiteLayer1);
+}
+.duehabitItem:hover {
+    border: 1px solid var(--whiteLayer2);
+    background-color: var(--whiteLayer2);
+}
+.duehabitItem:active {
+    border: 1px solid var(--fg);
+    transition: .1s;
+}

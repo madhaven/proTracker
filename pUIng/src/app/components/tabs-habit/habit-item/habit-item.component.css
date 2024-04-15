@@ -1,0 +1,14 @@
+.habitItem {
+    border: 1px solid var(--whiteLayer1);
+    margin-bottom: 1em;
+    /* margin-left: 1em; */
+    padding: .5em 1em;
+    transition: .5s ease-out;
+    border-radius: .5em;
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.5em;
+}
+.habitItem:hover {
+    border: 1px solid var(--whiteLayer2);
+}

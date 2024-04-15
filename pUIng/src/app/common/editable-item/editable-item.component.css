@@ -1,3 +1,7 @@
+:host {
+    width: 100%;
+}
+
 .editableItem {
     word-wrap: break-word;
     overflow-wrap: break-word;

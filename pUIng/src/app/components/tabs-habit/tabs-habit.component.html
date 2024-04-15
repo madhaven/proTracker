@@ -1,7 +1,22 @@
 <div class="menuTab habitTab">
     <main class="container">
         <h1>HABITS</h1>
-        <ul class="pendingHabits"></ul>
-        <ul class="habitList"></ul>
+        <h2 *ngIf="dueHabits.size > 0">Due Today</h2>
+        <ul class="pendingHabits" *ngIf="dueHabits.size > 0">
+            <pui-due-habit-item
+            *ngFor="let habit of dueHabits | keyvalue"
+            [habitId]="habit.key"
+            [habit]="habit.value"
+            ></pui-due-habit-item>
+        </ul>
+        <hr>
+        <ul class="habitList">
+            <pui-habit-item
+            *ngFor="let habit of uiStateService.habits | keyvalue"
+            [habitId]="habit.key"
+            [habit]="habit.value"
+            ></pui-habit-item>
+        </ul>
+        <pui-new-habit-section></pui-new-habit-section>
     </main>
 </div>

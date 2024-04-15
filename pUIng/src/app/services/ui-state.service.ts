@@ -5,6 +5,7 @@ import { Project } from '../models/project.model';
 import { TaskLog } from '../models/task-log.model';
 import { HabitLog } from '../models/habit-log.model';
 import { MenuTabs } from '../common/menu-tabs';
+import { type } from 'os';
 
 @Injectable({
   providedIn: 'root'
@@ -51,8 +52,8 @@ export class UiStateService {
       ["2024,2,30", new Map([[1, new Map([[2, {"id":13,"taskId":2,"statusId":1,"dateTime":1711032863583}]])]])],
     ])
     this.tasks = new Map<number, Task>([
-      [1, {"id":1,"projectId":1,"summary":"aa","parentId":-1}],
-      [2, {"id":2,"projectId":1,"summary":"llkjhasdf","parentId":-1}],
+      [1, {"id":1, "projectId":1, "summary":"aa", "parentId":-1}],
+      [2, {"id":2, "projectId":1, "summary":"llkjhasdf", "parentId":-1}],
     ])
     this.projects = new Map<number, Project>([
       [1, {"id": 1, "name": "test Project 1", "tasks": []}],
@@ -63,6 +64,10 @@ export class UiStateService {
       [2, new Map<number, number>()]
     ])
     this.foldedProjects = new Map<number, boolean>();
+    this.habits = new Map<number, Habit>([
+      [1, {"id":1, "name": "test", "days": 5, "lastLogTime": 0, "endTime": null, "removed": false, "startTime": 1}],
+      [2, {"id":2, "name": "testHabit 2", "days": 2, "lastLogTime": 0, "endTime": null, "removed": false, "startTime": 1}]
+    ])
   }
 
   getLogTree() {
@@ -93,5 +98,24 @@ export class UiStateService {
 
   getProject(projectId: number): Project | undefined {
     return this.projects.get(projectId)
+  }
+
+  getHabit(habitId: number): Habit | undefined {
+    return this.habits.get(habitId)
+  }
+
+  getHabitsDueOn(today: Date): Map<number, Habit> {
+    var dueHabits = new Map<number, Habit>()
+    for (let [id, habit] of this.habits) {
+      var lastLog = new Date(habit.lastLogTime)
+      if (lastLog.getFullYear() != today.getFullYear()
+      || lastLog.getMonth() != today.getMonth()
+      || lastLog.getDate() != today.getDate()) {
+        dueHabits.set(id, habit)
+      } else {
+        dueHabits.delete(id)
+      }
+    }
+    return dueHabits
   }
 }

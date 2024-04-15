@@ -93,64 +93,6 @@ button:hover {
     border: none !important;
 }
 
-/* #projectList > li:hover, */
-
-.pendingHabits {
-    list-style-type: none;
-    margin-bottom: 1em;
-    padding: 0;
-}
-.pendingHabitItem {
-    border: 1px solid transparent;
-    background-color: var(--red2);
-    margin-bottom: 1em;
-    padding: .5em 1em;
-    transition: .5s ease-out;
-    display: flex;
-    justify-content: space-between;
-}
-.pendingHabitItem:hover {
-    border: 1px solid var(--red);
-    transition: .1s;
-    cursor: pointer;
-    color: var(--fg-strong);
-}
-.habitList {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-}
-.habitItem {
-    border: 1px solid var(--whiteLayer1);
-    margin-bottom: 1em;
-    /* margin-left: 1em; */
-    padding: .5em 1em;
-    transition: .5s ease-out;
-    border-radius: .5em;
-    display: flex;
-    justify-content: space-between;
-}
-.habitItem:hover {
-    border: 1px solid var(--whiteLayer2);
-}
-.newHabitItem {
-    flex-direction: column;
-}
-.habitTitle {
-    font-size: 1.5em;
-}
-.newHabitItem .newHabitFrequency {
-    width: 2em;
-    margin-right: 1em;
-    text-align: right;  
-}
-/* .habitItem:not(:hover) .habitControls button {
-    display: none;
-    visibility: hidden;
-}
-button.habitDoneButton {
-    display: inline-block !important;
-} */
 
 /* width */
 ::-webkit-scrollbar {
