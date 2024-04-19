@@ -4,6 +4,7 @@ import { NewLogSectionComponent } from './new-log-section/new-log-section.compon
 import { LogDayComponent } from "./log-day/log-day.component";
 import { CommonModule, NgForOf } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ProjectAutoTypeService } from '../../services/project-auto-type.service';
 
 @Component({
   selector: 'pui-tabs-log',
@@ -15,6 +16,9 @@ import { ActivatedRoute, Router } from '@angular/router';
     LogDayComponent,
     NgForOf,
     CommonModule,
+  ],
+  providers: [
+    ProjectAutoTypeService,
   ]
 })
 export class TabsLogComponent {

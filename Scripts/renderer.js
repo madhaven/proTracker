@@ -35,12 +35,6 @@ const createDateTimeInput = () => {
     inputDiv.appendChild(input)
 }
 
-const autoTypeProject = (characters, inputField, index=0) => {
-    if (index >= characters.length) return
-    inputField.value += characters[index]
-    setTimeout(() => { autoTypeProject(characters, inputField, index+1) }, 25);
-}
-
 const addTaskListeners = (taskElement, log, task, day) => {
     var itIsToday
     if (day === false)

@@ -1,5 +1,5 @@
 <div class="projectRow">
-    <div class="projectColumn">
+    <div class="projectColumn" (click)="autoTypeProject()">
         <pui-editable-item
         class="stickyProjectStuff"
         [content]="project?.name ?? 'ERROR'"
