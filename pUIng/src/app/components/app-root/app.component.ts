@@ -7,8 +7,6 @@ import { TabsProjectComponent } from '../tabs-project/tabs-project.component';
 import { UiStateService } from '../../services/ui-state.service';
 import { MenuTabs } from '../../common/menu-tabs';
 import { CommonModule } from '@angular/common';
-import { ElectronComService } from '../../services/electron-com.service';
-import { DataComService } from '../../services/data-com.service';
 
 @Component({
   selector: 'app-root',
@@ -27,34 +25,18 @@ import { DataComService } from '../../services/data-com.service';
 export class AppComponent {
   title = 'pUIng';
   uiStateService!: UiStateService
-  comService!: DataComService
   
   currentTab: MenuTabs = MenuTabs.TaskLogs
   logsTab: MenuTabs = MenuTabs.TaskLogs
   habitsTab: MenuTabs = MenuTabs.Habits
   projectsTab: MenuTabs = MenuTabs.Projects
 
-  constructor(
-    uiStateService: UiStateService,
-    electronComService: ElectronComService
-  ) {
+  constructor(uiStateService: UiStateService) {
     this.uiStateService = uiStateService
-    this.comService = electronComService
   }
 
   ngOnInit() {
     this.currentTab = this.uiStateService.currentTab // TODO: fetch from preferences
-    this.comService.loadData().then(
-      (res: any) => {
-        if (res){
-            console.log('data recieved from db', res)
-            this.uiStateService.replaceData(res.tasks, res.taskLogs, res.projects, res.habits, res.habitLogs)
-        } else {
-            console.error('corrupt data received', res)
-            // TODO: notification ?
-        }
-      },
-      (err: any) => console.error('server error while loading data') // TODO notification
-    )
+    this.uiStateService.loadData()
   }
 }

@@ -6,6 +6,8 @@ import { TaskLog } from '../models/task-log.model';
 import { HabitLog } from '../models/habit-log.model';
 import { MenuTabs } from '../common/menu-tabs';
 import { TaskStatus } from '../common/task-status';
+import { DataComService } from './data-com.service';
+import { ElectronComService } from './electron-com.service';
 
 @Injectable({
   providedIn: 'root'
@@ -28,47 +30,13 @@ export class UiStateService {
   habitLogs = new Map<number, HabitLog>()
   logTree = new Map<string, Map<number, Map<number, TaskLog>>>()
   projectTree = new Map<number, Map<number, number>>()
-  
-  // constructor() {
-  //   this.logs = new Map<number, TaskLog>([
-  //     [1, {"id":1,"taskId":1,"statusId":1,"dateTime":1708861629507}],
-  //     [2, {"id":2,"taskId":1,"statusId":4,"dateTime":1710667805211}],
-  //     [3, {"id":3,"taskId":2,"statusId":1,"dateTime":1711006994475}],
-  //     [4, {"id":4,"taskId":2,"statusId":4,"dateTime":1711007023601}],
-  //     [5, {"id":5,"taskId":2,"statusId":1,"dateTime":1711007024305}],
-  //     [6, {"id":6,"taskId":2,"statusId":4,"dateTime":1711019619589}],
-  //     [7, {"id":7,"taskId":2,"statusId":1,"dateTime":1711019620107}],
-  //     [8, {"id":8,"taskId":2,"statusId":4,"dateTime":1711023591436}],
-  //     [9, {"id":9,"taskId":2,"statusId":1,"dateTime":1711023591892}],
-  //     [10, {"id":10,"taskId":2,"statusId":4,"dateTime":1711028226730}],
-  //     [11, {"id":11,"taskId":2,"statusId":1,"dateTime":1711028227195}],
-  //     [12, {"id":12,"taskId":2,"statusId":4,"dateTime":1711032862977}],
-  //     [13, {"id":13,"taskId":2,"statusId":1,"dateTime":1711032863583}],
-  //   ])
-  //   this.logTree = new Map<string, Map<number, Map<number, TaskLog>>>([
-  //     ["2024,1,25", new Map([[1, new Map([[1, {"id":1,"taskId":1,"statusId":1,"dateTime":1708861629507}]])]])],
-  //     ["2024,2,17", new Map([[1, new Map([[1, {"id":2,"taskId":1,"statusId":4,"dateTime":1710667805211}]])]])],
-  //     ["2024,2,21", new Map([[1, new Map([[2, {"id":13,"taskId":2,"statusId":1,"dateTime":1711032863583}]])]])],
-  //     ["2024,2,30", new Map([[1, new Map([[2, {"id":13,"taskId":2,"statusId":1,"dateTime":1711032863583}]])]])],
-  //   ])
-  //   this.tasks = new Map<number, Task>([
-  //     [1, {"id":1, "projectId":1, "summary":"aa", "parentId":-1}],
-  //     [2, {"id":2, "projectId":1, "summary":"llkjhasdf", "parentId":-1}],
-  //   ])
-  //   this.projects = new Map<number, Project>([
-  //     [1, {"id": 1, "name": "test Project 1", "tasks": []}],
-  //     [2, {"id": 2, "name": "test Project 2", "tasks": []}]
-  //   ])
-  //   this.projectTree = new Map<number, Map<number, number>>([
-  //     [1, new Map<number, number>([[1, 1], [2, 4]])],
-  //     [2, new Map<number, number>()]
-  //   ])
-  //   this.foldedProjects = new Map<number, boolean>();
-  //   this.habits = new Map<number, Habit>([
-  //     [1, {"id":1, "name": "test", "days": 5, "lastLogTime": 0, "endTime": null, "removed": false, "startTime": 1}],
-  //     [2, {"id":2, "name": "testHabit 2", "days": 2, "lastLogTime": 0, "endTime": null, "removed": false, "startTime": 1}]
-  //   ])
-  // }
+
+  // deps
+  comService!: DataComService
+
+  constructor(eComService: ElectronComService) {
+    this.comService = eComService
+  }
 
   getLogTree() {
     return this.logTree
@@ -126,9 +94,9 @@ export class UiStateService {
     this.growTrees()
   }
 
-  growTrees () {
-    var orderredLogs = [...this.logs.values()]
+  growTrees() {
     var pendingLogs = new Map<Task, TaskLog>()
+    var orderredLogs = [...this.logs.values()]
     orderredLogs.sort((a, b) => a.dateTime-b.dateTime)
 
     orderredLogs.forEach(log => {
@@ -139,6 +107,7 @@ export class UiStateService {
         , task = this.tasks.get(log.taskId)
         , project = this.projects.get(task!.projectId)
         , dateStr = `${year},${month},${date}`
+      
       if (!this.logTree.has(dateStr))
         this.logTree.set(dateStr, new Map())
       if (!this.logTree.get(dateStr)?.has(project!.id))
@@ -165,6 +134,21 @@ export class UiStateService {
         this.logTree.get(todayStr)?.set(task.projectId, new Map())
       this.logTree.get(todayStr)?.get(task.projectId)?.set(task.id, log)
     })
+  }
+
+  loadData() {
+    this.comService.loadData().then(
+      (res: any) => {
+        if (res){
+          console.log('data recieved from db', res)
+          this.replaceData(res.tasks, res.taskLogs, res.projects, res.habits, res.habitLogs)
+        } else {
+          console.error('corrupt data received', res)
+          // TODO: notification ?
+        }
+      },
+      (err: any) => console.error('server error while loading data') // TODO notification
+    )
   }
 
   replaceData(

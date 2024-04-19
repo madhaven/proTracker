@@ -1,4 +1,5 @@
-<pui-editable-item [content]="task?.summary ?? 'ERROR'"
+<pui-editable-item
+[content]="task?.summary ?? 'ERROR'"
 [class.pending]="taskStatus==1"
 [class.completed]="taskStatus==4"
 [class.flashedTask]="highlightedTask == task?.id"

@@ -255,22 +255,6 @@ const recieveStateChanges = (event, state) => {
 
 window.addEventListener('load', event => {
 
-    // Sidebar
-    document.getElementById('sideBar').addEventListener('click', e => toggleMenuBar())
-    document.getElementById("sideHandle").addEventListener('click', e => toggleMenuBar())
-
-    // Menu Buttons
-    document.querySelector('#projects.menuButton').addEventListener('click', event => { switchToTab('projectTab') })
-    document.querySelector('#export.menuButton').addEventListener('click', exportData)
-    document.querySelector('#habits.menuButton').addEventListener('click', event => { switchToTab('habitTab')})
-    document.querySelector('#logChart.menuButton').addEventListener('click', event => {
-        switchToTab('logChart')
-        document.getElementById('inputs').scrollIntoView({ behavior: 'smooth' })
-    })
-
-    // logs page inputs
-    document.getElementById('newLogProject').addEventListener('change', newLogInput)
-    document.getElementById('newLogTask').addEventListener('change', newLogInput)
     if (allowSuperpowers) createDateTimeInput()
 
     // window listeners

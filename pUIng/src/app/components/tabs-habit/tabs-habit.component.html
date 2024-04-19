@@ -9,7 +9,7 @@
             [habit]="habit.value"
             ></pui-due-habit-item>
         </ul>
-        <hr>
+        <hr *ngIf="dueHabits.size > 0">
         <ul class="habitList">
             <pui-habit-item
             *ngFor="let habit of uiStateService.habits | keyvalue"

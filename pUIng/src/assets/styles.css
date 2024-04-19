@@ -63,3 +63,31 @@ input:focus {
     border-bottom: 2px solid var(--whiteLayer3);
     transition: .2s ease-out;
 }
+
+/* scroll bar */
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+/* Track */
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: var(--whiteLayer1);
+}
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: var(--whiteLayer2);
+}
+
+::-webkit-input-placeholder { /* Edge */
+    color: var(--whiteLayer2);
+}
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: var(--whiteLayer2);
+}
+::placeholder {
+    color: var(--whiteLayer2);
+}

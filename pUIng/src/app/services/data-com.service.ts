@@ -7,12 +7,6 @@ import { UiStateService } from './ui-state.service';
 })
 export abstract class DataComService {
 
-  uiStateService: UiStateService
-
-  constructor(uiStateService: UiStateService) {
-    this.uiStateService = uiStateService
-  }
-
   newTask(newTask: NewTask): any {}
   editTask(newTask: NewTask): any {}
   toggleTask(id: number): any {}

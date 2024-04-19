@@ -22,10 +22,6 @@ export class TabsProjectComponent {
     this.uiStateService = uiStateService
   }
 
-  ngOnInit() {
-    console.log('projectTree', this.uiStateService.getProjectTree())
-  }
-
   foldProjectItem(projectId: number) {
     this.uiStateService.toggleFold(projectId)
   }

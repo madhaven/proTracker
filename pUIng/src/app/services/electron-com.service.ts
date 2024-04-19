@@ -12,8 +12,12 @@ declare global {
 @Injectable({ providedIn: 'root' })
 export class ElectronComService extends DataComService {
 
-  constructor (uiStateService: UiStateService) {
-    super(uiStateService)
+  comsCheck() {
+    if (!window.comms) {
+      console.error("DataComs Down")
+      return false
+    }
+    return true
   }
 
   override loadData() {
@@ -21,7 +25,7 @@ export class ElectronComService extends DataComService {
   }
 
   override newTask(task: NewTask) {
-    if (!window.comms) { console.error("DataComs Down") }
+    if (!this.comsCheck()) return
     return window.comms.newTask(task)
   }
 

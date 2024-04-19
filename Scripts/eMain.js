@@ -68,7 +68,7 @@ const createWindow = () => {
 
 // App Lifecycle
 
-if (!app.requestSingleInstanceLock()) {
+if (!app.requestSingleInstanceLock() && !debugMode) {
     console.warn('Multiple proTracker instances blocked')
     app.quit()
 } else app.whenReady().then(() => {
