@@ -1,6 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NewTask } from '../../../models/new-task.model';
+import { ElectronComService } from '../../../services/electron-com.service';
+import { UiStateService } from '../../../services/ui-state.service';
 
 @Component({
   selector: 'pui-new-log-section',
@@ -12,20 +14,51 @@ import { NewTask } from '../../../models/new-task.model';
 export class NewLogSectionComponent {
 
   @Input() logsExist:boolean = false
+  uiStateService: UiStateService
+  eComService: ElectronComService
   newProjectValue: string = ''
   newTaskValue: string = ''
 
-  trimInput(target: HTMLInputElement, leftOrRight: boolean): void {
-    target.value = leftOrRight
-      ? target.value.trim()
-      : target.value.trimStart()
+  constructor(
+    uiStateService: UiStateService,
+    eComService: ElectronComService
+  ) {
+    this.uiStateService = uiStateService
+    this.eComService = eComService
+  }
+
+  trimInput(target: HTMLInputElement): void {
+    target.value = target.value.trimStart()
   }
  
-  newTask(){
+  newTask(target: HTMLInputElement){
     if (!this.newTaskValue || !this.newProjectValue) {
-      console.log('project / task value invalid')
       return
     }
 
-  // TODO : ng new task logic
+    // content validations
+    this.newTaskValue = this.newTaskValue.trim()
+    this.newProjectValue = this.newProjectValue.trim()
+
+    var newTask = {
+      dateTime: new Date(),
+      project: this.newProjectValue,
+      summary: this.newTaskValue
+    } as NewTask
+    
+    this.eComService.newTask(newTask).then(
+      (res: any) => { // TODO: ng standardise data models
+        if (!res) return
+        this.uiStateService.newTask(res.log, res.task, res.project)
+      },
+      (err: any) => {
+          console.error('server error while adding new task') // TODO notification
+      }
+    )
+
+    // reset the input section
+    this.newProjectValue = ''
+    this.newTaskValue = ''
+    target.blur()
+  }
 }

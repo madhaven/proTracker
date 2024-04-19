@@ -14,8 +14,8 @@
                     placeholder="{{logsExist ? '' : 'Add a New Project'}}"
                     [(ngModel)]="newProjectValue"
                     #newLogProject
-                    (input)="trimInput(newLogProject, false)"
-                    (change)="newTask()">
+                    (input)="trimInput(newLogProject)"
+                    (change)="newTask(newLogProject)">
                 </div>
             </div>
             <div class="projectsTasks">
@@ -28,11 +28,10 @@
                     placeholder="{{logsExist ? '' : 'with a new task'}}"
                     [(ngModel)]="newTaskValue"
                     #newLogTask
-                    (input)="trimInput(newLogTask, false)"
-                    (change)="newTask()">
+                    (input)="trimInput(newLogTask)"
+                    (change)="newTask(newLogTask)">
                 </div>
             </div>
-            <p>project: {{newProjectValue}} task: {{newTaskValue}}</p>
         </div>
     </div>
 </div>

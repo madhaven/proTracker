@@ -114,44 +114,6 @@ const exportData = event => {
     )
 }
 
-const newLogInput = event => {
-    // validation
-    const UIsummary = document.getElementById('newLogTask')
-        , UIproject = document.getElementById('newLogProject')
-        , summary = UIsummary.value
-        , project = UIproject.value
-        , date = new Date()
-
-    if (allowSuperpowers) {
-    	const UIdate = document.getElementById('newLogDate')
-	        , debugDate = new Date(UIdate.value)
-	    date.setDate(debugDate.getDate())
-	    date.setMonth(debugDate.getMonth())
-	    date.setYear(debugDate.getFullYear())
-    }
-    
-    if (!date) return false
-    if (!summary) return false
-    if (!project) return false
-    
-    const task = { dateTime: date.getTime(), project: project, summary: summary }
-    comms.newTask (
-        task,
-        res => {
-            if (!res) return
-            uiState.taskLog(res.log, res.task, res.project)
-            render()
-
-            setDefaultDate()
-            UIsummary.value = UIproject.value = ""
-            UIproject.focus()
-        },
-        err => {
-            console.error('server error while adding new task') // TODO notification
-        }
-    )
-}
-
 const taskClick = (event, task, log) => {
     // TODO: setup more refined status change mechanism
     const newState = log.statusId == 1 ? 4 : 1

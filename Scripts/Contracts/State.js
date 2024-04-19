@@ -68,44 +68,4 @@ const State = class {
     addHabitLog (habitLog) {
         this.habitLogs[habitLog.id] = habitLog
     }
-    
-    growTrees () {
-        this.logTree = {}
-        this.projectTree = {}
-        const orderredLogs = []
-        const pendingLogs = new Map()
-
-        for (const log in this.logs) {
-            orderredLogs.push(this.logs[log]) // TODO: one-liner instead of looping
-        }
-        orderredLogs.sort((a, b) => a.dateTime-b.dateTime)
-
-        for (const log of orderredLogs) {
-            const t = new Date(log.dateTime)
-                , year = t.getFullYear()
-                , month = t.getMonth()
-                , date = t.getDate()
-                , task = this.tasks[log.taskId]
-                , project = this.projects[task.projectId]
-            this.logTree[[year, month, date]] ??= {}
-            this.logTree[[year, month, date]][project.id] ??= {}
-            this.logTree[[year, month, date]][project.id][task.id] = log
-            if (log.statusId == 1)
-                pendingLogs.set(task, log)
-            else
-                pendingLogs.delete(task)
-    
-            this.projectTree[project.id] ??= {}
-            this.projectTree[project.id][task.id] = log.statusId
-        }
-
-        // show pending tasks on current date
-        const t2 = new Date()
-        const today = [t2.getFullYear(), t2.getMonth(), t2.getDate()]
-        for (const [task, log] of pendingLogs) {
-            this.logTree[today] ??= {}
-            this.logTree[today][task.projectId] ??= {}
-            this.logTree[today][task.projectId][task.id] = log
-        }
-    }
 }
