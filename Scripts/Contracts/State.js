@@ -32,23 +32,6 @@ const State = class {
         return true
     }
 
-    replaceData (tasks, taskLogs, projects, habits, habitLogs) {
-        this.projects = {}
-        this.tasks = {}
-        this.logs = {}
-        this.habits = {}
-        this.habitLogs = {}
-        
-        for (var project of projects) { this.projects[project.id] = project }
-        for (var task of tasks) { this.tasks[task.id] = task }
-        for (var log of taskLogs) { this.logs[log.id] = log }
-        for (var habit of habits) { this.habits[habit.id] = habit }
-        for (var habitLog of habitLogs) { this.habitLogs[habitLog.id] = habitLog }
-
-        this.growTrees()
-        console.debug('state updated', this)
-    }
-
     taskLog (log, task, project) {
         this.tasks[task.id] ??= task
         this.projects[project.id] ??= project

@@ -16,6 +16,10 @@ export class ElectronComService extends DataComService {
     super(uiStateService)
   }
 
+  override loadData() {
+    return window.comms.loadData()
+  }
+
   override newTask(task: NewTask) {
     if (!window.comms) { console.error("DataComs Down") }
     return window.comms.newTask(task)

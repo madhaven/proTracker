@@ -15,8 +15,8 @@ contextBridge.exposeInMainWorld('comms', {
         ipcRenderer.invoke('habitDoneChannel', habitId, time).then(callback, err) },
     deleteHabit: (habitId, time, callback, err) => {
         ipcRenderer.invoke('deleteHabitChannel', habitId, time).then(callback, err) },
-    loadData: (callback, err) => {
-        ipcRenderer.invoke('loadDataRequest').then(callback, err) },
+    loadData: () => {
+        return ipcRenderer.invoke('loadDataRequest') },
     exportData: (logTree, tasks, projects, logs, callback, err) => {
         ipcRenderer.invoke('exportDataRequest', logTree, tasks, projects, logs).then(callback, err) },
     registerListener: (channel, callback) => {

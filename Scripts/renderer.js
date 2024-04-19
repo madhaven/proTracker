@@ -246,22 +246,6 @@ const taskEditHandler = (event, task, newSummary, uiUpdater) => {
     )
 }
 
-const requestDataFromDB = () => {
-    comms.loadData(
-        res => {
-            if (res){
-                console.log('data recieved from db', res)
-                uiState.replaceData(res.tasks, res.taskLogs, res.projects, res.habits, res.habitLogs)
-                render()
-            } else {
-                console.error('corrupt data received', res)
-                // TODO: notification ?
-            }
-        },
-        err => console.error('server error while loading data') // TODO notification
-    )
-}
-
 const recieveStateChanges = (event, state) => {
     // TODO
     console.log('UI|updateUI: recieved state change prompt', event, state)
@@ -296,7 +280,6 @@ window.addEventListener('load', event => {
     stateComm.registerListener('updateUI', recieveStateChanges)
 
     setDefaultDate()
-    requestDataFromDB()
     switchToTab('logChart')
     toggleMenuBar(true)
     if (!allowSuperpowers) trackIdle()

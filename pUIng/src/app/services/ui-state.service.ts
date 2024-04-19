@@ -166,4 +166,27 @@ export class UiStateService {
       this.logTree.get(todayStr)?.get(task.projectId)?.set(task.id, log)
     })
   }
+
+  replaceData(
+    tasks: any, 
+    taskLogs: any, 
+    projects: any, 
+    habits: any, 
+    habitLogs: any
+  ) {
+    this.logs = new Map()
+    this.tasks = new Map()
+    this.habits = new Map()
+    this.projects = new Map()
+    this.habitLogs = new Map()
+    
+    for (var log of taskLogs) { this.logs.set(log.id, log) }
+    for (var task of tasks) { this.tasks.set(task.id, task) }
+    for (var habit of habits) { this.habits.set(habit.id, habit) }
+    for (var project of projects) { this.projects.set(project.id, project) }
+    for (var habitLog of habitLogs) { this.habitLogs.set(habitLog.id, habitLog) }
+
+    this.growTrees()
+    console.debug('state updated', this)
+  }
 }
