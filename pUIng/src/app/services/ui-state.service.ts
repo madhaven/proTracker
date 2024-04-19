@@ -94,6 +94,18 @@ export class UiStateService {
     this.growTrees()
   }
 
+  toggleTask(taskId: number, newState: TaskStatus, currentTime: number) {
+    this.comService.toggleTask(taskId, newState, currentTime).then(
+      (res: TaskLog) => {
+        this.logs.set(res.id, res)
+        this.growTrees()
+      },
+      (err: any) => {
+        console.error('server error while updating task') // TODO remove error logs
+      }
+    )
+  }
+
   growTrees() {
     var pendingLogs = new Map<Task, TaskLog>()
     var orderredLogs = [...this.logs.values()]

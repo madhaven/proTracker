@@ -114,22 +114,6 @@ const exportData = event => {
     )
 }
 
-const taskClick = (event, task, log) => {
-    // TODO: setup more refined status change mechanism
-    const newState = log.statusId == 1 ? 4 : 1
-        , currentTime = Date.now()
-    comms.toggleTask (
-        task.id, newState, currentTime,
-        res => {
-            uiState.addLog(res)
-            render()
-        },
-        err => {
-            console.error('server error while updating task') // TODO remove error logs
-        }
-    )
-}
-
 const newHabit = (title, frequency) => {
     comms.createHabit(
         title, Date.now(), Infinity, frequency,

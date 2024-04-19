@@ -29,4 +29,13 @@ export class TaskRowComponent {
     this.task = this.uiStateService.getTask(this.taskId) // TODO: ng if task not found ?
     this.taskStatus = this.taskLog.statusId
   }
+
+  taskClick() {
+    // TODO: setup more refined status change mechanism
+    const currentTime = Date.now();
+    var newState: TaskStatus = this.taskLog.statusId == TaskStatus.PENDING
+        ? TaskStatus.COMPLETED
+        : TaskStatus.PENDING
+    this.uiStateService.toggleTask(this.taskLog.taskId, newState, currentTime)
+  }
 }

@@ -3,4 +3,5 @@
 [class.pending]="taskStatus==1"
 [class.completed]="taskStatus==4"
 [class.flashedTask]="highlightedTask == task?.id"
+(click)="taskClick()"
 ></pui-editable-item>
