@@ -115,6 +115,23 @@ export class UiStateService {
     )
   }
 
+  editTask(taskId: number, newSummary: string) {
+    var newTask = this.tasks.get(taskId)
+    newTask!.summary = newSummary
+    this.comService.editTask(newTask!).then(
+      (res: any) => { // TODO: document responses
+        if (res) {
+          this.tasks.set(taskId, newTask!)
+        } else {
+          console.error('Something went wrong.') // TODO notification
+        }
+      },
+      (err: any) => {
+        console.error('Unable to edit Task due to an internal error') // TODO notification
+      }
+    )
+  }
+
   growTrees() {
     var pendingLogs = new Map<Task, TaskLog>()
     var orderredLogs = [...this.logs.values()]

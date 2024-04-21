@@ -38,4 +38,8 @@ export class TaskRowComponent {
         : TaskStatus.PENDING
     this.uiStateService.toggleTask(this.taskLog.taskId, newState, currentTime)
   }
+
+  taskEdit(newName: string) {
+    this.uiStateService.editTask(this.task!.id, newName)
+  }
 }

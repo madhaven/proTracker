@@ -1,8 +1,8 @@
+import { Task } from "../models/task.model";
+import { NewTask } from "../models/new-task.model";
 import { Injectable } from "@angular/core";
 import { TaskStatus } from "../common/task-status";
-import { NewTask } from "../models/new-task.model";
 import { DataComService } from "./data-com.service";
-import { UiStateService } from "./ui-state.service";
 
 declare global {
   interface Window {
@@ -33,5 +33,10 @@ export class ElectronComService extends DataComService {
   override toggleTask(id: number, newState: TaskStatus, currentTime: number) {
     if (!this.comsCheck()) return
     return window.comms.toggleTask(id, newState, currentTime)
+  }
+
+  override editTask(newTask: Task) {
+    if (!this.comsCheck()) return
+    return window.comms.editTask(newTask)
   }
 }

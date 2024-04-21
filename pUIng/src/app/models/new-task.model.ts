@@ -1,6 +1,6 @@
 export class NewTask {
     id?: number
-    dateTime!: Date
+    dateTime!: number
     project!: string
     summary!: string
 }

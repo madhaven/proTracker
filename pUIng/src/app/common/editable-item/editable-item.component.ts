@@ -1,5 +1,5 @@
 import { NgIf } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, Input, ViewChild} from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 
@@ -13,34 +13,34 @@ import { FormsModule } from '@angular/forms';
 export class EditableItemComponent {
   @Input() content!: string
   @Input() isButtonOnLeft: boolean = false
+  @Output() itemEdited = new EventEmitter<string>()
+  @Output() contentClicked = new EventEmitter()
   isItemEditable: boolean = false
   @ViewChild('editableInput') inputItem!: ElementRef;
 
-  tryUpdate(event: Event): void {
+  tryUpdate(event: Event) {
     var target = event.target as HTMLInputElement
     var newValue = target.value.trim()
     
-    // TODO contact service
-    console.log("Contact service")
+    this.itemEdited.emit(newValue)
 
-    this.uiUpdater()
+    this.isItemEditable = false
   }
 
   ngAfterViewInit() {
   }
 
-  inputChanged(event: Event): void {
+  inputChanged(event: Event) {
     var target = event.target as HTMLInputElement
     target.blur()
   }
 
-  uiUpdater(): void {
-    this.isItemEditable = false
+  contentClick() {
+    this.contentClicked.emit()
   }
 
-  makeItemEditable(): void {
+  makeItemEditable() {
     this.isItemEditable = true
-    console.log(this.inputItem.nativeElement)
     setTimeout(() => {
       this.inputItem.nativeElement.value = this.content
       this.inputItem.nativeElement.select()

@@ -3,5 +3,6 @@
 [class.pending]="taskStatus==1"
 [class.completed]="taskStatus==4"
 [class.flashedTask]="highlightedTask == task?.id"
-(click)="taskClick()"
+(contentClicked)="taskClick()"
+(itemEdited)="taskEdit($event)"
 ></pui-editable-item>

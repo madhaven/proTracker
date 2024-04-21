@@ -205,25 +205,6 @@ const projectEditHandler = (event, project, newName, uiUpdater) => {
     )
 }
 
-const taskEditHandler = (event, task, newSummary, uiUpdater) => {
-    comms.editTask(
-        {id: task.id, summary: newSummary},
-        res => { // TODO: document responses
-            if (res) {
-                uiState.tasks[task.id].summary = newSummary
-            } else {
-                console.error('Something went wrong.') // TODO notification
-            }
-            uiUpdater()
-            render()
-        },
-        err => {
-            console.error('Unable to edit Task due to an internal error') // TODO notification
-            uiUpdater()
-        }
-    )
-}
-
 const recieveStateChanges = (event, state) => {
     // TODO
     console.log('UI|updateUI: recieved state change prompt', event, state)

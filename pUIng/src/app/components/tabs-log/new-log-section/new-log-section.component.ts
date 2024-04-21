@@ -49,7 +49,7 @@ export class NewLogSectionComponent {
     this.newProjectValue = this.newProjectValue.trim()
 
     var newTask = {
-      dateTime: new Date(),
+      dateTime: new Date().getTime(),
       project: this.newProjectValue,
       summary: this.newTaskValue
     } as NewTask

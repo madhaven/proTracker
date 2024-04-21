@@ -1,7 +1,7 @@
+import { Task } from '../models/task.model';
+import { NewTask } from '../models/new-task.model';
 import { Injectable } from '@angular/core';
 import { TaskStatus } from '../common/task-status';
-import { NewTask } from '../models/new-task.model';
-import { UiStateService } from './ui-state.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +9,7 @@ import { UiStateService } from './ui-state.service';
 export abstract class DataComService {
 
   newTask(newTask: NewTask): any {}
-  editTask(newTask: NewTask): any {}
+  editTask(newTask: Task): any {}
   toggleTask(id: number, newState: TaskStatus, currentTime: number): any {}
   createHabit(): any {}
   habitDone(id: number): any {}
