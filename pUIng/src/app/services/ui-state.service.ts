@@ -8,6 +8,7 @@ import { MenuTabs } from '../common/menu-tabs';
 import { TaskStatus } from '../common/task-status';
 import { DataComService } from './data-com.service';
 import { ElectronComService } from './electron-com.service';
+import { NewTask } from '../models/new-task.model';
 
 @Injectable({
   providedIn: 'root'
@@ -87,11 +88,19 @@ export class UiStateService {
     return dueHabits
   }
 
-  newTask(log: TaskLog, task: Task, project: Project) {
-    this.tasks.set(task.id, task)
-    this.projects.set(project.id, project)
-    this.logs.set(log.id, log)
-    this.growTrees()
+  newTask(newTask: NewTask) {
+    this.comService.newTask(newTask).then(
+      (res: any) => { // TODO: ng standardise data models
+        if (!res) return
+        this.tasks.set(res.task.id, res.task)
+        this.projects.set(res.project.id, res.project)
+        this.logs.set(res.log.id, res.log)
+        this.growTrees()
+      },
+      (err: any) => {
+        console.error('server error while adding new task') // TODO notification
+      }
+    )
   }
 
   toggleTask(taskId: number, newState: TaskStatus, currentTime: number) {

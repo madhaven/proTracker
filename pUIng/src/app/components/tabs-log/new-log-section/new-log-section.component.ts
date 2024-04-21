@@ -53,16 +53,8 @@ export class NewLogSectionComponent {
       project: this.newProjectValue,
       summary: this.newTaskValue
     } as NewTask
-    
-    this.eComService.newTask(newTask).then(
-      (res: any) => { // TODO: ng standardise data models
-        if (!res) return
-        this.uiStateService.newTask(res.log, res.task, res.project)
-      },
-      (err: any) => {
-          console.error('server error while adding new task') // TODO notification
-      }
-    )
+
+    this.uiStateService.newTask(newTask);
 
     // reset the input section
     this.newProjectValue = ''
