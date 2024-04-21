@@ -155,6 +155,25 @@ export class UiStateService {
     return this.projects.get(projectId)
   }
 
+  editProject(projectId: number, newName: string) {
+    var newProject = this.projects.get(projectId)
+    newProject!.name = newName
+    this.comService.editProject(newProject!).then(
+      (res: any) => {
+        if (res) {
+          this.projects.set(projectId, newProject!)
+        } else {
+          // TODO: create structured responses, false values limits the reasons for failure
+          // console.warn('Yo wtf, that name already exists!')
+          console.error(`Something went wrong.`) // TODO: CREATE APP NOTIFICATION
+        }
+      },
+      (err: any) => {
+        console.error('Unable to edit Project due to an internal error')
+      }
+    )
+  }
+
   getHabit(habitId: number): Habit | undefined {
     return this.habits.get(habitId)
   }

@@ -1,7 +1,10 @@
 <li>
-    <h3 class="projectHeader" (click)="foldProject()">
+    <h3 class="projectHeader">
         <pui-editable-item
-        [content]="project?.name ?? 'ERROR'"></pui-editable-item>
+        [content]="project?.name ?? 'ERROR'"
+        (contentClicked)="foldProject()"
+        (itemEdited)="editProject($event)"
+        ></pui-editable-item>
     </h3>
     <ul class="taskList"
     *ngIf="taskTree.size > 0">

@@ -1,4 +1,5 @@
 import { Task } from "../models/task.model";
+import { Project } from "../models/project.model";
 import { NewTask } from "../models/new-task.model";
 import { Injectable } from "@angular/core";
 import { TaskStatus } from "../common/task-status";
@@ -38,5 +39,10 @@ export class ElectronComService extends DataComService {
   override editTask(newTask: Task) {
     if (!this.comsCheck()) return
     return window.comms.editTask(newTask)
+  }
+
+  override editProject(newProject: Project) {
+    if (!this.comsCheck()) return
+    return window.comms.editProject(newProject)
   }
 }

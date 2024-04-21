@@ -38,4 +38,8 @@ export class ProjectRowComponent {
   autoTypeProject() {
     this.projectAutoTypeService.requestAutoType(this.project?.name ?? '')
   }
+
+  editProject(newProjectName: string) {
+    this.uiStateService.editProject(this.project!.id, newProjectName)
+  }
 }

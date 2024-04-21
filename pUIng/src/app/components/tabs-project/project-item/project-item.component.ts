@@ -38,4 +38,8 @@ export class ProjectItemComponent {
   foldProject() {
     this.fold.emit()
   }
+
+  editProject(newName: string) {
+    this.uiStateService.editProject(this.project!.id, newName)
+  }
 }

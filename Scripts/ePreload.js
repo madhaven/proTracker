@@ -2,7 +2,7 @@ const { contextBridge, ipcRenderer } = require('electron')
 
 contextBridge.exposeInMainWorld('comms', {
     editProject: (project, callback, err) => {
-        ipcRenderer.invoke('projectEditChannel', project).then(callback, err) },
+        return ipcRenderer.invoke('projectEditChannel', project) },
     newTask: (task) => {
         return ipcRenderer.invoke('newTaskChannel', task)},
     toggleTask: (taskId, statusId, time) => {

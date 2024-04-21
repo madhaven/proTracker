@@ -1,9 +1,11 @@
 <div class="projectRow">
-    <div class="projectColumn" (click)="autoTypeProject()">
+    <div class="projectColumn">
         <pui-editable-item
         class="stickyProjectStuff"
         [content]="project?.name ?? 'ERROR'"
         [isButtonOnLeft]="true"
+        (contentClicked)="autoTypeProject()"
+        (itemEdited)="editProject($event)"
         ></pui-editable-item>
     </div>
     <div class="projectsTasks">

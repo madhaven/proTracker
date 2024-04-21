@@ -184,27 +184,6 @@ const trackIdle = () => {
 
 // #region COMMS
 
-const projectEditHandler = (event, project, newName, uiUpdater) => {
-    comms.editProject(
-        {id:project.id, name:newName},
-        res => {
-            if (res) {
-                uiState.projects[project.id].name = newName
-            } else {
-                // TODO: create structured responses, false values limits the reasons for failure
-                // console.warn('Yo wtf, that name already exists!')
-                alert(`Something went wrong.`) // TODO: CREATE APP NOTIFICATION
-            }
-            uiUpdater()
-            render()
-        },
-        err => {
-            console.error('Unable to edit Project due to an internal error')
-            uiUpdater()
-        }
-    )
-}
-
 const recieveStateChanges = (event, state) => {
     // TODO
     console.log('UI|updateUI: recieved state change prompt', event, state)

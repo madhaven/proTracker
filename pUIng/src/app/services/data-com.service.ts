@@ -1,4 +1,5 @@
 import { Task } from '../models/task.model';
+import { Project } from '../models/project.model';
 import { NewTask } from '../models/new-task.model';
 import { Injectable } from '@angular/core';
 import { TaskStatus } from '../common/task-status';
@@ -14,6 +15,6 @@ export abstract class DataComService {
   createHabit(): any {}
   habitDone(id: number): any {}
   deleteHabit(id: number): any {}
-  editProject(): any {}
+  editProject(newProject: Project): any {}
   loadData(): any {}
 }
