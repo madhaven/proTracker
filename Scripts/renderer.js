@@ -164,22 +164,6 @@ const projectItemClick = (event, element, project) => {
     localStorage.setItem('foldedProjects', JSON.stringify(uiState.foldedProjects))
 }
 
-const trackIdle = () => {
-    ['mousemove', 'mousedown', 'drag', 'keypress', 'scroll'].forEach(event => {
-        document.addEventListener(event, () => { uiState.inactiveDuration = 0 })
-    });
-    setInterval(() => {
-        uiState.inactiveDuration = ++uiState.inactiveDuration ?? 0 // TODO: ensure state is initialized
-        if (uiState.inactiveDuration >= uiState.inactivityTolerance
-            && uiState.inactivityTolerance >= -1
-            && !uiState.menuVisible) {
-            toggleMenuBar(true)
-            console.info('MenuBar on idle')
-        }
-    }, 1000);
-    console.info('Idle tracking enabled')
-}
-
 // #endregion
 
 // #region COMMS
@@ -194,15 +178,8 @@ const recieveStateChanges = (event, state) => {
 window.addEventListener('load', event => {
 
     if (allowSuperpowers) createDateTimeInput()
-
-    // window listeners
-    window.addEventListener('pageshow', event => { render(); toggleMenuBar(true) })
     
     // comm listeners
     stateComm.registerListener('updateUI', recieveStateChanges)
 
-    setDefaultDate()
-    switchToTab('logChart')
-    toggleMenuBar(true)
-    if (!allowSuperpowers) trackIdle()
 })

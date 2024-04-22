@@ -1,4 +1,4 @@
-import { Component, ElementRef, Output, ViewChild, EventEmitter } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { UiStateService } from '../../services/ui-state.service';
 import { MenuTabs } from '../../common/menu-tabs';
@@ -10,8 +10,7 @@ import { MenuTabs } from '../../common/menu-tabs';
   templateUrl: './main-menu.component.html',
   styleUrl: './main-menu.component.css'
 })
-export class MainMenuComponent {
-  menuVisible: boolean;
+export class MainMenuComponent implements OnInit {
   uiStateService:UiStateService
   
   logChart: MenuTabs = MenuTabs.TaskLogs
@@ -21,7 +20,23 @@ export class MainMenuComponent {
 
   constructor(uistateService: UiStateService) {
     this.uiStateService = uistateService
-    this.menuVisible = true; // TODO: ng get state variables
+  }
+
+  ngOnInit(): void {
+    ['mousemove', 'mousedown', 'drag', 'keypress', 'scroll'].forEach(event => {
+      document.addEventListener(event, () => { this.uiStateService.inactiveDuration = 0 })
+    });
+
+    setInterval(() => {
+      this.uiStateService.inactiveDuration = ++this.uiStateService.inactiveDuration
+      if (this.uiStateService.inactiveDuration >= this.uiStateService.inactivityTolerance
+        && this.uiStateService.inactivityTolerance >= -1
+        && !this.uiStateService.menuVisible) {
+          this.uiStateService.menuVisible = true
+          console.info('MenuBar on idle')
+        }
+    }, 1000);
+    console.info('Idle tracking enabled')
   }
 
   switchToTab(tab:MenuTabs) {
@@ -35,8 +50,8 @@ export class MainMenuComponent {
 
   // handles the open and close of the sidebar
   toggleMenuBar(visible:boolean|null = null): void {
-    this.menuVisible = visible == null
-      ? !this.menuVisible
+    this.uiStateService.menuVisible = visible == null
+      ? !this.uiStateService.menuVisible
       : visible
   }
 }
