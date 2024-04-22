@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { TaskLog } from '../../../../../models/task-log.model';
 import { Task } from '../../../../../models/task.model';
 import { UiStateService } from '../../../../../services/ui-state.service';
@@ -12,7 +12,7 @@ import { TaskStatus } from '../../../../../common/task-status';
   styleUrl: './task-row.component.css',
   imports: [EditableItemComponent]
 })
-export class TaskRowComponent {
+export class TaskRowComponent implements OnInit {
 
   @Input() taskId!: number;
   @Input() taskLog!: TaskLog;

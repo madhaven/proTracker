@@ -142,7 +142,7 @@ export class UiStateService {
         if (res) {
           this.tasks.set(taskId, newTask!)
         } else {
-          console.error('Something went wrong.') // TODO notification
+          console.error('Something went wrong while editing task') // TODO notification
         }
       },
       (err: any) => {
@@ -165,7 +165,7 @@ export class UiStateService {
         } else {
           // TODO: create structured responses, false values limits the reasons for failure
           // console.warn('Yo wtf, that name already exists!')
-          console.error(`Something went wrong.`) // TODO: CREATE APP NOTIFICATION
+          console.error(`Something went wrong while editing project`) // TODO: CREATE APP NOTIFICATION
         }
       },
       (err: any) => {

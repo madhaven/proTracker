@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { EditableItemComponent } from '../../../../common/editable-item/editable-item.component';
 import { Project } from '../../../../models/project.model';
 import { TaskLog } from '../../../../models/task-log.model';
@@ -14,7 +14,7 @@ import { TaskRowComponent } from "./task-row/task-row.component";
   styleUrl: './project-row.component.css',
   imports: [TaskRowComponent, CommonModule, EditableItemComponent]
 })
-export class ProjectRowComponent {
+export class ProjectRowComponent implements OnInit {
 
   @Input() projectId!: number
   @Input() tree!: Map<number, TaskLog>

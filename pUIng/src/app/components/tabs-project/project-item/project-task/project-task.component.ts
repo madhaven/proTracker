@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { EditableItemComponent } from '../../../../common/editable-item/editable-item.component';
 import { TaskStatus } from '../../../../common/task-status';
 import { Task } from '../../../../models/task.model';
@@ -11,7 +11,7 @@ import { UiStateService } from '../../../../services/ui-state.service';
   templateUrl: './project-task.component.html',
   styleUrl: './project-task.component.css'
 })
-export class ProjectTaskComponent {
+export class ProjectTaskComponent implements OnInit {
 
   @Input() taskId!: number
   @Input() statusId!: number

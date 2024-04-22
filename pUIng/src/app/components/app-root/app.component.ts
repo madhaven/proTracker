@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { TabsHabitComponent } from '../tabs-habit/tabs-habit.component';
 import { TabsLogComponent } from '../tabs-log/tabs-log.component';
@@ -22,7 +22,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'pUIng';
   uiStateService!: UiStateService
   

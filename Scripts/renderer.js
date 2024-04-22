@@ -35,21 +35,6 @@ const createDateTimeInput = () => {
     inputDiv.appendChild(input)
 }
 
-const addTaskListeners = (taskElement, log, task, day) => {
-    var itIsToday
-    if (day === false)
-        itIsToday = true
-    else {
-        const [year, month, date] = day.split(',')
-        itIsToday = new Date().toDateString() == new Date(year, month, date).toDateString()
-    }
-    if (allowSuperpowers || itIsToday ) {
-        taskElement.addEventListener('click', event => {
-            taskClick(event, task, log)
-        }) // TODO: does this belong here?
-    }
-}
-
 const addHabitListeners = (newHabitItem) => {
     const habitTitle = newHabitItem.querySelector('input.newHabitTitle')
         , habitFreq = newHabitItem.querySelector('input.newHabitFrequency')

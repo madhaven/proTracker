@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { TaskLog } from '../../../models/task-log.model';
 import { ProjectRowComponent } from "./project-row/project-row.component";
 
@@ -10,7 +10,7 @@ import { ProjectRowComponent } from "./project-row/project-row.component";
     styleUrl: './log-day.component.css',
     imports: [ProjectRowComponent, CommonModule]
 })
-export class LogDayComponent {
+export class LogDayComponent implements OnInit {
 
   @Input() logDay: string = ""
   @Input() tree: Map<number, Map<number, TaskLog>> = new Map();

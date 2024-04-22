@@ -1,5 +1,5 @@
 import { CommonModule, NgForOf } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { EditableItemComponent } from '../../../common/editable-item/editable-item.component';
 import { Project } from '../../../models/project.model';
@@ -19,7 +19,7 @@ import { ProjectTaskComponent } from './project-task/project-task.component';
   templateUrl: './project-item.component.html',
   styleUrl: './project-item.component.css'
 })
-export class ProjectItemComponent {
+export class ProjectItemComponent implements OnInit {
 
   @Input() projectId!: number
   @Input() taskTree!: Map<number, number>

@@ -1,5 +1,5 @@
 import { NgIf } from '@angular/common';
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 
@@ -10,7 +10,7 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './editable-item.component.html',
   styleUrl: './editable-item.component.css'
 })
-export class EditableItemComponent {
+export class EditableItemComponent implements AfterViewInit {
   @Input() content!: string
   @Input() isButtonOnLeft: boolean = false
   @Output() itemEdited = new EventEmitter<string>()

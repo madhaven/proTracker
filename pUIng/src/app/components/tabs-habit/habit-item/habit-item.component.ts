@@ -1,5 +1,5 @@
 import { NgIf } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { EditableItemComponent } from '../../../common/editable-item/editable-item.component';
 import { Habit } from '../../../models/habit.model';
 
@@ -13,7 +13,7 @@ import { Habit } from '../../../models/habit.model';
   templateUrl: './habit-item.component.html',
   styleUrl: './habit-item.component.css'
 })
-export class HabitItemComponent {
+export class HabitItemComponent implements OnInit {
 
   @Input() habitId!: number
   @Input() habit!: Habit

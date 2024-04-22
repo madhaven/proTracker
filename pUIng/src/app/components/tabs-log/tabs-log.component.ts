@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { UiStateService } from '../../services/ui-state.service';
 import { NewLogSectionComponent } from './new-log-section/new-log-section.component';
 import { LogDayComponent } from "./log-day/log-day.component";
@@ -21,7 +21,7 @@ import { ProjectAutoTypeService } from '../../services/project-auto-type.service
     ProjectAutoTypeService,
   ]
 })
-export class TabsLogComponent {
+export class TabsLogComponent implements OnInit, AfterViewInit {
 
   @ViewChild('scrollAnchor') scrollAnchor!: ElementRef;
   uiStateService: UiStateService
