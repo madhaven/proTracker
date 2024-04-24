@@ -17,11 +17,9 @@ export class UiStateService {
 
   // preferences
   foldedProjects = new Map<number, boolean>()
-  menuVisible: boolean = true
   currentTab: MenuTabs = MenuTabs.TaskLogs
   dataProfile: boolean = true
-  inactiveDuration: number = 0 // TODO: ng fix
-  inactivityTolerance: number = 500 // TODO: ng fix
+  idleTolerance: number = 500 // TODO: ng fix
 
   // data
   tasks = new Map<number, Task>()
