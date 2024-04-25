@@ -6,14 +6,15 @@
         [isButtonOnLeft]="true"
         (contentClicked)="autoTypeProject()"
         (itemEdited)="editProject($event)"
-        ></pui-editable-item>
+        />
     </div>
     <div class="projectsTasks">
         <pui-task-row
         *ngFor="let taskLog of tree | keyvalue"
         [taskId]="taskLog.key"
         [taskLog]="taskLog.value"
-        [highlightedTask]="highlightedTask"></pui-task-row>
+        [highlightedTask]="highlightedTask"
+        />
     </div>
 </div>
 

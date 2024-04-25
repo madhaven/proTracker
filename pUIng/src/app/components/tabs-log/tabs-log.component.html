@@ -16,8 +16,9 @@
         *ngFor="let day of uiStateService.getLogTree() | keyvalue"
         [logDay]="day.key"
         [tree]="day.value"
-        [highlightedTask]="highlightedTask"></pui-log-day>
-        <pui-new-log-section [logsExist]="uiStateService.logsExist()"></pui-new-log-section>
+        [highlightedTask]="highlightedTask"
+        />
+        <pui-new-log-section [logsExist]="uiStateService.logsExist()" />
         <div #scrollAnchor></div>
     </main>
 </div>

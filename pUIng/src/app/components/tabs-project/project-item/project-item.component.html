@@ -4,7 +4,7 @@
         [content]="project?.name ?? 'ERROR'"
         (contentClicked)="foldProject()"
         (itemEdited)="editProject($event)"
-        ></pui-editable-item>
+        />
     </h3>
     <ul class="taskList"
     *ngIf="taskTree.size > 0">
@@ -12,6 +12,7 @@
         *ngFor="let item of taskTree | keyvalue"
         [taskId]="item.key"
         [statusId]="item.value"
-        [routerLink]="['/logs', item.key]"></pui-project-task>
+        [routerLink]="['/logs', item.key]"
+        />
     </ul>
 </li>
