@@ -221,12 +221,9 @@ const toggleTaskHandler = async (event, taskId, newStatusId, newTime) => {
     return statusLog ?? false
 }
 
-const createHabitHandler = async (event, title, startTime, endTime, frequency) => {
-    habit = await HP.create(
-        new Habit(-1, title, false, startTime, endTime, frequency, 0)
-    )
+const createHabitHandler = async (event, habit) => {
+    habit = await HP.create(habit)
     return habit ?? false
-
 }
 
 const habitDoneHandler = async (event, habitId, time) => {

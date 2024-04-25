@@ -35,20 +35,6 @@ const createDateTimeInput = () => {
     inputDiv.appendChild(input)
 }
 
-const addHabitListeners = (newHabitItem) => {
-    const habitTitle = newHabitItem.querySelector('input.newHabitTitle')
-        , habitFreq = newHabitItem.querySelector('input.newHabitFrequency')
-        , arr = [habitTitle, habitFreq]
-    
-    arr.forEach(item => {
-        item.addEventListener('change', (event) => {
-            if (habitTitle.value && habitFreq.value && habitFreq.value>=1 && habitFreq.value<=7) {
-                newHabit(habitTitle.value, habitFreq.value)
-            }
-        })
-    })
-}
-
 // #endregion
 
 // #region Actions
@@ -89,19 +75,6 @@ const exportData = event => {
         err => {
             console.error('Unhandled Error occurred on Data Export', err) // TODO logs and error management
             flashIcon(resultShowDuration)
-        }
-    )
-}
-
-const newHabit = (title, frequency) => {
-    comms.createHabit(
-        title, Date.now(), Infinity, frequency,
-        res => {
-            uiState.addHabit(res)
-            render()
-        },
-        err => {
-            console.error('servor errored while adding habit') // TODO notification
         }
     )
 }

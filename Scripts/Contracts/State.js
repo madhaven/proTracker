@@ -24,10 +24,6 @@ const State = class {
         console.debug('data added', this)
     }
 
-    addHabit (habit) {
-        this.habits[habit.id] = habit
-    }
-
     addHabitLog (habitLog) {
         this.habitLogs[habitLog.id] = habitLog
     }

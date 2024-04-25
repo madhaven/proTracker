@@ -9,8 +9,8 @@ contextBridge.exposeInMainWorld('comms', {
         return ipcRenderer.invoke('taskClickChannel', taskId, statusId, time) },
     editTask: (task) => {
         return ipcRenderer.invoke('taskEditChannel', task) },
-    createHabit: (title, startTime, endTime, frequency, callback, err) => {
-        ipcRenderer.invoke('habitCreateChannel', title, startTime, endTime, frequency).then(callback, err) },
+    newHabit: (habit) => {
+        return ipcRenderer.invoke('habitCreateChannel', habit) },
     habitDone: (habitId, time, callback, err) => {
         ipcRenderer.invoke('habitDoneChannel', habitId, time).then(callback, err) },
     deleteHabit: (habitId, time, callback, err) => {

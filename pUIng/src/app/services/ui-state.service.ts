@@ -108,7 +108,7 @@ export class UiStateService {
   newTask(newTask: NewTask) {
     this.comService.newTask(newTask).then(
       (res: any) => { // TODO: ng standardise data models
-        if (!res) return
+        if (res == false) return
         this.tasks.set(res.task.id, res.task)
         this.projects.set(res.project.id, res.project)
         this.logs.set(res.log.id, res.log)
@@ -122,7 +122,9 @@ export class UiStateService {
 
   toggleTask(taskId: number, newState: TaskStatus, currentTime: number) {
     this.comService.toggleTask(taskId, newState, currentTime).then(
-      (res: TaskLog) => {
+      (res: TaskLog|boolean) => {
+        if (res as boolean == false) return
+        res = res as TaskLog
         this.logs.set(res.id, res)
         this.growTrees()
       },
@@ -136,11 +138,12 @@ export class UiStateService {
     var newTask = this.tasks.get(taskId)
     newTask!.summary = newSummary
     this.comService.editTask(newTask!).then(
-      (res: any) => { // TODO: document responses
-        if (res) {
-          this.tasks.set(taskId, newTask!)
-        } else {
+      (res: Task|boolean) => { // TODO: document responses
+        if (res as boolean == false) {
           console.error('Something went wrong while editing task') // TODO notification
+        } else {
+          res = res as Task
+          this.tasks.set(taskId, newTask!)
         }
       },
       (err: any) => {
@@ -176,6 +179,38 @@ export class UiStateService {
     return this.habits.get(habitId)
   }
 
+  newHabit(
+    title: string,
+    frequency: number,
+    startTime: number = Date.now(),
+    endTime: number = Infinity
+  ) {
+    // title, Date.now(), Infinity, frequency
+    var newHabit: Habit = {
+      id: -1,
+      name: title,
+      days: frequency,
+      startTime: startTime,
+      endTime: endTime
+    } as Habit
+
+    this.comService.newHabit(newHabit).then(
+      (res: Habit|boolean) => {
+        if (res as boolean == false) {
+          console.error('Habit invalid')
+          console.log(res)
+          return
+        } else {
+          res = res as Habit
+          this.habits.set(res.id, res)
+        }
+      },
+      (err: any) => {
+        console.error('servor errored while adding habit', err) // TODO notification
+      }
+    )
+  }
+
   getHabitsDueOn(today: Date): Map<number, Habit> {
     var dueHabits = new Map<number, Habit>()
     for (let [id, habit] of this.habits) {
@@ -207,11 +242,11 @@ export class UiStateService {
   }
 
   replaceData(
-    tasks: any, 
-    taskLogs: any, 
-    projects: any, 
-    habits: any, 
-    habitLogs: any
+    tasks: [Task], 
+    taskLogs: [TaskLog], 
+    projects: [Project], 
+    habits: [Habit], 
+    habitLogs: [HabitLog],
   ) {
     this.logs = new Map()
     this.tasks = new Map()

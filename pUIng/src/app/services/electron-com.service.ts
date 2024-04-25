@@ -4,6 +4,7 @@ import { NewTask } from "../models/new-task.model";
 import { Injectable } from "@angular/core";
 import { TaskStatus } from "../common/task-status";
 import { DataComService } from "./data-com.service";
+import { Habit } from "../models/habit.model";
 
 declare global {
   interface Window {
@@ -44,5 +45,10 @@ export class ElectronComService extends DataComService {
   override editProject(newProject: Project) {
     if (!this.comsCheck()) return
     return window.comms.editProject(newProject)
+  }
+
+  override newHabit(habit: Habit) {
+    if (!this.comsCheck()) return
+    return window.comms.newHabit(habit)
   }
 }
