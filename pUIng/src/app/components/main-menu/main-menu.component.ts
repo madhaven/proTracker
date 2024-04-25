@@ -45,15 +45,6 @@ export class MainMenuComponent implements OnInit {
     console.info('Idle tracking enabled')
   }
 
-  switchToTab(tab:MenuTabs) {
-    
-    if (tab == MenuTabs.Export) {
-      ; // TODO: ng Export
-    } else {
-      this.uiStateService.switchTab(tab)
-    }
-  }
-
   // handles the open and close of the sidebar
   toggleMenuBar(visible:boolean|null = null): void {
     this.menuVisible = visible == null

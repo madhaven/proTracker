@@ -82,7 +82,7 @@ const HabitProvider = class {
             , habit.end_time
             , habit.days
         FROM habit LEFT JOIN habit_log hlog ON habit.id=hlog.habit_id
-        GROUP BY habit_id;`
+        GROUP BY habit.id;`
         console.debug('HabitProvider: getAllHabits')
         try {
             const res = await this.dbService.fetch(query)

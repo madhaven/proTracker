@@ -26,17 +26,17 @@ export class AppComponent implements OnInit {
   title = 'pUIng';
   uiStateService!: UiStateService
   
-  currentTab: MenuTabs = MenuTabs.TaskLogs
+  currentTab!: MenuTabs
   logsTab: MenuTabs = MenuTabs.TaskLogs
   habitsTab: MenuTabs = MenuTabs.Habits
   projectsTab: MenuTabs = MenuTabs.Projects
 
   constructor(uiStateService: UiStateService) {
     this.uiStateService = uiStateService
+    this.currentTab = this.uiStateService.defaultTab
   }
 
   ngOnInit() {
-    this.currentTab = this.uiStateService.currentTab // TODO: fetch from preferences
     this.uiStateService.loadData()
   }
 }

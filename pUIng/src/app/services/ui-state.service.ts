@@ -17,7 +17,7 @@ export class UiStateService {
 
   // preferences
   foldedProjects = new Map<number, boolean>()
-  currentTab: MenuTabs = MenuTabs.TaskLogs
+  defaultTab: MenuTabs = MenuTabs.TaskLogs
   dataProfile: boolean = true
   idleTolerance: number = 500 // TODO: ng fix
 
@@ -89,10 +89,6 @@ export class UiStateService {
 
   logsExist() {
     return this.logs.size > 0
-  }
-
-  switchTab(tab: MenuTabs) {
-    this.currentTab = tab
   }
 
   toggleFold(projectId: number): boolean {

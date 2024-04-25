@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { NewTask } from '../../../models/new-task.model';
@@ -16,6 +16,7 @@ import { UiStateService } from '../../../services/ui-state.service';
 export class NewLogSectionComponent {
 
   @Input() logsExist:boolean = false
+  @ViewChild('newLogTask') newTaskInput!: ElementRef
   uiStateService: UiStateService
   eComService: ElectronComService
   newProjectValue: string = ''
@@ -64,7 +65,10 @@ export class NewLogSectionComponent {
 
   autoTypeProject(projectName: string, index=0) {
     if (index == 0) this.newProjectValue = ''
-    if (index >= projectName.length) return
+    if (index >= projectName.length) {
+      this.newTaskInput.nativeElement.focus()
+      return
+    }
     this.newProjectValue += projectName[index]
     setTimeout(() => { this.autoTypeProject(projectName, index+1) }, 25);
   }
