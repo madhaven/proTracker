@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Habit } from '../../../models/habit.model';
+import { UiStateService } from '../../../services/ui-state.service';
 
 @Component({
   selector: 'pui-due-habit-item',
@@ -12,9 +13,14 @@ export class DueHabitItemComponent {
 
   @Input() habitId!: number
   @Input() habit!: Habit
+  uiStateService: UiStateService
+
+  constructor(uiStateService: UiStateService) {
+    this.uiStateService = uiStateService
+  }
 
   habitLog() {
-    // TODO: ng service
+    this.uiStateService.markHabitDone(this.habit)
   }
 
 }

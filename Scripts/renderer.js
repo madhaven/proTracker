@@ -79,22 +79,6 @@ const exportData = event => {
     )
 }
 
-const markHabitDone = (habitId, time) => {
-    comms.habitDone (
-        habitId, time,
-        res => {
-            uiState.addHabitLog(res)
-            console.log('reading last log tiem')
-            uiState.habits[res.habitId].lastLogTime = res.dateTime
-            console.log('reading last log tiem complete')
-            render()
-        },
-        err => {
-            console.error('server error while updating habit', err) // TODO notification
-        }
-    )
-}
-
 const deleteHabit = (habitId, time) => {
     comms.deleteHabit (
         habitId, time,

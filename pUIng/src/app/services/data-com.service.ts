@@ -14,7 +14,7 @@ export abstract class DataComService {
   editTask(newTask: Task): any {}
   toggleTask(id: number, newState: TaskStatus, currentTime: number): any {}
   newHabit(newHabit: Habit): any {}
-  habitDone(id: number): any {}
+  habitDone(id: number, time: number): any {}
   deleteHabit(id: number): any {}
   editProject(newProject: Project): any {}
   loadData(): any {}

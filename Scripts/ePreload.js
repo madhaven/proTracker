@@ -11,8 +11,8 @@ contextBridge.exposeInMainWorld('comms', {
         return ipcRenderer.invoke('taskEditChannel', task) },
     newHabit: (habit) => {
         return ipcRenderer.invoke('habitCreateChannel', habit) },
-    habitDone: (habitId, time, callback, err) => {
-        ipcRenderer.invoke('habitDoneChannel', habitId, time).then(callback, err) },
+    habitDone: (habitId, time) => {
+        return ipcRenderer.invoke('habitDoneChannel', habitId, time) },
     deleteHabit: (habitId, time, callback, err) => {
         ipcRenderer.invoke('deleteHabitChannel', habitId, time).then(callback, err) },
     loadData: () => {

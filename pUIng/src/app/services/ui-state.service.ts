@@ -194,7 +194,6 @@ export class UiStateService {
       (res: Habit|boolean) => {
         if (res as boolean == false) {
           console.error('Habit invalid')
-          console.log(res)
           return
         } else {
           res = res as Habit
@@ -203,6 +202,24 @@ export class UiStateService {
       },
       (err: any) => {
         console.error('servor errored while adding habit', err) // TODO notification
+      }
+    )
+  }
+
+  markHabitDone(habit: Habit) {
+    this.comService.habitDone(habit.id, Date.now()).then(
+      (res: HabitLog|boolean) => {
+        if (res as boolean == false) {
+          console.error('Unable to mark Habit as done due to some error')
+          return
+        } else {
+          res = res as HabitLog
+          this.habitLogs.set(res.id, res)
+          this.habits.get(res.habitId)!.lastLogTime = res.dateTime
+        }
+      },
+      (err: any) => {
+        console.error('server error while updating habit', err) // TODO notification
       }
     )
   }

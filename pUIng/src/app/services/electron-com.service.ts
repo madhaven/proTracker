@@ -51,4 +51,9 @@ export class ElectronComService extends DataComService {
     if (!this.comsCheck()) return
     return window.comms.newHabit(habit)
   }
+
+  override habitDone(id: number, time: number) {
+    if (!this.comsCheck()) return
+    return window.comms.habitDone(id, time)
+  }
 }
