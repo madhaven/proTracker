@@ -10,6 +10,7 @@
     *ngIf="taskTree.size > 0">
         <pui-project-task
         *ngFor="let item of taskTree | keyvalue"
+        class="projectTask"
         [taskId]="item.key"
         [statusId]="item.value"
         [routerLink]="['/logs', item.key]"

@@ -1,6 +1,7 @@
 .habitItem {
     border: 1px solid var(--whiteLayer1);
-    margin-bottom: 1em;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
     /* margin-left: 1em; */
     padding: .5em 1em;
     transition: .5s ease-out;

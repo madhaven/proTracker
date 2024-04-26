@@ -1,20 +1,22 @@
 <li class="newhabitItem">
     <input
+    #newHabitNameInput
     type="text"
     class="newHabitTitle"
     placeholder="I want to ... ?"
     [(ngModel)]="newHabitName"
-    (change)="newHabit()"
+    (change)="newHabit(newHabitNameInput)"
     >
     <div class="newHabitFrequencyContainer">
         <input
+        #newHabitFrequencyInput
         class="newHabitFrequency"
         type="number"
         min="1"
         max="7"
         placeholder="x"
         [(ngModel)]="newHabitFrequency"
-        (change)="newHabit()"
+        (change)="newHabit(newHabitFrequencyInput)"
         > days a week
     </div>
 </li>

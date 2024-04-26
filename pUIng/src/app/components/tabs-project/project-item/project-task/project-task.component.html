@@ -1,5 +1,6 @@
 <li>
-    <pui-editable-item [content]="task?.summary ?? 'ERROR'"
+    <pui-editable-item
+    [content]="task?.summary ?? ''"
     [class.pending]="taskStatus==1"
     [class.completed]="taskStatus==4"
     />

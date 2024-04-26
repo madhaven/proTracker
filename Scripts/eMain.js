@@ -25,16 +25,6 @@ const setupServices = () => {
     dbService.tryMigrate()
 }
 
-const initialState = () => {
-    // loads the data and creates the state instance that is sent to the UI
-    console.debug('main: Loading UI State', state)
-    var state = new State(
-        menuVisible=true,
-        dataProfile=''
-    )
-    return state
-}
-
 const createWindow = () => {
     const win = new BrowserWindow({
         width: 800,
@@ -48,15 +38,12 @@ const createWindow = () => {
     
     setupServices()
     registerHandlers(win)
-    win.removeMenu()
+    win.removeMenu() // hide default app toolbar
     if (debugMode)
         win.loadURL("http://localhost:4200")
     else
         win.loadFile("./pUIng/dist/pUIng/browser/index.html")
-        // win.loadFile('./Screens/index.html')
     win.webContents.on('did-finish-load', () => {
-        state = initialState()
-        mainWindow.webContents.send('updateUI', state)
         if (debugMode) win.webContents.openDevTools()
     })
     win.once('ready-to-show', () => {

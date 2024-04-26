@@ -29,7 +29,7 @@ export class TabsHabitComponent implements DoCheck{
     this.dueHabits = this.uiStateService.getHabitsDueOn(new Date())
   }
   
-
+  // ngAfterContentChecked() { // working too frequently
   ngDoCheck() { // TODO: working too frequently - make dueHabits item in stateservice
     this.dueHabits = this.uiStateService.getHabitsDueOn(new Date())
   }
