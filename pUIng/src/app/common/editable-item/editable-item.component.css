@@ -13,10 +13,13 @@
 .editableItem:not(.editable) .editableItemInput {
     display: none;
 }
-input.editableItemInput {
+.editableItemContent, .editableItemInput {
+    padding: 0em;
+}
+.editableItemInput input {
     border: none;
     padding: 0;
-    margin: auto;
+    margin: 0;
 }
 .editableItemEditButton {
     color: var(--whiteLayer2);

@@ -15,16 +15,20 @@ export class EditableItemComponent implements AfterViewInit {
   @Input() isButtonOnLeft: boolean = false
   @Output() itemEdited = new EventEmitter<string>()
   @Output() contentClicked = new EventEmitter()
-  isItemEditable: boolean = false
+  itemEditable: boolean = false
   @ViewChild('editableInput') inputItem!: ElementRef;
 
   tryUpdate(event: Event) {
     var target = event.target as HTMLInputElement
     var newValue = target.value.trim()
+
+    if (newValue.length < 1 || newValue == this.content) {
+      this.itemEditable = false
+      return
+    }
     
     this.itemEdited.emit(newValue)
-
-    this.isItemEditable = false
+    this.itemEditable = false
   }
 
   ngAfterViewInit() {
@@ -40,7 +44,7 @@ export class EditableItemComponent implements AfterViewInit {
   }
 
   makeItemEditable() {
-    this.isItemEditable = true
+    this.itemEditable = true
     setTimeout(() => {
       this.inputItem.nativeElement.value = this.content
       this.inputItem.nativeElement.select()
