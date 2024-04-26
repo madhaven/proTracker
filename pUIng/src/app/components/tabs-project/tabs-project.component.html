@@ -8,7 +8,6 @@
                 [projectId]="project.key"
                 [taskTree]="project.value"
                 [class.emptyProject]="project.value.size == 0 || uiStateService.foldedProjects.get(project.key)"
-                (fold)="foldProjectItem(project.key)"
                 />
             </ul>
         </div>

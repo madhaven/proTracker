@@ -1,8 +1,6 @@
 const allowSuperpowers = false // for debugging
     , doneIconSVG = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16"><path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/></svg>'
 
-// #region Helpers
-
 const setDefaultDate = () => {
     if (!allowSuperpowers) return
     // sets a default date client: recieved state change promptfor the input field
@@ -29,10 +27,6 @@ const createDateTimeInput = () => {
     input.addEventListener('change', newLogInput)
     inputDiv.appendChild(input)
 }
-
-// #endregion
-
-// #region Actions
 
 const exportData = event => {
     var x = event.srcElement.querySelector('svg')
@@ -87,36 +81,12 @@ const deleteHabit = (habitId, time) => {
     )
 }
 
-const projectItemClick = (event, element, project) => {
-    const taskList = element.querySelector('.taskList')
-    if (taskList.classList.contains('hidden')) { 
-        taskList.classList.remove('hidden')
-        element.classList.remove('emptyProject')
-        uiState.foldedProjects[project.id] = false
-    } else {
-        taskList.classList.add('hidden')
-        element.classList.add('emptyProject')
-        uiState.foldedProjects[project.id] = true
-    }
-    localStorage.setItem('foldedProjects', JSON.stringify(uiState.foldedProjects))
-}
-
-// #endregion
-
-// #region COMMS
-
 const recieveStateChanges = (event, state) => {
     // TODO
     console.log('UI|updateUI: recieved state change prompt', event, state)
 }
 
-// #endregion
-
 window.addEventListener('load', event => {
-
     if (allowSuperpowers) createDateTimeInput()
-    
-    // comm listeners
     stateComm.registerListener('updateUI', recieveStateChanges)
-
 })

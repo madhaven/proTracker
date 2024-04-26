@@ -91,10 +91,12 @@ export class UiStateService {
     return this.logs.size > 0
   }
 
-  toggleFold(projectId: number): boolean {
+  toggleFold(projectId: number) {
     var currentFold = this.foldedProjects.get(projectId) ?? false
     this.foldedProjects.set(projectId, !currentFold)
-    return !currentFold
+
+    var jsonData = JSON.stringify(Array.from(this.foldedProjects.entries()))
+    localStorage.setItem('foldedProjects', jsonData)
   }
 
   getTask(taskId: number): Task | undefined {
@@ -260,8 +262,13 @@ export class UiStateService {
     this.comService.loadData().then(
       (res: any) => {
         if (res){
+          // fetch data
           console.log('data recieved from db', res)
           this.replaceData(res.tasks, res.taskLogs, res.projects, res.habits, res.habitLogs)
+
+          // fetch UI info
+          var projectFoldData = new Map<number, boolean>(JSON.parse(localStorage.getItem('foldedProjects') ?? '[]'))
+          this.foldedProjects = projectFoldData
         } else {
           console.error('corrupt data received', res)
           // TODO: notification ?

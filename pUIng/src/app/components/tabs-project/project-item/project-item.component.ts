@@ -23,12 +23,11 @@ export class ProjectItemComponent implements OnInit {
 
   @Input() projectId!: number
   @Input() taskTree!: Map<number, number>
-  @Output() fold = new EventEmitter()
   project?: Project
   uiStateService!: UiStateService
 
   constructor(uiStateService: UiStateService) {
-    this.uiStateService = uiStateService
+    this.uiStateService = uiStateService 
   }
 
   ngOnInit() {
@@ -36,7 +35,8 @@ export class ProjectItemComponent implements OnInit {
   }
 
   foldProject() {
-    this.fold.emit()
+    console.log('foldproject called')
+    this.uiStateService.toggleFold(this.project!.id)
   }
 
   editProject(newName: string) {

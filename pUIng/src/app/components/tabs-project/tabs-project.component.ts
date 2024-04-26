@@ -21,8 +21,4 @@ export class TabsProjectComponent {
   constructor(uiStateService: UiStateService) {
     this.uiStateService = uiStateService
   }
-
-  foldProjectItem(projectId: number) {
-    this.uiStateService.toggleFold(projectId)
-  }
 }
