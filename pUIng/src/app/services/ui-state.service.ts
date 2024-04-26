@@ -201,7 +201,24 @@ export class UiStateService {
         }
       },
       (err: any) => {
-        console.error('servor errored while adding habit', err) // TODO notification
+        console.error('server errored while adding habit', err) // TODO notification
+      }
+    )
+  }
+
+  editHabit(newHabit: Habit) {
+    this.comService.editHabit(newHabit).then(
+      (res: Habit|boolean) => {
+        if (res as boolean == false) {
+          console.error('Habit invalid')
+          return
+        } else {
+          res = res as Habit
+          this.habits.set(res.id, res)
+        }
+      },
+      (err: any) => {
+        console.error('server errored while editing habit', err) // TODO: notification
       }
     )
   }

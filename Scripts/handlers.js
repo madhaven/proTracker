@@ -226,6 +226,11 @@ const createHabitHandler = async (event, habit) => {
     return habit ?? false
 }
 
+const editHabitHandler = async (event, newHabit) => {
+    newHabit = await HP.update(newHabit.id, newHabit)
+    return newHabit ?? false
+}
+
 const habitDoneHandler = async (event, habitId, time) => {
     const habit = await HP.get(habitId)
         , lastDayLogged = new Date(habit.lastLogTime)
@@ -273,6 +278,7 @@ const registerHandlers = mainWindow => {
     ipcMain.handle('taskEditChannel', editTaskHandler)
     ipcMain.handle('taskClickChannel', toggleTaskHandler)
     ipcMain.handle('habitCreateChannel', createHabitHandler)
+    ipcMain.handle('habitEditChannel', editHabitHandler)
     ipcMain.handle('habitDoneChannel', habitDoneHandler)
     ipcMain.handle('deleteHabitChannel', deleteHabitHandler)
     ipcMain.handle('loadDataRequest', DataRequestHandler)
