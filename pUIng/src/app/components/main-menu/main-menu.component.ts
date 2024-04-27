@@ -29,6 +29,11 @@ export class MainMenuComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.enableIdleTracking()
+    this.uiStateService.getAppVersion()
+  }
+
+  enableIdleTracking() {
     ['mousemove', 'mousedown', 'drag', 'keypress', 'scroll'].forEach(event => {
       document.addEventListener(event, () => { this.idleTime = 0 });
     });
