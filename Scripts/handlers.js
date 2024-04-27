@@ -240,7 +240,7 @@ const habitDoneHandler = async (event, habitId, time) => {
         && today.getMonth() == lastDayLogged.getMonth()
         && today.getDate() == lastDayLogged.getDate()
     ) {
-        throw Error("Already Logged Habit for the day") // TODO Notification
+        throw Error("Already Logged Habit for the day") // TODO: Notification
     } else {
         habitLog = await HLP.create(new HabitLog(-1, habitId, time))
         return habitLog ?? false
@@ -248,23 +248,23 @@ const habitDoneHandler = async (event, habitId, time) => {
 }
 
 const deleteHabitHandler = async (event, habitId, time) => {
-    // TODO
+    // TODO:
 }
 
 /// STATE EVENTS
 
 const stateEventHandler = async (event, data) => {
-    // TODO
+    // TODO:
     // console.log('main: state event notified')
 }
 
 const stateChangeRequestHandler = async (event, data) => {
-    // TODO
+    // TODO:
     console.log('main: state change request recieved', event, data)
 }
 
 const registerHandlers = mainWindow => {
-    // TODO DI ?
+    // TODO: Dependency Injection ?
     TP = new TaskProvider()
     PP = new ProjectProvider()
     SLP = new StatusLogProvider()

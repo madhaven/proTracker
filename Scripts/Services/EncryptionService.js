@@ -1,5 +1,5 @@
 const EncryptionService = class {
-    // TODO implement valid encryption
+    // TODO: implement valid encryption
 
     static encrypt (string) {
         return string

@@ -8,7 +8,7 @@ const State = class {
     ) {
         this.menuVisible = menuVisible
         this.dataProfile = dataProfile
-        this.logs = [] // TODO UI requests for logs vs backend prompts UI with logs?
+        this.logs = [] // TODO: UI requests for logs vs backend prompts UI with logs?
         this.logTree = {}
     }
 

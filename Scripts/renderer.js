@@ -62,7 +62,8 @@ const exportData = event => {
             flashIcon(resultShowDuration, res)
         },
         err => {
-            console.error('Unhandled Error occurred on Data Export', err) // TODO logs and error management
+            console.error('Unhandled Error occurred on Data Export', err)
+            // TODO: logs and error management
             flashIcon(resultShowDuration)
         }
     )
@@ -73,16 +74,16 @@ const deleteHabit = (habitId, time) => {
         habitId, time,
         res => {
             console.log('logdeletehabitresult', res)
-            // TODO
+            // TODO:
         },
         err => {
-            console.error('server error while updating habit') // TODO notification
+            console.error('server error while updating habit') // TODO: notification
         }
     )
 }
 
 const recieveStateChanges = (event, state) => {
-    // TODO
+    // TODO:
     console.log('UI|updateUI: recieved state change prompt', event, state)
 }
 
