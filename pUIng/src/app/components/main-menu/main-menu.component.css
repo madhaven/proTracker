@@ -1,4 +1,4 @@
-#sideHandle {
+#side_handle {
     position: fixed;
     left: 0;
     top: 50%;
@@ -10,12 +10,12 @@
     z-index: 2000;
     transition: .25s ease-out;
 }
-#sideHandle:hover {
+#side_handle:hover {
     color: var(--fg-strong);
     transition: .1s ease-out;
 }
 
-#sideBar {
+#side_bar {
     transition: opacity .5s ease, visibility 0s 0.5s;
     width: 100vw;
     height: 100vh;
@@ -31,12 +31,12 @@
     text-align: center;
     justify-content: center;
 }
-#sideBar.sideBar_open {
+#side_bar.side_bar_open {
     transition: opacity .5s ease, visibility 0s;
     opacity: 1;
     visibility: visible;
 }
-#sideBar .menu {
+#side_bar .menu {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -46,12 +46,12 @@
     transition: .5s ease-in-out;
 }
 
-.menuButtons {
+.menu_buttons {
     list-style-type: none;
     padding: 0;
     margin: 0;
 }
-.menuButton {
+.menu_button {
     text-align: left;
     cursor: pointer;
     padding: .5em 2em;
@@ -60,19 +60,19 @@
     transition: .1s ease-out, border-left 0s ease-out, color .25s ease-out;
     user-select: none;
 }
-.menuButton:hover, .menuButton:focus {
+.menu_button:hover, .menu_button:focus {
     border-left: 2px solid var(--whiteLayer3);
     background-color: var(--whiteLayer1);
     transition: .05s ease-out, border-left 0s ease-out, opacity .5s ease, visibility 0s, display 0s;
     outline: none;
     color: var(--fg-strong);
 }
-.menuButton:active {
+.menu_button:active {
     border-left: 2px solid green;
     transition:  border-left none;
 }
-.menuButton svg,
-.menuButton .spinner-grow {
+.menu_button svg,
+.menu_button .spinner-grow {
     margin-right: 1em;
     font-size: 1.25em;
     width: 1em;
@@ -81,21 +81,21 @@
     visibility: visible;
     transition: inherit, opacity .5s ease, visibility 0s, display 0s;
 }
-.menuButton *.hidden {
+.menu_button *.hidden {
     display: none;
     opacity: 0;
     visibility: hidden;
     transition: inherit, opacity .5s ease, visibility 0s 0.5s, display 0s 0.5s;
     color: transparent;
 }
-.menuButton .success {
+.menu_button .success {
     color: var(--green);
 }
-.menuButton .failure {
+.menu_button .failure {
     color: var(--red)
 }
 
-.menuTitle {
+.menu_title {
     font-family: 'Courier New', Courier, monospace;
     align-items: center;
     margin-left: auto;

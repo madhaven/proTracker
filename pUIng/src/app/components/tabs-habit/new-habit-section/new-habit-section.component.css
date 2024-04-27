@@ -1,4 +1,4 @@
-.newhabitItem {
+.new_habit_item {
     border: 1px solid var(--whiteLayer1);
     margin-bottom: 1em;
     /* margin-left: 1em; */
@@ -10,11 +10,11 @@
     flex-direction: column;
 }
 
-.newhabitItem:hover {
+.new_habit_item:hover {
     border: 1px solid var(--whiteLayer2);
 }
 
-input.newHabitFrequency {
+input.new_habit_frequency {
     width: 2em;
     margin-right: 1em;
     text-align: right;

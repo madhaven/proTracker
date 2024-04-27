@@ -1,15 +1,15 @@
-<div id="sideHandle" (click)="toggleMenuBar()">...</div>
-<aside id="sideBar" [class.sideBar_open]="menuVisible" (click)="toggleMenuBar()">
+<div id="side_handle" (click)="toggleMenuBar()">...</div>
+<aside id="side_bar" [class.side_bar_open]="menuVisible" (click)="toggleMenuBar()">
     <div class="menu container">
-        <ul class="menuButtons">
-            <!-- <li id="load" class="menuButton" tabindex="1">
+        <ul class="menu_buttons">
+            <!-- <li id="load" class="menu_button" tabindex="1">
                 OPEN FILE
                 <input type="file" accept=".xlsx, .xls, .csv" name="data" id="dataFile" hidden>
             </li> -->
-            <!-- <li id="save" class="menuButton" tabindex="2">SAVE</li> -->
+            <!-- <li id="save" class="menu_button" tabindex="2">SAVE</li> -->
             <li
             id="logChart"
-            class="menuButton"
+            class="menu_button"
             routerLink="/logs" routerLinkActive="active">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list-ul" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm-3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
@@ -18,7 +18,7 @@
             </li>
             <li
             id="habits"
-            class="menuButton"
+            class="menu_button"
             routerLink="/habits" routerLinkActive="active">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar3-week" viewBox="0 0 16 16">
                     <path d="M14 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2M1 3.857C1 3.384 1.448 3 2 3h12c.552 0 1 .384 1 .857v10.286c0 .473-.448.857-1 .857H2c-.552 0-1-.384-1-.857z"/>
@@ -28,7 +28,7 @@
             </li>
             <li
             id="projects"
-            class="menuButton"
+            class="menu_button"
             routerLink="/projects" routerLinkActive="active">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-folder" viewBox="0 0 16 16">
                     <path d="M.54 3.87.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.826a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31zM2.19 4a1 1 0 0 0-.996 1.09l.637 7a1 1 0 0 0 .995.91h10.348a1 1 0 0 0 .995-.91l.637-7A1 1 0 0 0 13.81 4H2.19zm4.69-1.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707z"/>
@@ -36,7 +36,7 @@
                 PROJECTS
             </li>
             <li id="export"
-            class="menuButton">
+            class="menu_button">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download defaultButton" viewBox="0 0 16 16">
                     <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
                     <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
@@ -45,7 +45,7 @@
                 EXPORT
             </li>
         </ul>
-        <div class="menuTitle" style="display:flex;">
+        <div class="menu_title" style="display:flex;">
             <h1>proTracker</h1>
         </div>
     </div>

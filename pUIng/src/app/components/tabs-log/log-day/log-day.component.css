@@ -1,21 +1,21 @@
-.logDay {
+.log_day {
     width: 100%;
     display: flex;
     border-bottom: 1px solid var(--whiteLayer1);
     padding: .5em 0;
 }
-.logDay.today {
+.log_day.today {
     border-bottom: none;
 }
-.logDate {
+.log_date {
     width: 15%;
 }
-.stickyDate {
+.sticky_date {
     position: sticky;
     top: 3em;
 }
 
-.daysProjects {
+.days_projects {
     width: 85%;
     display: flex;
     flex-direction: column;

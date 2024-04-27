@@ -1,8 +1,8 @@
-<div class="menuTab projectTab">
+<div class="menu_tab projectTab">
     <main class="container" *ngIf="sortedProjects!.length > 0 ?? false">
         <h1>PROJECTS</h1>
         <div>
-            <ul id="projectList">
+            <ul id="project_list">
                 <pui-project-item
                 *ngFor="let project of sortedProjects"
                 [projectId]="project[0]"
@@ -12,7 +12,7 @@
             </ul>
         </div>
     </main>
-    <main class="noProjects" *ngIf="sortedProjects!.length <= 0 ?? true">
+    <main class="no_projects" *ngIf="sortedProjects!.length <= 0 ?? true">
         <h1>PROJECTS</h1>
         <p>
             It looks like you haven't set up a project.<br>

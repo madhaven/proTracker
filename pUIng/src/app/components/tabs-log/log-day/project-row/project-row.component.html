@@ -1,14 +1,14 @@
-<div class="projectRow">
-    <div class="projectColumn">
+<div class="project_row">
+    <div class="project_column">
         <pui-editable-item
-        class="stickyProjectStuff"
+        class="sticky_project_stuff"
         [content]="project?.name ?? 'ERROR'"
         [isButtonOnLeft]="true"
         (contentClicked)="autoTypeProject()"
         (itemEdited)="editProject($event)"
         />
     </div>
-    <div class="projectsTasks">
+    <div class="projects_tasks">
         <pui-task-row
         *ngFor="let taskLog of tree | keyvalue"
         [taskId]="taskLog.key"

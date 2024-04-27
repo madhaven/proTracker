@@ -1,4 +1,4 @@
-#projectList {
+#project_list {
     transition: .5s;
     list-style-type: none;
     padding: 0px;
@@ -9,7 +9,7 @@
     /* align-items: center; */
 }
 
-.noProjects {
+.no_projects {
     height: 100%;
     width: 100%;
     display: flex;

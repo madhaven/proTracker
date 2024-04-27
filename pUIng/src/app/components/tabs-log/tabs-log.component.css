@@ -1,7 +1,7 @@
-.logChart {
+.log_chart {
     text-align: left;
 }
-.logChart .header {
+.log_chart .header {
     border-bottom: 2px solid var(--whiteLayer1) !important;
     font-weight: bold;
     position: sticky;
@@ -9,44 +9,44 @@
     background-color: var(--bg);
     z-index: 5;
 }
-.logChart .logDay {
+.log_chart .log_day {
     width: 100%;
     display: flex;
     border-bottom: 1px solid var(--whiteLayer1);
     padding: .5em 0;
 }
-.logChart .logDate {
+.log_chart .log_date {
     width: 15%;
 }
-.logTask {
+.log_task {
     width: 100%;
     transition: .2s ease-out;
     border-radius: .5em;
     padding: 0 .5em 0 .5em;
 }
-.logDay:not(#inputs, .header) .logTask:hover,
-.logDay:not(#inputs, .header) .logTask:focus-within {
+.log_day:not(#inputs, .header) .log_task:hover,
+.log_day:not(#inputs, .header) .log_task:focus-within {
     background-color: var(--blackLayer1);
     transition-delay: .2s;
 }
 
-.daysProjects {
+.days_projects {
     width: 85%;
     display: flex;
     flex-direction: column;
 }
-.projectRow {
+.project_row {
     width: 100%;
     display: flex;
     flex-direction: row;
     border-radius: .5em;
     transition: .1s linear;
 }
-.projectColumn {
+.project_column {
     width: 41.1355%;
     text-align: right;
     padding: 0 0.5em 0 0.5em;
 }
-.projectsTasks {
+.projects_tasks {
     width: 58.82%;
 }

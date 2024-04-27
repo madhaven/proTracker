@@ -12,6 +12,6 @@ li:hover {
     background-color: var(--blackLayer1);
 }
 
-::ng-deep .taskList .editableItem {
+::ng-deep .task_list .editable_item {
     padding: 0 0.5em 0 0.5em
 }
