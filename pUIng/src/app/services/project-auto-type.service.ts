@@ -4,10 +4,10 @@ import { Subject } from 'rxjs';
 @Injectable()
 export class ProjectAutoTypeService {
 
-  private requestedProjectName = new Subject<string>()
+  private requestedProjectName = new Subject<string>();
   autoTypeRequested$ = this.requestedProjectName.asObservable();
 
   requestAutoType(projectName: string) {
-    this.requestedProjectName.next(projectName)
+    this.requestedProjectName.next(projectName);
   }
 }

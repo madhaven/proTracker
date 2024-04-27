@@ -13,18 +13,18 @@ import { UiStateService } from '../../../../services/ui-state.service';
 })
 export class ProjectTaskComponent implements OnInit {
 
-  @Input() taskId!: number
-  @Input() statusId!: number
-  uiStateService!: UiStateService
-  task?: Task
-  taskStatus?: TaskStatus
+  @Input() taskId!: number;
+  @Input() statusId!: number;
+  uiStateService!: UiStateService;
+  task?: Task;
+  taskStatus?: TaskStatus;
 
   constructor(uiStateService: UiStateService) {
-    this.uiStateService = uiStateService
+    this.uiStateService = uiStateService;
   }
 
   ngOnInit() {
-    this.task = this.uiStateService.getTask(this.taskId) // TODO : ng error
-    this.taskStatus = this.statusId
+    this.task = this.uiStateService.getTask(this.taskId); // TODO: ng error
+    this.taskStatus = this.statusId;
   }
 }

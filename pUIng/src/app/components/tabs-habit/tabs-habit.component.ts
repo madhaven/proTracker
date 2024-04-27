@@ -22,15 +22,15 @@ import { DueHabitItemComponent } from './due-habit-item/due-habit-item.component
 export class TabsHabitComponent implements DoCheck{
 
   uiStateService!: UiStateService;
-  dueHabits!: Map<number, Habit>
+  dueHabits!: Map<number, Habit>;
 
   constructor(uiStateService: UiStateService) {
-    this.uiStateService = uiStateService // TODO: ng handle errors
-    this.dueHabits = this.uiStateService.getHabitsDueOn(new Date())
+    this.uiStateService = uiStateService; // TODO: ng handle errors
+    this.dueHabits = this.uiStateService.getHabitsDueOn(new Date());
   }
   
   // ngAfterContentChecked() { // working too frequently
   ngDoCheck() { // TODO: working too frequently - make dueHabits item in stateservice
-    this.dueHabits = this.uiStateService.getHabitsDueOn(new Date())
+    this.dueHabits = this.uiStateService.getHabitsDueOn(new Date());
   }
 }

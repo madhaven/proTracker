@@ -11,43 +11,43 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './editable-item.component.css'
 })
 export class EditableItemComponent implements AfterViewInit {
-  @Input() content!: string
-  @Input() isButtonOnLeft: boolean = false
-  @Output() itemEdited = new EventEmitter<string>()
-  @Output() contentClicked = new EventEmitter()
-  itemEditable: boolean = false
+  @Input() content!: string;
+  @Input() isButtonOnLeft: boolean = false;
+  @Output() itemEdited = new EventEmitter<string>();
+  @Output() contentClicked = new EventEmitter();
+  itemEditable: boolean = false;
   @ViewChild('editableInput') inputItem!: ElementRef;
 
   tryUpdate(event: Event) {
-    var target = event.target as HTMLInputElement
-    var newValue = target.value.trim()
+    var target = event.target as HTMLInputElement;
+    var newValue = target.value.trim();
 
     if (newValue.length < 1 || newValue == this.content) {
-      this.itemEditable = false
-      return
+      this.itemEditable = false;
+      return;
     }
     
-    this.itemEdited.emit(newValue)
-    this.itemEditable = false
+    this.itemEdited.emit(newValue);
+    this.itemEditable = false;
   }
 
   ngAfterViewInit() {
   }
 
   inputChanged(event: Event) {
-    var target = event.target as HTMLInputElement
-    target.blur()
+    var target = event.target as HTMLInputElement;
+    target.blur();
   }
 
   contentClick() {
-    this.contentClicked.emit()
+    this.contentClicked.emit();
   }
 
   makeItemEditable() {
-    this.itemEditable = true
+    this.itemEditable = true;
     setTimeout(() => {
-      this.inputItem.nativeElement.value = this.content
-      this.inputItem.nativeElement.select()
+      this.inputItem.nativeElement.value = this.content;
+      this.inputItem.nativeElement.select();
     });
   }
 }

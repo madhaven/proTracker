@@ -9,7 +9,6 @@ import { Habit } from '../models/habit.model';
   providedIn: 'root'
 })
 export abstract class DataComService {
-
   newTask(newTask: NewTask): any {}
   editTask(newTask: Task): any {}
   toggleTask(id: number, newState: TaskStatus, currentTime: number): any {}

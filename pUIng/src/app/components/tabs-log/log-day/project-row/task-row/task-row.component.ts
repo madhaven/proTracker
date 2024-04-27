@@ -22,12 +22,12 @@ export class TaskRowComponent implements OnInit {
   taskStatus!: TaskStatus;
 
   constructor(uiStateService: UiStateService) {
-    this.uiStateService = uiStateService
+    this.uiStateService = uiStateService;
   }
 
   ngOnInit() {
-    this.task = this.uiStateService.getTask(this.taskId) // TODO: ng if task not found ?
-    this.taskStatus = this.taskLog.statusId
+    this.task = this.uiStateService.getTask(this.taskId); // TODO: ng if task not found ?
+    this.taskStatus = this.taskLog.statusId;
   }
 
   taskClick() {
@@ -35,11 +35,11 @@ export class TaskRowComponent implements OnInit {
     const currentTime = Date.now();
     var newState: TaskStatus = this.taskLog.statusId == TaskStatus.PENDING
         ? TaskStatus.COMPLETED
-        : TaskStatus.PENDING
-    this.uiStateService.toggleTask(this.taskLog.taskId, newState, currentTime)
+        : TaskStatus.PENDING;
+    this.uiStateService.toggleTask(this.taskLog.taskId, newState, currentTime);
   }
 
   taskEdit(newName: string) {
-    this.uiStateService.editTask(this.task!.id, newName)
+    this.uiStateService.editTask(this.task!.id, newName);
   }
 }

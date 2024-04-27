@@ -16,30 +16,30 @@ import { TaskRowComponent } from "./task-row/task-row.component";
 })
 export class ProjectRowComponent implements OnInit {
 
-  @Input() projectId!: number
-  @Input() tree!: Map<number, TaskLog>
-  @Input() highlightedTask: number = -1
-  project?: Project
-  uiStateService!: UiStateService
-  projectAutoTypeService: ProjectAutoTypeService
+  @Input() projectId!: number;
+  @Input() tree!: Map<number, TaskLog>;
+  @Input() highlightedTask: number = -1;
+  project?: Project;
+  uiStateService!: UiStateService;
+  projectAutoTypeService: ProjectAutoTypeService;
 
   constructor(
     uiStateService: UiStateService,
     projectAutoTypeService: ProjectAutoTypeService,
   ) {
-    this.uiStateService = uiStateService
-    this.projectAutoTypeService = projectAutoTypeService
+    this.uiStateService = uiStateService;
+    this.projectAutoTypeService = projectAutoTypeService;
   }
 
   ngOnInit() {
-    this.project = this.uiStateService.getProject(this.projectId) // TODO: ng if service error
+    this.project = this.uiStateService.getProject(this.projectId); // TODO: ng if service error
   }
 
   autoTypeProject() {
-    this.projectAutoTypeService.requestAutoType(this.project?.name ?? '')
+    this.projectAutoTypeService.requestAutoType(this.project?.name ?? '');
   }
 
   editProject(newProjectName: string) {
-    this.uiStateService.editProject(this.project!.id, newProjectName)
+    this.uiStateService.editProject(this.project!.id, newProjectName);
   }
 }

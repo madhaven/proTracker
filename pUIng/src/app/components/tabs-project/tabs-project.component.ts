@@ -18,26 +18,26 @@ import { RouterModule } from '@angular/router';
 })
 export class TabsProjectComponent implements OnInit {
 
-  uiStateService!: UiStateService
-  sortedProjects!: [number, Map<number, number>][]
+  uiStateService!: UiStateService;
+  sortedProjects!: [number, Map<number, number>][];
 
   constructor(uiStateService: UiStateService) {
-    this.uiStateService = uiStateService
+    this.uiStateService = uiStateService;
   }
 
   ngOnInit() {
-    this.sortProjects()
+    this.sortProjects();
     setTimeout(() => { this.sortProjects() });
   }
 
   sortProjects() {
-    var projectTreeEntries = this.uiStateService.getProjectTree().entries()
-    var arr = Array.from(projectTreeEntries)
+    var projectTreeEntries = this.uiStateService.getProjectTree().entries();
+    var arr = Array.from(projectTreeEntries);
     arr.sort((a, b) => {
-      const A = this.uiStateService.getProject(a[0])
-      const B = this.uiStateService.getProject(b[0])
-      return A!.name.localeCompare(B!.name) ?? 0
+      const A = this.uiStateService.getProject(a[0]);
+      const B = this.uiStateService.getProject(b[0]);
+      return A!.name.localeCompare(B!.name) ?? 0;
     })
-    this.sortedProjects = arr
+    this.sortedProjects = arr;
   }
 }

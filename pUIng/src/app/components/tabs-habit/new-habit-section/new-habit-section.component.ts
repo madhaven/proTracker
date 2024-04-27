@@ -11,12 +11,12 @@ import { UiStateService } from '../../../services/ui-state.service';
 })
 export class NewHabitSectionComponent {
 
-  newHabitName?: string
-  newHabitFrequency?: number
-  uiStateService!: UiStateService
+  newHabitName?: string;
+  newHabitFrequency?: number;
+  uiStateService!: UiStateService;
 
   constructor(uiStateService: UiStateService) {
-    this.uiStateService = uiStateService
+    this.uiStateService = uiStateService;
   }
 
   newHabit(element: HTMLInputElement) {
@@ -25,12 +25,12 @@ export class NewHabitSectionComponent {
       || this.newHabitName!.length < 1
       || this.newHabitFrequency! < 1
       || this.newHabitFrequency! > 7
-    ) return
+    ) return;
 
-    this.uiStateService.newHabit(this.newHabitName!, this.newHabitFrequency!)
+    this.uiStateService.newHabit(this.newHabitName!, this.newHabitFrequency!);
 
     // reset UI
     this.newHabitName = this.newHabitFrequency = undefined;
-    element.blur()
+    element.blur();
   }
 }

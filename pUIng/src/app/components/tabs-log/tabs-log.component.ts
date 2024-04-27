@@ -21,47 +21,39 @@ import { ProjectAutoTypeService } from '../../services/project-auto-type.service
     ProjectAutoTypeService,
   ]
 })
-export class TabsLogComponent implements OnInit, AfterViewInit {
+export class TabsLogComponent implements AfterViewInit {
 
   @ViewChild('scrollAnchor') scrollAnchor!: ElementRef;
-  uiStateService: UiStateService
-  route: ActivatedRoute
-  router: Router
-  highlightedTask: number = -1
+  uiStateService: UiStateService;
+  route: ActivatedRoute;
+  router: Router;
+  highlightedTask: number = -1;
 
   constructor(
     uiStateService: UiStateService,
     route: ActivatedRoute,
     router: Router
   ) {
-    this.uiStateService = uiStateService
-    this.route = route
-    this.router = router
-  }
-
-  ngOnInit() {
-    this.scrollIntoView()
+    this.uiStateService = uiStateService;
+    this.route = route;
+    this.router = router;
   }
   
   ngAfterViewInit() {
-    this.scrollIntoView()
+    this.scrollIntoView();
   }
 
   scrollIntoView() {
     var task = Number.parseInt(this.route.snapshot.paramMap.get('task') ?? '0');
     if (task) {
-      this.flashTask(task)
+      this.flashTask(task);
     } else {
-      try {
-        this.scrollAnchor.nativeElement.scrollIntoView({ behavior: "smooth" })
-      } catch {
-        ;
-      }
+      this.scrollAnchor.nativeElement.scrollIntoView({ behavior: "smooth" });
     }
   }
 
   flashTask(taskId: number) {
-    this.highlightedTask = taskId
+    this.highlightedTask = taskId;
     setTimeout(() => { this.highlightedTask = -1 }, 5000);
   }
 }

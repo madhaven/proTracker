@@ -12,4 +12,4 @@ export const routes: Routes = [
     { path: "projects", title: "proTracker | Projects", component: TabsProjectComponent },
     { path: "", redirectTo: "/logs", pathMatch: "full" },
     // TODO: ng { path: "**", component: pagenotfound}
-]
+];

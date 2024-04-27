@@ -16,22 +16,22 @@ import { UiStateService } from '../../../services/ui-state.service';
 })
 export class HabitItemComponent implements OnInit {
 
-  @Input() habitId!: number
-  @Input() habit!: Habit
-  today: Date = new Date()
-  uiStateService: UiStateService
+  @Input() habitId!: number;
+  @Input() habit!: Habit;
+  today: Date = new Date();
+  uiStateService: UiStateService;
 
   constructor(uiStateService: UiStateService) {
-    this.uiStateService = uiStateService
+    this.uiStateService = uiStateService;
   }
 
   ngOnInit() {
-    this.today = new Date()
+    this.today = new Date();
   }
 
   editHabit(newName: string) {
-    var newHabit = this.habit
-    newHabit.name = newName
-    this.uiStateService.editHabit(newHabit)
+    var newHabit = this.habit;
+    newHabit.name = newName;
+    this.uiStateService.editHabit(newHabit);
   }
 }

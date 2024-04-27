@@ -11,16 +11,15 @@ import { UiStateService } from '../../../services/ui-state.service';
 })
 export class DueHabitItemComponent {
 
-  @Input() habitId!: number
-  @Input() habit!: Habit
-  uiStateService: UiStateService
+  @Input() habitId!: number;
+  @Input() habit!: Habit;
+  uiStateService: UiStateService;
 
   constructor(uiStateService: UiStateService) {
-    this.uiStateService = uiStateService
+    this.uiStateService = uiStateService;
   }
 
   habitLog() {
-    this.uiStateService.markHabitDone(this.habit)
+    this.uiStateService.markHabitDone(this.habit);
   }
-
 }

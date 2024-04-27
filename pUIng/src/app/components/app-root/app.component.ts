@@ -24,19 +24,19 @@ import { CommonModule } from '@angular/common';
 })
 export class AppComponent implements OnInit {
   title = 'pUIng';
-  uiStateService!: UiStateService
+  uiStateService!: UiStateService;
   
-  currentTab!: MenuTabs
-  logsTab: MenuTabs = MenuTabs.TaskLogs
-  habitsTab: MenuTabs = MenuTabs.Habits
-  projectsTab: MenuTabs = MenuTabs.Projects
+  currentTab!: MenuTabs;
+  logsTab: MenuTabs = MenuTabs.TaskLogs;
+  habitsTab: MenuTabs = MenuTabs.Habits;
+  projectsTab: MenuTabs = MenuTabs.Projects;
 
   constructor(uiStateService: UiStateService) {
-    this.uiStateService = uiStateService
-    this.currentTab = this.uiStateService.defaultTab
+    this.uiStateService = uiStateService;
+    this.currentTab = this.uiStateService.defaultTab;
   }
 
   ngOnInit() {
-    this.uiStateService.loadData()
+    this.uiStateService.loadData();
   }
 }

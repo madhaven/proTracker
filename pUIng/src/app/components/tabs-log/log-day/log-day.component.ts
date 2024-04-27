@@ -12,21 +12,21 @@ import { ProjectRowComponent } from "./project-row/project-row.component";
 })
 export class LogDayComponent implements OnInit {
 
-  @Input() logDay: string = ""
+  @Input() logDay: string = "";
   @Input() tree: Map<number, Map<number, TaskLog>> = new Map();
-  @Input() highlightedTask: number = -1
-  itIsToday: boolean = false
-  id: number = 0
-  displayDate: string = ""
+  @Input() highlightedTask: number = -1;
+  itIsToday: boolean = false;
+  id: number = 0;
+  displayDate: string = "";
   
   ngOnInit() {
-    const [year, month, day] = this.logDay.split(',').map(x => Number.parseInt(x, 10))
-    const t = new Date(year, month, day)
-    const itIsToday = new Date().toDateString() == t.toDateString()
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    const [year, month, day] = this.logDay.split(',').map(x => Number.parseInt(x, 10));
+    const t = new Date(year, month, day);
+    const itIsToday = new Date().toDateString() == t.toDateString();
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   
-    this.id = t.getTime()
-    this.itIsToday = itIsToday
-    this.displayDate = itIsToday ? 'Today' : `${year} ${months[month]} ${day}`
+    this.id = t.getTime();
+    this.itIsToday = itIsToday;
+    this.displayDate = itIsToday ? 'Today' : `${year} ${months[month]} ${day}`;
   }
 }
