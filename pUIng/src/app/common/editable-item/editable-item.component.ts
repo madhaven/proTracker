@@ -1,5 +1,5 @@
 import { NgIf } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, Output} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 
@@ -16,14 +16,14 @@ export class EditableItemComponent implements AfterViewInit {
   @Output() itemEdited = new EventEmitter<string>();
   @Output() contentClicked = new EventEmitter();
   itemEditable: boolean = false;
-  @ViewChild('editableInput') inputItem!: ElementRef;
+  newContent: string = ''
 
-  tryUpdate(event: Event) {
-    var target = event.target as HTMLInputElement;
-    var newValue = target.value.trim();
-
+  tryUpdate() {
+    var newValue = this.newContent.trim();
+    
     if (newValue.length < 1 || newValue == this.content) {
       this.itemEditable = false;
+      this.newContent = this.content
       return;
     }
     
@@ -34,8 +34,7 @@ export class EditableItemComponent implements AfterViewInit {
   ngAfterViewInit() {
   }
 
-  inputChanged(event: Event) {
-    var target = event.target as HTMLInputElement;
+  inputChanged(target: HTMLInputElement) {
     target.blur();
   }
 
@@ -43,11 +42,11 @@ export class EditableItemComponent implements AfterViewInit {
     this.contentClicked.emit();
   }
 
-  makeItemEditable() {
+  makeItemEditable(target: HTMLInputElement) {
     this.itemEditable = true;
     setTimeout(() => {
-      this.inputItem.nativeElement.value = this.content;
-      this.inputItem.nativeElement.select();
+      this.newContent = this.content;
+      target.select();
     });
   }
 }

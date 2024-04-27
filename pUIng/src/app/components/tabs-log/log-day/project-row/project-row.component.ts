@@ -40,6 +40,8 @@ export class ProjectRowComponent implements OnInit {
   }
 
   editProject(newProjectName: string) {
-    this.uiStateService.editProject(this.project!.id, newProjectName);
+    var newProject = {...this.project!}
+    newProject.name = newProjectName
+    this.uiStateService.editProject(newProject);
   }
 }

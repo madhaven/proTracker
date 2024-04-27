@@ -42,7 +42,9 @@ export class ProjectItemComponent implements OnInit {
   }
 
   editProject(newName: string) {
-    this.uiStateService.editProject(this.projectId, newName);
+    var newProject = {...this.project!}
+    newProject.name = newName
+    this.uiStateService.editProject(newProject);
     this.requestRearrange.emit();
   }
 }

@@ -40,6 +40,8 @@ export class TaskRowComponent implements OnInit {
   }
 
   taskEdit(newName: string) {
-    this.uiStateService.editTask(this.task!.id, newName);
+    var newTask = {...this.task!}
+    newTask.summary = newName
+    this.uiStateService.editTask(newTask);
   }
 }
