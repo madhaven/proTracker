@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ProjectItemComponent } from './project-item/project-item.component';
 import { UiStateService } from '../../services/ui-state.service';
 import { CommonModule, NgForOf } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'pui-tabs-project',
@@ -10,6 +11,7 @@ import { CommonModule, NgForOf } from '@angular/common';
     ProjectItemComponent,
     NgForOf,
     CommonModule,
+    RouterModule,
   ],
   templateUrl: './tabs-project.component.html',
   styleUrl: './tabs-project.component.css'
@@ -24,6 +26,7 @@ export class TabsProjectComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.sortProjects()
     setTimeout(() => { this.sortProjects() });
   }
 

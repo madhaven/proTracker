@@ -1,5 +1,5 @@
 <div class="menuTab projectTab">
-    <main class="container">
+    <main class="container" *ngIf="sortedProjects!.length > 0 ?? false">
         <h1>PROJECTS</h1>
         <div>
             <ul id="projectList">
@@ -11,5 +11,12 @@
                 />
             </ul>
         </div>
+    </main>
+    <main class="noProjects" *ngIf="sortedProjects!.length <= 0 ?? true">
+        <h1>PROJECTS</h1>
+        <p>
+            It looks like you haven't set up a project.<br>
+            Checkout the <a [routerLink]="['/logs']" routerLinkActive="router-link-active" >Logs tab</a> to add a new Project with a task
+        </p>
     </main>
 </div>
