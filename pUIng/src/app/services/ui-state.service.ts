@@ -97,6 +97,7 @@ export class UiStateService {
 
     var jsonData = JSON.stringify(Array.from(this.foldedProjects.entries()))
     localStorage.setItem('foldedProjects', jsonData)
+    return !currentFold
   }
 
   getTask(taskId: number): Task | undefined {

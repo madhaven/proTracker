@@ -4,10 +4,10 @@
         <div>
             <ul id="projectList">
                 <pui-project-item
-                *ngFor="let project of uiStateService.getProjectTree() | keyvalue"
-                [projectId]="project.key"
-                [taskTree]="project.value"
-                [class.emptyProject]="project.value.size == 0 || uiStateService.foldedProjects.get(project.key)"
+                *ngFor="let project of sortedProjects"
+                [projectId]="project[0]"
+                [taskTree]="project[1]"
+                (requestRearrange)="sortProjects()"
                 />
             </ul>
         </div>

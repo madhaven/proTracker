@@ -7,13 +7,13 @@
         />
     </h3>
     <ul class="taskList"
-    *ngIf="taskTree.size > 0">
+    *ngIf="!foldedProject">
         <pui-project-task
-        *ngFor="let item of taskTree | keyvalue"
+        *ngFor="let task of taskTree | keyvalue"
         class="projectTask"
-        [taskId]="item.key"
-        [statusId]="item.value"
-        [routerLink]="['/logs', item.key]"
+        [taskId]="task.key"
+        [statusId]="task.value"
+        [routerLink]="['/logs', task.key]"
         />
     </ul>
 </li>

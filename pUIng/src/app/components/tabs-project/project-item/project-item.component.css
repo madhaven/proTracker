@@ -12,6 +12,9 @@
 .projectTask {
     cursor: pointer;
 }
+.emptyProject.taskList {
+    display: none;
+}
 
 ::ng-deep li h3 {
     margin: 0;
@@ -24,5 +27,12 @@
     margin: .5em .5em 0em 0em;
     padding: .5em 1em;
     border-radius: .5em;
+    width: 100%;
     /* background-color: var(--blackLayer1); */
 }
+/* :host.emptyProject {
+    /* background-color: var(--blackLayer1);
+}
+:host.emptyProject:hover {
+    /* background-color: var(--blackLayer2)
+} */

@@ -23,23 +23,26 @@ export class ProjectItemComponent implements OnInit {
 
   @Input() projectId!: number
   @Input() taskTree!: Map<number, number>
+  @Output() requestRearrange = new EventEmitter()
   project?: Project
   uiStateService!: UiStateService
+  foldedProject!: boolean
 
   constructor(uiStateService: UiStateService) {
-    this.uiStateService = uiStateService 
+    this.uiStateService = uiStateService
   }
 
   ngOnInit() {
-    this.project = this.uiStateService.getProject(this.projectId) // TODO ng else throw error
+    this.project = this.uiStateService.getProject(this.projectId) // TODO: else throw error
+    this.foldedProject = this.taskTree.size == 0 || (this.uiStateService.foldedProjects.get(this.projectId) ?? false)
   }
 
   foldProject() {
-    console.log('foldproject called')
-    this.uiStateService.toggleFold(this.project!.id)
+    this.foldedProject = this.uiStateService.toggleFold(this.projectId)
   }
 
   editProject(newName: string) {
-    this.uiStateService.editProject(this.project!.id, newName)
+    this.uiStateService.editProject(this.projectId, newName)
+    this.requestRearrange.emit()
   }
 }
