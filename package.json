@@ -1,16 +1,19 @@
 {
   "name": "protracker",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "app to track tasks",
   "main": "./Scripts/eMain.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "cd pUIng && npm run build",
+    "buildnstart": "npm run build && cd .. && npm run start",
     "start": "electron .",
-    "make": "electron-forge make",
-    "clean": "del proTracker.db appconfig.json",
     "debug": "electron . --inspect=5858",
-    "cleandebug": "del proTracker.db appconfig.json proTracker.log && electron . --inspect=5858",
-    "package": "electron-forge package"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "del proTracker*.db appconfig.json proTracker.log",
+    "cleandebug": "npm run clean && npm run debug",
+    "make": "electron-forge make",
+    "package": "electron-forge package",
+    "postinstall": "npm install ./pUIng/"
   },
   "repository": {
     "type": "git",
@@ -40,6 +43,7 @@
     "electron-squirrel-startup": "^1.0.0",
     "exceljs": "^4.3.0",
     "fast-csv": "^4.3.6",
+    "pUIng": "file:pUIng",
     "sqlite3": "^5.1.6"
   }
 }

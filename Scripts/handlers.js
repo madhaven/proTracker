@@ -1,17 +1,21 @@
 const { ipcMain } = require('electron')
 const { dialog, app } = require('electron')
-
-const { FileService } = require('./Services/FileService')
-const { Task } = require('./Models/Task')
-const { Status } = require('./Models/Status')
-const { StatusLog } = require('./Models/StatusLog')
-const { TaskLog } = require('./Contracts/TaskLog')
-const { ProjectProvider } = require('./Providers/ProjectProvider')
-const { TaskProvider } = require('./Providers/TaskProvider')
-const { StatusProvider } = require('./Providers/StatusProvider')
-const { StatusLogProvider } = require('./Providers/StatusLogProvider')
 const ExcelJS = require('exceljs')
+
+const { StatusLogProvider } = require('./Providers/StatusLogProvider')
+const { HabitLogProvider } = require('./Providers/HabitLogProvider')
+const { ProjectProvider } = require('./Providers/ProjectProvider')
+const { StatusProvider } = require('./Providers/StatusProvider')
+const { HabitProvider } = require('./Providers/HabitProvider')
+const { TaskProvider } = require('./Providers/TaskProvider')
+const { FileService } = require('./Services/FileService')
+const { StatusLog } = require('./Models/StatusLog')
+const { HabitLog } = require('./Models/HabitLog')
 const { Project } = require('./Models/Project')
+const { Status } = require('./Models/Status')
+const { Habit } = require('./Models/Habit')
+const { Task } = require('./Models/Task')
+
 
 // TODO: move export colors to seperate class / Service
 const COLUMN_DATE = 1
@@ -33,18 +37,26 @@ const COLUMN_DATE = 1
         pattern: 'solid',
         fgColor: { argb:'FFC6EFCE' }
     };
-var TP, PP, SLP, SP
+var TP, PP, SLP, SP, HP, HLP
 
 const DataRequestHandler = async (event) => {
     const alltasks = await TP.getAllTasks() ?? false
         , allTaskLogs = await SLP.getAllLogs() ?? false
         , allProjects = await PP.getAllProjects() ?? false
-    if (!alltasks || !allTaskLogs || !allProjects) // || !allHabits || !allHabitLogs)
+        , allHabits = await HP.getAllHabits() ?? false
+        , allHabitLogs = await HLP.getAllLogs() ?? false
+        
+    // TODO: convertModelToContract
+
+    if (!alltasks || !allTaskLogs || !allProjects  || !allHabits || !allHabitLogs)
         return false
+
     return {
         "tasks": alltasks,
         "taskLogs": allTaskLogs,
         "projects": allProjects,
+        "habits": allHabits,
+        "habitLogs": allHabitLogs
     }
 }
 
@@ -174,7 +186,8 @@ const renderProjectsLogSheet = async (ws, projects, tasks, logs) => { // is it b
 
 const editProjectHandler = async (event, project) => {
     projectModel = new Project(project.id, project.name)
-    if (PP.getByName(project.name)) {
+    var projectInDB = await PP.getByName(projectModel.name)
+    if (projectInDB) {
         // TODO: create structured responses, false values limits the reasons for failure
         return false
     }
@@ -205,33 +218,69 @@ const editTaskHandler = async (event, task) => {
 
 const toggleTaskHandler = async (event, taskId, newStatusId, newTime) => {
     statusLog = await SLP.create(new StatusLog(-1, taskId, newStatusId, newTime))
-    return statusLog ? statusLog : false
+    return statusLog ?? false
+}
+
+const createHabitHandler = async (event, habit) => {
+    habit = await HP.create(habit)
+    return habit ?? false
+}
+
+const editHabitHandler = async (event, newHabit) => {
+    newHabit = await HP.update(newHabit.id, newHabit)
+    return newHabit ?? false
+}
+
+const habitDoneHandler = async (event, habitId, time) => {
+    const habit = await HP.get(habitId)
+        , lastDayLogged = new Date(habit.lastLogTime)
+        , today = new Date()
+
+    if (today.getFullYear() == lastDayLogged.getFullYear()
+        && today.getMonth() == lastDayLogged.getMonth()
+        && today.getDate() == lastDayLogged.getDate()
+    ) {
+        throw Error("Already Logged Habit for the day") // TODO: Notification
+    } else {
+        habitLog = await HLP.create(new HabitLog(-1, habitId, time))
+        return habitLog ?? false
+    }
+}
+
+const deleteHabitHandler = async (event, habitId, time) => {
+    // TODO:
 }
 
 /// STATE EVENTS
 
 const stateEventHandler = async (event, data) => {
-    // TODO
+    // TODO:
     // console.log('main: state event notified')
 }
 
 const stateChangeRequestHandler = async (event, data) => {
-    // TODO
+    // TODO:
     console.log('main: state change request recieved', event, data)
 }
 
 const registerHandlers = mainWindow => {
-    // TODO DI ?
+    // TODO: Dependency Injection ?
     TP = new TaskProvider()
     PP = new ProjectProvider()
     SLP = new StatusLogProvider()
     SP = new StatusProvider()
+    HP = new HabitProvider()
+    HLP = new HabitLogProvider
 
     // comms
     ipcMain.handle('projectEditChannel', editProjectHandler)
     ipcMain.handle('newTaskChannel', newTaskHandler)
     ipcMain.handle('taskEditChannel', editTaskHandler)
     ipcMain.handle('taskClickChannel', toggleTaskHandler)
+    ipcMain.handle('habitCreateChannel', createHabitHandler)
+    ipcMain.handle('habitEditChannel', editHabitHandler)
+    ipcMain.handle('habitDoneChannel', habitDoneHandler)
+    ipcMain.handle('deleteHabitChannel', deleteHabitHandler)
     ipcMain.handle('loadDataRequest', DataRequestHandler)
     ipcMain.handle('exportDataRequest', (event, a, b, c, d) => { return exportDataHandler(event, mainWindow, a, b, c, d) })
     

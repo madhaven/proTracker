@@ -1,6 +1,8 @@
+const path = require('path')
+
 const { FileService } = require("./FileService")
 const { SingletonServiceBase } = require("./SingletonServiceBase")
-const path = require('path')
+
 
 const DBVersionService = class extends SingletonServiceBase {
     LATEST = undefined

@@ -1,0 +1,24 @@
+<div class="menu_tab log_chart">
+    <main class="container">
+        <h1>LOGS</h1>
+        <div class="log_day header">
+            <div class="log_date">Date</div>
+            <div class="days_projects">
+                <div class="project_row">
+                    <div class="project_column">Project</div>
+                    <div class="projects_tasks">
+                        <div class="log_task">Task</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <pui-log-day
+        *ngFor="let day of uiStateService.getLogTree() | keyvalue"
+        [logDay]="day.key"
+        [tree]="day.value"
+        [highlightedTask]="highlightedTask"
+        />
+        <pui-new-log-section [logsExist]="uiStateService.logsExist()" />
+        <div #scrollAnchor></div>
+    </main>
+</div>

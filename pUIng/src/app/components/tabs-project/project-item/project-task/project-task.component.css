@@ -1,0 +1,17 @@
+:host{
+    width: 100%;
+}
+li {
+    width: 100%;
+    margin-top: 4px;
+    padding: 0em 0em 0em 1em;
+    border-radius: 0 0.5em 0.5em 0;
+    border-left: 1px solid var(--whiteLayer2);
+}
+li:hover {
+    background-color: var(--blackLayer1);
+}
+
+::ng-deep .task_list .editable_item {
+    padding: 0 0.5em 0 0.5em
+}

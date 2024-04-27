@@ -1,0 +1,37 @@
+<div class="log_day header inputs" id="inputs" #inputsArea>
+    <div class="log_date"></div>
+    <div class="days_projects">
+        <div class="project_row">
+            <div class="project_column">
+                <div>
+                    <input
+                    type="text"
+                    name="Project"
+                    id="newLogProject"
+                    autocomplete
+                    required
+                    title="Parent Task/Project"
+                    placeholder="{{logsExist ? '' : 'Add a New Project'}}"
+                    [(ngModel)]="newProjectValue"
+                    #newLogProject
+                    (input)="trimInput(newLogProject)"
+                    (change)="newTask(newLogProject)">
+                </div>
+            </div>
+            <div class="projects_tasks">
+                <div class="log_task">
+                    <input
+                    type="text"
+                    name="Task"
+                    id="newLogTask"
+                    title="Task"
+                    placeholder="{{logsExist ? '' : 'with a new task'}}"
+                    [(ngModel)]="newTaskValue"
+                    #newLogTask
+                    (input)="trimInput(newLogTask)"
+                    (change)="newTask(newLogTask)">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

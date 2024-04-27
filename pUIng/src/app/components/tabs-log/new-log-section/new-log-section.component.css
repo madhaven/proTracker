@@ -1,0 +1,51 @@
+.log_day {
+    width: 100%;
+    display: flex;
+    border-bottom: 1px solid var(--whiteLayer1);
+    padding: .5em 0;
+}
+.header {
+    border-bottom: 2px solid var(--whiteLayer1) !important;
+    font-weight: bold;
+    position: sticky;
+    top: 0em;
+    background-color: var(--bg);
+    z-index: 5;
+}
+.log_date {
+    width: 15%;
+}
+.days_projects {
+    width: 85%;
+    display: flex;
+    flex-direction: column;
+}
+.project_row {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    border-radius: .5em;
+    transition: .1s linear;
+}
+.project_column {
+    width: 41.1355%;
+    text-align: right;
+    padding: 0 0.5em 0 0.5em;
+}
+.projects_tasks {
+    width: 58.82%;
+}
+.log_task {
+    width: 100%;
+    transition: .2s ease-out;
+    border-radius: .5em;
+    padding: 0 .5em 0 .5em;
+}
+
+#inputs {
+    padding: 0 !important;
+    border: none !important;
+}
+.project_column input {
+    text-align: right;
+}

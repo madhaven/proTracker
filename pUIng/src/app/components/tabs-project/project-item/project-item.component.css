@@ -1,0 +1,38 @@
+.task_list {
+    transition: .5s;
+    list-style-type: none;
+    padding: 0px;
+    margin: 0px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    /* align-items: center; */
+}
+
+.project_task {
+    cursor: pointer;
+}
+.empty_project.task_list {
+    display: none;
+}
+
+::ng-deep li h3 {
+    margin: 0;
+}
+::ng-deep li h3 .editable_item_content {
+    cursor: pointer;
+}
+
+:host {
+    margin: .5em .5em 0em 0em;
+    padding: .5em 1em;
+    border-radius: .5em;
+    width: 100%;
+    /* background-color: var(--blackLayer1); */
+}
+/* :host.empty_project {
+    /* background-color: var(--blackLayer1);
+}
+:host.empty_project:hover {
+    /* background-color: var(--blackLayer2)
+} */

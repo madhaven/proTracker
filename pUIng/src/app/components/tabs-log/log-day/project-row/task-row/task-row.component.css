@@ -1,0 +1,17 @@
+::ng-deep .editable_item:hover,
+::ng-deep .editable_item:focus-within {
+    background-color: var(--blackLayer1);
+    transition-delay: .2s;
+}
+::ng-deep .editable_item {
+    width: 100%;
+    transition: .2s ease-out;
+    border-radius: .5em;
+    padding: 0 .5em 0 .5em;
+}
+::ng-deep .today .editable_item_content {
+    cursor: pointer;
+}
+::ng-deep .flashed_task .editable_item{
+    background-color: var(--whiteLayer1);
+}

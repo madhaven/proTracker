@@ -1,0 +1,22 @@
+.due_habit_item {
+    border: 1px solid var(--whiteLayer1);
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+    /* margin-left: 1em; */
+    padding: .5em 1em;
+    transition: .5s ease-out;
+    border-radius: .5em;
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.5em;
+    cursor: pointer;
+    background-color: var(--whiteLayer1);
+}
+.due_habit_item:hover {
+    border: 1px solid var(--whiteLayer2);
+    background-color: var(--whiteLayer2);
+}
+.due_habit_item:active {
+    border: 1px solid var(--fg);
+    transition: .1s;
+}

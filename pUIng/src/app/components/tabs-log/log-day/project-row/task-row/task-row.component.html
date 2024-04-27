@@ -1,0 +1,8 @@
+<pui-editable-item
+[content]="task?.summary ?? 'ERROR'"
+[class.pending]="taskStatus==1"
+[class.completed]="taskStatus==4"
+[class.flashed_task]="highlightedTask == task?.id"
+(contentClicked)="taskClick()"
+(itemEdited)="taskEdit($event)"
+/>

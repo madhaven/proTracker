@@ -1,0 +1,55 @@
+:host {
+    width: 100%;
+}
+
+.editable_item {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.editable_item.editable .editable_item_content,
+.editable_item:not(.editable) .editable_item_input {
+    display: none;
+}
+.editable_item_content, .editable_item_input {
+    padding: 0em;
+}
+.editable_item_input input {
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+.editable_item_edit_button {
+    color: var(--whiteLayer2);
+    opacity: 0;
+    visibility: hidden;
+    cursor: pointer;
+    transition: opacity .1s ease-out, visibility 0s linear .8s;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+.editable_item:hover .editable_item_edit_button {
+    opacity: 1;
+    visibility: visible;
+    transition: .1s ease-out, opacity .4s ease-out .8s, visibility 0s linear .8s;
+}
+.editable_item_edit_button:hover,
+.editable_item_edit_button:focus {
+    color: var(--whiteLayer3);
+}
+.editable_item_edit_button:active {
+    color: var(--fg-weak);
+}
+
+.align_right {
+    text-align: right;
+}
+
+:host.pending {
+    color: var(--red);
+}
+:host.completed {
+    color: var(--green);
+}

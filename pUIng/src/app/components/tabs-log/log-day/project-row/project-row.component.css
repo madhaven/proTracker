@@ -1,0 +1,21 @@
+.project_row {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    border-radius: .5em;
+    transition: .1s linear;
+}
+.project_column {
+    width: 41.1355%;
+    text-align: right;
+}
+.project_column input {
+    text-align: right;
+}
+.sticky_project_stuff {
+    position: sticky;
+    top: 3em;
+}
+.projects_tasks {
+    width: 58.82%;
+}

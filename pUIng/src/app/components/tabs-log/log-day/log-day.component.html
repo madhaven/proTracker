@@ -1,0 +1,11 @@
+<div class="log_day" id="{{id}}" [class.today]="itIsToday">
+    <div class="log_date"><div class="sticky_date">{{displayDate}}</div></div>
+    <div class="days_projects">
+        <pui-project-row
+        *ngFor="let project of tree | keyvalue"
+        [projectId]="project.key"
+        [tree]="project.value"
+        [highlightedTask]="highlightedTask"
+        />
+    </div>
+</div>

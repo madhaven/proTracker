@@ -1,14 +1,19 @@
-const { dialog, app } = require("electron")
-const { ConfigService } = require("./ConfigService")
-const { EncryptionService } = require("./EncryptionService")
-const { FileService } = require("./FileService")
-const sql = require('sqlite3').verbose()
 const fs = require('fs')
+const sql = require('sqlite3').verbose()
 const path = require("path")
+const { dialog, app } = require("electron")
+
+const { FileService } = require("./FileService")
+const { ConfigService } = require("./ConfigService")
 const { DBVersionService } = require("./DBVersionService")
+const { EncryptionService } = require("./EncryptionService")
+const { SingletonServiceBase } = require("./SingletonServiceBase")
+
 
 const DatabaseService = class extends SingletonServiceBase {
     dbPath = ''
+
+    // TODO: arrange methods
 
     constructor (
         dbVersionService,
@@ -37,12 +42,6 @@ const DatabaseService = class extends SingletonServiceBase {
             app.exit()
         }
     }
-    
-    static getService () {
-        if (!this.singleton)
-            this.singleton = new this()
-        return this.singleton
-    }
 
     initializeNewDB () {
         const db = new sql.Database(this.dbPath) // TODO: change to common method
@@ -69,8 +68,7 @@ const DatabaseService = class extends SingletonServiceBase {
     }
 
     isConnectionValid (testConString) {
-        // TODO
-        return true
+        return true // TODO:
     }
 
     async insertOne(command, params=[]) {

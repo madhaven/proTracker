@@ -1,0 +1,19 @@
+<li>
+    <h3 class="projectHeader">
+        <pui-editable-item
+        [content]="project?.name ?? 'ERROR'"
+        (contentClicked)="foldProject()"
+        (itemEdited)="editProject($event)"
+        />
+    </h3>
+    <ul class="task_list"
+    *ngIf="!foldedProject">
+        <pui-project-task
+        *ngFor="let task of taskTree | keyvalue"
+        class="project_task"
+        [taskId]="task.key"
+        [statusId]="task.value"
+        [routerLink]="['/logs', task.key]"
+        />
+    </ul>
+</li>
