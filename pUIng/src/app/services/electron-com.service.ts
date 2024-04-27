@@ -23,7 +23,13 @@ export class ElectronComService extends DataComService {
     return true;
   }
 
+  override getAppVersion() {
+    if (!this.comsCheck()) return;
+    return window.comms.getAppVersion()
+  }
+
   override loadData() {
+    if (!this.comsCheck()) return;
     return window.comms.loadData();
   }
 

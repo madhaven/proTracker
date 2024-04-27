@@ -184,6 +184,10 @@ const renderProjectsLogSheet = async (ws, projects, tasks, logs) => { // is it b
     return ws
 }
 
+const appVersionRequestHandler = async () => {
+    return app.getVersion()
+}
+
 const editProjectHandler = async (event, project) => {
     projectModel = new Project(project.id, project.name)
     var projectInDB = await PP.getByName(projectModel.name)
@@ -273,6 +277,7 @@ const registerHandlers = mainWindow => {
     HLP = new HabitLogProvider
 
     // comms
+    ipcMain.handle('appVersionRequestChannel', appVersionRequestHandler)
     ipcMain.handle('projectEditChannel', editProjectHandler)
     ipcMain.handle('newTaskChannel', newTaskHandler)
     ipcMain.handle('taskEditChannel', editTaskHandler)

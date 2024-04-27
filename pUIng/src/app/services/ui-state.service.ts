@@ -22,6 +22,7 @@ export class UiStateService {
   idleTolerance: number = 500; // TODO: ng fix
 
   // data
+  appVersion?: string
   tasks = new Map<number, Task>();
   habits = new Map<number, Habit>();
   projects = new Map<number, Project>();
@@ -35,6 +36,21 @@ export class UiStateService {
 
   constructor(eComService: ElectronComService) {
     this.comService = eComService;
+  }
+
+  getAppVersion() {
+    this.comService.getAppVersion().then(
+      (res: any) => {
+        if (res as boolean == false) {
+          console.error('app version not received');
+          return;
+        }
+        this.appVersion = res;
+      },
+      (err: any) => {
+        console.error('app version not received');
+      }
+    )
   }
 
   getLogTree() {

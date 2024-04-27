@@ -1,6 +1,8 @@
 const { contextBridge, ipcRenderer } = require('electron')
 
 contextBridge.exposeInMainWorld('comms', {
+    getAppVersion: () => {
+        return ipcRenderer.invoke('appVersionRequestChannel') },
     editProject: (project, callback, err) => {
         return ipcRenderer.invoke('projectEditChannel', project) },
     newTask: (task) => {
