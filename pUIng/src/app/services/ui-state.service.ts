@@ -9,6 +9,7 @@ import { TaskStatus } from '../common/task-status';
 import { DataComService } from './data-com.service';
 import { ElectronComService } from './electron-com.service';
 import { NewTask } from '../models/new-task.model';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +23,7 @@ export class UiStateService {
   idleTolerance: number = 500; // TODO: ng fix
 
   // data
-  appVersion?: string
+  appVersion!: string;
   tasks = new Map<number, Task>();
   habits = new Map<number, Habit>();
   projects = new Map<number, Project>();
@@ -34,23 +35,16 @@ export class UiStateService {
   // deps
   comService!: DataComService;
 
+  // subs
+  stateChanged = new Subject<UiStateService>();
+  stateChanged$ = this.stateChanged.asObservable();
+
   constructor(eComService: ElectronComService) {
     this.comService = eComService;
   }
 
-  getAppVersion() {
-    this.comService.getAppVersion().then(
-      (res: any) => {
-        if (res as boolean == false) {
-          console.error('app version not received');
-          return;
-        }
-        this.appVersion = res;
-      },
-      (err: any) => {
-        console.error('app version not received');
-      }
-    )
+  notifyStateChange() {
+    this.stateChanged.next(this);
   }
 
   getLogTree() {
@@ -123,11 +117,15 @@ export class UiStateService {
   newTask(newTask: NewTask) {
     this.comService.newTask(newTask).then(
       (res: any) => { // TODO: ng standardise data models
-        if (res == false) return;
+        if (res as boolean == false) {
+          console.error('invalid data');
+          return;
+        }
         this.tasks.set(res.task.id, res.task);
         this.projects.set(res.project.id, res.project);
         this.logs.set(res.log.id, res.log);
         this.growTrees();
+        this.notifyStateChange();
       },
       (err: any) => {
         console.error('server error while adding new task'); // TODO: notification
@@ -138,10 +136,14 @@ export class UiStateService {
   toggleTask(taskId: number, newState: TaskStatus, currentTime: number) {
     this.comService.toggleTask(taskId, newState, currentTime).then(
       (res: TaskLog|boolean) => {
-        if (res as boolean == false) return;
+        if (res as boolean == false) {
+          console.error('invalid data');
+          return;
+        }
         res = res as TaskLog;
         this.logs.set(res.id, res);
         this.growTrees();
+        this.notifyStateChange();
       },
       (err: any) => {
         console.error('server error while updating task'); // TODO remove error logs
@@ -149,16 +151,16 @@ export class UiStateService {
     );
   }
 
-  editTask(taskId: number, newSummary: string) {
-    var newTask = this.tasks.get(taskId);
-    newTask!.summary = newSummary;
+  editTask(newTask: Task) {
     this.comService.editTask(newTask!).then(
       (res: Task|boolean) => { // TODO: document responses
         if (res as boolean == false) {
           console.error('Something went wrong while editing task'); // TODO: notification
+          return;
         } else {
           res = res as Task;
-          this.tasks.set(taskId, newTask!);
+          this.tasks.set(newTask.id, newTask);
+          this.notifyStateChange();
         }
       },
       (err: any) => {
@@ -171,17 +173,17 @@ export class UiStateService {
     return this.projects.get(projectId);
   }
 
-  editProject(projectId: number, newName: string) {
-    var newProject = this.projects.get(projectId);
-    newProject!.name = newName;
+  editProject(newProject: Project) {
     this.comService.editProject(newProject!).then(
-      (res: any) => {
-        if (res) {
-          this.projects.set(projectId, newProject!);
-        } else {
+      (res: Project|boolean) => {
+        if (res as boolean == false) {
           // TODO: create structured responses, false values limits the reasons for failure
           // console.warn('Yo wtf, that name already exists!')
           console.error(`Something went wrong while editing project`); // TODO: CREATE APP NOTIFICATION
+          return;
+        } else {
+          this.projects.set(newProject!.id, newProject!);
+          this.notifyStateChange();
         }
       },
       (err: any) => {
@@ -217,6 +219,7 @@ export class UiStateService {
         } else {
           res = res as Habit;
           this.habits.set(res.id, res);
+          this.notifyStateChange();
         }
       },
       (err: any) => {
@@ -234,6 +237,7 @@ export class UiStateService {
         } else {
           res = res as Habit;
           this.habits.set(res.id, res);
+          this.notifyStateChange();
         }
       },
       (err: any) => {
@@ -252,6 +256,7 @@ export class UiStateService {
           res = res as HabitLog;
           this.habitLogs.set(res.id, res);
           this.habits.get(res.habitId)!.lastLogTime = res.dateTime;
+          this.notifyStateChange();
         }
       },
       (err: any) => {
@@ -278,17 +283,18 @@ export class UiStateService {
   loadData() {
     this.comService.loadData().then(
       (res: any) => {
-        if (res){
+        if (res as boolean == false) {
+          console.error('corrupt data received', res);
+          return;
+          // TODO: notification ?
+        } else {
           // fetch data
           console.log('data recieved from db', res);
-          this.replaceData(res.tasks, res.taskLogs, res.projects, res.habits, res.habitLogs);
+          this.replaceData(res.tasks, res.taskLogs, res.projects, res.habits, res.habitLogs, res.appVersion);
 
           // fetch UI info
           var projectFoldData = new Map<number, boolean>(JSON.parse(localStorage.getItem('foldedProjects') ?? '[]'));
           this.foldedProjects = projectFoldData;
-        } else {
-          console.error('corrupt data received', res);
-          // TODO: notification ?
         }
       },
       (err: any) => {
@@ -303,7 +309,9 @@ export class UiStateService {
     projects: [Project], 
     habits: [Habit], 
     habitLogs: [HabitLog],
+    appVersion: string,
   ) {
+    this.appVersion = appVersion;
     this.logs = new Map();
     this.tasks = new Map();
     this.habits = new Map();
@@ -317,6 +325,7 @@ export class UiStateService {
     for (var habitLog of habitLogs) { this.habitLogs.set(habitLog.id, habitLog); }
 
     this.growTrees();
+    this.notifyStateChange();
     console.debug('state updated', this);
   }
 }

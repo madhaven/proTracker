@@ -7,7 +7,6 @@
                 *ngFor="let project of sortedProjects"
                 [projectId]="project[0]"
                 [taskTree]="project[1]"
-                (requestRearrange)="sortProjects()"
                 />
             </ul>
         </div>

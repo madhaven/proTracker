@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { EditableItemComponent } from '../../../../common/editable-item/editable-item.component';
 import { Project } from '../../../../models/project.model';
 import { TaskLog } from '../../../../models/task-log.model';
@@ -21,6 +22,7 @@ export class ProjectRowComponent implements OnInit {
   @Input() highlightedTask: number = -1;
   project?: Project;
   uiStateService!: UiStateService;
+  stateObserver: Subscription;
   projectAutoTypeService: ProjectAutoTypeService;
 
   constructor(
@@ -29,6 +31,10 @@ export class ProjectRowComponent implements OnInit {
   ) {
     this.uiStateService = uiStateService;
     this.projectAutoTypeService = projectAutoTypeService;
+    this.stateObserver = this.uiStateService.stateChanged$.subscribe((newState) => {
+      this.uiStateService = newState;
+      this.project = this.uiStateService.getProject(this.projectId);
+    });
   }
 
   ngOnInit() {
@@ -40,6 +46,8 @@ export class ProjectRowComponent implements OnInit {
   }
 
   editProject(newProjectName: string) {
-    this.uiStateService.editProject(this.project!.id, newProjectName);
+    var newProject = {...this.project!}
+    newProject.name = newProjectName
+    this.uiStateService.editProject(newProject);
   }
 }

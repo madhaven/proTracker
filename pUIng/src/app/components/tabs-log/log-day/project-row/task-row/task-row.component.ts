@@ -4,6 +4,7 @@ import { Task } from '../../../../../models/task.model';
 import { UiStateService } from '../../../../../services/ui-state.service';
 import { EditableItemComponent } from "../../../../../common/editable-item/editable-item.component";
 import { TaskStatus } from '../../../../../common/task-status';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'pui-task-row',
@@ -19,10 +20,15 @@ export class TaskRowComponent implements OnInit {
   @Input() highlightedTask: number = -1;
   task?: Task;
   uiStateService!: UiStateService;
+  stateObserver: Subscription;
   taskStatus!: TaskStatus;
 
   constructor(uiStateService: UiStateService) {
     this.uiStateService = uiStateService;
+    this.stateObserver = this.uiStateService.stateChanged$.subscribe((newState) => {
+      this.uiStateService = newState;
+      this.task = this.uiStateService.getTask(this.taskId);
+    });
   }
 
   ngOnInit() {
@@ -40,6 +46,8 @@ export class TaskRowComponent implements OnInit {
   }
 
   taskEdit(newName: string) {
-    this.uiStateService.editTask(this.task!.id, newName);
+    var newTask = {...this.task!}
+    newTask.summary = newName
+    this.uiStateService.editTask(newTask);
   }
 }
