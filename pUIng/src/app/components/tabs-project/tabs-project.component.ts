@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit } from '@angular/core';
 import { ProjectItemComponent } from './project-item/project-item.component';
 import { UiStateService } from '../../services/ui-state.service';
 import { CommonModule, NgForOf } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'pui-tabs-project',
@@ -20,9 +21,14 @@ export class TabsProjectComponent implements OnInit {
 
   uiStateService!: UiStateService;
   sortedProjects!: [number, Map<number, number>][];
+  stateObserver: Subscription;
 
   constructor(uiStateService: UiStateService) {
     this.uiStateService = uiStateService;
+    this.stateObserver = this.uiStateService.stateChanged$.subscribe((newState) => {
+      this.uiStateService = newState;
+      this.sortProjects();
+    });
   }
 
   ngOnInit() {

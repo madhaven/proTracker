@@ -9,6 +9,7 @@ import { TaskStatus } from '../common/task-status';
 import { DataComService } from './data-com.service';
 import { ElectronComService } from './electron-com.service';
 import { NewTask } from '../models/new-task.model';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -34,8 +35,16 @@ export class UiStateService {
   // deps
   comService!: DataComService;
 
+  // subs
+  stateChanged = new Subject<UiStateService>();
+  stateChanged$ = this.stateChanged.asObservable();
+
   constructor(eComService: ElectronComService) {
     this.comService = eComService;
+  }
+
+  notifyStateChange() {
+    this.stateChanged.next(this);
   }
 
   getLogTree() {
@@ -116,6 +125,7 @@ export class UiStateService {
         this.projects.set(res.project.id, res.project);
         this.logs.set(res.log.id, res.log);
         this.growTrees();
+        this.notifyStateChange();
       },
       (err: any) => {
         console.error('server error while adding new task'); // TODO: notification
@@ -133,6 +143,7 @@ export class UiStateService {
         res = res as TaskLog;
         this.logs.set(res.id, res);
         this.growTrees();
+        this.notifyStateChange();
       },
       (err: any) => {
         console.error('server error while updating task'); // TODO remove error logs
@@ -149,6 +160,7 @@ export class UiStateService {
         } else {
           res = res as Task;
           this.tasks.set(newTask.id, newTask);
+          this.notifyStateChange();
         }
       },
       (err: any) => {
@@ -171,6 +183,7 @@ export class UiStateService {
           return;
         } else {
           this.projects.set(newProject!.id, newProject!);
+          this.notifyStateChange();
         }
       },
       (err: any) => {
@@ -206,6 +219,7 @@ export class UiStateService {
         } else {
           res = res as Habit;
           this.habits.set(res.id, res);
+          this.notifyStateChange();
         }
       },
       (err: any) => {
@@ -223,6 +237,7 @@ export class UiStateService {
         } else {
           res = res as Habit;
           this.habits.set(res.id, res);
+          this.notifyStateChange();
         }
       },
       (err: any) => {
@@ -241,6 +256,7 @@ export class UiStateService {
           res = res as HabitLog;
           this.habitLogs.set(res.id, res);
           this.habits.get(res.habitId)!.lastLogTime = res.dateTime;
+          this.notifyStateChange();
         }
       },
       (err: any) => {
@@ -309,6 +325,7 @@ export class UiStateService {
     for (var habitLog of habitLogs) { this.habitLogs.set(habitLog.id, habitLog); }
 
     this.growTrees();
+    this.notifyStateChange();
     console.debug('state updated', this);
   }
 }
