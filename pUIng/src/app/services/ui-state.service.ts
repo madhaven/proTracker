@@ -22,7 +22,7 @@ export class UiStateService {
   idleTolerance: number = 500; // TODO: ng fix
 
   // data
-  appVersion?: string
+  appVersion!: string;
   tasks = new Map<number, Task>();
   habits = new Map<number, Habit>();
   projects = new Map<number, Project>();
@@ -36,21 +36,6 @@ export class UiStateService {
 
   constructor(eComService: ElectronComService) {
     this.comService = eComService;
-  }
-
-  getAppVersion() {
-    this.comService.getAppVersion().then(
-      (res: any) => {
-        if (res as boolean == false) {
-          console.error('app version not received');
-          return;
-        }
-        this.appVersion = res;
-      },
-      (err: any) => {
-        console.error('app version not received');
-      }
-    )
   }
 
   getLogTree() {
@@ -289,7 +274,7 @@ export class UiStateService {
         } else {
           // fetch data
           console.log('data recieved from db', res);
-          this.replaceData(res.tasks, res.taskLogs, res.projects, res.habits, res.habitLogs);
+          this.replaceData(res.tasks, res.taskLogs, res.projects, res.habits, res.habitLogs, res.appVersion);
 
           // fetch UI info
           var projectFoldData = new Map<number, boolean>(JSON.parse(localStorage.getItem('foldedProjects') ?? '[]'));
@@ -308,7 +293,9 @@ export class UiStateService {
     projects: [Project], 
     habits: [Habit], 
     habitLogs: [HabitLog],
+    appVersion: string,
   ) {
+    this.appVersion = appVersion;
     this.logs = new Map();
     this.tasks = new Map();
     this.habits = new Map();

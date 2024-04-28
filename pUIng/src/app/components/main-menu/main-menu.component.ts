@@ -30,7 +30,6 @@ export class MainMenuComponent implements OnInit {
 
   ngOnInit(): void {
     this.enableIdleTracking()
-    this.uiStateService.getAppVersion()
   }
 
   enableIdleTracking() {

@@ -56,7 +56,8 @@ const DataRequestHandler = async (event) => {
         "taskLogs": allTaskLogs,
         "projects": allProjects,
         "habits": allHabits,
-        "habitLogs": allHabitLogs
+        "habitLogs": allHabitLogs,
+        "appVersion": app.getVersion(),
     }
 }
 
