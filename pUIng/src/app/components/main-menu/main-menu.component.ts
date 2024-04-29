@@ -2,17 +2,27 @@ import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { UiStateService } from '../../services/ui-state.service';
 import { MenuTabs } from '../../common/menu-tabs';
+import { Subscription } from 'rxjs';
+import { NgIf } from '@angular/common';
+import { LoaderComponent } from '../../common/loader/loader.component';
 
 @Component({
   selector: 'pui-main-menu',
   standalone: true,
-  imports: [RouterModule],
+  imports: [
+    RouterModule,
+    NgIf,
+    LoaderComponent,
+  ],
   templateUrl: './main-menu.component.html',
   styleUrl: './main-menu.component.css'
 })
 export class MainMenuComponent implements OnInit {
 
   uiStateService: UiStateService;
+
+  appLoadPercent: number = 0;
+  loadStateObserver: Subscription;
   
   menuVisible: boolean = true;
   logChart: MenuTabs = MenuTabs.TaskLogs;
@@ -26,6 +36,14 @@ export class MainMenuComponent implements OnInit {
   constructor(uistateService: UiStateService ) {
     this.uiStateService = uistateService;
     this.idleTolerance = uistateService.idleTolerance;
+    this.loadStateObserver = this.uiStateService.loading$.subscribe((percent) => {
+      if (percent != 100)
+        this.appLoadPercent = percent;
+      else
+        setTimeout(() => {
+          this.appLoadPercent = percent;
+        }, 2000);
+    });
   }
 
   ngOnInit(): void {

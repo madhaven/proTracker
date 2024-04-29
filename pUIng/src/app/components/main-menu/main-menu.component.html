@@ -1,5 +1,9 @@
 <div id="side_handle" (click)="toggleMenuBar()">...</div>
-<aside id="side_bar" [class.side_bar_open]="menuVisible" (click)="toggleMenuBar()">
+<aside
+id="side_bar"
+[class.side_bar_open]="menuVisible"
+(click)="toggleMenuBar()"
+>
     <div class="menu container">
         <ul class="menu_buttons">
             <!-- <li id="load" class="menu_button" tabindex="1">
@@ -8,6 +12,7 @@
             </li> -->
             <!-- <li id="save" class="menu_button" tabindex="2">SAVE</li> -->
             <li
+            *ngIf="appLoadPercent == 100"
             id="logChart"
             class="menu_button"
             routerLink="/logs" routerLinkActive="active">
@@ -17,6 +22,7 @@
                 LOGS
             </li>
             <li
+            *ngIf="appLoadPercent == 100"
             id="habits"
             class="menu_button"
             routerLink="/habits" routerLinkActive="active">
@@ -27,6 +33,7 @@
                 HABITS
             </li>
             <li
+            *ngIf="appLoadPercent == 100"
             id="projects"
             class="menu_button"
             routerLink="/projects" routerLinkActive="active">
@@ -35,7 +42,9 @@
                 </svg>
                 PROJECTS
             </li>
-            <li id="export"
+            <li
+            *ngIf="appLoadPercent == 100"
+            id="export"
             class="menu_button">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download defaultButton" viewBox="0 0 16 16">
                     <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
@@ -48,6 +57,7 @@
         <div class="menu_title" style="display:flex;">
             <h1>proTracker</h1>
             <p>{{uiStateService.appVersion}}</p>
+            <pui-loader [percent]="appLoadPercent" />
         </div>
     </div>
 </aside>

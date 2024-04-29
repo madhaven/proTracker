@@ -38,6 +38,8 @@ export class UiStateService {
   // subs
   stateChanged = new Subject<UiStateService>();
   stateChanged$ = this.stateChanged.asObservable();
+  loadPercent = new Subject<number>();
+  loading$ = this.loadPercent.asObservable();
 
   constructor(eComService: ElectronComService) {
     this.comService = eComService;
@@ -281,20 +283,25 @@ export class UiStateService {
   }
 
   loadData() {
+    this.loadPercent.next(0);
     this.comService.loadData().then(
       (res: any) => {
         if (res as boolean == false) {
           console.error('corrupt data received', res);
+          this.loadPercent.next(100);
           return;
           // TODO: notification ?
         } else {
           // fetch data
           console.log('data recieved from db', res);
+          this.loadPercent.next(33);
           this.replaceData(res.tasks, res.taskLogs, res.projects, res.habits, res.habitLogs, res.appVersion);
-
+          this.loadPercent.next(66);
+          
           // fetch UI info
           var projectFoldData = new Map<number, boolean>(JSON.parse(localStorage.getItem('foldedProjects') ?? '[]'));
           this.foldedProjects = projectFoldData;
+          this.loadPercent.next(100);
         }
       },
       (err: any) => {
