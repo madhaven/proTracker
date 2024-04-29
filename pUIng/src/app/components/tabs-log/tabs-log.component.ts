@@ -1,9 +1,9 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { UiStateService } from '../../services/ui-state.service';
 import { NewLogSectionComponent } from './new-log-section/new-log-section.component';
 import { LogDayComponent } from "./log-day/log-day.component";
 import { CommonModule, NgForOf } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { ProjectAutoTypeService } from '../../services/project-auto-type.service';
 
 @Component({
@@ -21,35 +21,35 @@ import { ProjectAutoTypeService } from '../../services/project-auto-type.service
     ProjectAutoTypeService,
   ]
 })
-export class TabsLogComponent implements AfterViewInit {
+export class TabsLogComponent implements OnInit {
 
   @ViewChild('scrollAnchor') scrollAnchor!: ElementRef;
+  @Input() task?: number;
   uiStateService: UiStateService;
-  route: ActivatedRoute;
   router: Router;
   highlightedTask: number = -1;
 
   constructor(
     uiStateService: UiStateService,
-    route: ActivatedRoute,
-    router: Router
+    router: Router,
   ) {
     this.uiStateService = uiStateService;
-    this.route = route;
     this.router = router;
   }
-  
-  ngAfterViewInit() {
-    this.scrollIntoView();
+
+  ngOnInit() {
+    if (this.task) this.flashTask(this.task);
+    this.scrollIntoView(this.task ?? 0);
   }
 
-  scrollIntoView() {
-    var task = Number.parseInt(this.route.snapshot.paramMap.get('task') ?? '0');
-    if (task) {
-      this.flashTask(task);
-    } else {
-      this.scrollAnchor.nativeElement.scrollIntoView({ behavior: "smooth" });
-    }
+  scrollIntoView(task: number) {
+    setTimeout(() => {
+      if (task == 0) {
+        this.scrollAnchor.nativeElement.scrollIntoView({ behavior: "smooth" });
+      } else {
+        document.getElementById("task_row_" + task)?.scrollIntoView({ behavior: "smooth" });
+      }
+    });
   }
 
   flashTask(taskId: number) {

@@ -7,7 +7,6 @@ import { TabsProjectComponent } from './components/tabs-project/tabs-project.com
 export const routes: Routes = [
     { path: "menu", title: "mainmenu", component: MainMenuComponent },
     { path: "logs", title: "proTracker | Logs", component: TabsLogComponent },
-    { path: "logs/:task", title: "proTracker | Logs", component: TabsLogComponent },
     { path: "habits", title: "proTracker | Habits", component: TabsHabitComponent },
     { path: "projects", title: "proTracker | Projects", component: TabsProjectComponent },
     { path: "", redirectTo: "/logs", pathMatch: "full" },

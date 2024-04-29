@@ -76,8 +76,9 @@ The folder structure is nested at the moment. I'm still debating the advantages 
 * Migration Services were added to automatically handle DB versions  
   Migrations became a necassity when Habit tracking features were planned and it required the db to be automatically updated  
   with a lack of test cases, the efficacy of this logic can be glitchy  
+* Added support for Habit tracking
 * The UI migration to Angular was a learning experience.  
-  A lot of time for migration without any project progress was hard to tolerate, but hey I learnt something new.  
+  A lot of time for migration without any project progress was hard to tolerate, but hey I learnt something new.
 
 ## Future
 
