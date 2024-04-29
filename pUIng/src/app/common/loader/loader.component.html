@@ -1,0 +1,8 @@
+<!-- <p>{{percent}} %</p> -->
+<div class="progress_bar_container" *ngIf="visible">
+    <div
+    class="progress_bar"
+    [style.width.%] = "percent"
+    #content
+    ></div>
+</div>
