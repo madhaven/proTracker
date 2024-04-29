@@ -47,6 +47,6 @@ export class ProjectTaskComponent implements OnInit {
   }
 
   redirectToLogs() {
-    this.router.navigate(['/logs', this.taskId]);
+    this.router.navigate(['/logs', {task: this.taskId}]);
   }
 }
