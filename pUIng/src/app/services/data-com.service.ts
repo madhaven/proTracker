@@ -4,6 +4,7 @@ import { NewTask } from '../models/new-task.model';
 import { Injectable } from '@angular/core';
 import { TaskStatus } from '../common/task-status';
 import { Habit } from '../models/habit.model';
+import { TaskLog } from '../models/task-log.model';
 
 @Injectable({
   providedIn: 'root'
@@ -19,4 +20,5 @@ export abstract class DataComService {
   deleteHabit(id: number): any {}
   editProject(newProject: Project): any {}
   loadData(): any {}
+  exportData(logTree: Map<string, Map<number, Map<number, TaskLog>>>): any {}
 }

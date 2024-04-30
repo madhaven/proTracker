@@ -61,17 +61,30 @@ const DataRequestHandler = async (event) => {
     }
 }
 
-const exportDataHandler = async (event, mainWindow, logTree, tasks, projects, logs) => {
+const exportDataHandler = async (event, mainWindow, logTree) => {
     // prompts user for file name and saves the data into the file
     // TODO: fetch from backend instead of front: shift logTree gen methods from front to back?
 
     try {
         const filename = await FileService.selectFileSaveName(mainWindow)
-            , workBook = new ExcelJS.Workbook()
+        if (!filename) return false
+
+        const workBook = new ExcelJS.Workbook()
             , logSheet = workBook.addWorksheet('Logs')
             , projectsSheet = workBook.addWorksheet('Project Overview')
+            , tasks_array = await TP.getAllTasks()
+            , project_array = await PP.getAllProjects()
+            , logs = await SLP.getAllLogs()
+            , projects = {}
+            , tasks = {}
+        for (const project of project_array) {
+            projects[project.id] = project
+        }
+        for (const task of tasks_array) {
+            tasks[task.id] = task
+        }
 
-        if (!filename) return false
+
         await renderExportLogSheet(logSheet, logTree, tasks, projects)
         await renderProjectsLogSheet(projectsSheet, projects, tasks, logs)
         await workBook.xlsx.writeFile(filename);
@@ -100,18 +113,17 @@ const renderExportLogSheet = async (ws, logTree, tasks, projects) => {
     ws.getRow(1).border = BORDER_BOTTOM_THICC
 
     var currentRow = 2
-    for (const day in logTree) {
+    for (const [day, pros] of logTree) {
         var [year, month, date] = day.split(',')
         year = year.padStart(4, '0')
         month = (parseInt(month)+1).toString().padStart(2, '0')
         date = date.padStart(2, '0')
         ws.getCell(currentRow, COLUMN_DATE).value = `${year}-${month}-${date}`
         if (currentRow != 2) ws.getRow(currentRow).border = BORDER_TOP_THIN
-        for (const projectId in logTree[day]) {
-            for (const taskId in logTree[day][projectId]) {
+        for (const [projectId, tas] of pros) {
+            for (const [taskId, log] of tas) {
                 const projectName = projects[projectId].name
                 const summary = tasks[taskId].summary
-                const log = logTree[day][projectId][taskId]
                 ws.getCell(currentRow, COLUMN_PROJECT).value = projectName
 
                 var column = 0, style = undefined
@@ -139,8 +151,6 @@ const renderProjectsLogSheet = async (ws, projects, tasks, logs) => { // is it b
     ws.getCell(1, 5).value = 'Time Spent'
     ws.getRow(1).font = FONT_BOLD
     ws.getRow(1).border = BORDER_BOTTOM_THICC
-    // const tasks = tp.getAllTasks()
-    // const logs = slp.getAllLogs()
     const projectTree = await PP.getProjectTree(logs, tasks) // project > task > statusLog
 
     var sl = 1
@@ -288,7 +298,7 @@ const registerHandlers = mainWindow => {
     ipcMain.handle('habitDoneChannel', habitDoneHandler)
     ipcMain.handle('deleteHabitChannel', deleteHabitHandler)
     ipcMain.handle('loadDataRequest', DataRequestHandler)
-    ipcMain.handle('exportDataRequest', (event, a, b, c, d) => { return exportDataHandler(event, mainWindow, a, b, c, d) })
+    ipcMain.handle('exportDataRequest', (event, logTree) => { return exportDataHandler(event, mainWindow, logTree) })
     
     // state info exchange
     ipcMain.on('UIEventNotifications', stateEventHandler)

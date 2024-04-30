@@ -76,12 +76,11 @@ const ProjectProvider = class {
     }
 
     async getProjectTree(logs, tasks) {
-        const projectTree = {}, orderredLogs = []
-        for (const log in logs)
-            orderredLogs.push(logs[log]) // TODO: one-liner instead of looping
+        var projectTree = {}, orderredLogs = []
+        orderredLogs = [...logs];
         orderredLogs.sort((a, b) => a.dateTime-b.dateTime)
 
-        for (const log of orderredLogs) {
+        orderredLogs.forEach((log) => {
             const taskId = log.taskId
                 , projectId = tasks[taskId].projectId
 
@@ -94,7 +93,7 @@ const ProjectProvider = class {
                 projectTree[projectId][taskId].push(log)
             else if (projectTree[projectId][taskId].length == 2)
                 projectTree[projectId][taskId][1] = log
-        }
+        })
         return projectTree
     }
 

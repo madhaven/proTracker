@@ -335,4 +335,8 @@ export class UiStateService {
     this.notifyStateChange();
     console.debug('state updated', this);
   }
+
+  exportData() {
+    return this.comService.exportData(this.logTree);
+  }
 }

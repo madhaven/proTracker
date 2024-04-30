@@ -5,6 +5,7 @@ import { Injectable } from "@angular/core";
 import { TaskStatus } from "../common/task-status";
 import { DataComService } from "./data-com.service";
 import { Habit } from "../models/habit.model";
+import { TaskLog } from "../models/task-log.model";
 
 declare global {
   interface Window {
@@ -31,6 +32,11 @@ export class ElectronComService extends DataComService {
   override loadData() {
     if (!this.comsCheck()) return;
     return window.comms.loadData();
+  }
+
+  override exportData(logTree: Map<string, Map<number, Map<number, TaskLog>>>) {
+    if (!this.comsCheck()) return;
+    return window.comms.exportData(logTree);
   }
 
   override newTask(task: NewTask) {
