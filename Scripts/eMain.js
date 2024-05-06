@@ -45,7 +45,8 @@ const createWindow = () => {
     else
         win.loadFile("./pUIng/dist/pUIng/browser/index.html")
     win.webContents.on('did-finish-load', () => {
-        if (debugMode) win.webContents.openDevTools()
+        if (debugMode)
+            win.webContents.openDevTools();
     })
     win.once('ready-to-show', () => {
         win.show()

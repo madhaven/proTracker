@@ -10,6 +10,7 @@ import { DataComService } from './data-com.service';
 import { ElectronComService } from './electron-com.service';
 import { NewTask } from '../models/new-task.model';
 import { Subject } from 'rxjs';
+import { Keys } from '../common/keys';
 
 @Injectable({
   providedIn: 'root'
@@ -108,7 +109,7 @@ export class UiStateService {
     this.foldedProjects.set(projectId, !currentFold);
 
     var jsonData = JSON.stringify(Array.from(this.foldedProjects.entries()));
-    localStorage.setItem('foldedProjects', jsonData);
+    localStorage.setItem(Keys.foldedProjects_2_1_0, jsonData);
     return !currentFold;
   }
 
@@ -299,8 +300,18 @@ export class UiStateService {
           this.loadPercent.next(66);
           
           // fetch UI info
-          var projectFoldData = new Map<number, boolean>(JSON.parse(localStorage.getItem('foldedProjects') ?? '[]'));
-          this.foldedProjects = projectFoldData;
+          try {
+            const data: [number, boolean][] = JSON.parse(localStorage.getItem(Keys.foldedProjects_2_1_0) ?? '[]')
+            const projectFoldData = new Map(data);
+            this.foldedProjects = projectFoldData;
+            this.loadPercent.next(82);
+          } catch(err) {
+            // handles data inconsistencies across UI versions
+            console.log('folded Projects were unreadable, reverting to default.')
+            localStorage.removeItem(Keys.foldedProjects_2_1_0);
+            this.foldedProjects = new Map();
+            this.loadPercent.next(95);
+          }
           this.loadPercent.next(100);
         }
       },
