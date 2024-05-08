@@ -3,9 +3,9 @@ import { Project } from "../models/project.model";
 import { NewTask } from "../models/new-task.model";
 import { Injectable } from "@angular/core";
 import { TaskStatus } from "../common/task-status";
-import { DataComService } from "./data-com.service";
 import { Habit } from "../models/habit.model";
 import { TaskLog } from "../models/task-log.model";
+import { DataCommsInterface } from "../common/data-comms-interface";
 
 declare global {
   interface Window {
@@ -14,63 +14,71 @@ declare global {
 }
 
 @Injectable({ providedIn: 'root' })
-export class ElectronComService extends DataComService {
+export class ElectronComService implements DataCommsInterface {
 
   comsCheck() {
-    if (!window.comms) {
-      console.error("DataComs Down");
-      return false;
+    var result = false;
+    try {
+      if (window.comms)
+        result = true;
+    } finally {
+      console.log(result ? "Electron found" : "Electron not found");
+      return result;
     }
-    return true;
   }
 
-  override getAppVersion() {
+  getAppVersion() {
     if (!this.comsCheck()) return;
     return window.comms.getAppVersion()
   }
 
-  override loadData() {
-    if (!this.comsCheck()) return;
-    return window.comms.loadData();
+  loadData(): Promise<Object> {
+    if (!this.comsCheck()) {
+      return new Promise((res, rej) => rej());
+    } else {
+      return window.comms.loadData();
+    }
   }
 
-  override exportData(logTree: Map<string, Map<number, Map<number, TaskLog>>>) {
+  exportData(logTree: Map<string, Map<number, Map<number, TaskLog>>>) {
     if (!this.comsCheck()) return;
     return window.comms.exportData(logTree);
   }
 
-  override newTask(task: NewTask) {
+  newTask(task: NewTask) {
     if (!this.comsCheck()) return;
     return window.comms.newTask(task);
   }
 
-  override toggleTask(id: number, newState: TaskStatus, currentTime: number) {
+  toggleTask(id: number, newState: TaskStatus, currentTime: number) {
     if (!this.comsCheck()) return;
     return window.comms.toggleTask(id, newState, currentTime);
   }
 
-  override editTask(newTask: Task) {
+  editTask(newTask: Task) {
     if (!this.comsCheck()) return;
     return window.comms.editTask(newTask);
   }
 
-  override editProject(newProject: Project) {
+  editProject(newProject: Project) {
     if (!this.comsCheck()) return;
     return window.comms.editProject(newProject);
   }
 
-  override newHabit(habit: Habit) {
+  newHabit(habit: Habit) {
     if (!this.comsCheck()) return;
     return window.comms.newHabit(habit);
   }
 
-  override editHabit(newHabit: Habit) {
+  editHabit(newHabit: Habit) {
     if (!this.comsCheck()) return;
     return window.comms.editHabit(newHabit);
   }
 
-  override habitDone(id: number, time: number) {
+  habitDone(id: number, time: number) {
     if (!this.comsCheck()) return;
     return window.comms.habitDone(id, time);
   }
+
+  deleteHabit(id: number) {}
 }

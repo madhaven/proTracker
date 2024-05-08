@@ -6,17 +6,20 @@ import { TaskLog } from '../models/task-log.model';
 import { HabitLog } from '../models/habit-log.model';
 import { MenuTabs } from '../common/menu-tabs';
 import { TaskStatus } from '../common/task-status';
-import { DataComService } from './data-com.service';
-import { ElectronComService } from './electron-com.service';
 import { NewTask } from '../models/new-task.model';
 import { Subject } from 'rxjs';
 import { Keys } from '../common/keys';
+
+import { DataCommsInterface } from '../common/data-comms-interface';
+import { ElectronComService } from './electron-com.service';
+import { BrowserBackendService } from './browser-backend.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UiStateService {
 
+  // TODO: move to separate object
   // preferences
   foldedProjects = new Map<number, boolean>();
   defaultTab: MenuTabs = MenuTabs.TaskLogs;
@@ -30,11 +33,13 @@ export class UiStateService {
   projects = new Map<number, Project>();
   logs = new Map<number, TaskLog>();
   habitLogs = new Map<number, HabitLog>();
+
+  // processed data
   logTree = new Map<string, Map<number, Map<number, TaskLog>>>();
   projectTree = new Map<number, Map<number, number>>();
 
   // deps
-  comService!: DataComService;
+  comService!: DataCommsInterface;
 
   // subs
   stateChanged = new Subject<UiStateService>();
@@ -42,8 +47,15 @@ export class UiStateService {
   loadPercent = new Subject<number>();
   loading$ = this.loadPercent.asObservable();
 
-  constructor(eComService: ElectronComService) {
-    this.comService = eComService;
+  constructor(
+    eComService: ElectronComService,
+    browserBackend: BrowserBackendService,
+  ) {
+    if (eComService.comsCheck()) {
+      this.comService = eComService;
+    } else {
+      this.comService = browserBackend;
+    }
   }
 
   notifyStateChange() {
@@ -285,49 +297,51 @@ export class UiStateService {
 
   loadData() {
     this.loadPercent.next(0);
-    this.comService.loadData().then(
-      (res: any) => {
-        if (res as boolean == false) {
-          console.error('corrupt data received', res);
-          this.loadPercent.next(100);
-          return;
-          // TODO: notification ?
-        } else {
-          // fetch data
-          console.log('data recieved from db', res);
-          this.loadPercent.next(33);
-          this.replaceData(res.tasks, res.taskLogs, res.projects, res.habits, res.habitLogs, res.appVersion);
-          this.loadPercent.next(66);
-          
-          // fetch UI info
-          try {
-            const data: [number, boolean][] = JSON.parse(localStorage.getItem(Keys.foldedProjects_2_1_0) ?? '[]')
-            const projectFoldData = new Map(data);
-            this.foldedProjects = projectFoldData;
-            this.loadPercent.next(82);
-          } catch(err) {
-            // handles data inconsistencies across UI versions
-            console.log('folded Projects were unreadable, reverting to default.')
-            localStorage.removeItem(Keys.foldedProjects_2_1_0);
-            this.foldedProjects = new Map();
-            this.loadPercent.next(95);
-          }
+    this.comService.loadData()
+    .then((res: any) => {
+      if (res as boolean == false) {
+        this.replaceData();
+        this.loadPercent.next(100);
+        return;
+        // TODO: notification ?
+      } else {
+        // fetch data
+        console.log('data recieved from db', res);
+        this.loadPercent.next(33);
+        this.replaceData(res.tasks, res.taskLogs, res.projects, res.habits, res.habitLogs, res.appVersion);
+        this.loadPercent.next(66);
+        
+        // fetch UI info
+        try {
+          const data: [number, boolean][] = JSON.parse(localStorage.getItem(Keys.foldedProjects_2_1_0) ?? '[]')
+          const projectFoldData = new Map(data);
+          this.foldedProjects = projectFoldData;
+          this.loadPercent.next(82);
+        } catch(err) {
+          // handles data inconsistencies across UI versions
+          console.log('folded Projects were unreadable, reverting to default.')
+          localStorage.removeItem(Keys.foldedProjects_2_1_0);
+          this.foldedProjects = new Map();
+          this.loadPercent.next(95);
+        } finally {
           this.loadPercent.next(100);
         }
-      },
-      (err: any) => {
-        console.error('server error while loading data'); // TODO: notification
       }
-    );
+    })
+    .catch((err: any) => {
+      console.error('server error while loading data'); // TODO: notification
+      this.replaceData();
+      this.loadPercent.next(100);
+    });
   }
 
   replaceData(
-    tasks: [Task], 
-    taskLogs: [TaskLog], 
-    projects: [Project], 
-    habits: [Habit], 
-    habitLogs: [HabitLog],
-    appVersion: string,
+    tasks: Task[] = [],
+    taskLogs: TaskLog[] = [],
+    projects: Project[] = [],
+    habits: Habit[] = [],
+    habitLogs: HabitLog[] = [],
+    appVersion: string = ''
   ) {
     this.appVersion = appVersion;
     this.logs = new Map();
@@ -344,7 +358,6 @@ export class UiStateService {
 
     this.growTrees();
     this.notifyStateChange();
-    console.debug('state updated', this);
   }
 
   exportData() {
