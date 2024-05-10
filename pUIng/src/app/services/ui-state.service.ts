@@ -13,6 +13,7 @@ import { Keys } from '../common/keys';
 import { DataCommsInterface } from '../common/data-comms-interface';
 import { ElectronComService } from './electron-com.service';
 import { BrowserBackendService } from './browser-backend.service';
+import { LocalStorageService } from './local-storage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -40,6 +41,7 @@ export class UiStateService {
 
   // deps
   comService!: DataCommsInterface;
+  localStorage!: LocalStorageService;
 
   // subs
   stateChanged = new Subject<UiStateService>();
@@ -50,7 +52,9 @@ export class UiStateService {
   constructor(
     eComService: ElectronComService,
     browserBackend: BrowserBackendService,
+    localStorage: LocalStorageService,
   ) {
+    this.localStorage = localStorage;
     if (eComService.comsCheck()) {
       this.comService = eComService;
     } else {
