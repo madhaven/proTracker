@@ -6,7 +6,6 @@ import { Habit } from '../models/habit.model';
 import { TaskLog } from '../models/task-log.model';
 
 export interface DataCommsInterface {
-  getAppVersion(): any
   newTask(newTask: NewTask): any
   editTask(newTask: Task): any
   toggleTask(id: number, newState: TaskStatus, currentTime: number): any

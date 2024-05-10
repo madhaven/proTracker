@@ -19,17 +19,11 @@ export class ElectronComService implements DataCommsInterface {
   comsCheck() {
     var result = false;
     try {
-      if (window.comms)
-        result = true;
+      if (!window.comms) {} else { result = true; }
     } finally {
       console.log(result ? "Electron found" : "Electron not found");
       return result;
     }
-  }
-
-  getAppVersion() {
-    if (!this.comsCheck()) return;
-    return window.comms.getAppVersion()
   }
 
   loadData(): Promise<Object> {

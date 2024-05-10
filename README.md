@@ -2,6 +2,31 @@
 
 a simple way to track task and habit progress
 
+## Usage
+
+* `npm run buildnstart` followed by `npm run make`  
+  Builds the project  
+  A number of issues have come to notice: [#54](https://github.com/madhaven/proTracker/issues/54)  
+  * Sqlite db having access  
+  * electron and npm version mismatches  
+* `npm run buildnstart`  
+  Builds the Angular UI and starts the app  
+  `npm run build`  
+  Builds the frontend UI alone and creates the distributables  
+  `npm run start`  
+  Starts the app, relying on the Angular distributables created  
+* `cd pUIng && ng serve`  
+  `npm run debug`  
+  Loads and serves the angular UI at localhost:4200 then runs Electron to render the UI in the app environment.  
+  While you should be able to access the app from a browser through `localhost:4200`, much of the native services that electron provides for File access are not available on the browser and require the native support from Electron.  
+  > PR's that setup DB services in `localStorage` are welcome.  
+  
+  `npm run clean`  
+  Cleans all debug configs and db data  
+  `npm run cleandebug`  
+  Dzebugs from a clean slate  
+
+
 ## Architecture
 
 The [Electron framework](https://www.electronjs.org/) as I understand works with 3 components  
@@ -31,25 +56,6 @@ While debugging, the electron backend fetches the site hosted by Angular CLI at 
 While running the app, the UI needs to be built and is fetched from the distributables generated.  
 The pUIng folder contains all things angular.  
 The folder structure is nested at the moment. I'm still debating the advantages of having all the components in the component folder altogether.  
-
-## Usage
-
-* To debug,  
-  `cd pUIng && ng serve` loads the angular UI  
-  `npm run debug` runs Electron to render the UI in the app environment  
-  While you should be able to access the app from a browser through `localhost:4200`, much of the native services that electron provides for File access are not available.  
-  PR's that setup DB services in `localStorage` are welcome.  
-  
-  `npm run clean` cleans all debug configs and db data  
-  `npm run cleandebug` debugs from a clean slate  
-* To run from code,  
-  `npm run buildnstart` builds the UI and starts the app  
-  `npm run build` builds the frontend UI alone and creates the distributables  
-  `npm run start` relies on the Angular distributables created  
-* To build the project, run `npm run buildnstart` followed by `npm run make`  
-  A number of issues have come to notice: [#54](https://github.com/madhaven/proTracker/issues/54)  
-  * Sqlite db having access  
-  * electron and npm version mismatches  
 
 ## Motivation
 

@@ -33,9 +33,6 @@ export class BrowserBackendService implements DataCommsInterface {
     this.LS = localStorage;
   }
 
-  getAppVersion() {
-    return this.appVersion;
-  }
   newTask(newTask: NewTask) {
   }
   editTask(newTask: Task) {
