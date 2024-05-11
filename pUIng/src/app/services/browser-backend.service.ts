@@ -8,6 +8,7 @@ import { TaskLog } from '../models/task-log.model';
 import { Task } from '../models/task.model';
 import { LocalStorageService } from './local-storage.service';
 import { DataCommsInterface } from '../common/data-comms-interface';
+import { Keys } from '../common/keys';
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +34,7 @@ export class BrowserBackendService implements DataCommsInterface {
     this.LS = localStorage;
   }
 
-  newTask(newTask: NewTask) {
+  newTask(newTask: NewTask) { // TODO: remove unwanted abstraction of Task
   }
   editTask(newTask: Task) {
     throw new Error('Method not implemented.');
@@ -58,7 +59,7 @@ export class BrowserBackendService implements DataCommsInterface {
   }
   loadData(): Promise<Object> {
     return new Promise((res, rej) => {
-      var stringData = this.LS.getItem('_data_')
+      var stringData = this.LS.getItem(Keys.browserDataStorage_0_0_0);
       if (stringData == null) {
         res(false);
       } else {
@@ -76,7 +77,7 @@ export class BrowserBackendService implements DataCommsInterface {
       habitLogs: this.habitLogs,
       appVersion: this.appVersion,
     })
-    this.LS.setItem('_data_', data);
+    this.LS.setItem(Keys.browserDataStorage_0_0_0, data);
   }
 
   exportData(logTree: Map<string, Map<number, Map<number, TaskLog>>>) {
