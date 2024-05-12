@@ -7,8 +7,8 @@ import { UiStateService } from './services/ui-state.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    UiStateService,
     provideRouter(routes, withComponentInputBinding()),
     provideClientHydration(),
-    UiStateService,
   ]
 };
