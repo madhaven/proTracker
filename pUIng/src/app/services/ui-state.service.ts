@@ -6,7 +6,7 @@ import { TaskLog } from '../models/task-log.model';
 import { HabitLog } from '../models/habit-log.model';
 import { MenuTabs } from '../common/menu-tabs';
 import { TaskStatus } from '../common/task-status';
-import { NewTask } from '../models/new-task.model';
+import { NewTaskData } from '../models/new-task-data.model';
 import { Subject } from 'rxjs';
 import { Keys } from '../common/keys';
 
@@ -56,7 +56,7 @@ export class UiStateService {
     localStorage: LocalStorageService,
   ) {
     this.localStorage = localStorage;
-    if (eComService.comsCheck()) {
+    if (eComService.comsCheck(false)) {
       this.comService = eComService;
     } else {
       this.comService = browserBackend;
@@ -134,7 +134,7 @@ export class UiStateService {
     return this.tasks.get(taskId);
   }
 
-  newTask(newTask: NewTask) {
+  newTask(newTask: NewTaskData) {
     this.comService.newTask(newTask).then(
       (res: any) => { // TODO: ng standardise data models
         if (res as boolean == false) {

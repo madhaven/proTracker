@@ -216,7 +216,7 @@ const newTaskHandler = async (event, newTask) => {
     newTask.summary = newTask.summary.trim()
 
     const project = await PP.getByNameOrCreate(newTask.project)
-    const task = await TP.create(new Task(-1, project.id, newTask.summary, -1)) // TODO: remove object and replace with direct params
+    const task = await TP.create(newTask.summary, project.id, -1)
     const status = await SP.getById(Status.PENDING)
     const log = await SLP.create(new StatusLog(-1, task.id, status.id, newTask.dateTime))
     return (project && task && log) ? {
@@ -236,9 +236,17 @@ const toggleTaskHandler = async (event, taskId, newStatusId, newTime) => {
     return statusLog ?? false
 }
 
-const createHabitHandler = async (event, habit) => {
-    habit = await HP.create(habit)
-    return habit ?? false
+const createHabitHandler = async (event, newHabit) => {
+    if (newHabit.days > 7
+        || newHabit.days < 1
+        || newHabit.name.length <= 0
+    ) res(false);
+    newHabit.endTime = new Date(newHabit.endTime).getTime();
+    newHabit.lastLogTime = new Date(newHabit.lastLogTime).getTime();
+    newHabit.startTime = new Date(newHabit.startTime).getTime();
+
+    habit = await HP.create(newHabit)
+    return newHabit ?? false
 }
 
 const editHabitHandler = async (event, newHabit) => {

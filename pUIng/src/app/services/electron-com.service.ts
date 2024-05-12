@@ -1,6 +1,6 @@
 import { Task } from "../models/task.model";
 import { Project } from "../models/project.model";
-import { NewTask } from "../models/new-task.model";
+import { NewTaskData } from "../models/new-task-data.model";
 import { Injectable } from "@angular/core";
 import { TaskStatus } from "../common/task-status";
 import { Habit } from "../models/habit.model";
@@ -17,12 +17,13 @@ declare global {
 @Injectable({ providedIn: 'root' })
 export class ElectronComService implements DataCommsInterface {
 
-  comsCheck() {
+  comsCheck(silent = true) {
     var result = false;
     try {
       if (!window.comms) {} else { result = true; }
     } finally {
-      console.log(result ? "Electron found" : "Electron not found");
+      if (!silent)
+        console.log(result ? "Electron found" : "Electron not found");
       return result;
     }
   }
@@ -40,7 +41,7 @@ export class ElectronComService implements DataCommsInterface {
     return window.comms.exportData(logTree);
   }
 
-  newTask(task: NewTask) {
+  newTask(task: NewTaskData) {
     if (!this.comsCheck()) return;
     return window.comms.newTask(task);
   }

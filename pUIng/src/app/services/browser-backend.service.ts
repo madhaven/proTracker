@@ -2,7 +2,7 @@ import { afterNextRender, Injectable } from '@angular/core';
 import { TaskStatus } from '../common/task-status';
 import { HabitLog } from '../models/habit-log.model';
 import { Habit } from '../models/habit.model';
-import { NewTask } from '../models/new-task.model';
+import { NewTaskData } from '../models/new-task-data.model';
 import { Project } from '../models/project.model';
 import { TaskLog } from '../models/task-log.model';
 import { Task } from '../models/task.model';
@@ -75,9 +75,7 @@ export class BrowserBackendService implements DataCommsInterface {
   //#region backend Logic
 
   createProject(name: string): Project {
-    var newProject = new Project();
-    newProject.id = ++this.lastId_projects;
-    newProject.name = name;
+    const newProject = new Project(++this.lastId_projects, name, []);
     this.projects.set(newProject.id, newProject);
     return newProject;
   }
@@ -99,13 +97,9 @@ export class BrowserBackendService implements DataCommsInterface {
     this.projects.set(project.id, project);
     return true;
   }
-  // delete(project: Project): boolean {} // TODO
+  // delete(project: Project): boolean {}
   createTask(taskName: string, projectId: number, parentId: number) {
-    var newTask = new Task();
-    newTask.id = ++this.lastId_tasks;
-    newTask.summary = taskName;
-    newTask.projectId = projectId;
-    newTask.parentId = parentId;
+    const newTask = new Task(++this.lastId_tasks, projectId, parentId, taskName);
     this.tasks.set(newTask.id, newTask);
     return newTask;
   }
@@ -118,7 +112,7 @@ export class BrowserBackendService implements DataCommsInterface {
     this.tasks.set(task.id, task);
     return true;
   }
-  // deleteTask(task): boolean {} TODO
+  // deleteTask(task): boolean {}
   createHabit(newHabit: Habit) {
     newHabit.id = ++this.lastId_habits;
     this.habits.set(newHabit.id, newHabit);
@@ -129,7 +123,7 @@ export class BrowserBackendService implements DataCommsInterface {
     this.habits.set(habit.id, habit);
     return true;
   }
-  // deleteHabit(habit: Habit): boolena {} // TODO
+  // deleteHabit(habit: Habit): boolena {}
   createTaskLog(newTaskLog: TaskLog): TaskLog {
     newTaskLog.id = ++this.lastId_taskLogs;
     this.taskLogs.set(newTaskLog.id, newTaskLog);
@@ -139,6 +133,7 @@ export class BrowserBackendService implements DataCommsInterface {
     newHabitLog.id = ++this.lastId_habitLogs;
     this.habitLogs.set(newHabitLog.id, newHabitLog);
 
+    // update Habit with latest date
     const habit = this.habits.get(newHabitLog.habitId);
     habit!.lastLogTime = newHabitLog.dateTime;
     this.habits.set(habit!.id, habit!);
@@ -146,22 +141,9 @@ export class BrowserBackendService implements DataCommsInterface {
     return newHabitLog;
   }
 
-  getStatusById(id: number) {
-    // TODO: move to LocalStorage: add DB versioning
-    switch (id) {
-      case 1: return {id: 1, status: "pending"};
-      case 2: return {id: 2, status: "in_progress"};
-      case 3: return {id: 3, status: "need_info"};
-      case 4: return {id: 4, status: "completed"};
-      case 5: return {id: 5, status: "waiting"};
-      case 6: return {id: 6, status: "wont_do"};
-      default: return false;
-    }
-  }
-
   //#endregion
 
-  newTask(newTask: NewTask) { // TODO: remove unwanted abstraction of Task
+  newTask(newTask: NewTaskData) {
     return new Promise((res, rej) => {
       newTask.dateTime = new Date(newTask.dateTime).getTime();
       newTask.project = newTask.project.trim();
@@ -169,13 +151,7 @@ export class BrowserBackendService implements DataCommsInterface {
       
       const project = this.getProjectByNameOrCreate(newTask.project);
       const task = this.createTask(newTask.summary, project.id, -1);
-      const status = this.getStatusById(1);
-
-      var newTaskLog = new TaskLog();
-      newTaskLog.dateTime = newTask.dateTime;
-      newTaskLog.id = -1;
-      newTaskLog.statusId = 1;
-      newTaskLog.taskId = task.id;
+      const newTaskLog = new TaskLog(-1, task.id, TaskStatus.PENDING, newTask.dateTime);
       const taskLog = this.createTaskLog(newTaskLog);
 
       this.dumpToLocalStorage();
@@ -200,12 +176,7 @@ export class BrowserBackendService implements DataCommsInterface {
 
   toggleTask(id: number, newState: TaskStatus, currentTime: number) {
     return new Promise((res, rej) => {
-      const taskLog = new TaskLog();
-      taskLog.dateTime = new Date(currentTime).getTime();
-      taskLog.id = -1;
-      taskLog.statusId = newState;
-      taskLog.taskId = id;
-  
+      const taskLog = new TaskLog(-1, id, newState, new Date(currentTime).getTime());
       const result = this.createTaskLog(taskLog);
       this.dumpToLocalStorage();
       res(result);
@@ -214,6 +185,14 @@ export class BrowserBackendService implements DataCommsInterface {
 
   newHabit(newHabit: Habit) {
     return new Promise((res, rej) => {
+      if (newHabit.days > 7
+        || newHabit.days < 1
+        || newHabit.name.length <= 0
+      ) res(false);
+      newHabit.endTime = new Date(newHabit.endTime!).getTime();
+      newHabit.lastLogTime = new Date(newHabit.lastLogTime!).getTime();
+      newHabit.startTime = new Date(newHabit.startTime!).getTime();
+
       const habit = this.createHabit(newHabit);
       this.dumpToLocalStorage();
       res(habit);
@@ -240,12 +219,8 @@ export class BrowserBackendService implements DataCommsInterface {
       ) {
         throw Error("Already Logged Habit for the day"); // TODO: Notification
       } else {
-        var newHabitLog = new HabitLog();
-        newHabitLog.dateTime = time;
-        newHabitLog.habitId = id;
-        newHabitLog.id = -1;
-
-        var habitLog = this.createHabitLog(newHabitLog);
+        const newHabitLog = new HabitLog(-1, id, time);
+        const habitLog = this.createHabitLog(newHabitLog);
         console.log('habitDone', habitLog);
         this.dumpToLocalStorage();
         return habitLog ?? false;
