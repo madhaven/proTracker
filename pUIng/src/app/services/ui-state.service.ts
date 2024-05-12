@@ -14,6 +14,7 @@ import { DataCommsInterface } from '../common/data-comms-interface';
 import { ElectronComService } from './electron-com.service';
 import { BrowserBackendService } from './browser-backend.service';
 import { LocalStorageService } from './local-storage.service';
+import { LocalStoreObject } from '../models/local-store-object.model';
 
 @Injectable({
   providedIn: 'root'
@@ -302,8 +303,8 @@ export class UiStateService {
   loadData() {
     this.loadPercent.next(0);
     this.comService.loadData()
-    .then((res: any) => {
-      if (res as boolean == false) {
+    .then((res: LocalStoreObject|false) => {
+      if (res == false) {
         this.replaceData();
         this.loadPercent.next(100);
         return;

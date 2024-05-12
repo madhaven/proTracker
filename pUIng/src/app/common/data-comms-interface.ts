@@ -4,6 +4,7 @@ import { NewTask } from '../models/new-task.model';
 import { TaskStatus } from '../common/task-status';
 import { Habit } from '../models/habit.model';
 import { TaskLog } from '../models/task-log.model';
+import { LocalStoreObject } from '../models/local-store-object.model';
 
 export interface DataCommsInterface {
   newTask(newTask: NewTask): any
@@ -14,6 +15,6 @@ export interface DataCommsInterface {
   habitDone(id: number, time: number): any
   deleteHabit(id: number): any
   editProject(newProject: Project): any
-  loadData(): Promise<any>
+  loadData(): Promise<LocalStoreObject|false>
   exportData(logTree: Map<string, Map<number, Map<number, TaskLog>>>): any
 }
