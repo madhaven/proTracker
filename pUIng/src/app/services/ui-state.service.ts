@@ -173,12 +173,11 @@ export class UiStateService {
 
   editTask(newTask: Task) {
     this.comService.editTask(newTask!).then(
-      (res: Task|boolean) => { // TODO: document responses
+      (res: boolean) => { // TODO: document responses
         if (res as boolean == false) {
           console.error('Something went wrong while editing task'); // TODO: notification
           return;
         } else {
-          res = res as Task;
           this.tasks.set(newTask.id, newTask);
           this.notifyStateChange();
         }
@@ -234,7 +233,7 @@ export class UiStateService {
     this.comService.newHabit(newHabit).then(
       (res: Habit|boolean) => {
         if (res as boolean == false) {
-          console.error('Habit invalid');
+          console.error('Habit create invalid');
           return;
         } else {
           res = res as Habit;
@@ -252,7 +251,7 @@ export class UiStateService {
     this.comService.editHabit(newHabit).then(
       (res: Habit|boolean) => {
         if (res as boolean == false) {
-          console.error('Habit invalid');
+          console.error('Habit edit invalid');
           return;
         } else {
           res = res as Habit;
@@ -301,7 +300,7 @@ export class UiStateService {
   }
 
   loadData() {
-    this.loadPercent.next(0);
+    this.loadPercent.next(10);
     this.comService.loadData()
     .then((res: LocalStoreObject|false) => {
       if (res == false) {
@@ -311,21 +310,21 @@ export class UiStateService {
         // TODO: notification ?
       } else {
         // fetch data
-        console.log('data recieved from db', res);
+        console.log('data received from db');
         this.loadPercent.next(33);
         this.replaceData(res.tasks, res.taskLogs, res.projects, res.habits, res.habitLogs, res.appVersion);
         this.loadPercent.next(66);
         
         // fetch UI info
         try {
-          const data: [number, boolean][] = JSON.parse(localStorage.getItem(Keys.foldedProjects_2_1_0) ?? '[]')
+          const data: [number, boolean][] = JSON.parse(this.localStorage.getItem(Keys.foldedProjects_2_1_0) ?? '[]')
           const projectFoldData = new Map(data);
           this.foldedProjects = projectFoldData;
           this.loadPercent.next(82);
         } catch(err) {
           // handles data inconsistencies across UI versions
           console.log('folded Projects were unreadable, reverting to default.')
-          localStorage.removeItem(Keys.foldedProjects_2_1_0);
+          this.localStorage.removeItem(Keys.foldedProjects_2_1_0);
           this.foldedProjects = new Map();
           this.loadPercent.next(95);
         } finally {

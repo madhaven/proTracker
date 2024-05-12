@@ -35,6 +35,8 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.uiStateService.loadData();
+    setTimeout(() => {
+      this.uiStateService.loadData();
+    });
   }
 }

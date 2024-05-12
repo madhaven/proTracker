@@ -33,15 +33,6 @@ export class BrowserBackendService implements DataCommsInterface {
 
   constructor(LS: LocalStorageService) {
     this.LS = LS;
-    afterNextRender(() => {
-      this.loadFromLocalStorage();
-    });
-  }
-
-  initializeLocalStorage(): LocalStoreObject {
-    var data = new LocalStoreObject([], [], [], [], [], 'LITE');
-    this.LS.setItem(Keys.browserDataStorage_0_0_0, data);
-    return data;
   }
 
   dumpToLocalStorage() {
@@ -55,17 +46,33 @@ export class BrowserBackendService implements DataCommsInterface {
     );
     this.LS.setItem(Keys.browserDataStorage_0_0_0, data);
     console.log('Data dumped');
+    return data;
   }
-
-  loadFromLocalStorage() {
+  
+  loadData(): Promise<LocalStoreObject|false> {
     var data:LocalStoreObject = this.LS.getItem(Keys.browserDataStorage_0_0_0);
     if (!data) {
-      data = this.initializeLocalStorage();
-      console.log('Fetched data after init from localStore', data);
-    } else {
-      console.log('Fetched data from localStore', data);
+      data = this.dumpToLocalStorage();
     }
+
+    data.tasks.forEach((task) => { this.tasks.set(task.id, task); });
+    data.taskLogs.forEach((taskLog) => { this.taskLogs.set(taskLog.id, taskLog); });
+    data.projects.forEach((project) => { this.projects.set(project.id, project); });
+    data.habits.forEach((habit) => { this.habits.set(habit.id, habit); });
+    data.habitLogs.forEach((habitLog) => { this.habitLogs.set(habitLog.id, habitLog); });
+    this.appVersion = data.appVersion;
+    this.lastId_tasks = this.findLastIndex(this.tasks);
+    this.lastId_taskLogs = this.findLastIndex(this.taskLogs);
+    this.lastId_projects = this.findLastIndex(this.projects);
+    this.lastId_habits = this.findLastIndex(this.habits);
+    this.lastId_habitLogs = this.findLastIndex(this.habitLogs);
+
+    return new Promise((res, rej) => {
+      res(data);
+    });
   }
+
+  //#region backend Logic
 
   createProject(name: string): Project {
     var newProject = new Project();
@@ -87,7 +94,7 @@ export class BrowserBackendService implements DataCommsInterface {
       return newProject;
     }
   }
-  update(project: Project): boolean {
+  updateProject(project: Project): boolean {
     if (!this.projects.has(project.id)) return false;
     this.projects.set(project.id, project);
     return true;
@@ -100,7 +107,6 @@ export class BrowserBackendService implements DataCommsInterface {
     newTask.projectId = projectId;
     newTask.parentId = parentId;
     this.tasks.set(newTask.id, newTask);
-    this.dumpToLocalStorage();
     return newTask;
   }
   getAllTasksOfProject(projectId: number): Task[]|false {
@@ -132,8 +138,14 @@ export class BrowserBackendService implements DataCommsInterface {
   createHabitLog(newHabitLog: HabitLog): HabitLog {
     newHabitLog.id = ++this.lastId_habitLogs;
     this.habitLogs.set(newHabitLog.id, newHabitLog);
+
+    const habit = this.habits.get(newHabitLog.habitId);
+    habit!.lastLogTime = newHabitLog.dateTime;
+    this.habits.set(habit!.id, habit!);
+
     return newHabitLog;
   }
+
   getStatusById(id: number) {
     // TODO: move to LocalStorage: add DB versioning
     switch (id) {
@@ -147,72 +159,115 @@ export class BrowserBackendService implements DataCommsInterface {
     }
   }
 
+  //#endregion
+
   newTask(newTask: NewTask) { // TODO: remove unwanted abstraction of Task
-    newTask.dateTime = new Date(newTask.dateTime).getTime();
-    newTask.project = newTask.project.trim();
-    newTask.summary = newTask.summary.trim();
-    
-    const project = this.getProjectByNameOrCreate(newTask.project)
-    const task = this.createTask(newTask.summary, project.id, -1);
-    const status = this.getStatusById(1);
-
-    var newTaskLog = new TaskLog();
-    newTaskLog.dateTime = newTask.dateTime;
-    newTaskLog.id = -1;
-    newTaskLog.statusId = 1;
-    newTaskLog.taskId = task.id;
-    const taskLog = this.createTaskLog(newTaskLog);
-
-    return (project && task && taskLog)
-      ? new Promise((res, rej) => res({
-          "task": task,
-          "log": taskLog,
-          "project": project,
-        }))
-      : new Promise((res, rej) => res(false));
-  }
-  editTask(newTask: Task) {
-    throw new Error('Method not implemented.');
-  }
-  toggleTask(id: number, newState: TaskStatus, currentTime: number) {
-    throw new Error('Method not implemented.');
-  }
-  newHabit(newHabit: Habit) {
-    throw new Error('Method not implemented.');
-  }
-  editHabit(newHabit: Habit) {
-    throw new Error('Method not implemented.');
-  }
-  habitDone(id: number, time: number) {
-    throw new Error('Method not implemented.');
-  }
-  deleteHabit(id: number) {
-    throw new Error('Method not implemented.');
-  }
-  editProject(newProject: Project) {
-    throw new Error('Method not implemented.');
-  }
-  loadData(): Promise<LocalStoreObject|false> {
     return new Promise((res, rej) => {
-      var stringData = this.LS.getItem(Keys.browserDataStorage_0_0_0);
-      if (stringData == null) {
-        res(false);
+      newTask.dateTime = new Date(newTask.dateTime).getTime();
+      newTask.project = newTask.project.trim();
+      newTask.summary = newTask.summary.trim();
+      
+      const project = this.getProjectByNameOrCreate(newTask.project);
+      const task = this.createTask(newTask.summary, project.id, -1);
+      const status = this.getStatusById(1);
+
+      var newTaskLog = new TaskLog();
+      newTaskLog.dateTime = newTask.dateTime;
+      newTaskLog.id = -1;
+      newTaskLog.statusId = 1;
+      newTaskLog.taskId = task.id;
+      const taskLog = this.createTaskLog(newTaskLog);
+
+      this.dumpToLocalStorage();
+      res((project && task && taskLog)
+        ? {
+            "task": task,
+            "log": taskLog,
+            "project": project,
+          }
+        : false
+      );
+    });
+  }
+  
+  editTask(newTask: Task) {
+    return new Promise((res, rej) => {
+      const result = this.updateTask(newTask);
+      this.dumpToLocalStorage();
+      res(result);
+    });
+  }
+
+  toggleTask(id: number, newState: TaskStatus, currentTime: number) {
+    return new Promise((res, rej) => {
+      const taskLog = new TaskLog();
+      taskLog.dateTime = new Date(currentTime).getTime();
+      taskLog.id = -1;
+      taskLog.statusId = newState;
+      taskLog.taskId = id;
+  
+      const result = this.createTaskLog(taskLog);
+      this.dumpToLocalStorage();
+      res(result);
+    });
+  }
+
+  newHabit(newHabit: Habit) {
+    return new Promise((res, rej) => {
+      const habit = this.createHabit(newHabit);
+      this.dumpToLocalStorage();
+      res(habit);
+    });
+  }
+
+  editHabit(newHabit: Habit) { // TODO standardize API to return boolean on updates;
+    return new Promise((res, rej) => {
+      const result = this.updateHabit(newHabit);
+      this.dumpToLocalStorage();
+      res(result ? newHabit : false);
+    });
+  }
+
+  habitDone(id: number, time: number) {
+    return new Promise((res, rej) => {
+      const habit = this.habits.get(id);
+      const lastDayLogged = new Date(habit!.lastLogTime);
+      const today = new Date();
+
+      if (today.getFullYear() == lastDayLogged.getFullYear()
+        && today.getMonth() == lastDayLogged.getMonth()
+        && today.getDate() == lastDayLogged.getDate()
+      ) {
+        throw Error("Already Logged Habit for the day"); // TODO: Notification
       } else {
-        const jsonData = JSON.parse(stringData);
-        res(jsonData);
+        var newHabitLog = new HabitLog();
+        newHabitLog.dateTime = time;
+        newHabitLog.habitId = id;
+        newHabitLog.id = -1;
+
+        var habitLog = this.createHabitLog(newHabitLog);
+        console.log('habitDone', habitLog);
+        this.dumpToLocalStorage();
+        return habitLog ?? false;
       }
     });
   }
-  saveData() {
-    var data = JSON.stringify({
-      tasks: this.tasks,
-      taskLogs: this.taskLogs,
-      projects: this.projects,
-      habits: this.habits,
-      habitLogs: this.habitLogs,
-      appVersion: this.appVersion,
+
+  deleteHabit(id: number) {
+    throw new Error('Method not implemented.');
+  }
+
+  editProject(newProject: Project) {
+    return new Promise((res, rej) => {
+      const projectInStore = this.getProjectByName(newProject.name);
+      if (projectInStore) {
+        res(false);
+      }
+
+      const result = this.updateProject(newProject);
+      this.dumpToLocalStorage();
+      res(result);
     });
-    this.LS.setItem(Keys.browserDataStorage_0_0_0, data);
   }
 
   exportData(logTree: Map<string, Map<number, Map<number, TaskLog>>>) {
