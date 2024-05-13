@@ -1,4 +1,4 @@
-:host {
+:host, .editable_item_input {
     width: 100%;
 }
 
