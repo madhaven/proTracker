@@ -45,7 +45,6 @@ export class BrowserBackendService implements DataCommsInterface {
       this.appVersion,
     );
     this.LS.setItem(Keys.browserDataStorage_0_0_0, data);
-    console.log('Data dumped');
     return data;
   }
   

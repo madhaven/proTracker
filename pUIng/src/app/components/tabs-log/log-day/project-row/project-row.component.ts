@@ -20,6 +20,7 @@ export class ProjectRowComponent implements OnInit {
   @Input() projectId!: number;
   @Input() tree!: Map<number, TaskLog>;
   @Input() highlightedTask: number = -1;
+  @Input() itIsToday: boolean = false;
   project?: Project;
   uiStateService!: UiStateService;
   stateObserver: Subscription;
