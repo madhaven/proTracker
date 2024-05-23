@@ -12,9 +12,9 @@ import { Keys } from '../common/keys';
 
 import { DataCommsInterface } from '../common/data-comms-interface';
 import { ElectronComService } from './electron-com.service';
-import { BrowserBackendService } from './browser-backend.service';
+import { BrowserBackendService } from '../BrowserBackend/browser-backend.service';
 import { LocalStorageService } from './local-storage.service';
-import { LocalStoreObject } from '../models/local-store-object.model';
+import { BrowserDataObject } from '../models/browser-data-object.model';
 
 @Injectable({
   providedIn: 'root'
@@ -302,7 +302,7 @@ export class UiStateService {
   loadData() {
     this.loadPercent.next(10);
     this.comService.loadData()
-    .then((res: LocalStoreObject|false) => {
+    .then((res: BrowserDataObject|false) => {
       if (res == false) {
         this.replaceData();
         this.loadPercent.next(100);

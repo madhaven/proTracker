@@ -6,10 +6,11 @@ import { NewTaskData } from '../models/new-task-data.model';
 import { Project } from '../models/project.model';
 import { TaskLog } from '../models/task-log.model';
 import { Task } from '../models/task.model';
-import { LocalStorageService } from './local-storage.service';
+import { LocalStorageService } from '../services/local-storage.service';
 import { DataCommsInterface } from '../common/data-comms-interface';
 import { Keys } from '../common/keys';
-import { LocalStoreObject } from '../models/local-store-object.model';
+import { BrowserDataObject } from '../models/browser-data-object.model';
+import { LocalStorageVersionService } from '../BrowserBackend/local-storage-version.service';
 
 @Injectable({
   providedIn: 'root'
@@ -30,13 +31,18 @@ export class BrowserBackendService implements DataCommsInterface {
   appVersion: string = 'Lite';
 
   private LS!: LocalStorageService;
+  private LSVersionService!: LocalStorageVersionService;
 
-  constructor(LS: LocalStorageService) {
-    this.LS = LS;
+  constructor(
+    ls: LocalStorageService,
+    lsvs: LocalStorageVersionService,
+  ) {
+    this.LS = ls;
+    this.LSVersionService = lsvs;
   }
 
   dumpToLocalStorage() {
-    var data = new LocalStoreObject(
+    var data = new BrowserDataObject(
       Array.from(this.tasks.values()),
       Array.from(this.taskLogs.values()),
       Array.from(this.projects.values()),
@@ -44,31 +50,58 @@ export class BrowserBackendService implements DataCommsInterface {
       Array.from(this.habitLogs.values()),
       this.appVersion,
     );
-    this.LS.setItem(Keys.browserDataStorage_0_0_0, data);
-    return data;
+    var exportableData = this.LSVersionService
+      .getLatestVersion()
+      .getExportableData(data);
+    this.LS.setItem(Keys.browserDataStorage_0_0_0, exportableData);
   }
   
-  loadData(): Promise<LocalStoreObject|false> {
-    var data:LocalStoreObject = this.LS.getItem(Keys.browserDataStorage_0_0_0);
-    if (!data) {
-      data = this.dumpToLocalStorage();
-    }
+  loadData(): Promise<BrowserDataObject|false> {
+    return new Promise((res, rej) => {
+      try {
+        // fetch data from LS
+        var jsonData:any = this.LS.getItem(Keys.browserDataStorage_0_0_0);
 
-    data.tasks.forEach((task) => { this.tasks.set(task.id, task); });
-    data.taskLogs.forEach((taskLog) => { this.taskLogs.set(taskLog.id, taskLog); });
-    data.projects.forEach((project) => { this.projects.set(project.id, project); });
-    data.habits.forEach((habit) => { this.habits.set(habit.id, habit); });
-    data.habitLogs.forEach((habitLog) => { this.habitLogs.set(habitLog.id, habitLog); });
-    this.appVersion = data.appVersion;
+        // read data
+        if (!jsonData) {
+          var version = this.LSVersionService.getLatestVersion();
+          var data = version.setup();
+          res(data);
+          return;
+        } else {
+          var data = this.LSVersionService
+            .getVersionFromString(jsonData!.lsVersion)
+            .read(jsonData);
+          this.replaceData(data);
+          res(data);
+          return;
+        }
+      } catch (err) {
+        rej("Browser Data failed to load"); // TODO: Notification
+      }
+    });
+  }
+
+  replaceData(data: BrowserDataObject) {
+    data.tasks.forEach(task => { this.tasks.set(task.id, task); });
+    data.taskLogs.forEach(taskLog => { this.taskLogs.set(taskLog.id, taskLog); });
+    data.projects.forEach(project => { this.projects.set(project.id, project); });
+    data.habits.forEach(habit => { this.habits.set(habit.id, habit); });
+    data.habitLogs.forEach(habitLog => { this.habitLogs.set(habitLog.id, habitLog); });
     this.lastId_tasks = this.findLastIndex(this.tasks);
     this.lastId_taskLogs = this.findLastIndex(this.taskLogs);
     this.lastId_projects = this.findLastIndex(this.projects);
     this.lastId_habits = this.findLastIndex(this.habits);
     this.lastId_habitLogs = this.findLastIndex(this.habitLogs);
+  }
 
-    return new Promise((res, rej) => {
-      res(data);
-    });
+  findLastIndex(map: Map<number, any>) {
+    var highestIndexFound = -1;
+    map.forEach((value: any, key: number) => {
+      if (key > highestIndexFound)
+        highestIndexFound = key;
+    })
+    return highestIndexFound;
   }
 
   //#region backend Logic
@@ -246,14 +279,5 @@ export class BrowserBackendService implements DataCommsInterface {
 
   exportData(logTree: Map<string, Map<number, Map<number, TaskLog>>>) {
     throw new Error('Method not implemented.');
-  }
-
-  findLastIndex(map: Map<number, any>) {
-    var highestIndexFound = -1;
-    map.forEach((value: any, key: number) => {
-      if (key > highestIndexFound)
-        highestIndexFound = key;
-    })
-    return highestIndexFound;
   }
 }

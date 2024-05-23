@@ -6,7 +6,7 @@ import { TaskStatus } from "../common/task-status";
 import { Habit } from "../models/habit.model";
 import { TaskLog } from "../models/task-log.model";
 import { DataCommsInterface } from "../common/data-comms-interface";
-import { LocalStoreObject } from "../models/local-store-object.model";
+import { BrowserDataObject } from "../models/browser-data-object.model";
 
 declare global {
   interface Window {
@@ -28,7 +28,7 @@ export class ElectronComService implements DataCommsInterface {
     }
   }
 
-  loadData(): Promise<LocalStoreObject|false> {
+  loadData(): Promise<BrowserDataObject|false> {
     if (!this.comsCheck()) {
       return new Promise((res, rej) => rej());
     } else {

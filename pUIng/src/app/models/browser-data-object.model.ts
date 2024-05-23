@@ -4,7 +4,7 @@ import { Project } from "./project.model";
 import { TaskLog } from "./task-log.model";
 import { Task } from "./task.model";
 
-export class LocalStoreObject {
+export class BrowserDataObject {
     tasks!: Task[];
     taskLogs!: TaskLog[];
     projects!: Project[];
