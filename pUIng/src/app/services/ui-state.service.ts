@@ -83,13 +83,9 @@ export class UiStateService {
     orderredLogs.sort((a, b) => a.dateTime-b.dateTime);
 
     orderredLogs.forEach(log => {
-      const t = new Date(log.dateTime);
-      const year = t.getFullYear();
-      const month = t.getMonth();
-      const date = t.getDate();
+      const dateStr = this._getDateStr(new Date(log.dateTime));
       const task = this.tasks.get(log.taskId);
       const project = this.projects.get(task!.projectId);
-      const dateStr = `${year},${month},${date}`;
       
       if (!this.logTree.has(dateStr))
         this.logTree.set(dateStr, new Map());
@@ -109,8 +105,7 @@ export class UiStateService {
     })
 
     // show pending tasks on current date
-    const today = new Date();
-    const todayStr = `${today.getFullYear()},${today.getMonth()},${today.getDate()}`;
+    const todayStr = this._getDateStr(new Date());
     pendingLogs.forEach((log: TaskLog, task: Task) => {
       if (!this.logTree.has(todayStr))
         this.logTree.set(todayStr, new Map());
@@ -122,15 +117,24 @@ export class UiStateService {
     })
   }
 
+  _getDateStr(date: Date): string {
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const dayOfMonth = date.getDate();
+    const dateStr = `${year},${month},${dayOfMonth}`;
+    return dateStr;
+  }
+
   _populateOrderredTree(dateStr: string, tree: Map<number, Map<number, TaskLog>>): void {
-    if (this.orderredTree.length > 0) {
-      if (this.orderredTree[this.orderredTree.length - 1][0] != dateStr) {
-        this.orderredTree.push([dateStr, tree]);
-      } else {
-        this.orderredTree[this.orderredTree.length - 1][1] = tree;
-      }
-    } else {
+    if (this.orderredTree.length <= 0) {
       this.orderredTree.push([dateStr, tree]);
+      return;
+    }
+
+    if (this.orderredTree[this.orderredTree.length - 1][0] != dateStr) {
+      this.orderredTree.push([dateStr, tree]);
+    } else {
+      this.orderredTree[this.orderredTree.length - 1][1] = tree;
     }
   }
 
