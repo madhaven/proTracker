@@ -80,7 +80,6 @@ export class UiStateService {
     this.orderredTree = [];
     var pendingLogs = new Map<Task, TaskLog>();
     var orderredLogs = [...this.logs.values()];
-    orderredLogs.sort((a, b) => a.dateTime-b.dateTime);
 
     orderredLogs.forEach(log => {
       const dateStr = this._getDateStr(new Date(log.dateTime));
@@ -183,7 +182,14 @@ export class UiStateService {
         }
         res = res as TaskLog;
         this.logs.set(res.id, res);
-        this.growTrees();
+
+        // update trees
+        const tree = this.logTree.get(this._getDateStr(new Date()));
+        const task = this.tasks.get(taskId)!;
+        const project = this.projects.get(task.projectId)!;
+        tree?.get(project.id)!.set(task.id, res);
+        this.orderredTree[this.orderredTree.length-1][1].get(project.id)!.set(task.id, res)
+
         this.notifyStateChange();
       },
       (err: any) => {
