@@ -38,6 +38,7 @@ export class UiStateService {
 
   // processed data
   logTree = new Map<string, Map<number, Map<number, TaskLog>>>();
+  orderredTree: [string, Map<number, Map<number, TaskLog>>][] = [];
   projectTree = new Map<number, Map<number, number>>();
 
   // deps
@@ -67,15 +68,16 @@ export class UiStateService {
     this.stateChanged.next(this);
   }
 
-  getLogTree() {
-    return this.logTree;
+  getLogTreeAsOrderredList(): [string, Map<number, Map<number, TaskLog>>][] {
+    return this.orderredTree;
   }
 
   getProjectTree() {
     return this.projectTree;
   }
 
-  growTrees() {
+  growTrees() { // TODO optimise
+    this.orderredTree = [];
     var pendingLogs = new Map<Task, TaskLog>();
     var orderredLogs = [...this.logs.values()];
     orderredLogs.sort((a, b) => a.dateTime-b.dateTime);
@@ -94,12 +96,13 @@ export class UiStateService {
       if (!this.logTree.get(dateStr)?.has(project!.id))
         this.logTree.get(dateStr)?.set(project!.id, new Map());
       this.logTree.get(dateStr)?.get(project!.id)?.set(task!.id, log)
+      this._populateOrderredTree(dateStr, this.logTree.get(dateStr)!);
 
       if (log.statusId == TaskStatus.PENDING)
         pendingLogs.set(task!, log);
       else
         pendingLogs.delete(task!);
-      
+
       if (!this.projectTree.has(project!.id))
         this.projectTree.set(project!.id, new Map());
       this.projectTree.get(project!.id)?.set(task!.id, log.statusId);
@@ -114,7 +117,21 @@ export class UiStateService {
       if (!this.logTree.get(todayStr)?.has(task.projectId))
         this.logTree.get(todayStr)?.set(task.projectId, new Map());
       this.logTree.get(todayStr)?.get(task.projectId)?.set(task.id, log);
+
+      this._populateOrderredTree(todayStr, this.logTree.get(todayStr)!);
     })
+  }
+
+  _populateOrderredTree(dateStr: string, tree: Map<number, Map<number, TaskLog>>): void {
+    if (this.orderredTree.length > 0) {
+      if (this.orderredTree[this.orderredTree.length - 1][0] != dateStr) {
+        this.orderredTree.push([dateStr, tree]);
+      } else {
+        this.orderredTree[this.orderredTree.length - 1][1] = tree;
+      }
+    } else {
+      this.orderredTree.push([dateStr, tree]);
+    }
   }
 
   logsExist() {
