@@ -90,7 +90,7 @@ export class UiStateService {
         this.logTree.set(dateStr, new Map());
       if (!this.logTree.get(dateStr)?.has(project!.id))
         this.logTree.get(dateStr)?.set(project!.id, new Map());
-      this.logTree.get(dateStr)?.get(project!.id)?.set(task!.id, log)
+      this.logTree.get(dateStr)?.get(task!.projectId)?.set(task!.id, log)
       this._populateOrderredTree(dateStr, this.logTree.get(dateStr)!);
 
       if (log.statusId == TaskStatus.PENDING)
@@ -110,7 +110,7 @@ export class UiStateService {
         this.logTree.set(todayStr, new Map());
       if (!this.logTree.get(todayStr)?.has(task.projectId))
         this.logTree.get(todayStr)?.set(task.projectId, new Map());
-      this.logTree.get(todayStr)?.get(task.projectId)?.set(task.id, log);
+      this.logTree.get(todayStr)?.get(task!.projectId)?.set(task!.id, log);
 
       this._populateOrderredTree(todayStr, this.logTree.get(todayStr)!);
     })
