@@ -4,11 +4,6 @@ a simple way to track task and habit progress
 
 ## Usage
 
-* `npm run buildnstart` followed by `npm run make`  
-  Builds the project  
-  A number of issues have come to notice: [#54](https://github.com/madhaven/proTracker/issues/54)  
-  * Sqlite db having access  
-  * electron and npm version mismatches  
 * `npm run buildnstart`  
   Builds the Angular UI and starts the app  
   `npm run build`  
@@ -19,13 +14,16 @@ a simple way to track task and habit progress
   `npm run debug`  
   Loads and serves the angular UI at localhost:4200 then runs Electron to render the UI in the app environment.  
   While you should be able to access the app from a browser through `localhost:4200`, much of the native services that electron provides for File access are not available on the browser and require the native support from Electron.  
-  > PR's that setup DB services in `localStorage` are welcome.  
   
   `npm run clean`  
   Cleans all debug configs and db data  
   `npm run cleandebug`  
-  Dzebugs from a clean slate  
-
+  Debugs from a clean slate  
+* `npm run buildnstart` followed by `npm run make`  
+  Builds the project  
+  A number of issues have come to notice: [#54](https://github.com/madhaven/proTracker/issues/54)  
+  * Sqlite db having access  
+  * electron and npm version mismatches  
 
 ## Architecture
 
@@ -37,12 +35,21 @@ The [Electron framework](https://www.electronjs.org/) as I understand works with
 
 In this project
 
-* The renderer is actually angular scripts that are loaded from the Angular distributables created.  
+* The renderer is angular script(s) that are loaded from the Angular distributables created.  
   During debug, the app accesses `localhost:4200` so changes are dynamically reflected.
 * The Electron / backend section has been modularized into a layered architecture format.
 
+The [Angular framework](https://angular.io/) helps render the UI.  
+The pUIng folder contains all things angular.  
+While debugging, the electron backend fetches the site hosted by Angular CLI at `localhost:4200`.  
+While running the app, the UI is fetched from the distributables generated in build.  
+
+The project can also work in a serverless web-app mode.  
+All data will be stored on browser's localStorage.  
+Although this looks like a quick way to get access to proTracker, the storage limits imposed by the browser could be a constraint in the long run.  
+
 ```text
-eMain.js <--ePreload_APIBridge--|--> Angular frontend
+eMain.js <--ePreload_APIBridge--|--> Angular frontend <--|--BrowserBackendService.ts--> localStorage
 |
 |
 handlers.js  - handles IPC with renderer and delegates tasks
@@ -51,11 +58,10 @@ Providers    - provides Data connectivity
 DB
 ```
 
-The [Angular framework](https://angular.io/) helps render the UI.  
-While debugging, the electron backend fetches the site hosted by Angular CLI at `localhost:4200`.  
-While running the app, the UI needs to be built and is fetched from the distributables generated.  
-The pUIng folder contains all things angular.  
-The folder structure is nested at the moment. I'm still debating the advantages of having all the components in the component folder altogether.  
+The Angular UI is setup in such a way that the uiStateService contains all data required for the app.  
+The uiStateService fetches data from either the `BrowserBackendService` or the `ElectronComService`, both of which are implementations of the `DataComInterface`.  
+The DataCom interface contains all API required to fetch information for the frontend and the Electron and BrowserBackend adheres to this standard.
+> PRs implementing an IndexedStorage version of Browser data is welcome.  
 
 ## Motivation
 
@@ -85,6 +91,9 @@ The folder structure is nested at the moment. I'm still debating the advantages 
 * Added support for Habit tracking
 * The UI migration to Angular was a learning experience.  
   A lot of time for migration without any project progress was hard to tolerate, but hey I learnt something new.
+* With the Angular migration, converting the project to a serverless web-app was all the more easier.  
+  proTracker is now easily accessible.  
+  Introducing the BrowserBackend also came with added complexity to handle localStorage data storage and migration strategies.  
 
 ## Future
 
@@ -92,8 +101,6 @@ The folder structure is nested at the moment. I'm still debating the advantages 
 * Thinking of setting up tests  
   [Here's a document](https://www.electronjs.org/docs/latest/tutorial/automated-testing) on electron testing  
   Feel free to contribute
-* Setup a better migration strategy  
-  The one in use currently works within the DBService and the DBVersionService  
 
 ## My Takeaway
 
