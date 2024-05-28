@@ -1,6 +1,13 @@
 # proTracker
 
-a simple way to track task and habit progress
+when the To-Do list keeps getting bigger, you need:
+
+* an easy way to track your progress
+* something better than a checklist
+* something that'll do the arranging and prioritization for you
+
+you need _proTracker_  
+checkout [proTracker Lite here](https://madhaven.github.io/proTracker/)  
 
 ## Usage
 
@@ -102,7 +109,7 @@ The DataCom interface contains all API required to fetch information for the fro
   [Here's a document](https://www.electronjs.org/docs/latest/tutorial/automated-testing) on electron testing  
   Feel free to contribute
 
-## My Takeaway
+## My Takeaway from the Project
 
 * The Layered Architecture Pattern.  
   While I've worked in huge projects that follow the Layered pattern, I feel setting things up from the start gives you a better understanding of how things work and why.  

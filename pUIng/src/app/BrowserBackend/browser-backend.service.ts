@@ -249,13 +249,13 @@ export class BrowserBackendService implements DataCommsInterface {
         && today.getMonth() == lastDayLogged.getMonth()
         && today.getDate() == lastDayLogged.getDate()
       ) {
-        throw Error("Already Logged Habit for the day"); // TODO: Notification
+        // throw Error("Already Logged Habit for the day"); // TODO: Notification
+        rej(false);
       } else {
         const newHabitLog = new HabitLog(-1, id, time);
         const habitLog = this.createHabitLog(newHabitLog);
-        console.log('habitDone', habitLog);
         this.dumpToLocalStorage();
-        return habitLog ?? false;
+        res(habitLog ?? false);
       }
     });
   }
