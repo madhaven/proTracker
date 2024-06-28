@@ -7,8 +7,8 @@ const Status = class {
     static WONT_DO = 6
 
     constructor (
-        id
-        , name
+        id,
+        name,
     ) {
         this.id = id
         this.name = name

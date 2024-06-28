@@ -13,9 +13,9 @@
             </div>
         </div>
         <pui-log-day
-        *ngFor="let day of uiStateService.getLogTree() | keyvalue"
-        [logDay]="day.key"
-        [tree]="day.value"
+        *ngFor="let day of uiStateService.getLogTreeAsOrderredList()"
+        [logDay]="day[0]"
+        [tree]="day[1]"
         [highlightedTask]="highlightedTask"
         />
         <pui-new-log-section [logsExist]="uiStateService.logsExist()" />

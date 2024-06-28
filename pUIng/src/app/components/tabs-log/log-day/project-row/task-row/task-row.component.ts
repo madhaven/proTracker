@@ -18,6 +18,7 @@ export class TaskRowComponent implements OnInit {
   @Input() taskId!: number;
   @Input() taskLog!: TaskLog;
   @Input() highlightedTask: number = -1;
+  @Input() itIsToday: boolean = false;
   task?: Task;
   uiStateService!: UiStateService;
   stateObserver: Subscription;
@@ -42,7 +43,8 @@ export class TaskRowComponent implements OnInit {
     var newState: TaskStatus = this.taskLog.statusId == TaskStatus.PENDING
         ? TaskStatus.COMPLETED
         : TaskStatus.PENDING;
-    this.uiStateService.toggleTask(this.taskLog.taskId, newState, currentTime);
+    if (this.itIsToday)
+      this.uiStateService.toggleTask(this.taskLog.taskId, newState, currentTime);
   }
 
   taskEdit(newName: string) {

@@ -9,13 +9,13 @@ const TaskProvider = class {
         this.dbService = dbService ? dbService : DatabaseService.getService()
     }
 
-    async create(task) {
+    async create(summary, projectId, parentId) {
         const query = `INSERT INTO task (project_id, summary, parent_id) VALUES (?, ?, ?);`
-        const params = [task.projectId, task.summary, task.parentId]
+        const params = [projectId, summary, parentId]
         console.debug('TaskProvider: creating')
         try {
             const id = await this.dbService.insertOne(query, params)
-            task.id = id
+            var task = new Task(id, projectId, summary, parentId);
             console.debug('TaskProvider: created')
             return id ? task : false
         } catch (err) {
@@ -51,7 +51,7 @@ const TaskProvider = class {
     }
 
     async getAllTasks() {
-        const query = `SELECT t.id as id, t.summary, t.project_id as project_id, t.parent_id, p.name as project_name, sl.date_time as date_time, s.id as status_id, s.status as status_name FROM task t INNER JOIN project p ON t.project_id=p.id INNER JOIN (SELECT task_id, MAX(date_time) AS date_time, status_id FROM status_log GROUP BY task_id) sl ON t.id=sl.task_id INNER JOIN status s ON s.id=sl.status_id`
+        const query = `SELECT * FROM task`;
         console.debug('TaskProvider: getallTasks')
         try {
             const res = await this.dbService.fetch(query)
@@ -64,28 +64,6 @@ const TaskProvider = class {
             return result ? result : false
         } catch (err) {
             console.trace("TaskProvider: getAllTasks", err)
-        }
-    }
-
-    async getAllTaskLogs() { // deprecated
-        const query = `SELECT t.id as id, t.summary, t.project_id as project_id, t.parent_id, p.name as project_name, sl.date_time as date_time, s.id as status_id, s.status as status_name, sl.task_id, sl.date_time FROM task t INNER JOIN project p ON t.project_id=p.id INNER JOIN status_log sl ON t.id=sl.task_id INNER JOIN status s ON s.id=sl.status_id ORDER BY sl.date_time`
-        console.debug('TaskProvider: allTaskLogs')
-        try {
-            const res = await this.dbService.fetch(query)
-            const result = res.map(task => new TaskLog(
-                    task.id,
-                    task.date_time,
-                    task.summary,
-                    task.parent_id,
-                    task.project_id,
-                    task.project_name,
-                    task.status_id,
-                    task.status_name
-                )
-            )
-            return res ? result : false
-        } catch (err) {
-            console.trace('TaskProvider: getAllTaskLogs', err)
         }
     }
 

@@ -25,7 +25,7 @@ const StatusLogProvider = class {
     }
 
     async getAllLogs() {
-        const query = `SELECT id, task_id, status_id, date_time FROM status_log;`
+        const query = `SELECT id, task_id, status_id, date_time FROM status_log ORDER BY date_time ASC;`
         console.debug('StatusLogProvider: getAllLogs')
         try {
             const res = await this.dbService.fetch(query)

@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { afterNextRender, Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { UiStateService } from '../../services/ui-state.service';
 import { Subscription } from 'rxjs';
@@ -17,7 +17,7 @@ import { ExportButtonState } from '../../common/export-button-state';
   templateUrl: './main-menu.component.html',
   styleUrl: './main-menu.component.css'
 })
-export class MainMenuComponent implements OnInit {
+export class MainMenuComponent {
 
   uiStateService: UiStateService;
 
@@ -42,10 +42,10 @@ export class MainMenuComponent implements OnInit {
           this.appLoadPercent = percent;
         }, 2000);
     });
-  }
 
-  ngOnInit(): void {
-    this.enableIdleTracking()
+    afterNextRender(() => {
+      this.enableIdleTracking();
+    });
   }
 
   enableIdleTracking() {

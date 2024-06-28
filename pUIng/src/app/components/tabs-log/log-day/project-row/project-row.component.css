@@ -9,6 +9,9 @@
     width: 41.1355%;
     text-align: right;
 }
+::ng-deep .project_column .editable_item_content {
+    cursor: pointer;
+}
 .project_column input {
     text-align: right;
 }

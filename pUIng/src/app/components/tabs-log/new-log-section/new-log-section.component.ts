@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { NewTask } from '../../../models/new-task.model';
+import { NewTaskData } from '../../../models/new-task-data.model';
 import { ElectronComService } from '../../../services/electron-com.service';
 import { ProjectAutoTypeService } from '../../../services/project-auto-type.service';
 import { UiStateService } from '../../../services/ui-state.service';
@@ -49,12 +49,7 @@ export class NewLogSectionComponent {
     this.newTaskValue = this.newTaskValue.trim();
     this.newProjectValue = this.newProjectValue.trim();
 
-    var newTask = {
-      dateTime: new Date().getTime(),
-      project: this.newProjectValue,
-      summary: this.newTaskValue
-    } as NewTask;
-
+    var newTask = new NewTaskData(-1, new Date().getTime(), this.newProjectValue, this.newTaskValue);
     this.uiStateService.newTask(newTask);
 
     // reset the input section

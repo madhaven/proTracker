@@ -6,17 +6,22 @@ import { TaskLog } from '../models/task-log.model';
 import { HabitLog } from '../models/habit-log.model';
 import { MenuTabs } from '../common/menu-tabs';
 import { TaskStatus } from '../common/task-status';
-import { DataComService } from './data-com.service';
-import { ElectronComService } from './electron-com.service';
-import { NewTask } from '../models/new-task.model';
+import { NewTaskData } from '../models/new-task-data.model';
 import { Subject } from 'rxjs';
 import { Keys } from '../common/keys';
+
+import { DataCommsInterface } from '../common/data-comms-interface';
+import { ElectronComService } from './electron-com.service';
+import { BrowserBackendService } from '../BrowserBackend/browser-backend.service';
+import { LocalStorageService } from './local-storage.service';
+import { BrowserDataObject } from '../models/browser-data-object.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UiStateService {
 
+  // TODO: move to separate object
   // preferences
   foldedProjects = new Map<number, boolean>();
   defaultTab: MenuTabs = MenuTabs.TaskLogs;
@@ -30,11 +35,15 @@ export class UiStateService {
   projects = new Map<number, Project>();
   logs = new Map<number, TaskLog>();
   habitLogs = new Map<number, HabitLog>();
+
+  // processed data
   logTree = new Map<string, Map<number, Map<number, TaskLog>>>();
+  orderredTree: [string, Map<number, Map<number, TaskLog>>][] = [];
   projectTree = new Map<number, Map<number, number>>();
 
   // deps
-  comService!: DataComService;
+  comService!: DataCommsInterface;
+  localStorage!: LocalStorageService;
 
   // subs
   stateChanged = new Subject<UiStateService>();
@@ -42,62 +51,90 @@ export class UiStateService {
   loadPercent = new Subject<number>();
   loading$ = this.loadPercent.asObservable();
 
-  constructor(eComService: ElectronComService) {
-    this.comService = eComService;
+  constructor(
+    eComService: ElectronComService,
+    browserBackend: BrowserBackendService,
+    localStorage: LocalStorageService,
+  ) {
+    this.localStorage = localStorage;
+    if (eComService.comsCheck(false)) {
+      this.comService = eComService;
+    } else {
+      this.comService = browserBackend;
+    }
   }
 
   notifyStateChange() {
     this.stateChanged.next(this);
   }
 
-  getLogTree() {
-    return this.logTree;
+  getLogTreeAsOrderredList(): [string, Map<number, Map<number, TaskLog>>][] {
+    return this.orderredTree;
   }
 
   getProjectTree() {
     return this.projectTree;
   }
 
-  growTrees() {
+  growTrees() { // TODO optimise
+    this.orderredTree = [];
     var pendingLogs = new Map<Task, TaskLog>();
     var orderredLogs = [...this.logs.values()];
-    orderredLogs.sort((a, b) => a.dateTime-b.dateTime);
 
     orderredLogs.forEach(log => {
-      const t = new Date(log.dateTime);
-      const year = t.getFullYear();
-      const month = t.getMonth();
-      const date = t.getDate();
+      const dateStr = this._getDateStr(new Date(log.dateTime));
       const task = this.tasks.get(log.taskId);
       const project = this.projects.get(task!.projectId);
-      const dateStr = `${year},${month},${date}`;
       
       if (!this.logTree.has(dateStr))
         this.logTree.set(dateStr, new Map());
       if (!this.logTree.get(dateStr)?.has(project!.id))
         this.logTree.get(dateStr)?.set(project!.id, new Map());
-      this.logTree.get(dateStr)?.get(project!.id)?.set(task!.id, log)
+      this.logTree.get(dateStr)?.get(task!.projectId)?.set(task!.id, log)
+      this._populateOrderredTree(dateStr, this.logTree.get(dateStr)!);
 
       if (log.statusId == TaskStatus.PENDING)
         pendingLogs.set(task!, log);
       else
         pendingLogs.delete(task!);
-      
+
       if (!this.projectTree.has(project!.id))
         this.projectTree.set(project!.id, new Map());
       this.projectTree.get(project!.id)?.set(task!.id, log.statusId);
     })
 
     // show pending tasks on current date
-    const today = new Date();
-    const todayStr = `${today.getFullYear()},${today.getMonth()},${today.getDate()}`;
+    const todayStr = this._getDateStr(new Date());
     pendingLogs.forEach((log: TaskLog, task: Task) => {
       if (!this.logTree.has(todayStr))
         this.logTree.set(todayStr, new Map());
       if (!this.logTree.get(todayStr)?.has(task.projectId))
         this.logTree.get(todayStr)?.set(task.projectId, new Map());
-      this.logTree.get(todayStr)?.get(task.projectId)?.set(task.id, log);
+      this.logTree.get(todayStr)?.get(task!.projectId)?.set(task!.id, log);
+
+      this._populateOrderredTree(todayStr, this.logTree.get(todayStr)!);
     })
+  }
+
+  _getDateStr(date: Date): string {
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const dayOfMonth = date.getDate();
+    const dateStr = `${year},${month},${dayOfMonth}`;
+    return dateStr;
+  }
+
+  _populateOrderredTree(dateStr: string, tree: Map<number, Map<number, TaskLog>>): void {
+    if (this.orderredTree.length <= 0) {
+      this.orderredTree.push([dateStr, tree]);
+      return;
+    }
+
+    if (this.orderredTree[this.orderredTree.length - 1][0] != dateStr) {
+      this.orderredTree.push([dateStr, tree]);
+    } else {
+      this.orderredTree[this.orderredTree.length - 1][1] = tree;
+    }
   }
 
   logsExist() {
@@ -117,7 +154,7 @@ export class UiStateService {
     return this.tasks.get(taskId);
   }
 
-  newTask(newTask: NewTask) {
+  newTask(newTask: NewTaskData) {
     this.comService.newTask(newTask).then(
       (res: any) => { // TODO: ng standardise data models
         if (res as boolean == false) {
@@ -145,7 +182,14 @@ export class UiStateService {
         }
         res = res as TaskLog;
         this.logs.set(res.id, res);
-        this.growTrees();
+
+        // update trees
+        const tree = this.logTree.get(this._getDateStr(new Date()));
+        const task = this.tasks.get(taskId)!;
+        const project = this.projects.get(task.projectId)!;
+        tree?.get(project.id)!.set(task.id, res);
+        this.orderredTree[this.orderredTree.length-1][1].get(project.id)!.set(task.id, res)
+
         this.notifyStateChange();
       },
       (err: any) => {
@@ -156,12 +200,11 @@ export class UiStateService {
 
   editTask(newTask: Task) {
     this.comService.editTask(newTask!).then(
-      (res: Task|boolean) => { // TODO: document responses
+      (res: boolean) => { // TODO: document responses
         if (res as boolean == false) {
           console.error('Something went wrong while editing task'); // TODO: notification
           return;
         } else {
-          res = res as Task;
           this.tasks.set(newTask.id, newTask);
           this.notifyStateChange();
         }
@@ -217,7 +260,7 @@ export class UiStateService {
     this.comService.newHabit(newHabit).then(
       (res: Habit|boolean) => {
         if (res as boolean == false) {
-          console.error('Habit invalid');
+          console.error('Habit create invalid');
           return;
         } else {
           res = res as Habit;
@@ -235,7 +278,7 @@ export class UiStateService {
     this.comService.editHabit(newHabit).then(
       (res: Habit|boolean) => {
         if (res as boolean == false) {
-          console.error('Habit invalid');
+          console.error('Habit edit invalid');
           return;
         } else {
           res = res as Habit;
@@ -284,50 +327,52 @@ export class UiStateService {
   }
 
   loadData() {
-    this.loadPercent.next(0);
-    this.comService.loadData().then(
-      (res: any) => {
-        if (res as boolean == false) {
-          console.error('corrupt data received', res);
-          this.loadPercent.next(100);
-          return;
-          // TODO: notification ?
-        } else {
-          // fetch data
-          console.log('data recieved from db', res);
-          this.loadPercent.next(33);
-          this.replaceData(res.tasks, res.taskLogs, res.projects, res.habits, res.habitLogs, res.appVersion);
-          this.loadPercent.next(66);
-          
-          // fetch UI info
-          try {
-            const data: [number, boolean][] = JSON.parse(localStorage.getItem(Keys.foldedProjects_2_1_0) ?? '[]')
-            const projectFoldData = new Map(data);
-            this.foldedProjects = projectFoldData;
-            this.loadPercent.next(82);
-          } catch(err) {
-            // handles data inconsistencies across UI versions
-            console.log('folded Projects were unreadable, reverting to default.')
-            localStorage.removeItem(Keys.foldedProjects_2_1_0);
-            this.foldedProjects = new Map();
-            this.loadPercent.next(95);
-          }
+    this.loadPercent.next(10);
+    this.comService.loadData()
+    .then((res: BrowserDataObject|false) => {
+      if (res == false) {
+        this.replaceData();
+        this.loadPercent.next(100);
+        return;
+        // TODO: notification ?
+      } else {
+        // fetch data
+        console.log('data received from db');
+        this.loadPercent.next(33);
+        this.replaceData(res.tasks, res.taskLogs, res.projects, res.habits, res.habitLogs, res.appVersion);
+        this.loadPercent.next(66);
+        
+        // fetch UI info
+        try {
+          const data: [number, boolean][] = JSON.parse(this.localStorage.getItem(Keys.foldedProjects_2_1_0) ?? '[]')
+          const projectFoldData = new Map(data);
+          this.foldedProjects = projectFoldData;
+          this.loadPercent.next(82);
+        } catch(err) {
+          // handles data inconsistencies across UI versions
+          console.log('folded Projects were unreadable, reverting to default.')
+          this.localStorage.removeItem(Keys.foldedProjects_2_1_0);
+          this.foldedProjects = new Map();
+          this.loadPercent.next(95);
+        } finally {
           this.loadPercent.next(100);
         }
-      },
-      (err: any) => {
-        console.error('server error while loading data'); // TODO: notification
       }
-    );
+    })
+    .catch((err: any) => {
+      console.error('server error while loading data'); // TODO: notification
+      this.replaceData();
+      this.loadPercent.next(100);
+    });
   }
 
   replaceData(
-    tasks: [Task], 
-    taskLogs: [TaskLog], 
-    projects: [Project], 
-    habits: [Habit], 
-    habitLogs: [HabitLog],
-    appVersion: string,
+    tasks: Task[] = [],
+    taskLogs: TaskLog[] = [],
+    projects: Project[] = [],
+    habits: Habit[] = [],
+    habitLogs: HabitLog[] = [],
+    appVersion: string = ''
   ) {
     this.appVersion = appVersion;
     this.logs = new Map();
@@ -344,7 +389,6 @@ export class UiStateService {
 
     this.growTrees();
     this.notifyStateChange();
-    console.debug('state updated', this);
   }
 
   exportData() {
