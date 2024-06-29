@@ -1,5 +1,5 @@
-import { afterNextRender, Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { afterNextRender, Component, HostListener } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
 import { UiStateService } from '../../services/ui-state.service';
 import { Subscription } from 'rxjs';
 import { NgIf } from '@angular/common';
@@ -27,11 +27,12 @@ export class MainMenuComponent {
   menuVisible: boolean = true;
   ebs = ExportButtonState;
   exportButtonState = ExportButtonState.Idle;
+  flashedButton: string = "";
 
   idleTime: number = 0;
   idleTolerance: number = 500;
 
-  constructor(uistateService: UiStateService ) {
+  constructor(uistateService: UiStateService, private router: Router) {
     this.uiStateService = uistateService;
     this.idleTolerance = uistateService.idleTolerance;
     this.loadStateObserver = this.uiStateService.loading$.subscribe((percent) => {
@@ -66,10 +67,31 @@ export class MainMenuComponent {
   }
 
   // handles the open and close of the sidebar
-  toggleMenuBar(visible:boolean|null = null): void {
-    this.menuVisible = visible == null
+  toggleMenuBar(visibility:boolean|null = null): void {
+    this.menuVisible = visibility == null
       ? !this.menuVisible
-      : visible;
+      : visibility;
+  }
+
+  @HostListener('window:keydown.shift.m', ['$event'])
+  MenuBarShortcut(event: Event): void {
+    event.preventDefault();
+    this.toggleMenuBar()
+  }
+
+  @HostListener('window:keydown.shift.l', ['$event', '"/logs"'],)
+  @HostListener('window:keydown.shift.p', ['$event', '"/projects"'],)
+  @HostListener('window:keydown.shift.h', ['$event', '"/habits"'],)
+  TabShortcut(event: Event, page:string): void {
+
+    event.preventDefault();
+    this.flashedButton = page
+    this.toggleMenuBar(true);
+    setTimeout(() => {
+      this.router.navigate([page]);
+      this.toggleMenuBar(false);
+      setTimeout(() => { this.flashedButton = ''; }, 500);
+    }, 500);
   }
 
   exportData(target: HTMLElement) {
