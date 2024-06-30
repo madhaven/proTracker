@@ -60,7 +60,7 @@
     transition: .1s ease-out, border-left 0s ease-out, color .25s ease-out;
     user-select: none;
 }
-.menu_button:hover, .menu_button:focus {
+.menu_button:hover, .menu_button:focus, .menu_button.flashed {
     border-left: 2px solid var(--whiteLayer3);
     background-color: var(--whiteLayer1);
     transition: .05s ease-out, border-left 0s ease-out, opacity .5s ease, visibility 0s, display 0s;
