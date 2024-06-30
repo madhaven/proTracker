@@ -2,7 +2,7 @@
   "name": "protracker",
   "version": "2.2.0",
   "description": "app to track tasks",
-  "main": "./Scripts/eMain.js",
+  "main": "./eMain.js",
   "scripts": {
     "build": "cd pUIng && npm run build",
     "buildnstart": "npm run build && npm run start",

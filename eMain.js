@@ -1,12 +1,12 @@
 const path = require('path')
 const { app, BrowserWindow } = require('electron')
-const { State } = require('./Models/State')
-const { ConfigService } = require('./Services/ConfigService')
-const { DatabaseService } = require('./Services/DatabaseService')
-const { LogService } = require('./Services/LogService')
-const { FileService } = require('./Services/FileService')
-const { registerHandlers } = require('./handlers')
-const { DBVersionService } = require('./Services/DBVersionService')
+const { State } = require('./Scripts/Models/State')
+const { ConfigService } = require('./Scripts/Services/ConfigService')
+const { DatabaseService } = require('./Scripts/Services/DatabaseService')
+const { LogService } = require('./Scripts/Services/LogService')
+const { FileService } = require('./Scripts/Services/FileService')
+const { registerHandlers } = require('./Scripts/handlers')
+const { DBVersionService } = require('./Scripts/Services/DBVersionService')
 
 var mainWindow
 const debugMode = process.argv.some(arg => arg.includes('--inspect'))
@@ -30,7 +30,7 @@ const createWindow = () => {
         width: 800,
         height: 600,
         webPreferences: {
-            preload: path.join(__dirname, './ePreload.js'),
+            preload: path.join(__dirname, './Scripts/ePreload.js'),
             webSecurity: false
         },
         show: false,
