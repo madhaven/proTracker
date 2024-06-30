@@ -79,7 +79,7 @@ export class MainMenuComponent {
       return;
     }
     event?.preventDefault();
-    this.toggleMenuBar()
+    this.toggleMenuBar();
   }
 
   @HostListener('window:keydown.alt.shift.l', ['"/logs"', '$event'],)
@@ -90,12 +90,12 @@ export class MainMenuComponent {
       return;
     }
     event?.preventDefault();
-    this.flashedButton = page
+    this.flashedButton = page;
     this.toggleMenuBar(true);
     setTimeout(() => {
       this.router.navigate([page]);
       this.toggleMenuBar(false);
-      setTimeout(() => { this.flashedButton = ''; }, 500);
+      setTimeout(() => { this.flashedButton = ''; });
     }, 500);
   }
 

@@ -9,7 +9,7 @@ export class NewLogShortcutService {
   private newLogFocusTrigger = new Subject<void>();
   newLogFocusTriggered$ = this.newLogFocusTrigger.asObservable();
 
-  requestNewLogFocus() {
+  requestFocus() {
     this.newLogFocusTrigger.next();
   }
 }

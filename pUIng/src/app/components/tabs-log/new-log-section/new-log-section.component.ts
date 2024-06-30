@@ -40,7 +40,7 @@ export class NewLogSectionComponent {
     )
     this.newLogShortcutListener = newLogShortcutService.newLogFocusTriggered$.subscribe(
       () => { this.focusOnProjectField(); }
-    )
+    );
   }
 
   trimInput(target: HTMLInputElement): void {

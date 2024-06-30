@@ -25,7 +25,7 @@ export class NewHabitSectionComponent {
   ) {
     this.uiStateService = uiStateService;
     this.newHabitShortcutListener = newHabitShortcutService.newHabitFocusTriggered$.subscribe(
-      () => { this.focusOnHabitField() }
+      () => { this.focusOnHabitField(); }
     );
   }
 

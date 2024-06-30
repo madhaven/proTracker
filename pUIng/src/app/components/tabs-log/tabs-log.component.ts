@@ -45,12 +45,12 @@ export class TabsLogComponent implements OnInit {
   }
 
   @HostListener('window:keydown.alt.shift.n', ['$event'])
-  newLogShortcut(event?: Event) {
+  newLogShortcut(event?: Event): void {
     if (!this.uiStateService.shortcutsEnabled) {
       return;
     }
     event?.preventDefault();
-    this.newLogShortcutService.requestNewLogFocus();
+    this.newLogShortcutService.requestFocus();
   }
 
   scrollIntoView(task: number) {
