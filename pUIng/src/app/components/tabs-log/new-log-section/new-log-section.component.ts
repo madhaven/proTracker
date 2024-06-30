@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { NewTaskData } from '../../../models/new-task-data.model';
 import { ElectronComService } from '../../../services/electron-com.service';
+import { NewLogShortcutService } from '../../../services/new-log-shortcut.service';
 import { ProjectAutoTypeService } from '../../../services/project-auto-type.service';
 import { UiStateService } from '../../../services/ui-state.service';
 
@@ -17,22 +18,28 @@ export class NewLogSectionComponent {
 
   @Input() logsExist:boolean = false;
   @ViewChild('newLogTask') newTaskInput!: ElementRef;
+  @ViewChild('newLogProject') newProjectInput!: ElementRef;
   uiStateService: UiStateService;
   eComService: ElectronComService;
   newProjectValue: string = '';
   newTaskValue: string = '';
   autoTypeListener: Subscription;
+  newLogShortcutListener: Subscription;
 
   constructor(
     uiStateService: UiStateService,
     eComService: ElectronComService,
     autoTypeService: ProjectAutoTypeService,
+    private newLogShortcutService: NewLogShortcutService,
   ) {
     this.uiStateService = uiStateService;
     this.eComService = eComService;
 
     this.autoTypeListener = autoTypeService.autoTypeRequested$.subscribe(
       projectName => { this.autoTypeProject(projectName); }
+    )
+    this.newLogShortcutListener = newLogShortcutService.newLogFocusTriggered$.subscribe(
+      () => { this.focusOnProjectField(); }
     )
   }
 
@@ -58,10 +65,18 @@ export class NewLogSectionComponent {
     target.blur();
   }
 
+  public focusOnProjectField() {
+    this.newProjectInput.nativeElement.focus();
+  }
+
+  public focusOnTaskField() {
+    this.newTaskInput.nativeElement.focus();
+  }
+
   autoTypeProject(projectName: string, index=0) {
     if (index == 0) this.newProjectValue = '';
     if (index >= projectName.length) {
-      this.newTaskInput.nativeElement.focus();
+      this.focusOnTaskField();
       return;
     }
     this.newProjectValue += projectName[index];

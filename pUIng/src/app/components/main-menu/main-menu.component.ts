@@ -19,8 +19,6 @@ import { ExportButtonState } from '../../common/export-button-state';
 })
 export class MainMenuComponent {
 
-  uiStateService: UiStateService;
-
   appLoadPercent: number = 0;
   loadStateObserver: Subscription;
   
@@ -32,9 +30,11 @@ export class MainMenuComponent {
   idleTime: number = 0;
   idleTolerance: number = 500;
 
-  constructor(uistateService: UiStateService, private router: Router) {
-    this.uiStateService = uistateService;
-    this.idleTolerance = uistateService.idleTolerance;
+  constructor(
+    protected uiStateService: UiStateService,
+    private router: Router,
+  ) {
+    this.idleTolerance = this.uiStateService.idleTolerance;
     this.loadStateObserver = this.uiStateService.loading$.subscribe((percent) => {
       if (percent != 100)
         this.appLoadPercent = percent;
@@ -50,7 +50,7 @@ export class MainMenuComponent {
   }
 
   enableIdleTracking() {
-    ['mousemove', 'mousedown', 'drag', 'keypress', 'scroll'].forEach(event => {
+    ['mousemove', 'mousedown', 'drag', 'keypress', 'keydown', 'scroll'].forEach(event => {
       document.addEventListener(event, () => { this.idleTime = 0 });
     });
 
@@ -73,18 +73,23 @@ export class MainMenuComponent {
       : visibility;
   }
 
-  @HostListener('window:keydown.shift.m', ['$event'])
-  MenuBarShortcut(event: Event): void {
-    event.preventDefault();
+  @HostListener('window:keydown.alt.shift.m', ['$event'])
+  menuBarShortcut(event?: Event): void {
+    if (!this.uiStateService.shortcutsEnabled) {
+      return;
+    }
+    event?.preventDefault();
     this.toggleMenuBar()
   }
 
-  @HostListener('window:keydown.shift.l', ['$event', '"/logs"'],)
-  @HostListener('window:keydown.shift.p', ['$event', '"/projects"'],)
-  @HostListener('window:keydown.shift.h', ['$event', '"/habits"'],)
-  TabShortcut(event: Event, page:string): void {
-
-    event.preventDefault();
+  @HostListener('window:keydown.alt.shift.l', ['"/logs"', '$event'],)
+  @HostListener('window:keydown.alt.shift.p', ['"/projects"', '$event'],)
+  @HostListener('window:keydown.alt.shift.h', ['"/habits"', '$event'],)
+  tabShortcut(page:string, event?: Event): void {
+    if (!this.uiStateService.shortcutsEnabled) {
+      return;
+    }
+    event?.preventDefault();
     this.flashedButton = page
     this.toggleMenuBar(true);
     setTimeout(() => {

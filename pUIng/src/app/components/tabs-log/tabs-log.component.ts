@@ -1,10 +1,11 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { UiStateService } from '../../services/ui-state.service';
 import { NewLogSectionComponent } from './new-log-section/new-log-section.component';
 import { LogDayComponent } from "./log-day/log-day.component";
 import { CommonModule, NgForOf } from '@angular/common';
 import { Router } from '@angular/router';
 import { ProjectAutoTypeService } from '../../services/project-auto-type.service';
+import { NewLogShortcutService } from '../../services/new-log-shortcut.service';
 
 @Component({
   selector: 'pui-tabs-log',
@@ -32,6 +33,7 @@ export class TabsLogComponent implements OnInit {
   constructor(
     uiStateService: UiStateService,
     router: Router,
+    private newLogShortcutService: NewLogShortcutService,
   ) {
     this.uiStateService = uiStateService;
     this.router = router;
@@ -39,12 +41,21 @@ export class TabsLogComponent implements OnInit {
 
   ngOnInit() {
     if (this.task) this.flashTask(this.task);
-    this.scrollIntoView(this.task ?? 0);
+    this.scrollIntoView(this.task ?? -1);
+  }
+
+  @HostListener('window:keydown.alt.shift.n', ['$event'])
+  newLogShortcut(event?: Event) {
+    if (!this.uiStateService.shortcutsEnabled) {
+      return;
+    }
+    event?.preventDefault();
+    this.newLogShortcutService.requestNewLogFocus();
   }
 
   scrollIntoView(task: number) {
     setTimeout(() => {
-      if (task == 0) {
+      if (task == -1) {
         this.scrollAnchor.nativeElement.scrollIntoView({ behavior: "smooth" });
       } else {
         document.getElementById("task_row_" + task)?.scrollIntoView({ behavior: "smooth" });

@@ -27,6 +27,7 @@ export class UiStateService {
   defaultTab: MenuTabs = MenuTabs.TaskLogs;
   dataProfile: boolean = true;
   idleTolerance: number = 500; // TODO: ng fix
+  shortcutsEnabled: boolean = true;
 
   // data
   appVersion!: string;
