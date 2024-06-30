@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Subscription } from 'rxjs';
+import { NewHabitShortcutService } from '../../../services/new-habit-shortcut.service';
 import { UiStateService } from '../../../services/ui-state.service';
 
 @Component({
@@ -11,12 +13,24 @@ import { UiStateService } from '../../../services/ui-state.service';
 })
 export class NewHabitSectionComponent {
 
+  @ViewChild('newHabitNameInput') newHabitInput!: ElementRef;
   newHabitName?: string;
   newHabitFrequency?: number;
   uiStateService!: UiStateService;
+  newHabitShortcutListener: Subscription;
 
-  constructor(uiStateService: UiStateService) {
+  constructor(
+    uiStateService: UiStateService,
+    private newHabitShortcutService: NewHabitShortcutService,
+  ) {
     this.uiStateService = uiStateService;
+    this.newHabitShortcutListener = newHabitShortcutService.newHabitFocusTriggered$.subscribe(
+      () => { this.focusOnHabitField() }
+    );
+  }
+
+  focusOnHabitField() {
+    this.newHabitInput.nativeElement.focus();
   }
 
   newHabit(element: HTMLInputElement) {
