@@ -8,6 +8,7 @@ import { ExportButtonState } from '../../common/export-button-state';
 import { Shortcuts } from '../../common/shortcuts';
 import { KeyboardBindingsService } from '../../services/keyboard-bindings.service';
 import { HintingService } from '../../services/hinting.service';
+import { SusStuffDirective } from '../../common/sus-stuff.directive';
 
 @Component({
   selector: 'pui-main-menu',
@@ -16,6 +17,7 @@ import { HintingService } from '../../services/hinting.service';
     RouterModule,
     NgIf,
     LoaderComponent,
+    SusStuffDirective,
   ],
   templateUrl: './main-menu.component.html',
   styleUrl: './main-menu.component.css'
@@ -92,6 +94,10 @@ export class MainMenuComponent {
 
   showHabitShortcutHint() {
     this.hintingService.showHint(this.keyBinds.getKeyString(Shortcuts.ShiftToHabitsTab));
+  }
+
+  hideHint() {
+    this.hintingService.hideHint();
   }
 
   @HostListener('window:keydown.alt.shift.m', ['$event'])
