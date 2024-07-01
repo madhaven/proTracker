@@ -5,6 +5,10 @@ import { Subscription } from 'rxjs';
 import { NgIf } from '@angular/common';
 import { LoaderComponent } from '../../common/loader/loader.component';
 import { ExportButtonState } from '../../common/export-button-state';
+import { Shortcuts } from '../../common/shortcuts';
+import { KeyboardBindingsService } from '../../services/keyboard-bindings.service';
+import { HintingService } from '../../services/hinting.service';
+import { SusStuffDirective } from '../../common/sus-stuff.directive';
 
 @Component({
   selector: 'pui-main-menu',
@@ -13,6 +17,7 @@ import { ExportButtonState } from '../../common/export-button-state';
     RouterModule,
     NgIf,
     LoaderComponent,
+    SusStuffDirective,
   ],
   templateUrl: './main-menu.component.html',
   styleUrl: './main-menu.component.css'
@@ -33,6 +38,8 @@ export class MainMenuComponent {
   constructor(
     protected uiStateService: UiStateService,
     private router: Router,
+    private keyBinds: KeyboardBindingsService,
+    private hintingService: HintingService,
   ) {
     this.idleTolerance = this.uiStateService.idleTolerance;
     this.loadStateObserver = this.uiStateService.loading$.subscribe((percent) => {
@@ -71,6 +78,26 @@ export class MainMenuComponent {
     this.menuVisible = visibility == null
       ? !this.menuVisible
       : visibility;
+  }
+
+  showMenuShortcutHint() {
+    this.hintingService.showHint(this.keyBinds.getKeyString(Shortcuts.MainMenu));
+  }
+
+  showLogShortcutHint() {
+    this.hintingService.showHint(this.keyBinds.getKeyString(Shortcuts.ShiftToLogsTab));
+  }
+
+  showProjectsShortcutHint() {
+    this.hintingService.showHint(this.keyBinds.getKeyString(Shortcuts.ShiftToProjectsTab));
+  }
+
+  showHabitShortcutHint() {
+    this.hintingService.showHint(this.keyBinds.getKeyString(Shortcuts.ShiftToHabitsTab));
+  }
+
+  hideHint() {
+    this.hintingService.hideHint();
   }
 
   @HostListener('window:keydown.alt.shift.m', ['$event'])

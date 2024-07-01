@@ -1,0 +1,22 @@
+:host {
+    margin-top: 2em;
+    position: fixed;
+    bottom: 1em;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    z-index: 1000;
+}
+
+div {
+    padding: 1em;
+    transition: .25s ease-out;
+    text-shadow: 0px 0px 20px #000;
+    background: radial-gradient(var(--bg) 0%, var(--bg) 70%, transparent 100%);
+}
+
+.hidden {
+    transition: 1s ease-out;
+    opacity: 0%;
+}
