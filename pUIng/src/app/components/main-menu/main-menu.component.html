@@ -1,4 +1,4 @@
-<div id="side_handle" (click)="toggleMenuBar()">...</div>
+<div id="side_handle" (click)="toggleMenuBar()" (mouseenter)="showMenuShortcutHint()">...</div>
 <aside
 id="side_bar"
 [class.side_bar_open]="menuVisible"
@@ -12,6 +12,7 @@ id="side_bar"
             </li> -->
             <!-- <li id="save" class="menu_button" tabindex="2">SAVE</li> -->
             <li
+            (mouseenter)="showLogShortcutHint()"
             *ngIf="appLoadPercent == 100"
             id="logChart"
             class="menu_button"
@@ -23,6 +24,7 @@ id="side_bar"
                 LOGS
             </li>
             <li
+            (mouseenter)="showHabitShortcutHint()"
             *ngIf="appLoadPercent == 100"
             id="habits"
             class="menu_button"
@@ -35,6 +37,7 @@ id="side_bar"
                 HABITS
             </li>
             <li
+            (mouseenter)="showProjectsShortcutHint()"
             *ngIf="appLoadPercent == 100"
             id="projects"
             class="menu_button"
