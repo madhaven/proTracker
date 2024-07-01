@@ -40,11 +40,13 @@ const COLUMN_DATE = 1
 var TP, PP, SLP, SP, HP, HLP
 
 const DataRequestHandler = async (event) => {
-    const alltasks = await TP.getAllTasks() ?? false
+    const debugMode = process.argv.some(arg => arg.includes('--inspect'))
+        , alltasks = await TP.getAllTasks() ?? false
         , allTaskLogs = await SLP.getAllLogs() ?? false
         , allProjects = await PP.getAllProjects() ?? false
         , allHabits = await HP.getAllHabits() ?? false
         , allHabitLogs = await HLP.getAllLogs() ?? false
+        , version = debugMode? "debug " + app.getVersion() : app.getVersion()
         
     // TODO: convertModelToContract
 
@@ -57,7 +59,7 @@ const DataRequestHandler = async (event) => {
         "projects": allProjects,
         "habits": allHabits,
         "habitLogs": allHabitLogs,
-        "appVersion": app.getVersion(),
+        "appVersion": version,
     }
 }
 
@@ -280,6 +282,18 @@ const stateEventHandler = async (event, data) => {
 const stateChangeRequestHandler = async (event, data) => {
     // TODO:
     console.log('main: state change request recieved', event, data)
+}
+
+const _readDir_ = (dir='') => {
+    // Print files in the base directory
+    const baseDir = __dirname; // Base directory of the Electron app
+    fs.readdir(path.join(__dirname, dir), (err, files) => {
+        if (err) {
+            return console.error('Unable to scan directory:', err);
+        }
+        console.log(`Files in ${dir}`);
+        console.log(...files)
+    });
 }
 
 const registerHandlers = mainWindow => {

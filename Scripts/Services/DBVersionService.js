@@ -47,7 +47,7 @@ const DBVersionService = class extends SingletonServiceBase {
         if (index == -1) {
             // TODO: notify user ?
             // throw Error('Unknown DB version found')
-            console.error('DBVersionService: Unknown DB version found', currentDBVersion)
+            console.error('DBVersionService: Unknown DB version found', currentDBVersion, 'available versions', this.ALL_VERSIONS.toString())
             return false
         } else if (index >= (this.ALL_VERSIONS.length - 1)) {
             // no migration required
