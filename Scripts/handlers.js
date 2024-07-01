@@ -282,6 +282,18 @@ const stateChangeRequestHandler = async (event, data) => {
     console.log('main: state change request recieved', event, data)
 }
 
+const _readDir_ = (dir='') => {
+    // Print files in the base directory
+    const baseDir = __dirname; // Base directory of the Electron app
+    fs.readdir(path.join(__dirname, dir), (err, files) => {
+        if (err) {
+            return console.error('Unable to scan directory:', err);
+        }
+        console.log(`Files in ${dir}`);
+        console.log(...files)
+    });
+}
+
 const registerHandlers = mainWindow => {
     // TODO: Dependency Injection ?
     TP = new TaskProvider()
