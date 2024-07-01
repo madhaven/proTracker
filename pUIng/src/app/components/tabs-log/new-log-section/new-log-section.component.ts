@@ -65,8 +65,12 @@ export class NewLogSectionComponent {
     target.blur();
   }
 
+  // TODO: abstract into interface ?
   public focusOnProjectField() {
-    this.newProjectInput.nativeElement.focus();
+    this.newProjectInput.nativeElement.scrollIntoView({ behavior: "smooth" });
+    setTimeout(() => {
+      this.newProjectInput.nativeElement.focus();
+    }, 500);
   }
 
   public focusOnTaskField() {

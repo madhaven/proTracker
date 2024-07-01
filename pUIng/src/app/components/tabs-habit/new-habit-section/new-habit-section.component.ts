@@ -29,8 +29,12 @@ export class NewHabitSectionComponent {
     );
   }
 
+  // TODO: abstract into interface ?
   focusOnHabitField() {
-    this.newHabitInput.nativeElement.focus();
+    this.newHabitInput.nativeElement.scrollIntoView({ behavior: "smooth" });
+    setTimeout(() => {
+      this.newHabitInput.nativeElement.focus();
+    }, 500);
   }
 
   newHabit(element: HTMLInputElement) {

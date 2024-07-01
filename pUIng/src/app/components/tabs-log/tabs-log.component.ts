@@ -41,7 +41,7 @@ export class TabsLogComponent implements OnInit {
 
   ngOnInit() {
     if (this.task) this.flashTask(this.task);
-    this.scrollIntoView(this.task ?? -1);
+    this.scrollTaskIntoView(this.task ?? -1);
   }
 
   @HostListener('window:keydown.alt.shift.n', ['$event'])
@@ -53,7 +53,7 @@ export class TabsLogComponent implements OnInit {
     this.newLogShortcutService.requestFocus();
   }
 
-  scrollIntoView(task: number) {
+  scrollTaskIntoView(task: number) {
     setTimeout(() => {
       if (task == -1) {
         this.scrollAnchor.nativeElement.scrollIntoView({ behavior: "smooth" });
