@@ -40,11 +40,13 @@ const COLUMN_DATE = 1
 var TP, PP, SLP, SP, HP, HLP
 
 const DataRequestHandler = async (event) => {
-    const alltasks = await TP.getAllTasks() ?? false
+    const debugMode = process.argv.some(arg => arg.includes('--inspect'))
+        , alltasks = await TP.getAllTasks() ?? false
         , allTaskLogs = await SLP.getAllLogs() ?? false
         , allProjects = await PP.getAllProjects() ?? false
         , allHabits = await HP.getAllHabits() ?? false
         , allHabitLogs = await HLP.getAllLogs() ?? false
+        , version = debugMode? "debug " + app.getVersion() : app.getVersion()
         
     // TODO: convertModelToContract
 
@@ -57,7 +59,7 @@ const DataRequestHandler = async (event) => {
         "projects": allProjects,
         "habits": allHabits,
         "habitLogs": allHabitLogs,
-        "appVersion": app.getVersion(),
+        "appVersion": version,
     }
 }
 
