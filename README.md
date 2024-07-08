@@ -7,6 +7,13 @@ when the To-Do list keeps getting bigger, you need:
 * something that'll do the arranging and prioritization for you
 
 you need _proTracker_  
+
+What makes proTracker different ?  
+proTracker tries its best to keep the book-keeping as short as possible.  
+Want to mark a task done ? Just Click it!  
+Want to add another entry ? Just type and hit the Enter!  
+That's all there is
+
 checkout [proTracker Lite here](https://madhaven.github.io/proTracker/)  
 
 ## Usage
@@ -101,6 +108,7 @@ The DataCom interface contains all API required to fetch information for the fro
 * With the Angular migration, converting the project to a serverless web-app was all the more easier.  
   proTracker is now easily accessible.  
   Introducing the BrowserBackend also came with added complexity to handle localStorage data storage and migration strategies.  
+* Adding shortcuts made accessibility so easy, the app felt closer to the keys.  
 
 ## Future
 
