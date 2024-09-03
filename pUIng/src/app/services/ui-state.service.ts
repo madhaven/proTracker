@@ -26,7 +26,7 @@ export class UiStateService {
   foldedProjects = new Map<number, boolean>();
   defaultTab: MenuTabs = MenuTabs.TaskLogs;
   dataProfile: boolean = true;
-  idleTolerance: number = 500; // TODO: ng fix
+  idleTolerance: number = 60; // TODO: ng fix
   shortcutsEnabled: boolean = true;
 
   // data

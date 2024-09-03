@@ -1,4 +1,4 @@
-import { afterNextRender, Component, HostListener } from '@angular/core';
+import { afterNextRender, ChangeDetectorRef, Component, HostListener } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { UiStateService } from '../../services/ui-state.service';
 import { Subscription } from 'rxjs';
@@ -33,13 +33,14 @@ export class MainMenuComponent {
   flashedButton: string = "";
 
   idleTime: number = 0;
-  idleTolerance: number = 500;
+  idleTolerance: number;
 
   constructor(
     protected uiStateService: UiStateService,
     private router: Router,
     private keyBinds: KeyboardBindingsService,
     private hintingService: HintingService,
+    private cdr: ChangeDetectorRef,
   ) {
     this.idleTolerance = this.uiStateService.idleTolerance;
     this.loadStateObserver = this.uiStateService.loading$.subscribe((percent) => {
@@ -56,20 +57,23 @@ export class MainMenuComponent {
     });
   }
 
+  trackInactivity() {
+    ++this.idleTime;
+    console.log(this.idleTime, this.idleTime >= this.idleTolerance)
+
+    if (!this.menuVisible && this.idleTime >= this.idleTolerance && this.idleTolerance >= -1) {
+      this.menuVisible = true;
+      this.cdr.detectChanges();
+      console.info('MenuBar on idle');
+    }
+  }
+
   enableIdleTracking() {
     ['mousemove', 'mousedown', 'drag', 'keypress', 'keydown', 'scroll'].forEach(event => {
       document.addEventListener(event, () => { this.idleTime = 0 });
     });
 
-    setInterval(() => {
-      this.idleTime = ++this.idleTime;
-      if (this.idleTime >= this.idleTolerance
-        && this.idleTolerance >= -1
-        && !this.menuVisible) {
-          this.menuVisible = true;
-          console.info('MenuBar on idle');
-        }
-    }, 1000);
+    setInterval(() => { this.trackInactivity(); }, 1000);
     console.info('Idle tracking enabled');
   }
 
