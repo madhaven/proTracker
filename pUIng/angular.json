@@ -95,7 +95,8 @@
               "src/assets/styles.css",
               "src/assets/bootstrap.min.css"
             ],
-            "scripts": []
+            "scripts": [],
+            "karmaConfig": "karma.conf.js"
           }
         },
         "deploy": {
