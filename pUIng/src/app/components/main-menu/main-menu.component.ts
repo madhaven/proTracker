@@ -59,8 +59,6 @@ export class MainMenuComponent {
 
   trackInactivity() {
     ++this.idleTime;
-    console.log(this.idleTime, this.idleTime >= this.idleTolerance)
-
     if (!this.menuVisible && this.idleTime >= this.idleTolerance && this.idleTolerance >= -1) {
       this.menuVisible = true;
       this.cdr.detectChanges();
