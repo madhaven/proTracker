@@ -34,6 +34,7 @@ export class AppComponent implements OnInit {
 
   constructor(uiStateService: UiStateService) {
     this.uiStateService = uiStateService;
+    this.title = "pUIng";
   }
 
   ngOnInit() {

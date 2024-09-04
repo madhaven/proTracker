@@ -8,7 +8,7 @@ export class SusStuffDirective {
 
   @Output('onSus') sus = new EventEmitter<void>();
   @Output('onNonSus') notSus = new EventEmitter<void>();
-  timer?: NodeJS.Timeout;
+  timer?: ReturnType<typeof setTimeout>;
   minimumSusTime: number = 1500;
 
   constructor(private el?: ElementRef) { }

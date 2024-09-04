@@ -29,6 +29,7 @@ export class KeyboardBindingsService {
   }
 
   getKeyString (shortcut: Shortcuts): string {
+    // TODO: create a mapping for iOS keyStrings
     return this.keyStrings.get(shortcut) ?? "";
   }
 }

@@ -16,9 +16,9 @@ export class HintLineComponent {
 
   isVisible: boolean = false;
   hint: string = "";
-  timer1?: NodeJS.Timeout;
-  timer2?: NodeJS.Timeout;
-  timer3?: NodeJS.Timeout;
+  timer1?: ReturnType<typeof setTimeout>;
+  timer2?: ReturnType<typeof setTimeout>;
+  timer3?: ReturnType<typeof setTimeout>;
   hintListener: Subscription;
   hideHintListener: Subscription;
 

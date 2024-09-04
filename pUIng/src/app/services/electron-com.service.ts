@@ -22,8 +22,7 @@ export class ElectronComService implements DataCommsInterface {
     try {
       if (!window.comms) {} else { result = true; }
     } finally {
-      if (!silent)
-        console.log(result ? "Electron found" : "Electron not found");
+      if (!silent) console.log(result ? "Electron found" : "Electron not found");
       return result;
     }
   }

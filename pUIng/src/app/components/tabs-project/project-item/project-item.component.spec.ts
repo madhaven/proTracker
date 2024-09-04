@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ProjectItemComponent } from './project-item.component';
+import { UiStateService } from '../../../services/ui-state.service';
 
 describe('ProjectItemComponent', () => {
   let component: ProjectItemComponent;
