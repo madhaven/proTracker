@@ -7,9 +7,14 @@
     transition: .5s ease-out;
     border-radius: .5em;
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
     font-size: 1.5em;
 }
 .habit_item:hover {
     border: 1px solid var(--whiteLayer2);
+}
+
+.habit_item_title {
+    margin-bottom: 1em;
 }
