@@ -1,8 +1,9 @@
 import { NgIf } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { EditableItemComponent } from '../../../common/editable-item/editable-item.component';
 import { Habit } from '../../../models/habit.model';
 import { UiStateService } from '../../../services/ui-state.service';
+import { Chart } from 'chart.js'
 
 @Component({
   selector: 'pui-habit-item',
@@ -21,12 +22,36 @@ export class HabitItemComponent implements OnInit {
   today: Date = new Date();
   uiStateService: UiStateService;
 
+  @ViewChild('lineChart') private chartRef!: ElementRef;
+  chart: any;
+
   constructor(uiStateService: UiStateService) {
     this.uiStateService = uiStateService;
   }
 
   ngOnInit() {
     this.today = new Date();
+
+    this.chart = new Chart(this.chartRef.nativeElement, {
+      type: 'line',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar'],
+        datasets: [
+          {
+            data: [0, 0, 1, 2, 3 ,-1],
+            borderColor: '#00AEFF',
+            fill: true
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          x: { display: true },
+          y: { display: true }
+        }
+      }
+    })
   }
 
   editHabit(newName: string) {

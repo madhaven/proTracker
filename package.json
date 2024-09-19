@@ -40,9 +40,12 @@
     "electron": "^26.2.4"
   },
   "dependencies": {
+    "@angular/core": "^18.2.5",
+    "chart.js": "^4.4.4",
     "electron-squirrel-startup": "^1.0.0",
     "exceljs": "^4.3.0",
     "fast-csv": "^4.3.6",
+    "ng2-charts": "^6.0.1",
     "pUIng": "file:pUIng",
     "sqlite3": "^5.1.6"
   }
