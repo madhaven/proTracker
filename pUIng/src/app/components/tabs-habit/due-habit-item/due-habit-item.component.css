@@ -1,5 +1,5 @@
 .due_habit_item {
-    border: 1px solid var(--whiteLayer1);
+    border: 1px solid transparent;
     margin-bottom: 1rem;
     margin-top: 1rem;
     /* margin-left: 1em; */
@@ -12,11 +12,14 @@
     cursor: pointer;
     background-color: var(--whiteLayer1);
 }
-.due_habit_item:hover {
-    border: 1px solid var(--whiteLayer2);
+.due_habit_item:hover, .due_habit_item:active {
+    border: 1px solid transparent;
     background-color: var(--whiteLayer2);
+    color: var(--fg-strong);
+    transition: .2s ease-out;
 }
-.due_habit_item:active {
-    border: 1px solid var(--fg);
-    transition: .1s;
+.due_habit_item:hover::after, .due_habit_item:active::after {
+    transition: .2s ease-out;
+    content: "mark as done";
+    color: var(--whiteLayer2);
 }

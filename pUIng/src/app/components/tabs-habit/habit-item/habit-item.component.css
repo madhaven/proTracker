@@ -11,8 +11,15 @@
     justify-content: space-between;
     font-size: 1.5em;
 }
+.habit_item :not(.habit_item_title) {
+    font-size: .7em;
+}
 .habit_item:hover {
     border: 1px solid var(--whiteLayer2);
+    transition: .2s ease-out;
+}
+.habit_item:active {
+    transition: .1s ease-out;
 }
 
 .habit_item_title {
