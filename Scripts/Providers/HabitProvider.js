@@ -44,8 +44,8 @@ const HabitProvider = class {
                 res.id,
                 res.name,
                 res.removed,
-                res.startTime,
-                res.endTime,
+                res.start_time,
+                res.end_time,
                 res.days,
                 res.latest_log_time
             ) : false
@@ -55,8 +55,10 @@ const HabitProvider = class {
     }
 
     async update(id, habit) {
-        const query = `UPDATE habit SET name=?, removed=?, start_time=?, end_time=?, days=?;`
-        const params = [habit.name, habit.removed, habit.startTime, habit.endTime, habit.days]
+        const query = `UPDATE habit SET name=?, removed=?, start_time=?, end_time=?, days=?
+        WHERE id=?
+        AND ? NOT IN (SELECT name FROM habit);;`
+        const params = [habit.name, habit.removed, habit.startTime, habit.endTime, habit.days, id, habit.name]
         console.debug('HabitProvider: update')
         try {
             const res = await this.dbService.exec(query, params)
@@ -90,8 +92,8 @@ const HabitProvider = class {
                 habit.id,
                 habit.name,
                 habit.removed,
-                habit.startTime,
-                habit.endTime,
+                habit.start_time,
+                habit.end_time,
                 habit.days,
                 habit.latest_log_time
             )) : false

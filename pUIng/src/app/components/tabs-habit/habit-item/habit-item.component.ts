@@ -30,7 +30,7 @@ export class HabitItemComponent implements OnInit {
   }
 
   editHabit(newName: string) {
-    var newHabit = this.habit;
+    var newHabit = {...this.habit};
     newHabit.name = newName;
     this.uiStateService.editHabit(newHabit);
   }

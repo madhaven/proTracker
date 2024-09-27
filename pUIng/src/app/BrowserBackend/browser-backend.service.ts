@@ -150,9 +150,14 @@ export class BrowserBackendService implements DataCommsInterface {
     this.habits.set(newHabit.id, newHabit);
     return newHabit;
   }
-  updateHabit(habit: Habit): boolean {
-    if (!this.habits.has(habit.id)) return false;
-    this.habits.set(habit.id, habit);
+  updateHabit(newHabit: Habit): boolean {
+    if (!this.habits.has(newHabit.id)) return false;
+
+    // check for existing habit
+    var existing: Habit|undefined = Array.from(this.habits.values()).find(habit => habit.name == newHabit.name)
+    if (existing != undefined) return false;
+    
+    this.habits.set(newHabit.id, newHabit);
     return true;
   }
   // deleteHabit(habit: Habit): boolena {}
@@ -202,7 +207,7 @@ export class BrowserBackendService implements DataCommsInterface {
     return new Promise((res, rej) => {
       const result = this.updateTask(newTask);
       this.dumpToLocalStorage();
-      res(result);
+      res(result ? true : false);
     });
   }
 
@@ -235,7 +240,7 @@ export class BrowserBackendService implements DataCommsInterface {
     return new Promise((res, rej) => {
       const result = this.updateHabit(newHabit);
       this.dumpToLocalStorage();
-      res(result ? newHabit : false);
+      res(result ? true : false);
     });
   }
 
@@ -273,7 +278,7 @@ export class BrowserBackendService implements DataCommsInterface {
 
       const result = this.updateProject(newProject);
       this.dumpToLocalStorage();
-      res(result);
+      res(result ? true : false);
     });
   }
 

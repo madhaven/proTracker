@@ -202,11 +202,11 @@ export class UiStateService {
   editTask(newTask: Task) {
     this.comService.editTask(newTask!).then(
       (res: boolean) => { // TODO: document responses
-        if (res as boolean == false) {
+        if (res == false) {
           console.error('Something went wrong while editing task'); // TODO: notification
           return;
         } else {
-          this.tasks.set(newTask.id, newTask);
+          this.tasks.set(newTask!.id, newTask!);
           this.notifyStateChange();
         }
       },
@@ -222,8 +222,8 @@ export class UiStateService {
 
   editProject(newProject: Project) {
     this.comService.editProject(newProject!).then(
-      (res: Project|boolean) => {
-        if (res as boolean == false) {
+      (res: boolean) => {
+        if (res == false) {
           // TODO: create structured responses, false values limits the reasons for failure
           // console.warn('Yo wtf, that name already exists!')
           console.error(`Something went wrong while editing project`); // TODO: CREATE APP NOTIFICATION
@@ -276,14 +276,13 @@ export class UiStateService {
   }
 
   editHabit(newHabit: Habit) {
-    this.comService.editHabit(newHabit).then(
-      (res: Habit|boolean) => {
-        if (res as boolean == false) {
+    this.comService.editHabit(newHabit!).then(
+      (res: boolean) => {
+        if (res == false) {
           console.error('Habit edit invalid');
           return;
         } else {
-          res = res as Habit;
-          this.habits.set(res.id, res);
+          this.habits!.set(newHabit!.id, newHabit!);
           this.notifyStateChange();
         }
       },
