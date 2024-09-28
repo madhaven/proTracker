@@ -234,11 +234,20 @@ const toggleTaskHandler = async (event, taskId, newStatusId, newTime) => {
     return statusLog ?? false
 }
 
+const isHabitInvalid = async (habit) => {
+    return await habit.days > 7
+    || habit.days < 1
+    || habit.name.length <= 0
+    || isExistingHabit(habit.name);
+}
+
+const isExistingHabit = async (name) => {
+    existing = await HP.getByName(name);
+    return existing != false
+}
+
 const createHabitHandler = async (event, newHabit) => {
-    if (newHabit.days > 7
-        || newHabit.days < 1
-        || newHabit.name.length <= 0
-    ) res(false);
+    if (await isHabitInvalid(newHabit)) return false;
     newHabit.endTime = new Date(newHabit.endTime).getTime();
     newHabit.lastLogTime = new Date(newHabit.lastLogTime).getTime();
     newHabit.startTime = new Date(newHabit.startTime).getTime();
@@ -248,6 +257,7 @@ const createHabitHandler = async (event, newHabit) => {
 }
 
 const editHabitHandler = async (event, newHabit) => {
+    if (await isHabitInvalid(newHabit)) return false;
     newHabit = await HP.update(newHabit.id, newHabit);
     return newHabit ?? false;
 }

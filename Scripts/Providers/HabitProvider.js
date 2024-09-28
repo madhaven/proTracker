@@ -52,6 +52,35 @@ const HabitProvider = class {
         }
     }
 
+    async getByName(name) {
+        const query = `SELECT habit.id
+            , MAX(hlog.date_time) as latest_log_time
+            , habit.name
+            , habit.removed
+            , habit.start_time
+            , habit.end_time
+            , habit.days
+        FROM habit LEFT JOIN habit_log hlog
+        ON habit.id=hlog.habit_id GROUP BY habit_id
+        HAVING habit.name=?;`;
+        const params = [name];
+        console.debug('HabitProvider: getByName');
+        try {
+            const res = await this.dbService.getOne(query, params);
+            return res ? new Habit(
+                res.id,
+                res.name,
+                res.removed,
+                res.start_time,
+                res.end_time,
+                res.days,
+                res.latest_log_time
+            ) : false;
+        } catch (err) {
+            console.trace("Habit: getByName", err);
+        }
+    }
+
     async update(id, habit) {
         const query = `UPDATE habit SET name=?, removed=?, start_time=?, end_time=?, days=?
         WHERE id=?

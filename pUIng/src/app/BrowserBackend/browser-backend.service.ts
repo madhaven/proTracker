@@ -152,13 +152,20 @@ export class BrowserBackendService implements DataCommsInterface {
   }
   private updateHabit(newHabit: Habit): boolean {
     if (!this.habits.has(newHabit.id)) return false;
-
-    // check for existing habit
-    var existing: Habit|undefined = Array.from(this.habits.values()).find(habit => habit.name == newHabit.name)
-    if (existing != undefined) return false;
-    
     this.habits.set(newHabit.id, newHabit);
     return true;
+  }
+  private isExistingHabit(name: string): boolean {
+    var existing: Habit|undefined = Array
+      .from(this.habits.values())
+      .find(habit => habit.name == name);
+    return (existing != undefined)? true : false;
+  }
+  private isHabitInvalid(habit: Habit): boolean {
+    return habit.name.length <= 0
+      || habit.days > 7
+      || habit.days < 1
+      || this.isExistingHabit(habit.name)
   }
   // deleteHabit(habit: Habit): boolena {}
   private createTaskLog(newTaskLog: TaskLog): TaskLog {
@@ -222,10 +229,8 @@ export class BrowserBackendService implements DataCommsInterface {
 
   newHabit(newHabit: Habit) {
     return new Promise((res, rej) => {
-      if (newHabit.days > 7
-        || newHabit.days < 1
-        || newHabit.name.length <= 0
-      ) res(false);
+      if (this.isHabitInvalid(newHabit)) res(false);
+
       newHabit.endTime = new Date(newHabit.endTime!).getTime();
       newHabit.lastLogTime = new Date(newHabit.lastLogTime!).getTime();
       newHabit.startTime = new Date(newHabit.startTime!).getTime();
@@ -238,6 +243,7 @@ export class BrowserBackendService implements DataCommsInterface {
 
   editHabit(newHabit: Habit) { // TODO standardize API to return boolean on updates;
     return new Promise((res, rej) => {
+      if (this.isHabitInvalid(newHabit)) res(false);
       const result = this.updateHabit(newHabit);
       this.dumpToLocalStorage();
       res(result ? true : false);
