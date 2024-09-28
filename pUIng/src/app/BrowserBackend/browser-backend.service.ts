@@ -106,16 +106,16 @@ export class BrowserBackendService implements DataCommsInterface {
 
   //#region backend Logic
 
-  createProject(name: string): Project {
+  private createProject(name: string): Project {
     const newProject = new Project(++this.lastId_projects, name, []);
     this.projects.set(newProject.id, newProject);
     return newProject;
   }
-  getProjectByName(name: string): Project|false {
+  private getProjectByName(name: string): Project|false {
     const res = [...this.projects.values()].filter((project) => project.name == name);
     return res.length > 0 ? res[0] : false;
   }
-  getProjectByNameOrCreate(name: string): Project {
+  private getProjectByNameOrCreate(name: string): Project {
     const existingProject = this.getProjectByName(name);
     if (existingProject) {
       return existingProject;
@@ -124,44 +124,56 @@ export class BrowserBackendService implements DataCommsInterface {
       return newProject;
     }
   }
-  updateProject(project: Project): boolean {
+  private updateProject(project: Project): boolean {
     if (!this.projects.has(project.id)) return false;
     this.projects.set(project.id, project);
     return true;
   }
   // delete(project: Project): boolean {}
-  createTask(taskName: string, projectId: number, parentId: number) {
+  private createTask(taskName: string, projectId: number, parentId: number) {
     const newTask = new Task(++this.lastId_tasks, projectId, parentId, taskName);
     this.tasks.set(newTask.id, newTask);
     return newTask;
   }
-  getAllTasksOfProject(projectId: number): Task[]|false {
+  private getAllTasksOfProject(projectId: number): Task[]|false {
     const res = [...this.tasks.values()].filter((task) => task.projectId == projectId);
     return res.length > 0 ? res : false;
   }
-  updateTask(task: Task): boolean {
+  private updateTask(task: Task): boolean {
     if (!this.tasks.has(task.id)) return false;
     this.tasks.set(task.id, task);
     return true;
   }
   // deleteTask(task): boolean {}
-  createHabit(newHabit: Habit) {
+  private createHabit(newHabit: Habit) {
     newHabit.id = ++this.lastId_habits;
     this.habits.set(newHabit.id, newHabit);
     return newHabit;
   }
-  updateHabit(habit: Habit): boolean {
-    if (!this.habits.has(habit.id)) return false;
-    this.habits.set(habit.id, habit);
+  private updateHabit(newHabit: Habit): boolean {
+    if (!this.habits.has(newHabit.id)) return false;
+    this.habits.set(newHabit.id, newHabit);
     return true;
   }
+  private isExistingHabit(name: string): boolean {
+    var existing: Habit|undefined = Array
+      .from(this.habits.values())
+      .find(habit => habit.name == name);
+    return (existing != undefined)? true : false;
+  }
+  private isHabitInvalid(habit: Habit): boolean {
+    return habit.name.length <= 0
+      || habit.days > 7
+      || habit.days < 1
+      || this.isExistingHabit(habit.name)
+  }
   // deleteHabit(habit: Habit): boolena {}
-  createTaskLog(newTaskLog: TaskLog): TaskLog {
+  private createTaskLog(newTaskLog: TaskLog): TaskLog {
     newTaskLog.id = ++this.lastId_taskLogs;
     this.taskLogs.set(newTaskLog.id, newTaskLog);
     return newTaskLog;
   }
-  createHabitLog(newHabitLog: HabitLog): HabitLog {
+  private createHabitLog(newHabitLog: HabitLog): HabitLog {
     newHabitLog.id = ++this.lastId_habitLogs;
     this.habitLogs.set(newHabitLog.id, newHabitLog);
 
@@ -202,7 +214,7 @@ export class BrowserBackendService implements DataCommsInterface {
     return new Promise((res, rej) => {
       const result = this.updateTask(newTask);
       this.dumpToLocalStorage();
-      res(result);
+      res(result ? true : false);
     });
   }
 
@@ -217,10 +229,8 @@ export class BrowserBackendService implements DataCommsInterface {
 
   newHabit(newHabit: Habit) {
     return new Promise((res, rej) => {
-      if (newHabit.days > 7
-        || newHabit.days < 1
-        || newHabit.name.length <= 0
-      ) res(false);
+      if (this.isHabitInvalid(newHabit)) res(false);
+
       newHabit.endTime = new Date(newHabit.endTime!).getTime();
       newHabit.lastLogTime = new Date(newHabit.lastLogTime!).getTime();
       newHabit.startTime = new Date(newHabit.startTime!).getTime();
@@ -233,9 +243,10 @@ export class BrowserBackendService implements DataCommsInterface {
 
   editHabit(newHabit: Habit) { // TODO standardize API to return boolean on updates;
     return new Promise((res, rej) => {
+      if (this.isHabitInvalid(newHabit)) res(false);
       const result = this.updateHabit(newHabit);
       this.dumpToLocalStorage();
-      res(result ? newHabit : false);
+      res(result ? true : false);
     });
   }
 
@@ -273,7 +284,7 @@ export class BrowserBackendService implements DataCommsInterface {
 
       const result = this.updateProject(newProject);
       this.dumpToLocalStorage();
-      res(result);
+      res(result ? true : false);
     });
   }
 
