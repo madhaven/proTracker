@@ -106,16 +106,16 @@ export class BrowserBackendService implements DataCommsInterface {
 
   //#region backend Logic
 
-  createProject(name: string): Project {
+  private createProject(name: string): Project {
     const newProject = new Project(++this.lastId_projects, name, []);
     this.projects.set(newProject.id, newProject);
     return newProject;
   }
-  getProjectByName(name: string): Project|false {
+  private getProjectByName(name: string): Project|false {
     const res = [...this.projects.values()].filter((project) => project.name == name);
     return res.length > 0 ? res[0] : false;
   }
-  getProjectByNameOrCreate(name: string): Project {
+  private getProjectByNameOrCreate(name: string): Project {
     const existingProject = this.getProjectByName(name);
     if (existingProject) {
       return existingProject;
@@ -124,33 +124,33 @@ export class BrowserBackendService implements DataCommsInterface {
       return newProject;
     }
   }
-  updateProject(project: Project): boolean {
+  private updateProject(project: Project): boolean {
     if (!this.projects.has(project.id)) return false;
     this.projects.set(project.id, project);
     return true;
   }
   // delete(project: Project): boolean {}
-  createTask(taskName: string, projectId: number, parentId: number) {
+  private createTask(taskName: string, projectId: number, parentId: number) {
     const newTask = new Task(++this.lastId_tasks, projectId, parentId, taskName);
     this.tasks.set(newTask.id, newTask);
     return newTask;
   }
-  getAllTasksOfProject(projectId: number): Task[]|false {
+  private getAllTasksOfProject(projectId: number): Task[]|false {
     const res = [...this.tasks.values()].filter((task) => task.projectId == projectId);
     return res.length > 0 ? res : false;
   }
-  updateTask(task: Task): boolean {
+  private updateTask(task: Task): boolean {
     if (!this.tasks.has(task.id)) return false;
     this.tasks.set(task.id, task);
     return true;
   }
   // deleteTask(task): boolean {}
-  createHabit(newHabit: Habit) {
+  private createHabit(newHabit: Habit) {
     newHabit.id = ++this.lastId_habits;
     this.habits.set(newHabit.id, newHabit);
     return newHabit;
   }
-  updateHabit(newHabit: Habit): boolean {
+  private updateHabit(newHabit: Habit): boolean {
     if (!this.habits.has(newHabit.id)) return false;
 
     // check for existing habit
@@ -161,12 +161,12 @@ export class BrowserBackendService implements DataCommsInterface {
     return true;
   }
   // deleteHabit(habit: Habit): boolena {}
-  createTaskLog(newTaskLog: TaskLog): TaskLog {
+  private createTaskLog(newTaskLog: TaskLog): TaskLog {
     newTaskLog.id = ++this.lastId_taskLogs;
     this.taskLogs.set(newTaskLog.id, newTaskLog);
     return newTaskLog;
   }
-  createHabitLog(newHabitLog: HabitLog): HabitLog {
+  private createHabitLog(newHabitLog: HabitLog): HabitLog {
     newHabitLog.id = ++this.lastId_habitLogs;
     this.habitLogs.set(newHabitLog.id, newHabitLog);
 

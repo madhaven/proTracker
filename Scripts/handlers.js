@@ -243,13 +243,13 @@ const createHabitHandler = async (event, newHabit) => {
     newHabit.lastLogTime = new Date(newHabit.lastLogTime).getTime();
     newHabit.startTime = new Date(newHabit.startTime).getTime();
 
-    habit = await HP.create(newHabit)
-    return newHabit ?? false
+    habit = await HP.create(newHabit);
+    return newHabit ?? false;
 }
 
 const editHabitHandler = async (event, newHabit) => {
-    newHabit = await HP.update(newHabit.id, newHabit)
-    return newHabit ?? false
+    newHabit = await HP.update(newHabit.id, newHabit);
+    return newHabit ?? false;
 }
 
 const habitDoneHandler = async (event, habitId, time) => {

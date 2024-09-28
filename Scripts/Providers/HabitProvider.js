@@ -24,9 +24,7 @@ const HabitProvider = class {
     }
 
     async get(id) {
-        const query = `
-        SELECT 
-            habit.id
+        const query = `SELECT  habit.id
             , MAX(hlog.date_time) as latest_log_time
             , habit.name
             , habit.removed
@@ -35,11 +33,11 @@ const HabitProvider = class {
             , habit.days
         FROM habit LEFT JOIN habit_log hlog
         ON habit.id=hlog.habit_id GROUP BY habit_id
-        HAVING habit.id=?;`
-        const params = [id]
-        console.debug('HabitProvider: get')
+        HAVING habit.id=?;`;
+        const params = [id];
+        console.debug('HabitProvider: get');
         try {
-            const res = await this.dbService.getOne(query, params)
+            const res = await this.dbService.getOne(query, params);
             return res ? new Habit(
                 res.id,
                 res.name,
@@ -48,9 +46,9 @@ const HabitProvider = class {
                 res.end_time,
                 res.days,
                 res.latest_log_time
-            ) : false
+            ) : false;
         } catch (err) {
-            console.trace("Habit: get", err)
+            console.trace("Habit: get", err);
         }
     }
 
