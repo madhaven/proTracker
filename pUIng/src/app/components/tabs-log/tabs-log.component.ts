@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { UiStateService } from '../../services/ui-state.service';
 import { NewLogSectionComponent } from './new-log-section/new-log-section.component';
 import { LogDayComponent } from "./log-day/log-day.component";
@@ -33,6 +33,7 @@ export class TabsLogComponent implements OnInit {
   constructor(
     uiStateService: UiStateService,
     router: Router,
+    private renderer: Renderer2,
     private newLogShortcutService: NewLogShortcutService,
   ) {
     this.uiStateService = uiStateService;
@@ -58,7 +59,10 @@ export class TabsLogComponent implements OnInit {
       if (task == -1) {
         this.scrollAnchor.nativeElement.scrollIntoView({ behavior: "smooth" });
       } else {
-        document.getElementById("task_row_" + task)?.scrollIntoView({ behavior: "smooth" });
+        const taskElement = this.renderer.selectRootElement(`#task_row_${task}`, true);
+        if (taskElement) {
+          taskElement.scrollIntoView({ behavior: "smooth" });
+        }
       }
     });
   }
