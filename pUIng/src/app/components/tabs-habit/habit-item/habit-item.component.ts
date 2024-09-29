@@ -3,7 +3,7 @@ import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { EditableItemComponent } from '../../../common/editable-item/editable-item.component';
 import { Habit } from '../../../models/habit.model';
 import { UiStateService } from '../../../services/ui-state.service';
-import { Chart } from 'chart.js'
+import { Chart, registerables } from 'chart.js';
 
 @Component({
   selector: 'pui-habit-item',
@@ -21,37 +21,34 @@ export class HabitItemComponent implements OnInit {
   @Input() habit!: Habit;
   today: Date = new Date();
   uiStateService: UiStateService;
-
-  @ViewChild('lineChart') private chartRef!: ElementRef;
+  
   chart: any;
+  chartConfig: any;
+  @ViewChild('lineChart') chartRef!: ElementRef;
 
   constructor(uiStateService: UiStateService) {
     this.uiStateService = uiStateService;
+    Chart.register(...registerables)
+    this.chartConfig = {
+      type: 'line',
+      options: {},
+      data: {
+        labels: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+        datasets: [
+          {
+            label: "Steps",
+            data: [1, 2, 3, 4, 5, 6, 7]
+          }
+        ]
+      }
+    }
   }
 
   ngOnInit() {
     this.today = new Date();
-
-    this.chart = new Chart(this.chartRef.nativeElement, {
-      type: 'line',
-      data: {
-        labels: ['Jan', 'Feb', 'Mar'],
-        datasets: [
-          {
-            data: [0, 0, 1, 2, 3 ,-1],
-            borderColor: '#00AEFF',
-            fill: true
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        scales: {
-          x: { display: true },
-          y: { display: true }
-        }
-      }
-    })
+    setTimeout(() => {
+      this.chart = new Chart(this.chartRef.nativeElement, this.chartConfig)
+    });
   }
 
   editHabit(newName: string) {
