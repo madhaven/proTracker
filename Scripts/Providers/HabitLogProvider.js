@@ -16,9 +16,9 @@ const HabitLogProvider = class {
         console.debug('HabitLogProvider: creating')
         try {
             var id = await this.dbService.insertOne(query, params)
-            habitLog.id = id
+            var newHabitLog = new HabitLog(id, habitLog.habitId, habitLog.dateTime)
             console.debug('HabitLogProvider: created')
-            return id ? habitLog : false
+            return id ? newHabitLog : false
         } catch (err) {
             console.trace('HabitLogProvider: create', err)
         }
