@@ -21,5 +21,6 @@ export class DueHabitItemComponent {
 
   habitLog() {
     this.uiStateService.markHabitDone(this.habit);
+    this.uiStateService.notifyStateChange();
   }
 }
