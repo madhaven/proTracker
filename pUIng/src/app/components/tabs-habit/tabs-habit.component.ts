@@ -7,6 +7,7 @@ import { NewHabitSectionComponent } from './new-habit-section/new-habit-section.
 import { DueHabitItemComponent } from './due-habit-item/due-habit-item.component';
 import { Subscription } from 'rxjs';
 import { NewHabitShortcutService } from '../../services/new-habit-shortcut.service';
+import { HabitGraphComponent } from "./habit-graph/habit-graph.component";
 
 @Component({
   selector: 'pui-tabs-habit',
@@ -17,7 +18,8 @@ import { NewHabitShortcutService } from '../../services/new-habit-shortcut.servi
     HabitItemComponent,
     DueHabitItemComponent,
     NewHabitSectionComponent,
-  ],
+    HabitGraphComponent
+],
   templateUrl: './tabs-habit.component.html',
   styleUrl: './tabs-habit.component.css'
 })
