@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { BaseChartDirective, provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import { UiStateService } from '../../../services/ui-state.service';
 import { HabitMetricsService } from '../../../services/habit-metrics.service';
+import { ChartData, ChartDataset, ChartOptions } from 'chart.js';
 
 @Component({
   selector: 'pui-habit-graph',
@@ -17,21 +18,24 @@ import { HabitMetricsService } from '../../../services/habit-metrics.service';
 })
 export class HabitGraphComponent {
   
+  @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
   uiStateService: UiStateService;
   habitService: HabitMetricsService;
-  today: Date = new Date();
+  activityStart: number = 0;
 
   // default chart data
-  chartData = {
-    labels: ["habit1", "habit2"],
-    datasets: [
-      {
-        label: "",
-        data: [0],
-        tension: 0.3,
-      }
-    ]
+  chartData: ChartData = {
+    labels: ["day1", "day2"],
+    datasets: [{ label: "sample", data: [0, 1, 2], tension: 0.3 }]
   };
+  chartOptions: ChartOptions = {
+    responsive: true,
+    scales: {y: {display: false}},
+    elements: {
+      line: {borderWidth: 2},
+      point: {pointStyle: false}
+    }
+  }
 
   constructor(
     uiStateService: UiStateService,
@@ -39,7 +43,6 @@ export class HabitGraphComponent {
   ) {
     this.uiStateService = uiStateService;
     this.habitService = habitService;
-
     this.uiStateService.stateChanged$.subscribe(newState => {
       this.uiStateService = newState;
       this.populateGraph();
@@ -47,25 +50,33 @@ export class HabitGraphComponent {
   }
 
   ngOnInit() {
-    this.today = new Date();
     this.populateGraph();
   }
-
-  populateGraph() {
-    console.log('populating graph')
-    this.chartData.datasets = []
+  
+  populateGraph(): void {
+    this.activityStart = this.habitService.getActivityStart();
+    this.setGraphDates();
+    this.chartData.datasets = [];
     for (var [id, habit] of this.uiStateService.habits) {
-      // console.log(habit)
-      var consistancyData = this.habitService.generateDailyFrequency(habit);
-      var dataset = {
+      var mappedData = this.habitService
+        .getHabitStreakMap(habit, this.activityStart, 2)
+        .values();
+      var dataset: ChartDataset = {
         label: habit.name,
-        data: Array.from(consistancyData.values()),
-        tension: 0.3,
+        data: Array.from(mappedData),
+        tension: 0.5,
       }
-      this.chartData.datasets.push(dataset)
-      // this.chartData.labels = Array
-      //   .from(consistancyData.keys())
-      //   .map(x => x.toString().slice(0, 15));
+      this.chartData.datasets.push(dataset);
+    }
+    this.chart?.update();
+  }
+
+  setGraphDates(): void {
+    var oneDay = 24 * 60 * 60 * 1000;
+    this.chartData.labels = [];
+    for (var time=this.activityStart; time <= Date.now(); time += oneDay) {
+      var date = new Date(time);
+      this.chartData.labels.push(date.toString().slice(0, 15));
     }
 
   }

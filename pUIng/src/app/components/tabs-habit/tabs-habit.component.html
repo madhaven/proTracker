@@ -9,6 +9,7 @@
                 *ngFor="let habit of dueHabits | keyvalue"
                 [habitId]="habit.key"
                 [habit]="habit.value"
+                (dueHabitDone)="updateGraph()"
                 />
             </ul>
         }

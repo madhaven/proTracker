@@ -9,46 +9,66 @@ import { UiStateService } from './ui-state.service';
 export class HabitMetricsService {
 
   uiStateService: UiStateService;
+  oneDay: number = 24 * 60 * 60 * 1000;
 
-  constructor(
-    uiStateService: UiStateService,
-  ) {
+  constructor(uiStateService: UiStateService) {
     this.uiStateService = uiStateService;
   }
 
-  getLogsOfHabit(id: number): HabitLog[] {
+  getActivityStart(): number {
+    var allHabitLogs = Array
+      .from(this.uiStateService.habitLogs.values())
+      .map(x => x.dateTime);
+    return Math.min(...allHabitLogs);
+  }
+
+  getLogsOfHabit(id: number): number[] {
     var logs = Array
       .from(this.uiStateService.habitLogs.values())
-      .filter(log => log.habitId == id);
+      .filter(log => log.habitId == id)
+      .map(log => log.dateTime);
     return logs;
   }
 
-  generateDailyFrequency(habit: Habit): Map<Date, number> {
-    var logs = this.getLogsOfHabit(habit.id).map(log => log.dateTime);
-    var dailyFrequency = new Map<Date, number>();
-    var now = Date.now();
-    var timeOfDay = habit.startTime ?? logs[0] ?? 0;
+  getHabitFrequencyMap(habit: Habit, startTime: number): Map<Date, number> {
+    var logs = this.getLogsOfHabit(habit.id);
+    var data = new Map<Date, number>();
+    var timeNow = Date.now();
     var index = 0;
-    var oneDay = 24 * 60 * 60 * 1000;
-    
-    // travel through time and logs to set up data
-    while ( timeOfDay <= now && timeOfDay < (habit.endTime??Infinity) && index < logs.length ) {
-      var date = new Date(timeOfDay);
-      
-      if (logs[index] < timeOfDay) {
+
+    while (startTime <= (timeNow + this.oneDay) && index < logs.length) {
+      var date = new Date(startTime);
+      if (logs[index] <= startTime) {
         index++;
-      } else if (logs[index] <= timeOfDay + oneDay) {
-        var existingFrequency = dailyFrequency.get(date) ?? 0;
-        dailyFrequency.set(date, existingFrequency + 1);
+        data.set(date, NaN);
+      } else if (logs[index] <= startTime + this.oneDay) {
+        data.set(date, (data.get(date) ?? 0) + 1);
         index++;
       } else {
-        if (!dailyFrequency.has(date)) {
-          dailyFrequency.set(date, 0);
-        }
-        timeOfDay += oneDay;
+        if (!data.has(date)) data.set(date, 0);
+        startTime += this.oneDay;
       }
     }
+    return data;
+  }
 
-    return dailyFrequency
+  getHabitStreakMap(habit: Habit, startTime: number, daysForStreakLoss: number): Map<Date, number> {
+    var frequencyMap = this.getHabitFrequencyMap(habit, startTime);
+    var streakMap = new Map<Date, number>();
+    var streakLoss = 0;
+    var streak = 0;
+    for (var [date, frequency] of frequencyMap) {
+      if (frequency > 0) {
+        streak += 1;
+        streakLoss = 0;
+      } else {
+        streak = Math.max(streak-1, 0);
+        streakLoss += 1;
+        if (streakLoss >= daysForStreakLoss)
+          streak = 0;
+      }
+      streakMap.set(date, streak);
+    }
+    return streakMap;
   }
 }
