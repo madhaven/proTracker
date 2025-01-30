@@ -19,7 +19,9 @@ export class HabitMetricsService {
     var allHabitLogs = Array
       .from(this.uiStateService.habitLogs.values())
       .map(x => x.dateTime);
-    return Math.min(...allHabitLogs);
+    var minTime = new Date(Math.min(...allHabitLogs));
+    var activityStartDate = new Date(minTime.getFullYear(), minTime.getMonth(), minTime.getDate());
+    return activityStartDate.getTime();
   }
 
   getLogsOfHabit(id: number): number[] {
@@ -34,33 +36,34 @@ export class HabitMetricsService {
     var logs = this.getLogsOfHabit(habit.id);
     var data = new Map<Date, number>();
     var timeNow = Date.now();
+    var x = new Date(startTime);
+    
+    var timePoint = new Date(x.getFullYear(), x.getMonth(), x.getDate()).getTime();
     var index = 0;
-
-    while (startTime <= (timeNow + this.oneDay) && index < logs.length) {
-      var date = new Date(startTime);
-      if (logs[index] <= startTime) {
-        index++;
-        data.set(date, NaN);
-      } else if (logs[index] <= startTime + this.oneDay) {
+    console.log('frequncymaplength', logs.length);
+    while (timePoint <= timeNow && index < logs.length) {
+      var date = new Date(timePoint);
+      if (logs[index] > timePoint + this.oneDay) {
+        if (!data.has(date)) data.set(date, 0);
+        timePoint += this.oneDay;  
+      } else if (logs[index] <= timePoint + this.oneDay) {
         data.set(date, (data.get(date) ?? 0) + 1);
         index++;
-      } else {
-        if (!data.has(date)) data.set(date, 0);
-        startTime += this.oneDay;
+      } else if (logs[index] < timePoint) {
+        data.set(date, NaN);
+        index++;
       }
     }
+    console.log('frequencyMap', data);
     return data;
   }
-
+  
   getHabitStreakMap(habit: Habit, startTime: number, daysForStreakLoss: number): Map<Date, number> {
     var frequencyMap = this.getHabitFrequencyMap(habit, startTime);
     var streakMap = new Map<Date, number>();
     var streakLoss = 0;
     var streak = 0;
     for (var [date, frequency] of frequencyMap) {
-      // if (habit.startTime > startTime) {
-      //   streakMap.set(date, NaN);
-      // } else
       if (frequency > 0) {
         streak += 1;
         streakLoss = 0;
@@ -72,6 +75,7 @@ export class HabitMetricsService {
       }
       streakMap.set(date, streak);
     }
+    console.log('streakMap', streakMap);
     return streakMap;
   }
 }
