@@ -2,5 +2,6 @@
     <canvas baseChart
     [data]="chartData"
     [options]="chartOptions"
-    [type]="'line'"></canvas>
+    [type]="'line'"
+    (chartHover)="graphHover($event)"></canvas>
 </div>

@@ -45,15 +45,18 @@ export class HabitGraphComponent {
     this.habitService = habitService;
     this.uiStateService.stateChanged$.subscribe(newState => {
       this.uiStateService = newState;
+      console.log('state update graph update');
       this.populateGraph();
     });
   }
 
   ngOnInit() {
+    console.log('initingGraph');
     this.populateGraph();
   }
   
   populateGraph(): void {
+    console.log('populating graph');
     this.activityStart = this.habitService.getActivityStart();
     this.setGraphDates();
     this.chartData.datasets = [];
@@ -65,6 +68,7 @@ export class HabitGraphComponent {
         label: habit.name,
         data: Array.from(mappedData),
         tension: 0.5,
+        fill: 'origin'
       }
       this.chartData.datasets.push(dataset);
     }
@@ -78,6 +82,17 @@ export class HabitGraphComponent {
       var date = new Date(time);
       this.chartData.labels.push(date.toString().slice(0, 15));
     }
-
   }
+
+  graphHover(event: any): void {
+    console.log('hover', event);
+  }
+
+  // graphData(event: ChartEvent): void {
+  //   console.log('data', event);
+  // }
+
+  // graphClick(event: ChartEvent): void {
+  //   console.log('click', event);
+  // }
 }

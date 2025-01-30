@@ -51,6 +51,8 @@ export class TabsHabitComponent {
   }
 
   updateGraph(): void {
+    console.log('parent asking for update');
     this.habitGraph?.ngOnInit();
+    // this.habitGraph.populateGraph();
   }
 }

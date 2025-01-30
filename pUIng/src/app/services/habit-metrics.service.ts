@@ -58,6 +58,9 @@ export class HabitMetricsService {
     var streakLoss = 0;
     var streak = 0;
     for (var [date, frequency] of frequencyMap) {
+      // if (habit.startTime > startTime) {
+      //   streakMap.set(date, NaN);
+      // } else
       if (frequency > 0) {
         streak += 1;
         streakLoss = 0;
