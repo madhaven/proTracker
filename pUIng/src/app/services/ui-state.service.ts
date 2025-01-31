@@ -51,6 +51,7 @@ export class UiStateService {
   stateChanged$ = this.stateChanged.asObservable();
   loadPercent = new Subject<number>();
   loading$ = this.loadPercent.asObservable();
+  // TODO: Event Bus so components can filter out what was changed
 
   constructor(
     eComService: ElectronComService,

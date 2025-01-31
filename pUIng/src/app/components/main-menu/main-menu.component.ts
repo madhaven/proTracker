@@ -1,4 +1,4 @@
-import { afterNextRender, ChangeDetectorRef, Component, HostListener } from '@angular/core';
+import { afterNextRender, ChangeDetectorRef, Component, HostListener, Renderer2 } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { UiStateService } from '../../services/ui-state.service';
 import { Subscription } from 'rxjs';
@@ -34,6 +34,7 @@ export class MainMenuComponent {
 
   idleTime: number = 0;
   idleTolerance: number;
+  private eventListeners: (() => void)[] = []
 
   constructor(
     protected uiStateService: UiStateService,
@@ -41,6 +42,7 @@ export class MainMenuComponent {
     private keyBinds: KeyboardBindingsService,
     private hintingService: HintingService,
     private cdr: ChangeDetectorRef,
+    private renderer: Renderer2,
   ) {
     this.idleTolerance = this.uiStateService.idleTolerance;
     this.loadStateObserver = this.uiStateService.loading$.subscribe((percent) => {
@@ -68,7 +70,9 @@ export class MainMenuComponent {
 
   enableIdleTracking() {
     ['mousemove', 'mousedown', 'drag', 'keypress', 'keydown', 'scroll'].forEach(event => {
-      document.addEventListener(event, () => { this.idleTime = 0 });
+      this.eventListeners.push(this.renderer.listen(
+        'document', event, () => { this.idleTime = 0; }
+      ));
     });
 
     setInterval(() => { this.trackInactivity(); }, 1000);

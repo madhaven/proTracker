@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Habit } from '../../../models/habit.model';
 import { UiStateService } from '../../../services/ui-state.service';
 
@@ -13,13 +13,16 @@ export class DueHabitItemComponent {
 
   @Input() habitId!: number;
   @Input() habit!: Habit;
+  @Output() dueHabitDone = new EventEmitter();
   uiStateService: UiStateService;
 
   constructor(uiStateService: UiStateService) {
     this.uiStateService = uiStateService;
   }
 
-  habitLog() {
+  habitLog(): void {
     this.uiStateService.markHabitDone(this.habit);
+    this.uiStateService.notifyStateChange();
+    this.dueHabitDone.emit();
   }
 }

@@ -1,5 +1,5 @@
 import { CommonModule, NgForOf } from '@angular/common';
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, ViewChild } from '@angular/core';
 import { HabitItemComponent } from './habit-item/habit-item.component';
 import { Habit } from '../../models/habit.model';
 import { UiStateService } from '../../services/ui-state.service';
@@ -7,6 +7,7 @@ import { NewHabitSectionComponent } from './new-habit-section/new-habit-section.
 import { DueHabitItemComponent } from './due-habit-item/due-habit-item.component';
 import { Subscription } from 'rxjs';
 import { NewHabitShortcutService } from '../../services/new-habit-shortcut.service';
+import { HabitGraphComponent } from "./habit-graph/habit-graph.component";
 
 @Component({
   selector: 'pui-tabs-habit',
@@ -17,7 +18,9 @@ import { NewHabitShortcutService } from '../../services/new-habit-shortcut.servi
     HabitItemComponent,
     DueHabitItemComponent,
     NewHabitSectionComponent,
+    HabitGraphComponent
   ],
+  providers: [ HabitGraphComponent ],
   templateUrl: './tabs-habit.component.html',
   styleUrl: './tabs-habit.component.css'
 })
@@ -26,6 +29,7 @@ export class TabsHabitComponent {
   uiStateService!: UiStateService;
   stateObserver: Subscription;
   dueHabits!: Map<number, Habit>;
+  @ViewChild(HabitGraphComponent) habitGraph?: HabitGraphComponent;
 
   constructor(
     uiStateService: UiStateService,
@@ -41,10 +45,14 @@ export class TabsHabitComponent {
 
   @HostListener('window:keydown.alt.shift.n', ['$event'])
   newHabitShortcut(event?: Event): void {
-    if (!this.uiStateService.shortcutsEnabled) {
-      return;
-    }
+    if (!this.uiStateService.shortcutsEnabled) return;
     event?.preventDefault();
     this.newHabitShortcutService.requestFocus();
+  }
+
+  updateGraph(): void {
+    console.log('parent asking for update');
+    this.habitGraph?.ngOnInit();
+    // this.habitGraph.populateGraph();
   }
 }

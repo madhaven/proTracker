@@ -21,8 +21,13 @@ export class HabitItemComponent implements OnInit {
   today: Date = new Date();
   uiStateService: UiStateService;
 
-  constructor(uiStateService: UiStateService) {
+  constructor(
+    uiStateService: UiStateService,
+  ) {
     this.uiStateService = uiStateService;
+    this.uiStateService.stateChanged$.subscribe(newState => {
+      this.uiStateService = newState;
+    });
   }
 
   ngOnInit() {

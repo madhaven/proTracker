@@ -1,0 +1,7 @@
+<div class="habit_item_graph">
+    <canvas baseChart
+    [data]="chartData"
+    [options]="chartOptions"
+    [type]="'line'"
+    (chartHover)="graphHover($event)"></canvas>
+</div>
