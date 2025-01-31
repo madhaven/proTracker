@@ -21,7 +21,6 @@ export class HabitGraphComponent {
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
   uiStateService: UiStateService;
   habitService: HabitMetricsService;
-  activityStart: number = 0;
 
   // default chart data
   chartData: ChartData = {
@@ -37,7 +36,7 @@ export class HabitGraphComponent {
       }
     },
     elements: {
-      line: {borderWidth: 2},
+      line: {borderWidth: 1},
       point: {pointStyle: false}
     }
   }
@@ -60,61 +59,39 @@ export class HabitGraphComponent {
     this.populateGraph();
   }
 
-  createDataset(label: string, data: number[], tension: number = 0.5, fill: string = 'origin'): ChartDataset {
-    return { label: label, data: data, tension: tension, fill: fill };
+  createDataset(label: string, data: number[], tension: number = 0.5, fill: string = 'none'): ChartDataset {
+    return { label: label, data: data, tension: tension, fill: fill};
   }
   
   populateGraph(): void {
     console.log('populating graph');
-    this.activityStart = this.habitService.getActivityStart();
-    var labelMap = this.setGraphDates(this.activityStart);
+    var activityStart = this.habitService.getActivityStart();
+    var labelMap = this.setGraphDates(activityStart);
 
     this.chartData.datasets = [];
     for (var [id, habit] of this.uiStateService.habits) {
-      var freqMap = this.habitService.getHabitFrequencyMap(habit, this.activityStart);
-      var streakMap = this.habitService.getHabitStreakMap(habit, this.activityStart, 2);
+      var streakMap = this.habitService.getHabitStreakMap(habit, labelMap, 10);
       var dataset = this.createDataset(habit.name, Array.from(streakMap.values()));
       this.chartData.datasets.push(dataset);
-      
-      // validation
-      freqMap.forEach((freq, date) => {
-        if (!labelMap.has(date)) { console.log('labels dont have freqdate', date); }
-      })
-      streakMap.forEach((freq, date) => {
-        if (!labelMap.has(date)) { console.log('labels dont have streakdate', date); }
-      })
-      labelMap.forEach((x, date) => {
-        if (!freqMap.has(date)) { console.log('freqMap dont have', date); }
-        if (!streakMap.has(date)) { console.log('streakMap dont have', date); }
-      })
-
     }
     this.chart?.update();
-    
-    // internal validation
-    var graphLabelCount = this.chartData.labels?.length;
-    this.chartData.datasets.forEach(dataset => {
-      var datasetLength = dataset.data.length;
-      if (datasetLength != graphLabelCount) {
-        console.log(dataset.label, 'point Count', datasetLength, '!=', graphLabelCount);
-      }
-    });
   }
 
-  setGraphDates(activityStart: number): Map<Date, number> {
+  setGraphDates(activityStart: number): Map<number, number> {
     var oneDay = 24 * 60 * 60 * 1000;
     this.chartData.labels = [];
-    var labelMap = new Map<Date, number>();
-    for (var time=activityStart; time <= Date.now(); time += oneDay) {
+    var dateMap = new Map<number, number>();
+    var startDate = HabitMetricsService.getDayStartTime(activityStart);
+    for (var time=startDate; time <= Date.now(); time += oneDay) {
       var date = new Date(time);
       this.chartData.labels.push(date.toString().slice(0, 15));
-      labelMap.set(date, 0);
+      dateMap.set(time, 0);
     }
-    return labelMap;
+    return dateMap;
   }
 
   graphHover(event: any): void {
-    console.log('hover', event);
+    // console.log('hover', event);
   }
 
   // graphData(event: ChartEvent): void {
