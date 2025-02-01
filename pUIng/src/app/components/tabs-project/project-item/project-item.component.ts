@@ -1,6 +1,5 @@
 import { CommonModule, NgForOf } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { EditableItemComponent } from '../../../common/editable-item/editable-item.component';
 import { Project } from '../../../models/project.model';
@@ -15,7 +14,6 @@ import { ProjectTaskComponent } from './project-task/project-task.component';
     ProjectTaskComponent,
     CommonModule,
     NgForOf,
-    RouterLink,
   ],
   templateUrl: './project-item.component.html',
   styleUrl: './project-item.component.css'

@@ -1,4 +1,3 @@
-import { NgIf } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { EditableItemComponent } from '../../../common/editable-item/editable-item.component';
 import { Habit } from '../../../models/habit.model';
@@ -8,9 +7,8 @@ import { UiStateService } from '../../../services/ui-state.service';
   selector: 'pui-habit-item',
   standalone: true,
   imports: [
-    EditableItemComponent,
-    NgIf,
-  ],
+    EditableItemComponent
+],
   templateUrl: './habit-item.component.html',
   styleUrl: './habit-item.component.css'
 })
