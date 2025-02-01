@@ -1,4 +1,3 @@
-import { NgIf } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { HintingService } from '../../services/hinting.service';
@@ -6,9 +5,6 @@ import { HintingService } from '../../services/hinting.service';
 @Component({
   selector: 'pui-hint-line',
   standalone: true,
-  imports: [
-    NgIf
-  ],
   templateUrl: './hint-line.component.html',
   styleUrl: './hint-line.component.css'
 })
