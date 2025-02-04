@@ -1,9 +1,10 @@
 {
   "name": "protracker",
-  "version": "2.4.1",
+  "version": "2.5.0",
   "description": "app to track tasks",
   "main": "./eMain.js",
   "scripts": {
+    "postinstall": "npm install ./pUIng/",
     "build": "cd pUIng && npm run build",
     "buildnstart": "npm run build && npm run start",
     "start": "electron .",
@@ -11,9 +12,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "del proTracker*.db appconfig.json proTracker.log",
     "cleandebug": "npm run clean && npm run debug",
-    "make": "electron-forge make",
+    "make": "npm run build && electron-forge make",
     "package": "electron-forge package",
-    "postinstall": "npm install ./pUIng/"
+    "deploy": "cd pUIng && ng deploy"
   },
   "repository": {
     "type": "git",

@@ -62,7 +62,7 @@ export class MainMenuComponent {
   trackInactivity() {
     ++this.idleTime;
     if (!this.menuVisible && this.idleTime >= this.idleTolerance && this.idleTolerance >= -1) {
-      this.menuVisible = true;
+      this.toggleMenuBar(true);
       this.cdr.detectChanges();
       console.info('MenuBar on idle');
     }
