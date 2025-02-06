@@ -25,7 +25,6 @@
             ],
             "tsConfig": "tsconfig.app.json",
             "assets": [
-              "src/assets/favicon.ico",
               "src/assets"
             ],
             "styles": [
@@ -90,7 +89,6 @@
             ],
             "tsConfig": "tsconfig.spec.json",
             "assets": [
-              "src/assets/favicon.ico",
               "src/assets"
             ],
             "styles": [
@@ -99,6 +97,9 @@
             ],
             "scripts": []
           }
+        },
+        "deploy": {
+          "builder": "angular-cli-ghpages:deploy"
         }
       }
     }

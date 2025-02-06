@@ -1,5 +1,5 @@
 <div class="menu_tab projectTab">
-    <main class="container" *ngIf="sortedProjects?.length ?? 0 > 0">
+    <main class="container" *ngIf="(sortedProjects?.length ?? 0) > 0">
         <h1>PROJECTS</h1>
         <div>
             <ul id="project_list">
@@ -11,7 +11,7 @@
             </ul>
         </div>
     </main>
-    <main class="no_projects" *ngIf="sortedProjects?.length ?? 0 <= 0">
+    <main class="no_projects" *ngIf="(sortedProjects?.length ?? 0) <= 0">
         <h1>PROJECTS</h1>
         <p>
             It looks like you haven't set up a project.<br>
