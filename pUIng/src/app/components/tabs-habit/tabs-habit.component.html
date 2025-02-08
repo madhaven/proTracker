@@ -1,7 +1,9 @@
 <div class="menu_tab habitTab">
     <main class="container">
         <h1>HABITS</h1>
-        <pui-habit-graph></pui-habit-graph>
+        @if (uiStateService.habits.size > 0) {
+            <pui-habit-graph></pui-habit-graph>
+        }
         @if (dueHabits.size > 0) {
             <h2>Due Today</h2>
             <ul class="pending_habits">
