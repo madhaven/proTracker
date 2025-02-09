@@ -43,7 +43,7 @@ const createWindow = () => {
     if (debugMode)
         win.loadURL("http://localhost:4200")
     else
-        win.loadFile("./pUIng/dist/puing/browser/index.html")
+        win.loadFile("./pUIng/dist/pUIng/browser/index.html")
 
     win.webContents.on('did-finish-load', () => {
         if (debugMode)

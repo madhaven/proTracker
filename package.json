@@ -1,6 +1,6 @@
 {
   "name": "protracker",
-  "version": "2.5.0",
+  "version": "2.6.0",
   "description": "app to track tasks",
   "main": "./eMain.js",
   "scripts": {
@@ -14,7 +14,7 @@
     "cleandebug": "npm run clean && npm run debug",
     "make": "npm run build && electron-forge make",
     "package": "electron-forge package",
-    "deploy": "cd pUIng && ng deploy"
+    "deploy": "cd pUIng && ng deploy --base-href=/proTracker/"
   },
   "repository": {
     "type": "git",
