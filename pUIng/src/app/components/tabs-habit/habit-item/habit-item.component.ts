@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { BlurDirective } from '../../../common/blur.directive';
 import { EditableItemComponent } from '../../../common/editable-item/editable-item.component';
 import { Habit } from '../../../models/habit.model';
 import { UiStateService } from '../../../services/ui-state.service';
@@ -7,7 +8,8 @@ import { UiStateService } from '../../../services/ui-state.service';
   selector: 'pui-habit-item',
   standalone: true,
   imports: [
-    EditableItemComponent
+    EditableItemComponent,
+    BlurDirective
 ],
   templateUrl: './habit-item.component.html',
   styleUrl: './habit-item.component.css'

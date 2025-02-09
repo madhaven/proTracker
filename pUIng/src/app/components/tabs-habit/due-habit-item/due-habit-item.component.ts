@@ -1,11 +1,14 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { BlurDirective } from '../../../common/blur.directive';
 import { Habit } from '../../../models/habit.model';
 import { UiStateService } from '../../../services/ui-state.service';
 
 @Component({
   selector: 'pui-due-habit-item',
   standalone: true,
-  imports: [],
+  imports: [
+    BlurDirective
+  ],
   templateUrl: './due-habit-item.component.html',
   styleUrl: './due-habit-item.component.css'
 })
