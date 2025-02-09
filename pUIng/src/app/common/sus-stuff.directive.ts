@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, HostListener, Output } from '@angular/core';
+import { Directive, EventEmitter, HostListener, Input, Output } from '@angular/core';
 
 @Directive({
   selector: '[susStuff]',
@@ -7,14 +7,14 @@ import { Directive, EventEmitter, HostListener, Output } from '@angular/core';
 export class SusStuffDirective {
 
   // Directive that tracks mouse hovers on objects
-  // When mouse hovers for more than a minimum time, the directive emits an "onSus" event
+  // When mouse hovers for more than a minimumSusTime, the directive emits an "onSus" event
   // When mouse leaves, it emits an "onNonSus" event. 
 
+  @Input('susTime') minimumSusTime: number = 1500;
   @Output('onSus') sus = new EventEmitter<void>();
   @Output('onNonSus') notSus = new EventEmitter<void>();
   isSus: boolean = false;
   timer?: NodeJS.Timeout;
-  minimumSusTime: number = 1500;
   emitter = () => {
     this.isSus = true;
     this.sus.emit();

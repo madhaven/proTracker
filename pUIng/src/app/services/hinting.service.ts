@@ -7,13 +7,13 @@ import { Subject } from 'rxjs';
 export class HintingService {
   // delegates hint show/hide requests to the hinting component
 
-  private hint = new Subject<string>();
+  private hint = new Subject<[string, number?, number?]>();
   hintRequested$ = this.hint.asObservable();
   private hider = new Subject<void>();
   hideHintRequested$ = this.hider.asObservable();
 
-  showHint(hint: string) {
-    this.hint.next(hint);
+  showHint(hint: string, durationInSeconds?: number, delayInSeconds?: number) {
+    this.hint.next([hint, durationInSeconds, durationInSeconds]);
   }
 
   hideHint() {

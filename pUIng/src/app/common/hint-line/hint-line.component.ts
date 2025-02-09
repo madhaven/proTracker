@@ -20,21 +20,23 @@ export class HintLineComponent {
 
   constructor (private hintingService: HintingService) {
     this.hintListener = this.hintingService.hintRequested$.subscribe(
-      hint => { this.showHint(hint); }
+      ([hint, duration, delay]) => { this.showHint(hint, duration, delay); }
     );
     this.hideHintListener = this.hintingService.hideHintRequested$.subscribe(
       () => { this.hideHint(); }
     );
   }
 
-  showHint(text: string) {
+  showHint(text: string, durationInSeconds: number = 2, delayInSeconds: number = 0.1) {
     this.clearTimers();
     this.hint = text;
+    var duration = durationInSeconds * 2000 + 100;
+    var delay = delayInSeconds * 1000;
 
     // set timers to hide hint
-    this.timer1 = setTimeout(() => { this.isVisible = true; }, 100);
-    this.timer2 = setTimeout(() => { this.isVisible = false; }, 2000);
-    this.timer3 = setTimeout(() => { this.hint = ""; }, 4000);
+    this.timer1 = setTimeout(() => { this.isVisible = true; }, delay);
+    this.timer2 = setTimeout(() => { this.isVisible = false; }, duration);
+    this.timer3 = setTimeout(() => { this.hint = ""; }, duration + 2000);
   }
 
   hideHint(): void {
