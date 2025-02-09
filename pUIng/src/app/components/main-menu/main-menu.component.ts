@@ -86,25 +86,18 @@ export class MainMenuComponent {
       : visibility;
   }
 
-  showMenuShortcutHint() {
-    this.hintingService.showHint(this.keyBinds.getKeyString(Shortcuts.MainMenu));
+  showHint(shortcut: Shortcuts) {
+    this.hintingService.showHint(this.keyBinds.getKeyString(shortcut));
   }
-
-  showLogShortcutHint() {
-    this.hintingService.showHint(this.keyBinds.getKeyString(Shortcuts.ShiftToLogsTab));
-  }
-
-  showProjectsShortcutHint() {
-    this.hintingService.showHint(this.keyBinds.getKeyString(Shortcuts.ShiftToProjectsTab));
-  }
-
-  showHabitShortcutHint() {
-    this.hintingService.showHint(this.keyBinds.getKeyString(Shortcuts.ShiftToHabitsTab));
-  }
-
+  
   hideHint() {
     this.hintingService.hideHint();
   }
+  
+  showMenuShortcutHint() { this.showHint(Shortcuts.MainMenu); }
+  showLogShortcutHint() { this.showHint(Shortcuts.ShiftToLogsTab); }
+  showProjectsShortcutHint() { this.showHint(Shortcuts.ShiftToProjectsTab); }
+  showHabitShortcutHint() { this.showHint(Shortcuts.ShiftToHabitsTab); }
 
   @HostListener('window:keydown.alt.shift.m', ['$event'])
   menuBarShortcut(event?: Event): void {

@@ -109,6 +109,7 @@ The DataCom interface contains all API required to fetch information for the fro
   proTracker is now easily accessible.  
   Introducing the BrowserBackend also came with added complexity to handle localStorage data storage and migration strategies.  
 * Adding shortcuts made accessibility so easy, the app felt closer to the keys.  
+* A graph for habit consistency was added and a better deployment workflow.  
 
 ## Future
 
