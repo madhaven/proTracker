@@ -1,10 +1,8 @@
-import { NgIf } from '@angular/common';
 import { Component, ElementRef, Input, OnChanges, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'pui-loader',
   standalone: true,
-  imports: [NgIf],
   templateUrl: './loader.component.html',
   styleUrl: './loader.component.css'
 })

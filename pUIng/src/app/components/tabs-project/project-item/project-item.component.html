@@ -6,13 +6,11 @@
         (itemEdited)="editProject($event)"
         />
     </h3>
-    <ul class="task_list"
-    *ngIf="!foldedProject">
-        <pui-project-task
-        *ngFor="let task of taskTree | keyvalue"
-        class="project_task"
-        [taskId]="task.key"
-        [statusId]="task.value"
-        />
-    </ul>
+    @if (!foldedProject) {
+        <ul class="task_list">
+            @for (task of taskTree | keyvalue; track task) {
+                <pui-project-task class="project_task" [taskId]="task.key" [statusId]="task.value" />
+            }
+        </ul>
+    }
 </li>

@@ -12,12 +12,9 @@
                 </div>
             </div>
         </div>
-        <pui-log-day
-        *ngFor="let day of uiStateService.getLogTreeAsOrderredList()"
-        [logDay]="day[0]"
-        [tree]="day[1]"
-        [highlightedTask]="highlightedTask"
-        />
+        @for (day of uiStateService.getLogTreeAsOrderredList(); track day) {
+            <pui-log-day [logDay]="day[0]" [tree]="day[1]" [highlightedTask]="highlightedTask" />
+        }
         <pui-new-log-section [logsExist]="uiStateService.logsExist()" />
         <div #scrollAnchor></div>
     </main>

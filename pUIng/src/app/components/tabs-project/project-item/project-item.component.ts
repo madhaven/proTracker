@@ -1,4 +1,4 @@
-import { CommonModule, NgForOf } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { EditableItemComponent } from '../../../common/editable-item/editable-item.component';
@@ -13,7 +13,6 @@ import { ProjectTaskComponent } from './project-task/project-task.component';
     EditableItemComponent,
     ProjectTaskComponent,
     CommonModule,
-    NgForOf,
   ],
   templateUrl: './project-item.component.html',
   styleUrl: './project-item.component.css'

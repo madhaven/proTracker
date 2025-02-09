@@ -7,21 +7,23 @@
         @if (dueHabits.size > 0) {
             <h2>Due Today</h2>
             <ul class="pending_habits">
-                <pui-due-habit-item
-                *ngFor="let habit of dueHabits | keyvalue"
-                [habitId]="habit.key"
-                [habit]="habit.value"
-                (dueHabitDone)="updateGraph()"
-                />
+                @for (habit of dueHabits | keyvalue ; track habit) {
+                    <pui-due-habit-item
+                    [habitId]="habit.key"
+                    [habit]="habit.value"
+                    (dueHabitDone)="updateGraph()"
+                    />
+                }
             </ul>
         }
-        <hr *ngIf="dueHabits.size > 0">
+        @if (dueHabits.size > 0) { <hr> }
         <ul class="habit_list">
-            <pui-habit-item
-            *ngFor="let habit of uiStateService.habits | keyvalue"
-            [habitId]="habit.key"
-            [habit]="habit.value"
-            />
+            @for (habit of uiStateService.habits | keyvalue; track habit) {
+                <pui-habit-item
+                [habitId]="habit.key"
+                [habit]="habit.value"
+                />
+            }
         </ul>
         <pui-new-habit-section />
     </main>

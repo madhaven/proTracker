@@ -9,13 +9,14 @@
         />
     </div>
     <div class="projects_tasks">
-        <pui-task-row
-        *ngFor="let taskLog of tree | keyvalue"
-        [taskId]="taskLog.key"
-        [taskLog]="taskLog.value"
-        [highlightedTask]="highlightedTask"
-        [itIsToday]="itIsToday"
-        />
+        @for (taskLog of tree | keyvalue; track taskLog) {
+            <pui-task-row
+            [taskId]="taskLog.key"
+            [taskLog]="taskLog.value"
+            [highlightedTask]="highlightedTask"
+            [itIsToday]="itIsToday"
+            />
+        }
     </div>
 </div>
 

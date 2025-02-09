@@ -2,7 +2,6 @@ import { afterNextRender, ChangeDetectorRef, Component, HostListener, Renderer2 
 import { Router, RouterModule } from '@angular/router';
 import { UiStateService } from '../../services/ui-state.service';
 import { Subscription } from 'rxjs';
-import { NgIf } from '@angular/common';
 import { LoaderComponent } from '../../common/loader/loader.component';
 import { ExportButtonState } from '../../common/export-button-state';
 import { Shortcuts } from '../../common/shortcuts';
@@ -15,7 +14,6 @@ import { SusStuffDirective } from '../../common/sus-stuff.directive';
   standalone: true,
   imports: [
     RouterModule,
-    NgIf,
     LoaderComponent,
     SusStuffDirective,
   ],

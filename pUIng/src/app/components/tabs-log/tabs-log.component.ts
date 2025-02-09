@@ -2,7 +2,7 @@ import { Component, ElementRef, HostListener, Input, OnInit, Renderer2, ViewChil
 import { UiStateService } from '../../services/ui-state.service';
 import { NewLogSectionComponent } from './new-log-section/new-log-section.component';
 import { LogDayComponent } from "./log-day/log-day.component";
-import { CommonModule, NgForOf } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ProjectAutoTypeService } from '../../services/project-auto-type.service';
 import { NewLogShortcutService } from '../../services/new-log-shortcut.service';
@@ -15,7 +15,6 @@ import { NewLogShortcutService } from '../../services/new-log-shortcut.service';
   imports: [
     NewLogSectionComponent,
     LogDayComponent,
-    NgForOf,
     CommonModule,
   ],
   providers: [

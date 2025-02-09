@@ -1,7 +1,7 @@
-import { Component, OnChanges, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ProjectItemComponent } from './project-item/project-item.component';
 import { UiStateService } from '../../services/ui-state.service';
-import { CommonModule, NgForOf } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -10,7 +10,6 @@ import { Subscription } from 'rxjs';
   standalone: true,
   imports: [
     ProjectItemComponent,
-    NgForOf,
     CommonModule,
     RouterModule,
   ],

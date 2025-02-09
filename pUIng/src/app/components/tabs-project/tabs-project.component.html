@@ -1,21 +1,26 @@
 <div class="menu_tab projectTab">
-    <main class="container" *ngIf="(sortedProjects?.length ?? 0) > 0">
-        <h1>PROJECTS</h1>
-        <div>
-            <ul id="project_list">
-                <pui-project-item
-                *ngFor="let project of sortedProjects"
-                [projectId]="project[0]"
-                [taskTree]="project[1]"
-                />
-            </ul>
-        </div>
-    </main>
-    <main class="no_projects" *ngIf="(sortedProjects?.length ?? 0) <= 0">
-        <h1>PROJECTS</h1>
-        <p>
-            It looks like you haven't set up a project.<br>
-            Checkout the <a [routerLink]="['/logs']" routerLinkActive="router-link-active" >Logs tab</a> to add a new Project with a task
-        </p>
-    </main>
+    @if (sortedProjects!.length > 0) {
+        <main class="container">
+            <h1>PROJECTS</h1>
+            <div>
+                <ul id="project_list">
+                    @for (project of sortedProjects; track project) {
+                        <pui-project-item
+                        [projectId]="project[0]"
+                        [taskTree]="project[1]"
+                        />
+                    }
+                </ul>
+            </div>
+        </main>
+    }
+    @else {
+        <main class="no_projects">
+            <h1>PROJECTS</h1>
+            <p>
+                It looks like you haven't set up a project.<br>
+                Checkout the <a [routerLink]="['/logs']" routerLinkActive="router-link-active" >Logs tab</a> to add a new Project with a task
+            </p>
+        </main>
+    }
 </div>

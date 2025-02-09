@@ -1,4 +1,4 @@
-import { CommonModule, NgForOf } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component, HostListener, ViewChild } from '@angular/core';
 import { HabitItemComponent } from './habit-item/habit-item.component';
 import { Habit } from '../../models/habit.model';
@@ -13,7 +13,6 @@ import { HabitGraphComponent } from "./habit-graph/habit-graph.component";
   selector: 'pui-tabs-habit',
   standalone: true,
   imports: [
-    NgForOf,
     CommonModule,
     HabitItemComponent,
     DueHabitItemComponent,
