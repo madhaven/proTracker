@@ -1,0 +1,3 @@
+::ng-deep * {
+    transition: .1s;
+}

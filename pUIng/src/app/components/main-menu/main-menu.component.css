@@ -104,4 +104,5 @@
     flex-direction: column;
     text-align: center;
     justify-content: center;
+    cursor: default;
 }

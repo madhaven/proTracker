@@ -5,6 +5,7 @@ import { Subject } from 'rxjs';
   providedIn: 'root'
 })
 export class HintingService {
+  // delegates hint show/hide requests to the hinting component
 
   private hint = new Subject<string>();
   hintRequested$ = this.hint.asObservable();

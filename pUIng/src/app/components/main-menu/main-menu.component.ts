@@ -57,7 +57,7 @@ export class MainMenuComponent {
     });
   }
 
-  trackInactivity() {
+  idleCheck() {
     ++this.idleTime;
     if (!this.menuVisible && this.idleTime >= this.idleTolerance && this.idleTolerance >= -1) {
       this.toggleMenuBar(true);
@@ -73,7 +73,7 @@ export class MainMenuComponent {
       ));
     });
 
-    setInterval(() => { this.trackInactivity(); }, 1000);
+    setInterval(() => { this.idleCheck(); }, 1000);
     console.info('Idle tracking enabled');
   }
 

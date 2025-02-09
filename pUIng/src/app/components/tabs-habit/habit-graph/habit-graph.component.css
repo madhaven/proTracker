@@ -1,6 +1,7 @@
 .habit_item_graph {
     width: 100%;
     aspect-ratio: 2;
+    overflow: hidden;
 }
 
 .habit_item_graph canvas {
