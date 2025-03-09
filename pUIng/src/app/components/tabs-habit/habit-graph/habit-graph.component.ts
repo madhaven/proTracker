@@ -38,7 +38,8 @@ export class HabitGraphComponent {
     elements: {
       line: {borderWidth: 1},
       point: {pointStyle: false}
-    }
+    },
+    aspectRatio: 3
   }
 
   constructor(
