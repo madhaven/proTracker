@@ -31,7 +31,9 @@ const createWindow = () => {
         height: 600,
         webPreferences: {
             preload: path.join(__dirname, './Scripts/ePreload.js'),
-            webSecurity: false
+            webSecurity: false,
+            contextIsolation: true,
+            nodeIntegration: true // security risk
         },
         show: false,
         autoHideMenuBar: true

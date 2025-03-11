@@ -15,6 +15,7 @@ const { Project } = require('./Models/Project')
 const { Status } = require('./Models/Status')
 const { Habit } = require('./Models/Habit')
 const { Task } = require('./Models/Task')
+const { Channels } = require('./Utils/Channels');
 
 
 // TODO: move export colors to seperate class / Service
@@ -316,20 +317,20 @@ const registerHandlers = mainWindow => {
     HLP = new HabitLogProvider
 
     // comms
-    ipcMain.handle('projectEditChannel', editProjectHandler)
-    ipcMain.handle('newTaskChannel', newTaskHandler)
-    ipcMain.handle('taskEditChannel', editTaskHandler)
-    ipcMain.handle('taskClickChannel', toggleTaskHandler)
-    ipcMain.handle('habitCreateChannel', createHabitHandler)
-    ipcMain.handle('habitEditChannel', editHabitHandler)
-    ipcMain.handle('habitDoneChannel', habitDoneHandler)
-    ipcMain.handle('deleteHabitChannel', deleteHabitHandler)
-    ipcMain.handle('loadDataRequest', DataRequestHandler)
-    ipcMain.handle('exportDataRequest', (event, logTree) => { return exportDataHandler(event, mainWindow, logTree) })
+    ipcMain.handle(Channels.editProject, editProjectHandler)
+    ipcMain.handle(Channels.newTask, newTaskHandler)
+    ipcMain.handle(Channels.editTask, editTaskHandler)
+    ipcMain.handle(Channels.toggleTask, toggleTaskHandler)
+    ipcMain.handle(Channels.createHabit, createHabitHandler)
+    ipcMain.handle(Channels.editHabit, editHabitHandler)
+    ipcMain.handle(Channels.habitDone, habitDoneHandler)
+    ipcMain.handle(Channels.deleteHabit, deleteHabitHandler)
+    ipcMain.handle(Channels.loadDataRequest, DataRequestHandler)
+    ipcMain.handle(Channels.exportDataRequest, (event, logTree) => { return exportDataHandler(event, mainWindow, logTree) })
     
     // state info exchange
-    ipcMain.on('UIEventNotifications', stateEventHandler)
-    ipcMain.handle('UIEventRequests', stateChangeRequestHandler)
+    ipcMain.on(Channels.UIEventNotifications, stateEventHandler)
+    ipcMain.handle(Channels.UIEventRequests, stateChangeRequestHandler)
 
     console.debug("backend event handlers registered")
 }
