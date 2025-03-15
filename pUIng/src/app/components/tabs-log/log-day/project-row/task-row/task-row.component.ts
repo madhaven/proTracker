@@ -22,7 +22,9 @@ export class TaskRowComponent implements OnInit {
   task?: Task;
   uiStateService!: UiStateService;
   stateObserver: Subscription;
-  taskStatus!: TaskStatus;
+  statusOnUi!: TaskStatus;
+
+  private clickTimer?: NodeJS.Timeout;
 
   constructor(uiStateService: UiStateService) {
     this.uiStateService = uiStateService;
@@ -34,17 +36,29 @@ export class TaskRowComponent implements OnInit {
 
   ngOnInit() {
     this.task = this.uiStateService.getTask(this.taskId); // TODO: ng if task not found ?
-    this.taskStatus = this.taskLog.statusId;
+    this.statusOnUi = this.taskLog.statusId;
   }
 
   taskClick() {
     // TODO: setup more refined status change mechanism
-    const currentTime = Date.now();
-    var newState: TaskStatus = this.taskLog.statusId == TaskStatus.PENDING
-        ? TaskStatus.COMPLETED
-        : TaskStatus.PENDING;
-    if (this.itIsToday)
-      this.uiStateService.toggleTask(this.taskLog.taskId, newState, currentTime);
+    if (!this.itIsToday) return;
+    
+    var newTaskStatus;
+    switch (this.statusOnUi) {
+      case TaskStatus.PENDING:
+        newTaskStatus = TaskStatus.IN_PROGRESS;
+        break;
+      case TaskStatus.IN_PROGRESS:
+        newTaskStatus = TaskStatus.COMPLETED;
+        break;
+      case TaskStatus.COMPLETED:
+      default:
+        newTaskStatus = TaskStatus.PENDING;
+        break;
+    }
+
+    this.statusOnUi = newTaskStatus;
+    this.uiStateService.toggleTask(this.taskLog.taskId, newTaskStatus, Date.now());
   }
 
   taskEdit(newName: string) {

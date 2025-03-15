@@ -18,6 +18,9 @@ checkout [proTracker Lite here](https://madhaven.github.io/proTracker/)
 
 ## Usage
 
+Protracker was built using a [Node](https://nodejs.org/) v22.6.0 environment.  
+Using the same node environment could help avoid errors due to environment differences.  
+
 * `npm run buildnstart`  
   Builds the Angular UI and starts the app  
   `npm run build`  

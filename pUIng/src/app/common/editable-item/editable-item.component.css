@@ -53,3 +53,6 @@
 :host.completed {
     color: var(--green);
 }
+:host.in_progress {
+    color: var(--yellow);
+}
