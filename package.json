@@ -1,6 +1,6 @@
 {
   "name": "protracker",
-  "version": "2.8.0",
+  "version": "2.8.1",
   "description": "app to track tasks",
   "main": "./eMain.js",
   "scripts": {
@@ -10,7 +10,7 @@
     "start": "electron .",
     "debug": "electron . --inspect=5858",
     "test": "npm run test:backend && npm run test:puing",
-    "test:backend": "jest",
+    "test:backend": "npx jest",
     "test:puing": "cd pUIng && npx ng test --watch=false --browsers=ChromeHeadless",
     "clean": "del proTracker*.db appconfig.json proTracker.log",
     "cleandebug": "npm run clean && npm run debug",

@@ -79,7 +79,6 @@ export class UiStateService {
   }
 
   growTrees() { // TODO optimise
-    this.orderredTree = [];
     var pendingLogs = new Map<Task, TaskLog>();
     var orderredLogs = [...this.logs.values()];
 
@@ -95,7 +94,7 @@ export class UiStateService {
       this.logTree.get(dateStr)?.get(task!.projectId)?.set(task!.id, log)
       this._populateOrderredTree(dateStr, this.logTree.get(dateStr)!);
 
-      if (log.statusId == TaskStatus.PENDING)
+      if (log.statusId == TaskStatus.PENDING || log.statusId == TaskStatus.IN_PROGRESS)
         pendingLogs.set(task!, log);
       else
         pendingLogs.delete(task!);

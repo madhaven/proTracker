@@ -57,7 +57,6 @@ export class TaskRowComponent implements OnInit {
         break;
     }
 
-    this.statusOnUi = newTaskStatus;
     this.uiStateService.toggleTask(this.taskLog.taskId, newTaskStatus, Date.now());
   }
 
