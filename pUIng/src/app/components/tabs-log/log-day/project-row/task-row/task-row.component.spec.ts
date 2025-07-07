@@ -14,6 +14,12 @@ describe('TaskRowComponent', () => {
     
     fixture = TestBed.createComponent(TaskRowComponent);
     component = fixture.componentInstance;
+    component.taskLog = {
+      id: 1,
+      taskId: 123,
+      dateTime: 0,
+      statusId: 1
+    };
     fixture.detectChanges();
   });
 

@@ -6,7 +6,9 @@ describe('ProjectAutoTypeService', () => {
   let service: ProjectAutoTypeService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      providers: [ProjectAutoTypeService]
+    });
     service = TestBed.inject(ProjectAutoTypeService);
   });
 

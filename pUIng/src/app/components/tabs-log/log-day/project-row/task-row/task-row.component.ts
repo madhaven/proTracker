@@ -24,7 +24,7 @@ export class TaskRowComponent implements OnInit {
   stateObserver: Subscription;
   statusOnUi!: TaskStatus;
 
-  private clickTimer?: NodeJS.Timeout;
+  private clickTimer?: number;
 
   constructor(uiStateService: UiStateService) {
     this.uiStateService = uiStateService;

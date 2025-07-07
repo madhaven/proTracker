@@ -27,15 +27,17 @@ import { HabitGraphComponent } from "./habit-graph/habit-graph.component";
 export class TabsHabitComponent {
 
   uiStateService!: UiStateService;
+  newHabitShortcutService: NewHabitShortcutService;
   stateObserver: Subscription;
   dueHabits!: Map<number, Habit>;
   @ViewChild(HabitGraphComponent) habitGraph?: HabitGraphComponent;
 
   constructor(
     uiStateService: UiStateService,
-    private newHabitShortcutService: NewHabitShortcutService,
+    newHabitShortcutService: NewHabitShortcutService,
   ) {
     this.uiStateService = uiStateService; // TODO: ng handle errors
+    this.newHabitShortcutService = newHabitShortcutService;
     this.dueHabits = this.uiStateService.getHabitsDueOn(new Date());
     this.stateObserver = this.uiStateService.stateChanged$.subscribe((newState) => {
       this.uiStateService = newState;

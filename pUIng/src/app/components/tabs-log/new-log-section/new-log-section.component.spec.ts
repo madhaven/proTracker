@@ -7,10 +7,7 @@ describe('NewLogSectionComponent', () => {
   let fixture: ComponentFixture<NewLogSectionComponent>;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [NewLogSectionComponent]
-    })
-    .compileComponents();
+    await TestBed.compileComponents();
     
     fixture = TestBed.createComponent(NewLogSectionComponent);
     component = fixture.componentInstance;

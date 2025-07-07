@@ -9,7 +9,9 @@
     "buildnstart": "npm run build && npm run start",
     "start": "electron .",
     "debug": "electron . --inspect=5858",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "npm run test:backend && npm run test:puing",
+    "test:backend": "jest",
+    "test:puing": "cd pUIng && npx ng test --watch=false --browsers=ChromeHeadless",
     "clean": "del proTracker*.db appconfig.json proTracker.log",
     "cleandebug": "npm run clean && npm run debug",
     "make": "npm run build && electron-forge make",
@@ -39,6 +41,7 @@
     "@electron-forge/maker-zip": "^6.2.1",
     "@electron-forge/plugin-auto-unpack-natives": "^6.2.1",
     "electron": "^26.2.4",
+    "jest": "^29.7.0",
     "typescript": "^5.7.3"
   },
   "dependencies": {
