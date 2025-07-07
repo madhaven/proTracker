@@ -10,10 +10,10 @@ const { DBVersionService } = require('./Scripts/Services/DBVersionService')
 
 var mainWindow
 const debugMode = process.argv.some(arg => arg.includes('--inspect'))
-    , userDataPath = debugMode ? '.' : path.join(app.getPath('appData'), 'proTracker')
-    , configFileName = debugMode ? 'appconfig.json' : path.join(userDataPath, 'appconfig.json')
-    , config = debugMode ? { dbPath: 'proTracker.db' } : { dbPath: path.join(userDataPath, 'proTracker.db') }
-    , logFile = FileService.openStream(path.join(userDataPath, 'proTracker.log'))
+const userDataPath = debugMode ? '.' : path.join(app.getPath('appData'), 'proTracker')
+const configFileName = debugMode ? 'appconfig.json' : path.join(userDataPath, 'appconfig.json')
+const config = debugMode ? { dbPath: 'proTracker.db' } : { dbPath: path.join(userDataPath, 'proTracker.db') }
+const logFile = FileService.openStream(path.join(userDataPath, 'proTracker.log'))
 
 const setupServices = () => {
     // PS: order of services does matter
