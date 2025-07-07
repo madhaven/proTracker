@@ -19,7 +19,7 @@ import { HintLineComponent } from '../../common/hint-line/hint-line.component';
   styleUrl: './app.component.css'
 })
 export class AppComponent implements OnInit {
-  title = 'pUIng';
+  title = 'proTracker';
   uiStateService!: UiStateService;
   
   logsTab: MenuTabs = MenuTabs.TaskLogs;

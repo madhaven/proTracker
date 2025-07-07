@@ -12,17 +12,15 @@ export class HintLineComponent {
 
   isVisible: boolean = false;
   hint: string = "";
-  timer1?: NodeJS.Timeout;
-  timer2?: NodeJS.Timeout;
-  timer3?: NodeJS.Timeout;
-  hintListener: Subscription;
-  hideHintListener: Subscription;
+  private timer1?: number;
+  private timer2?: number;
+  private timer3?: number;
 
   constructor (private hintingService: HintingService) {
-    this.hintListener = this.hintingService.hintRequested$.subscribe(
+    this.hintingService.hintRequested$.subscribe(
       hint => { this.showHint(hint); }
     );
-    this.hideHintListener = this.hintingService.hideHintRequested$.subscribe(
+    this.hintingService.hideHintRequested$.subscribe(
       () => { this.hideHint(); }
     );
   }
@@ -32,18 +30,18 @@ export class HintLineComponent {
     this.hint = text;
 
     // set timers to hide hint
-    this.timer1 = setTimeout(() => { this.isVisible = true; }, 100);
-    this.timer2 = setTimeout(() => { this.isVisible = false; }, 2000);
-    this.timer3 = setTimeout(() => { this.hint = ""; }, 4000);
+    this.timer1 = window.setTimeout(() => { this.isVisible = true; }, 100);
+    this.timer2 = window.setTimeout(() => { this.isVisible = false; }, 2000);
+    this.timer3 = window.setTimeout(() => { this.hint = ""; }, 4000);
   }
 
   hideHint(): void {
     this.clearTimers();
     this.isVisible = false;
-    this.timer1 = setTimeout(() => { this.hint = ""; }, 2000);
+    this.timer1 = window.setTimeout(() => { this.hint = ""; }, 2000);
   }
 
-  clearTimers(): void {
+  private clearTimers(): void {
     if (this.timer1) { clearTimeout(this.timer1); }
     if (this.timer2) { clearTimeout(this.timer2); }
     if (this.timer3) { clearTimeout(this.timer3); }

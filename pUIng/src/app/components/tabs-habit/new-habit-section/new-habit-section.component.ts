@@ -17,13 +17,15 @@ export class NewHabitSectionComponent {
   newHabitName?: string;
   newHabitFrequency?: number;
   uiStateService!: UiStateService;
+  newHabitShortcutService: NewHabitShortcutService;
   newHabitShortcutListener: Subscription;
 
   constructor(
     uiStateService: UiStateService,
-    private newHabitShortcutService: NewHabitShortcutService,
+    newHabitShortcutService: NewHabitShortcutService,
   ) {
     this.uiStateService = uiStateService;
+    this.newHabitShortcutService = newHabitShortcutService;
     this.newHabitShortcutListener = newHabitShortcutService.newHabitFocusTriggered$.subscribe(
       () => { this.focusOnHabitField(); }
     );
