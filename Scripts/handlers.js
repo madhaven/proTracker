@@ -209,19 +209,21 @@ const editProjectHandler = async (event, project) => {
 }
 
 const newTaskHandler = async (event, newTask) => {
-    newTask.dateTime = new Date(newTask.dateTime).getTime()
-    newTask.project = newTask.project.trim()
-    newTask.summary = newTask.summary.trim()
+    newTask.dateTime = new Date(newTask.dateTime).getTime();
+    newTask.project = newTask.project?.trim();
+    newTask.summary = newTask.summary.trim();
 
-    const project = await PP.getByNameOrCreate(newTask.project)
-    const task = await TP.create(newTask.summary, project.id, -1)
-    const status = await SP.getById(Status.PENDING)
-    const log = await SLP.create(new StatusLog(-1, task.id, status.id, newTask.dateTime))
+    const project = newTask.project === undefined
+        ? {id: -1}
+        : await PP.getByNameOrCreate(newTask.project);
+    const task = await TP.create(newTask.summary, project.id, -1);
+    const status = await SP.getById(Status.PENDING);
+    const log = await SLP.create(new StatusLog(-1, task.id, status.id, newTask.dateTime));
     return (project && task && log) ? {
         "task": task,
         "log": log,
         "project": project
-    } : false
+    } : false;
 }
 
 const editTaskHandler = async (event, task) => {

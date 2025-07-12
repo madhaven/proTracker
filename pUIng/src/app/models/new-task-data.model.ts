@@ -1,13 +1,13 @@
 export class NewTaskData {
     id?: number;
     dateTime!: number;
-    project!: string;
+    project?: string;
     summary!: string;
 
     constructor(
         id: number,
         dateTime: number,
-        project: string,
+        project: string | undefined,
         summary: string,
     ) {
         this.id = id;
