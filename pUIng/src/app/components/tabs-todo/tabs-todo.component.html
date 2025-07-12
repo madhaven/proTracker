@@ -1,0 +1,13 @@
+<div class="todo_tab log_chart">
+    <main class="container">
+        <h1>TODO</h1>
+        <div class="todo-container">
+            <ul id="task-list">
+                @for (task of this.todoList; track task) {
+                    <li><input type="checkbox" id="task_{{task}}" (change)="handleCheckboxChange($event, task)">{{task.summary}}</li>
+                }
+            </ul>
+            <input type="text" id="new-task" placeholder="I will..." (keydown.enter)="addTask()" [(ngModel)]="inputValue">
+        </div>
+    </main>
+</div>

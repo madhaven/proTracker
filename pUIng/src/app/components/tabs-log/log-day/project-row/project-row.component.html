@@ -2,7 +2,7 @@
     <div class="project_column">
         <pui-editable-item
         class="sticky_project_stuff"
-        [content]="project?.name ?? 'ERROR'"
+        [content]="project?.name ?? ''" todoItem 
         [isButtonOnLeft]="true"
         (contentClicked)="autoTypeProject()"
         (itemEdited)="editProject($event)"

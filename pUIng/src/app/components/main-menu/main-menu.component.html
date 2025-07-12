@@ -11,7 +11,13 @@ id="side_bar"
 (click)="toggleMenuBar()"
 >
     <div class="menu container">
-        <ul class="menu_buttons">
+        <div class="menu_title" style="display:flex;">
+            <h1>proTracker</h1>
+            <p>{{uiStateService.appVersion}}</p>
+            <pui-loader [percent]="appLoadPercent" />
+        </div>
+        <ul class="menu_buttons"
+        *ngIf="appLoadPercent == 100">
             <!-- <li id="load" class="menu_button" tabindex="1">
                 OPEN FILE
                 <input type="file" accept=".xlsx, .xls, .csv" name="data" id="dataFile" hidden>
@@ -19,9 +25,23 @@ id="side_bar"
             <!-- <li id="save" class="menu_button" tabindex="2">SAVE</li> -->
             <li
             susStuff
+            (onSus)="showTodoShortcutHint()"
+            (onNonSus)="hideHint()"
+            id="toDo"
+            class="menu_button"
+            [class.flashed]="flashedButton == '/todo'"
+            routerLink="/todo"
+            routerLinkActive="active"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list-ul" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm-3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+                </svg>
+                TO-DOS
+            </li>
+            <li
+            susStuff
             (onSus)="showLogShortcutHint()"
             (onNonSus)="hideHint()"
-            *ngIf="appLoadPercent == 100"
             id="logChart"
             class="menu_button"
             [class.flashed]="flashedButton == '/logs'"
@@ -31,13 +51,12 @@ id="side_bar"
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list-ul" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm-3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
                 </svg>
-                LOGS
+                LOG
             </li>
             <li
             susStuff
             (onSus)="showHabitShortcutHint()"
             (onNonSus)="hideHint()"
-            *ngIf="appLoadPercent == 100"
             id="habits"
             class="menu_button"
             [class.flashed]="flashedButton == '/habits'"
@@ -53,7 +72,6 @@ id="side_bar"
             susStuff
             (onSus)="showProjectsShortcutHint()"
             (onNonSus)="hideHint()"
-            *ngIf="appLoadPercent == 100"
             id="projects"
             class="menu_button"
             [class.flashed]="flashedButton == '/projects'"
@@ -66,7 +84,6 @@ id="side_bar"
             </li>
             <!--
             <li
-            *ngIf="appLoadPercent == 100"
             id="export"
             class="menu_button"
             #exportButton
@@ -84,10 +101,5 @@ id="side_bar"
             </li>
             -->
         </ul>
-        <div class="menu_title" style="display:flex;">
-            <h1>proTracker</h1>
-            <p>{{uiStateService.appVersion}}</p>
-            <pui-loader [percent]="appLoadPercent" />
-        </div>
     </div>
 </aside>

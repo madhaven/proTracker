@@ -6,29 +6,26 @@ import { Shortcuts } from '../common/shortcuts';
 })
 export class KeyboardBindingsService {
 
-  bindings = new Map<Shortcuts, string>();
-  keyStrings = new Map<Shortcuts, string>();
+  bindings = new Map<Shortcuts, string[]>([
+    [Shortcuts.MainMenu, ["window:keydown.alt.shift.m", "Alt Shift M"]],
+    [Shortcuts.NewEntry, ["window:keydown.alt.shift.n", "Alt Shift N"]],
+    [Shortcuts.ShiftToTodoTab, ["window:keydown.alt.shift.t", "Alt Shift T"]],
+    [Shortcuts.ShiftToHabitsTab, ["window:keydown.alt.shift.h", "Alt Shift H"]],
+    [Shortcuts.ShiftToLogsTab, ["window:keydown.alt.shift.l", "Alt Shift L"]],
+    [Shortcuts.ShiftToProjectsTab, ["window:keydown.alt.shift.p", "Alt Shift P"]],
+  ]);
+  keyStrings = new Map<Shortcuts, string>([
+  ]);
 
   constructor() {
-    this.bindings.set(Shortcuts.MainMenu, "window:keydown.alt.shift.m");
-    this.keyStrings.set(Shortcuts.MainMenu, "Alt Shift M");
-    this.bindings.set(Shortcuts.NewEntry, "window:keydown.alt.shift.n");
-    this.keyStrings.set(Shortcuts.NewEntry, "Alt Shift N");
-    this.bindings.set(Shortcuts.ShiftToHabitsTab, "window:keydown.alt.shift.h");
-    this.keyStrings.set(Shortcuts.ShiftToHabitsTab, "Alt Shift H");
-    this.bindings.set(Shortcuts.ShiftToLogsTab, "window:keydown.alt.shift.l");
-    this.keyStrings.set(Shortcuts.ShiftToLogsTab, "Alt Shift L");
-    this.bindings.set(Shortcuts.ShiftToProjectsTab, "window:keydown.alt.shift.p");
-    this.keyStrings.set(Shortcuts.ShiftToProjectsTab, "Alt Shift P");
-
     // TODO: load shortcuts from preferences #56
   }
 
   getShortcut (shortcut: Shortcuts): string {
-    return this.bindings.get(shortcut) ?? "";
+    return this.bindings.get(shortcut)?.[0] ?? "";
   }
 
   getKeyString (shortcut: Shortcuts): string {
-    return this.keyStrings.get(shortcut) ?? "";
+    return this.bindings.get(shortcut)?.[1] ?? "";
   }
 }

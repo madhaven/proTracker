@@ -89,6 +89,10 @@ export class MainMenuComponent {
   showMenuShortcutHint() {
     this.hintingService.showHint(this.keyBinds.getKeyString(Shortcuts.MainMenu));
   }
+  
+  showTodoShortcutHint() {
+    this.hintingService.showHint(this.keyBinds.getKeyString(Shortcuts.ShiftToTodoTab));
+  }
 
   showLogShortcutHint() {
     this.hintingService.showHint(this.keyBinds.getKeyString(Shortcuts.ShiftToLogsTab));
@@ -115,6 +119,7 @@ export class MainMenuComponent {
     this.toggleMenuBar();
   }
 
+  @HostListener('window:keydown.alt.shift.t', ['"/todo"', '$event'],)
   @HostListener('window:keydown.alt.shift.l', ['"/logs"', '$event'],)
   @HostListener('window:keydown.alt.shift.p', ['"/projects"', '$event'],)
   @HostListener('window:keydown.alt.shift.h', ['"/habits"', '$event'],)
