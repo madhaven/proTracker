@@ -1,0 +1,113 @@
+.todo-container {
+    width: 100%;
+    max-width: 600px; /* Max width for readability on larger screens */
+    padding: 20px;
+    box-sizing: border-box; /* Include padding in width calculation */
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Horizontally center content */
+    align-items: center;
+}
+
+.todo-container {
+    --width: 90%; /* Example: limit width */
+    max-width: 800px; /* Example: ensure it doesn't get too wide on large screens */
+    padding: 20px;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    flex-grow: 1; /* Allows the list to take up available space */
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+li {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--whiteLayer1);
+    font-size: 1.1em;
+    display: flex; /* Use flexbox for alignment of checkbox and text */
+    align-items: center; /* Vertically align items in the list */
+    opacity: 1;
+    transition: opacity .5s ease-out; /* Smooth fade-out transition */
+}
+
+li:last-child {
+    border-bottom: none;
+}
+
+/* Checkbox styling - made subtle */
+input[type="checkbox"] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    -webkit-appearance: none; /* Remove default browser styling */
+    -moz-appearance: none;
+    appearance: none;
+    width: 1em;
+    height: 1em;
+    border: 1px solid var(--whiteLayer3);
+    border-radius: 50%;
+    background-color: transparent;
+    margin-right: 10px; /* Space between checkbox and text */
+    cursor: pointer;
+    position: relative; /* For custom checkmark */
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+/* Custom checkmark for checked state */
+input[type="checkbox"]:checked {
+    background-color: var(--fg-weak); /* Black background when checked */
+    border-color: #000000; /* Black border when checked */
+}
+
+input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 0px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+/* Input field styling */
+input[type="text"] {
+    width: 100%; /* Full width of its container */
+    padding: 15px;
+    border: 1px solid var(--whiteLayer2); /* Light grey border */
+    border-radius: 8px; /* Slightly rounded corners */
+    font-size: 1.1em;
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    outline: none; /* Remove outline on focus */
+    transition: border-color 0.2s ease-in-out; /* Smooth transition for border */
+}
+
+input[type="text"]:focus {
+    border-color: var(--whiteLayer3); /* Darker border on focus */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    body {
+        padding: 15px;
+    }
+    h1 {
+        font-size: 2em;
+    }
+    li {
+        font-size: 1em;
+        padding: 10px 0;
+    }
+    input[type="text"] {
+        padding: 12px;
+        font-size: 1em;
+    }
+}

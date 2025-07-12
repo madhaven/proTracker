@@ -1,5 +1,6 @@
 export enum Shortcuts {
 
+    ShiftToTodoTab,
     ShiftToLogsTab,
     ShiftToHabitsTab,
     ShiftToProjectsTab,
