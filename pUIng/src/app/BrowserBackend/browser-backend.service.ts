@@ -190,10 +190,12 @@ export class BrowserBackendService implements DataCommsInterface {
   newTask(newTask: NewTaskData) {
     return new Promise((res, rej) => {
       newTask.dateTime = new Date(newTask.dateTime).getTime();
-      newTask.project = newTask.project.trim();
+      newTask.project = newTask.project?.trim();
       newTask.summary = newTask.summary.trim();
       
-      const project = this.getProjectByNameOrCreate(newTask.project);
+      const project = newTask.project === undefined
+        ? {id: -1}
+        : this.getProjectByNameOrCreate(newTask.project);
       const task = this.createTask(newTask.summary, project.id, -1);
       const newTaskLog = new TaskLog(-1, task.id, TaskStatus.PENDING, newTask.dateTime);
       const taskLog = this.createTaskLog(newTaskLog);

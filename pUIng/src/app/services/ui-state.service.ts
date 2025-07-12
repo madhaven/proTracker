@@ -29,7 +29,7 @@ export class UiStateService {
   idleTolerance: number = 60; // TODO: ng fix
   shortcutsEnabled: boolean = true;
 
-  // data
+  // data cache
   appVersion!: string;
   tasks = new Map<number, Task>();
   habits = new Map<number, Habit>();
@@ -47,9 +47,9 @@ export class UiStateService {
   localStorage!: LocalStorageService;
 
   // subs
-  stateChanged = new Subject<UiStateService>();
+  private stateChanged = new Subject<UiStateService>();
   stateChanged$ = this.stateChanged.asObservable();
-  loadPercent = new Subject<number>();
+  private loadPercent = new Subject<number>();
   loading$ = this.loadPercent.asObservable();
   // TODO: Event Bus so components can filter out what was changed
 
@@ -85,7 +85,9 @@ export class UiStateService {
     orderredLogs.forEach(log => {
       const dateStr = this._getDateStr(new Date(log.dateTime));
       const task = this.tasks.get(log.taskId);
-      const project = this.projects.get(task!.projectId);
+      const project = task!.projectId === -1
+        ? {id: -1} // for handling todo tasks without projects
+        : this.projects.get(task!.projectId);
       
       if (!this.logTree.has(dateStr))
         this.logTree.set(dateStr, new Map());
@@ -155,6 +157,14 @@ export class UiStateService {
     return this.tasks.get(taskId);
   }
 
+  getTaskStatus(taskId: number): TaskStatus {
+    if (!this.tasks.get(taskId)) { throw new Error("invalid task id"); }
+    var lastStatus = Array.from(this.logs.values())
+      .filter(log => log.taskId == taskId)
+      .reduce((latest, current) => current.dateTime > latest.dateTime ? current : latest)
+    return lastStatus.statusId;
+  }
+
   newTask(newTask: NewTaskData) {
     this.comService.newTask(newTask).then(
       (res: any) => { // TODO: ng standardise data models
@@ -162,6 +172,7 @@ export class UiStateService {
           console.error('invalid data');
           return;
         }
+        console.log('uiStateresult:', res);
         this.tasks.set(res.task.id, res.task);
         this.projects.set(res.project.id, res.project);
         this.logs.set(res.log.id, res.log);
@@ -187,7 +198,9 @@ export class UiStateService {
         // update trees
         const tree = this.logTree.get(this._getDateStr(new Date()));
         const task = this.tasks.get(taskId)!;
-        const project = this.projects.get(task.projectId)!;
+        const project = (task.projectId === -1)
+          ? {id: -1} // for handling todo tasks without projects
+          : this.projects.get(task.projectId)!;
         tree?.get(project.id)!.set(task.id, res);
         this.orderredTree[this.orderredTree.length-1][1].get(project.id)!.set(task.id, res)
 

@@ -41,6 +41,9 @@ Using the same node environment could help avoid errors due to environment diffe
   A number of issues have come to notice: [#54](https://github.com/madhaven/proTracker/issues/54)  
   * Sqlite db having access  
   * electron and npm version mismatches  
+* npm test
+  Runs tests.  
+  Make use of the tests to make sure your contributions have not broken existing functionality.
 
 ## Architecture
 
@@ -112,13 +115,11 @@ The DataCom interface contains all API required to fetch information for the fro
   proTracker is now easily accessible.  
   Introducing the BrowserBackend also came with added complexity to handle localStorage data storage and migration strategies.  
 * Adding shortcuts made accessibility so easy, the app felt closer to the keys.  
+* Added tests.  
 
 ## Future
 
 * Checkout the issues tab to see imperfections, features and their statuses.  
-* Thinking of setting up tests  
-  [Here's a document](https://www.electronjs.org/docs/latest/tutorial/automated-testing) on electron testing  
-  Feel free to contribute
 
 ## My Takeaway from the Project
 
