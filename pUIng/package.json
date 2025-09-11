@@ -21,7 +21,7 @@
     "@angular/platform-browser-dynamic": "^17.3.1",
     "@angular/platform-server": "^17.3.1",
     "@angular/router": "^17.3.1",
-    "@angular/ssr": "^17.3.1",
+    "@angular/ssr": "^18.2.21",
     "chart.js": "^4.4.7",
     "express": "^4.21.0",
     "ng2-charts": "^6.0.1",
