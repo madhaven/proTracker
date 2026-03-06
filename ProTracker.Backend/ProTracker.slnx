@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="ProTracker.Api/ProTracker.Api.csproj" />
+  <Project Path="ProTracker.Data/ProTracker.Data.csproj" />
+  <Project Path="ProTracker.Models/ProTracker.Models.csproj" />
+</Solution>
