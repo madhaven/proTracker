@@ -1,0 +1,51 @@
+<div class="view-header">
+  <h2 class="view-title">Long-term Goals</h2>
+  <p class="view-subtitle">Group your tasks into larger milestones.</p>
+</div>
+
+ <!-- Add Goal Form -->
+ <div class="form-card">
+  <form [formGroup]="goalForm" (ngSubmit)="addGoal()">
+    <div class="grid-2">
+      <input type="text" formControlName="title" placeholder="Goal Title (e.g., Launch App)">
+      <input type="date" formControlName="targetDate">
+    </div>
+    <div class="goal-form-layout">
+      <textarea formControlName="description" placeholder="Short description..." rows="2" class="textarea-flex"></textarea>
+      <button type="submit" [disabled]="goalForm.invalid" class="btn-submit btn-align-end">
+        Create Goal
+      </button>
+    </div>
+  </form>
+</div>
+
+<!-- Goals Grid -->
+<div class="grid-2">
+  @for (goal of goals(); track goal.id) {
+    @let stats = getGoalStats(goal.id);
+    <div class="content-card relative">
+      <button (click)="deleteGoal(goal.id)" class="floating-delete">
+        <pt-svg [icon]="SvgIcon.Trash" [size]="18" />
+      </button>
+      <div class="goal-header-spacing">
+        <h3 class="card-title">{{ goal.title }}</h3>
+        <p class="view-subtitle goal-description-preview">{{ goal.description }}</p>
+      </div>
+      
+      <div class="mt-24">
+        <div class="goal-info">
+          <span class="progress-text">{{ stats.completed }} / {{ stats.total }} Tasks</span>
+          <span class="progress-text goal-progress-percentage">{{ stats.percentage }}%</span>
+        </div>
+        <div class="progress-bg goal-progress-bar">
+          <div class="progress-fill" [style.width.%]="stats.percentage"></div>
+        </div>
+      </div>
+      
+      <div class="goal-card-footer">
+        <pt-svg [icon]="SvgIcon.Calendar" [size]="14" class="goal-footer-icon" />
+        Target: {{ goal.targetDate | date }}
+      </div>
+    </div>
+  }
+</div>

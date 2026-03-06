@@ -134,3 +134,352 @@ body, html {
   color: var(--text-main);
   transition: var(--theme-transition);
 }
+
+/* Common UI Components */
+.view-header {
+  margin-bottom: 32px;
+}
+
+.view-title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0;
+}
+
+.view-subtitle {
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.stat-card,
+.content-card,
+.habit-card,
+.form-card {
+  background-color: var(--bg-card);
+  border-radius: 16px;
+  padding: 24px;
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
+}
+
+.form-card {
+  margin-bottom: 32px;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0;
+}
+
+.card-link {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--accent-indigo-text);
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.card-link:hover {
+  color: var(--accent-indigo-hover);
+}
+
+/* List Items */
+.list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.list-item {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid transparent;
+  transition: var(--theme-transition);  
+  border-bottom: 1px solid var(--border-light);
+  border-radius: 0;
+}
+
+.list-item:hover {
+  background-color: var(--bg-hover);
+  border-color: var(--border-light);
+}
+
+.checkbox-btn {
+  flex-shrink: 0;
+  height: 24px;
+  width: 24px;
+  border-radius: 50%;
+  border: 2px solid var(--border-color);
+  background: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--theme-transition);
+}
+
+.list-item:hover .checkbox-btn {
+  border-color: var(--accent-indigo-text);
+}
+
+.checkbox-btn.completed {
+  background-color: var(--accent-green-solid);
+  border-color: var(--accent-green-solid);
+  color: var(--text-inverse);
+}
+
+.item-content {
+  margin-left: 16px;
+  flex: 1;
+}
+
+.item-title {
+  color: var(--text-main);
+  font-weight: 500;
+  margin: 0;
+}
+
+.item-title.line-through {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+.badge-group {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.badge {
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-weight: 500;
+}
+
+.badge-indigo { background-color: var(--accent-indigo-bg); color: var(--accent-indigo-text); }
+.badge-orange { background-color: var(--accent-orange-bg); color: var(--accent-orange-text); }
+
+.delete-btn {
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  opacity: 0;
+  transition: var(--theme-transition);
+}
+
+.list-item:hover .delete-btn {
+  opacity: 1;
+}
+
+.delete-btn:hover {
+  color: var(--accent-red-text);
+}
+
+/* Progress Bar */
+.goal-item {
+  margin-bottom: 24px;
+}
+
+.goal-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 8px;
+}
+
+.goal-title {
+  font-weight: 600;
+  color: var(--text-main);
+  margin: 0;
+}
+
+.progress-text {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.progress-bg {
+  height: 8px;
+  width: 100%;
+  background-color: var(--border-light);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: var(--accent-indigo-text);
+  border-radius: 9999px;
+  transition: all 0.5s;
+}
+
+/* Forms */
+.form-row {
+  display: flex;
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .form-row {
+    flex-direction: column;
+  }
+}
+
+.input-wrapper {
+  flex: 1;
+}
+
+.select-wrapper {
+  width: 256px;
+}
+
+@media (max-width: 768px) {
+  .select-wrapper {
+    width: 100%;
+  }
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 12px 16px;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  font-size: 1rem;
+  color: var(--text-main);
+  transition: var(--theme-transition);
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--accent-indigo-text);
+  background-color: var(--bg-card);
+  box-shadow: 0 0 0 2px var(--accent-indigo-bg);
+}
+
+.btn-submit {
+  padding: 12px 24px;
+  background-color: var(--accent-indigo-text);
+  color: var(--text-inverse);
+  font-weight: 500;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: var(--theme-transition);
+  white-space: nowrap;
+}
+
+.btn-submit:hover {
+  background-color: var(--accent-indigo-hover);
+}
+
+.btn-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Grids */
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 768px) {
+  .grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 768px) {
+  .grid-3 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Sections */
+.section-divider {
+  padding: 16px;
+  border-bottom: 1px solid var(--border-light);
+  background-color: var(--bg-section);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.section-title {
+  font-weight: 600;
+  color: var(--text-main);
+  margin: 0;
+}
+
+.section-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  background-color: var(--bg-hover);
+  color: var(--text-muted);
+  border-radius: 9999px;
+}
+
+.section-badge-green {
+  background-color: var(--accent-green-bg);
+  color: var(--accent-green-text);
+}
+
+.empty-state {
+  padding: 32px;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.floating-delete {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  opacity: 0;
+  transition: var(--theme-transition);
+}
+
+.habit-card:hover .floating-delete, .content-card:hover .floating-delete {
+  opacity: 1;
+}
+
+.floating-delete:hover {
+  color: var(--accent-red-text);
+}
+
+.mb-24 { margin-bottom: 24px; }
+.mt-24 { margin-top: 24px; }
+.gap-0 { gap: 0; }
+.overflow-hidden { overflow: hidden; }
+.p-0 { padding: 0; }
+.relative { position: relative; }
+

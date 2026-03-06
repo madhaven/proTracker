@@ -1,14 +1,12 @@
 import { Injectable, signal, inject } from '@angular/core';
-import { Task } from '../models';
-import { HabitService } from './habit.service';
-import { GoalService } from './goal.service';
+import { Task } from '@models';
+import { HabitService } from '@services';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TaskService {
   private habitService = inject(HabitService);
-  private goalService = inject(GoalService);
 
   private tasksSignal = signal<Task[]>([
     { id: this.uid(), title: 'Draft system architecture', completed: true, goalId: 'g1', date: new Date().toISOString() },
