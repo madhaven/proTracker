@@ -129,7 +129,22 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+# .NET / Visual Studio / C#
+[Bb]in/
+[Oo]bj/
+[Rr]elease/
+[Dd]ebug/
+.vs/
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.doccache
+*.db-shm
+*.db-wal
+
 # custom
-*.db
-appconfig.json
 *.angular*
+*.db
+**/wwwroot/
+appconfig.json
