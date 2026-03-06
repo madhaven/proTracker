@@ -1,0 +1,4 @@
+<button (click)="onClick()" [class.active]="isActive()">
+  <ng-content select="[icon]"></ng-content>
+  <span class="nav-label">{{ label() }}</span>
+</button>

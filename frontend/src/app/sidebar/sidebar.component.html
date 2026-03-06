@@ -1,0 +1,26 @@
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="logo-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
+    </div>
+    <h1 class="logo-text">FocusTrail</h1>
+  </div>
+
+  <nav class="sidebar-nav">
+    <pt-nav-button label="Dashboard" [tab]="ActiveTab.Dashboard" (clicked)="setDashboardTab()">
+      <svg icon xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+    </pt-nav-button>
+    
+    <pt-nav-button label="Tasks" [tab]="ActiveTab.Tasks" (clicked)="setTasksTab()">
+      <svg icon xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.59-9.21l-5.41 5.41"/><path d="M16 8l5.5-5.5"/></svg>
+    </pt-nav-button>
+    
+    <pt-nav-button label="Goals" [tab]="ActiveTab.Goals" (clicked)="setGoalsTab()">
+      <svg icon xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+    </pt-nav-button>
+
+    <pt-nav-button label="Habits" [tab]="ActiveTab.Habits" (clicked)="setHabitsTab()">
+      <svg icon xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+    </pt-nav-button>
+  </nav>
+</aside>

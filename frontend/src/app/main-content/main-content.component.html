@@ -1,0 +1,295 @@
+<main class="main-content">
+  <div class="container">
+    
+    @switch (activeTab()) {
+      
+      <!-- ================= DASHBOARD VIEW ================= -->
+      @case (ActiveTab.Dashboard) {
+        <div class="view-header">
+          <h2 class="view-title">Welcome Back</h2>
+          <p class="view-subtitle">Here is what's happening with your goals and tasks today.</p>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div>
+              <p class="stat-label">Tasks Today</p>
+              <p class="stat-value">{{ pendingTasksToday().length }} <span class="stat-unit">pending</span></p>
+            </div>
+            <div class="stat-icon bg-blue-light">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div>
+              <p class="stat-label">Active Goals</p>
+              <p class="stat-value">{{ goals().length }}</p>
+            </div>
+            <div class="stat-icon bg-indigo-light">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div>
+              <p class="stat-label">Top Habit Streak</p>
+              <p class="stat-value">{{ topStreak() }} <span class="stat-unit">days</span></p>
+            </div>
+            <div class="stat-icon bg-orange-light">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-grid">
+          <!-- Dashboard Tasks -->
+          <div class="content-card">
+            <div class="card-header">
+              <h3 class="card-title">Today's Focus</h3>
+              <button (click)="activeTab.set(ActiveTab.Tasks)" class="card-link">View all</button>
+            </div>
+            <div class="list-container">
+              @for (task of pendingTasksToday().slice(0, 5); track task.id) {
+                <div class="list-item">
+                  <button (click)="toggleTask(task.id)" class="checkbox-btn"></button>
+                  <div class="item-content">
+                    <p class="item-title">{{ task.title }}</p>
+                    @if (task.goalId || task.habitId) {
+                      <div class="badge-group">
+                        @if (task.goalId) {
+                          <span class="badge badge-indigo">{{ getGoalName(task.goalId) }}</span>
+                        }
+                        @if (task.habitId) {
+                          <span class="badge badge-orange">Habit</span>
+                        }
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+              @if (pendingTasksToday().length === 0) {
+                <div class="empty-state">
+                  <p>All caught up for today! 🎉</p>
+                </div>
+              }
+            </div>
+          </div>
+
+          <!-- Dashboard Goals Progress -->
+          <div class="content-card">
+            <h3 class="card-title" style="margin-bottom: 24px;">Goal Progress</h3>
+            <div class="goal-list">
+              @for (goal of goals(); track goal.id) {
+                @let stats = getGoalStats(goal.id);
+                <div class="goal-item">
+                  <div class="goal-info">
+                    <h4 class="goal-title">{{ goal.title }}</h4>
+                    <span class="progress-text">{{ stats.percentage }}%</span>
+                  </div>
+                  <div class="progress-bg">
+                    <div class="progress-fill" [style.width.%]="stats.percentage"></div>
+                  </div>
+                </div>
+              }
+              @if (goals().length === 0) {
+                <div class="empty-state">
+                  <p>No active goals yet.</p>
+                  <button (click)="activeTab.set(ActiveTab.Goals)" class="card-link" style="margin-top: 8px; display: block;">Create a goal</button>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- ================= TASKS VIEW ================= -->
+      @case (ActiveTab.Tasks) {
+        <div class="view-header">
+          <h2 class="view-title">Tasks</h2>
+          <p class="view-subtitle">Manage your fundamental action items.</p>
+        </div>
+
+        <!-- Add Task Form -->
+        <div class="form-card">
+          <form [formGroup]="taskForm" (ngSubmit)="addTask()" class="form-row">
+            <div class="input-wrapper">
+              <input type="text" formControlName="title" placeholder="What needs to be done?">
+            </div>
+            <div class="select-wrapper">
+              <select formControlName="goalId">
+                <option value="">No Goal (Standalone Task)</option>
+                @for (goal of goals(); track goal.id) {
+                  <option [value]="goal.id">{{ goal.title }}</option>
+                }
+              </select>
+            </div>
+            <button type="submit" [disabled]="taskForm.invalid" class="btn-submit">
+              Add Task
+            </button>
+          </form>
+        </div>
+
+        <!-- Task List -->
+        <div class="content-card" style="padding: 0; overflow: hidden;">
+          <div class="section-divider">
+            <h3 class="section-title">Pending Tasks</h3>
+            <span class="section-badge">{{ pendingTasks().length }}</span>
+          </div>
+          <div class="list-container" style="gap: 0;">
+            @for (task of pendingTasks(); track task.id) {
+              <div class="list-item" style="border-bottom: 1px solid var(--slate-100); border-radius: 0;">
+                <button (click)="toggleTask(task.id)" class="checkbox-btn"></button>
+                <div class="item-content">
+                  <p class="item-title">{{ task.title }}</p>
+                  @if (task.goalId || task.habitId) {
+                    <div class="badge-group">
+                      @if (task.goalId) {
+                        <span class="badge badge-indigo">🎯 {{ getGoalName(task.goalId) }}</span>
+                      }
+                      @if (task.habitId) {
+                        <span class="badge badge-orange">🔥 Habit</span>
+                      }
+                    </div>
+                  }
+                </div>
+                <button (click)="deleteTask(task.id)" class="delete-btn">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+                </button>
+              </div>
+            }
+            @if (pendingTasks().length === 0) {
+              <div class="empty-state">No pending tasks. You're all caught up!</div>
+            }
+          </div>
+          
+          <!-- Completed Section -->
+          @if (completedTasks().length > 0) {
+            <div class="section-divider">
+              <h3 class="section-title">Completed</h3>
+              <span class="section-badge section-badge-green">{{ completedTasks().length }}</span>
+            </div>
+            <div class="list-container" style="gap: 0; opacity: 0.75;">
+              @for (task of completedTasks(); track task.id) {
+                <div class="list-item" style="border-bottom: 1px solid var(--slate-100); border-radius: 0;">
+                  <button (click)="toggleTask(task.id)" class="checkbox-btn completed">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                  </button>
+                  <div class="item-content">
+                    <p class="item-title line-through">{{ task.title }}</p>
+                  </div>
+                  <button (click)="deleteTask(task.id)" class="delete-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+                  </button>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      }
+
+      <!-- ================= GOALS VIEW ================= -->
+      @case (ActiveTab.Goals) {
+        <div class="view-header">
+          <h2 class="view-title">Long-term Goals</h2>
+          <p class="view-subtitle">Group your tasks into larger milestones.</p>
+        </div>
+
+         <!-- Add Goal Form -->
+         <div class="form-card">
+          <form [formGroup]="goalForm" (ngSubmit)="addGoal()">
+            <div class="grid-2">
+              <input type="text" formControlName="title" placeholder="Goal Title (e.g., Launch App)">
+              <input type="date" formControlName="targetDate">
+            </div>
+            <div style="margin-top: 16px; display: flex; gap: 16px;">
+              <textarea formControlName="description" placeholder="Short description..." rows="2" style="flex: 1;"></textarea>
+              <button type="submit" [disabled]="goalForm.invalid" class="btn-submit" style="align-self: flex-end;">
+                Create Goal
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Goals Grid -->
+        <div class="grid-2">
+          @for (goal of goals(); track goal.id) {
+            @let stats = getGoalStats(goal.id);
+            <div class="content-card" style="position: relative;">
+              <button (click)="deleteGoal(goal.id)" class="floating-delete">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+              </button>
+              <div style="margin-bottom: 16px;">
+                <h3 class="card-title">{{ goal.title }}</h3>
+                <p class="view-subtitle" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">{{ goal.description }}</p>
+              </div>
+              
+              <div style="margin-top: 24px;">
+                <div class="goal-info">
+                  <span class="progress-text" style="color: var(--slate-700);">{{ stats.completed }} / {{ stats.total }} Tasks</span>
+                  <span class="progress-text" style="font-weight: 700; color: var(--indigo-600);">{{ stats.percentage }}%</span>
+                </div>
+                <div class="progress-bg" style="height: 10px;">
+                  <div class="progress-fill" [style.width.%]="stats.percentage"></div>
+                </div>
+              </div>
+              
+              <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--slate-100); display: flex; align-items: center; font-size: 0.75rem; font-weight: 500; color: var(--slate-400);">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" style="margin-right: 6px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+                Target: {{ goal.targetDate | date }}
+              </div>
+            </div>
+          }
+        </div>
+      }
+
+      <!-- ================= HABITS VIEW ================= -->
+      @case (ActiveTab.Habits) {
+        <div class="view-header">
+          <h2 class="view-title">Daily Habits</h2>
+          <p class="view-subtitle">Build consistency. Habits automatically generate tasks for you.</p>
+        </div>
+
+         <!-- Add Habit Form -->
+         <div class="form-card">
+          <form [formGroup]="habitForm" (ngSubmit)="addHabit()" class="form-row">
+            <div class="input-wrapper">
+              <input type="text" formControlName="title" placeholder="New Habit (e.g., Read 20 pages)">
+            </div>
+            <div class="select-wrapper" style="width: 192px;">
+              <select formControlName="frequency">
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+              </select>
+            </div>
+            <button type="submit" [disabled]="habitForm.invalid" class="btn-submit btn-orange">
+              Start Habit
+            </button>
+          </form>
+        </div>
+
+        <!-- Habits Grid -->
+        <div class="grid-3">
+          @for (habit of habits(); track habit.id) {
+            <div class="habit-card">
+              <button (click)="deleteHabit(habit.id)" class="floating-delete">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+              </button>
+              <div class="habit-icon-wrapper">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+              </div>
+              <h3 class="card-title" style="margin-bottom: 4px;">{{ habit.title }}</h3>
+              <p style="font-size: 0.75rem; font-weight: 500; color: var(--slate-400); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 24px;">{{ habit.frequency }}</p>
+              
+              <div class="habit-streak">
+                <p class="streak-label">Current Streak</p>
+                <p class="streak-value">
+                  {{ habit.streak }} <span class="streak-unit">days</span>
+                </p>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    }
+  </div>
+</main>
