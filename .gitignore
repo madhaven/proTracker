@@ -130,6 +130,8 @@ dist
 .pnp.*
 
 # custom
-*.db
 appconfig.json
+*bin/
+*obj/
 *.angular*
+*.db

@@ -1,9 +1,0 @@
-<li>
-    <pui-editable-item
-    [content]="task?.summary ?? ''"
-    [class.pending]="taskStatus==1"
-    [class.completed]="taskStatus==4"
-    (itemEdited)="taskEdit($event)"
-    (contentClicked)="redirectToLogs()"
-    />
-</li>
