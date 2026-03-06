@@ -2,12 +2,13 @@ import { Component, ChangeDetectionStrategy, signal, computed, OnInit, inject } 
 import { ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DatePipe, CommonModule } from '@angular/common';
 import { TaskService, GoalService, HabitService, StateService } from '../../services';
-import { ActiveTab } from '../../constants';
+import { ActiveTab, SvgIcon } from '../../constants';
+import { SvgComponent } from '../atoms/svg.component';
 
 @Component({
   selector: 'pt-main-content',
   standalone: true,
-  imports: [ReactiveFormsModule, DatePipe, CommonModule],
+  imports: [ReactiveFormsModule, DatePipe, CommonModule, SvgComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './main-content.component.html',
   styleUrls: ['./main-content.component.css']
@@ -20,6 +21,7 @@ export class MainContentComponent implements OnInit {
   
   activeTab = this.stateService.activeTab;
   ActiveTab = ActiveTab;
+  SvgIcon = SvgIcon;
 
   // Core Data State (from Services)
   tasks = this.taskService.tasks;
