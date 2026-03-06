@@ -144,9 +144,11 @@ dist
 *.db-wal
 
 # custom
-*.angular*
+appconfig.json
 *.db
 **/.idea
+**/.angular
+**/bin/
 **/Migrations
+**/obj/
 **/wwwroot/
-appconfig.json

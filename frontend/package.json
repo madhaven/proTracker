@@ -1,0 +1,81 @@
+{
+  "name": "protracker",
+  "version": "3.0.0",
+  "description": "track tasks, goals and habits like a pro",
+  "author": "madhaven",
+  "private": true,
+  "homepage": "https://github.com/madhaven/proTracker#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/madhaven/proTracker.git"
+  },
+  "bugs": {
+    "url": "https://github.com/madhaven/proTracker/issues"
+  },
+  "license": "ISC",
+  "keywords": [
+    "track",
+    "tasks",
+    "goals",
+    "habits"
+  ],
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test",
+    "serve:ssr:frontend": "node dist/frontend/server/server.mjs"
+  },
+  "old_scripts": {
+    "postinstall": "npm install ./pUIng/",
+    "build": "cd pUIng && npm run build",
+    "buildnstart": "npm run build && npm run start",
+    "start": "electron .",
+    "debug": "electron . --inspect=5858",
+    "test": "npm run test:backend && npm run test:puing",
+    "test:backend": "npx jest",
+    "test:puing": "cd pUIng && npx ng test --watch=false --browsers=ChromeHeadless",
+    "clean": "del proTracker*.db appconfig.json proTracker.log",
+    "cleandebug": "npm run clean && npm run debug",
+    "make": "npm run build && electron-forge make",
+    "package": "electron-forge package",
+    "deploy": "cd pUIng && ng deploy --base-href=/proTracker/"
+  },
+  "prettier": {
+    "printWidth": 100,
+    "singleQuote": true,
+    "overrides": [
+      {
+        "files": "*.html",
+        "options": {
+          "parser": "angular"
+        }
+      }
+    ]
+  },
+  "packageManager": "npm@10.8.2",
+  "dependencies": {
+    "@angular/common": "^21.1.0",
+    "@angular/compiler": "^21.1.0",
+    "@angular/core": "^21.1.0",
+    "@angular/forms": "^21.1.0",
+    "@angular/platform-browser": "^21.1.0",
+    "@angular/platform-server": "^21.1.0",
+    "@angular/router": "^21.1.0",
+    "@angular/ssr": "^21.1.1",
+    "express": "^5.1.0",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@angular/build": "^21.1.1",
+    "@angular/cli": "^21.1.1",
+    "@angular/compiler-cli": "^21.1.0",
+    "@types/express": "^5.0.1",
+    "@types/node": "^20.17.19",
+    "jsdom": "^27.1.0",
+    "typescript": "~5.9.2",
+    "vitest": "^4.0.8"
+  }
+}
