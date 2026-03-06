@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { NavButtonComponent } from './nav-button/nav-button.component';
-import { StateService } from '../../services';
-import { ActiveTab } from '../../constants';
+import { StateService, ThemeService } from '../../services';
+import { ActiveTab, Theme } from '../../constants';
 
 @Component({
   selector: 'pt-sidebar',
@@ -13,8 +13,17 @@ import { ActiveTab } from '../../constants';
 })
 export class SidebarComponent {
   private stateService = inject(StateService);
+  private themeService = inject(ThemeService);
+
   activeTab = this.stateService.activeTab;
+  currentTheme = this.themeService.theme;
+
   ActiveTab = ActiveTab;
+  Theme = Theme;
+
+  toggleTheme() {
+    this.themeService.toggleTheme();
+  }
 
   setActiveTab(tab: ActiveTab) {
     this.activeTab.set(tab);

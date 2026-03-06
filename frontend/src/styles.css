@@ -1,39 +1,136 @@
 :root {
+  /* Global Palette - accessible to both themes */
+  --white: #ffffff;
+  --black: #000000;
+
   --slate-50: #f8fafc;
   --slate-100: #f1f5f9;
   --slate-200: #e2e8f0;
-  --slate-300: #cbd5e1;
   --slate-400: #94a3b8;
   --slate-500: #64748b;
-  --slate-600: #475569;
-  --slate-700: #334155;
-  --slate-800: #1e293b;
+  --slate-700: #374151;
+  --slate-800: #1f2937;
+  --slate-850: #2d3748;
   --slate-900: #0f172a;
+  --slate-950: #0b0f19;
+
+  --gray-900: #111827;
 
   --indigo-50: #eef2ff;
   --indigo-100: #e0e7ff;
+  --indigo-400: #818cf8;
   --indigo-500: #6366f1;
   --indigo-600: #4f46e5;
   --indigo-700: #4338ca;
 
   --orange-50: #fff7ed;
+  --orange-400: #fb923c;
   --orange-500: #f97316;
   --orange-600: #ea580c;
-  --orange-700: #c2410c;
 
   --blue-50: #eff6ff;
+  --blue-400: #60a5fa;
   --blue-600: #2563eb;
 
-  --green-50: #f0fdf4;
   --green-100: #dcfce7;
+  --green-400: #4ade80;
   --green-500: #22c55e;
   --green-700: #15803d;
 
+  --red-400: #f87171;
   --red-500: #ef4444;
+
+  /* RGB variants for opacity */
+  --slate-50-rgb: 248, 250, 252;
+  --indigo-500-rgb: 99, 102, 241;
+  --blue-600-rgb: 37, 99, 235;
+  --orange-500-rgb: 249, 115, 22;
+  --green-500-rgb: 34, 197, 94;
+  --black-rgb: 0, 0, 0;
+
+  --theme-transition: all 0.3s ease;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+:root.light {
+  --bg-main: var(--slate-50);
+  --bg-sidebar: var(--white);
+  --bg-card: var(--white);
+  --bg-hover: var(--slate-50);
+  --bg-active: var(--indigo-50);
+  --bg-input: var(--slate-50);
+  --bg-section: rgba(var(--slate-50-rgb), 0.5);
+  
+  --text-main: var(--slate-900);
+  --text-muted: var(--slate-500);
+  --text-inverse: var(--white);
+  --text-active: var(--indigo-700);
+
+  --border-color: var(--slate-200);
+  --border-light: var(--slate-100);
+  --border-active: var(--indigo-100);
+
+  /* Accents */
+  --accent-blue-bg: var(--blue-50);
+  --accent-blue-text: var(--blue-600);
+  --accent-indigo-bg: var(--indigo-50);
+  --accent-indigo-text: var(--indigo-600);
+  --accent-indigo-hover: var(--indigo-700);
+  --accent-orange-bg: var(--orange-50);
+  --accent-orange-text: var(--orange-500);
+  --accent-orange-hover: var(--orange-600);
+  --accent-green-bg: var(--green-100);
+  --accent-green-text: var(--green-700);
+  --accent-green-solid: var(--green-500);
+  --accent-red-text: var(--red-500);
+
+  --shadow-sm: 0 1px 2px 0 rgba(var(--black-rgb), 0.05);
+}
+
+:root.dark {
+  --bg-main: var(--slate-950);
+  --bg-sidebar: var(--gray-900);
+  --bg-card: var(--slate-800);
+  --bg-hover: var(--slate-700);
+  --bg-active: rgba(var(--indigo-500-rgb), 0.15);
+  --bg-input: var(--gray-900);
+  --bg-section: var(--gray-900);
+  
+  --text-main: var(--slate-50);
+  --text-muted: var(--slate-400);
+  --text-inverse: var(--slate-900);
+  --text-active: var(--indigo-400);
+
+  --border-color: var(--slate-700);
+  --border-light: var(--slate-850);
+  --border-active: var(--indigo-600);
+
+  /* Accents */
+  --accent-blue-bg: rgba(var(--blue-600-rgb), 0.2);
+  --accent-blue-text: var(--blue-400);
+  --accent-indigo-bg: rgba(var(--indigo-500-rgb), 0.2);
+  --accent-indigo-text: var(--indigo-400);
+  --accent-indigo-hover: var(--indigo-500);
+  --accent-orange-bg: rgba(var(--orange-500-rgb), 0.2);
+  --accent-orange-text: var(--orange-400);
+  --accent-orange-hover: var(--orange-500);
+  --accent-green-bg: rgba(var(--green-500-rgb), 0.2);
+  --accent-green-text: var(--green-400);
+  --accent-green-solid: var(--green-500);
+  --accent-red-text: var(--red-400);
+
+  --shadow-sm: 0 1px 2px 0 rgba(var(--black-rgb), 0.5);
 }
 
 body, html {
   margin: 0;
   padding: 0;
   height: 100%;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  transition: var(--theme-transition);
 }

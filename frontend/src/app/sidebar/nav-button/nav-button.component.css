@@ -8,8 +8,8 @@ button {
   border: 1px solid transparent;
   background: none;
   cursor: pointer;
-  transition: all 0.2s;
-  color: var(--slate-500);
+  transition: var(--theme-transition);
+  color: var(--text-muted);
 }
 
 @media (max-width: 768px) {
@@ -19,15 +19,15 @@ button {
 }
 
 button:hover {
-  background-color: var(--slate-50);
-  color: var(--slate-900);
+  background-color: var(--bg-hover);
+  color: var(--text-main);
 }
 
 button.active {
-  background-color: var(--indigo-50);
-  color: var(--indigo-700);
-  border-color: var(--indigo-100);
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  background-color: var(--bg-active);
+  color: var(--text-active);
+  border-color: var(--border-active);
+  box-shadow: var(--shadow-sm);
 }
 
 .nav-label {

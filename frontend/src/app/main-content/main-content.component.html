@@ -77,7 +77,7 @@
 
           <!-- Dashboard Goals Progress -->
           <div class="content-card">
-            <h3 class="card-title" style="margin-bottom: 24px;">Goal Progress</h3>
+            <h3 class="card-title mb-24">Goal Progress</h3>
             <div class="goal-list">
               @for (goal of goals(); track goal.id) {
                 @let stats = getGoalStats(goal.id);
@@ -94,7 +94,7 @@
               @if (goals().length === 0) {
                 <div class="empty-state">
                   <p>No active goals yet.</p>
-                  <button (click)="activeTab.set(ActiveTab.Goals)" class="card-link" style="margin-top: 8px; display: block;">Create a goal</button>
+                  <button (click)="activeTab.set(ActiveTab.Goals)" class="card-link create-goal-btn">Create a goal</button>
                 </div>
               }
             </div>
@@ -130,14 +130,14 @@
         </div>
 
         <!-- Task List -->
-        <div class="content-card" style="padding: 0; overflow: hidden;">
+        <div class="content-card p-0 overflow-hidden">
           <div class="section-divider">
             <h3 class="section-title">Pending Tasks</h3>
             <span class="section-badge">{{ pendingTasks().length }}</span>
           </div>
-          <div class="list-container" style="gap: 0;">
+          <div class="list-container gap-0">
             @for (task of pendingTasks(); track task.id) {
-              <div class="list-item" style="border-bottom: 1px solid var(--slate-100); border-radius: 0;">
+              <div class="list-item">
                 <button (click)="toggleTask(task.id)" class="checkbox-btn"></button>
                 <div class="item-content">
                   <p class="item-title">{{ task.title }}</p>
@@ -168,9 +168,9 @@
               <h3 class="section-title">Completed</h3>
               <span class="section-badge section-badge-green">{{ completedTasks().length }}</span>
             </div>
-            <div class="list-container" style="gap: 0; opacity: 0.75;">
+            <div class="list-container completed-list">
               @for (task of completedTasks(); track task.id) {
-                <div class="list-item" style="border-bottom: 1px solid var(--slate-100); border-radius: 0;">
+                <div class="list-item">
                   <button (click)="toggleTask(task.id)" class="checkbox-btn completed">
                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                   </button>
@@ -201,9 +201,9 @@
               <input type="text" formControlName="title" placeholder="Goal Title (e.g., Launch App)">
               <input type="date" formControlName="targetDate">
             </div>
-            <div style="margin-top: 16px; display: flex; gap: 16px;">
-              <textarea formControlName="description" placeholder="Short description..." rows="2" style="flex: 1;"></textarea>
-              <button type="submit" [disabled]="goalForm.invalid" class="btn-submit" style="align-self: flex-end;">
+            <div class="goal-form-layout">
+              <textarea formControlName="description" placeholder="Short description..." rows="2" class="textarea-flex"></textarea>
+              <button type="submit" [disabled]="goalForm.invalid" class="btn-submit btn-align-end">
                 Create Goal
               </button>
             </div>
@@ -214,27 +214,27 @@
         <div class="grid-2">
           @for (goal of goals(); track goal.id) {
             @let stats = getGoalStats(goal.id);
-            <div class="content-card" style="position: relative;">
+            <div class="content-card relative">
               <button (click)="deleteGoal(goal.id)" class="floating-delete">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
               </button>
-              <div style="margin-bottom: 16px;">
+              <div class="goal-header-spacing">
                 <h3 class="card-title">{{ goal.title }}</h3>
-                <p class="view-subtitle" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">{{ goal.description }}</p>
+                <p class="view-subtitle goal-description-preview">{{ goal.description }}</p>
               </div>
               
-              <div style="margin-top: 24px;">
+              <div class="mt-24">
                 <div class="goal-info">
-                  <span class="progress-text" style="color: var(--slate-700);">{{ stats.completed }} / {{ stats.total }} Tasks</span>
-                  <span class="progress-text" style="font-weight: 700; color: var(--indigo-600);">{{ stats.percentage }}%</span>
+                  <span class="progress-text">{{ stats.completed }} / {{ stats.total }} Tasks</span>
+                  <span class="progress-text goal-progress-percentage">{{ stats.percentage }}%</span>
                 </div>
-                <div class="progress-bg" style="height: 10px;">
+                <div class="progress-bg goal-progress-bar">
                   <div class="progress-fill" [style.width.%]="stats.percentage"></div>
                 </div>
               </div>
               
-              <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--slate-100); display: flex; align-items: center; font-size: 0.75rem; font-weight: 500; color: var(--slate-400);">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" style="margin-right: 6px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+              <div class="goal-card-footer">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" class="goal-footer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
                 Target: {{ goal.targetDate | date }}
               </div>
             </div>
@@ -255,7 +255,7 @@
             <div class="input-wrapper">
               <input type="text" formControlName="title" placeholder="New Habit (e.g., Read 20 pages)">
             </div>
-            <div class="select-wrapper" style="width: 192px;">
+            <div class="select-wrapper habit-form-select">
               <select formControlName="frequency">
                 <option value="daily">Daily</option>
                 <option value="weekly">Weekly</option>
@@ -277,8 +277,8 @@
               <div class="habit-icon-wrapper">
                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
               </div>
-              <h3 class="card-title" style="margin-bottom: 4px;">{{ habit.title }}</h3>
-              <p style="font-size: 0.75rem; font-weight: 500; color: var(--slate-400); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 24px;">{{ habit.frequency }}</p>
+              <h3 class="card-title habit-title-margin">{{ habit.title }}</h3>
+              <p class="habit-freq-label">{{ habit.frequency }}</p>
               
               <div class="habit-streak">
                 <p class="streak-label">Current Streak</p>
