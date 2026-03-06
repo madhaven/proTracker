@@ -1,0 +1,72 @@
+:host {
+  display: block;
+}
+
+.habit-icon-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 64px;
+  width: 64px;
+  border-radius: 50%;
+  background-color: var(--accent-orange-bg);
+  color: var(--accent-orange-text);
+  margin-bottom: 16px;
+}
+
+.habit-streak {
+  background-color: var(--bg-input);
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid var(--border-light);
+  margin-top: 24px;
+}
+
+.streak-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.streak-value {
+  font-size: 1.875rem;
+  font-weight: 900;
+  color: var(--text-main);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+
+.streak-unit {
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.btn-orange {
+  background-color: var(--accent-orange-text);
+}
+
+.btn-orange:hover {
+  background-color: var(--accent-orange-hover);
+}
+
+.habit-form-select {
+  width: 192px;
+}
+
+.habit-title-margin {
+  margin-bottom: 4px;
+}
+
+.habit-freq-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 24px;
+}
