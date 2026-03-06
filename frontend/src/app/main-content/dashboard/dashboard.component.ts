@@ -1,8 +1,8 @@
 import { Component, ChangeDetectionStrategy, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TaskService, GoalService, HabitService, StateService } from '../../../services';
-import { ActiveTab, SvgIcon } from '../../../constants';
-import { SvgComponent } from '../../atoms/svg.component';
+import { TaskService, GoalService, HabitService, StateService } from '@services';
+import { ActiveTab, SvgIcon } from '@constants';
+import { SvgComponent } from '@atoms';
 
 @Component({
   selector: 'pt-dashboard',

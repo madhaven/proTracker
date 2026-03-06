@@ -1,9 +1,9 @@
 import { Component, ChangeDetectionStrategy, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms';
-import { TaskService, GoalService, StateService } from '../../../services';
-import { SvgIcon } from '../../../constants';
-import { SvgComponent } from '../../atoms/svg.component';
+import { TaskService, GoalService } from '@services';
+import { SvgIcon } from '@constants';
+import { SvgComponent } from '@atoms';
 
 @Component({
   selector: 'pt-tasks',

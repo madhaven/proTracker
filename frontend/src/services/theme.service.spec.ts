@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
-import { ThemeService } from './theme.service';
+import { ThemeService } from '@services';
 import { PLATFORM_ID } from '@angular/core';
-import { Theme } from '../constants';
+import { Theme } from '@constants';
 
 describe('ThemeService', () => {
   let service: ThemeService;

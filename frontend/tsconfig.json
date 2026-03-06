@@ -3,6 +3,17 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@services": ["src/services"],
+      "@services/*": ["src/services/*"],
+      "@atoms": ["src/atoms"],
+      "@atoms/*": ["src/atoms/*"],
+      "@constants": ["src/constants"],
+      "@constants/*": ["src/constants/*"],
+      "@models": ["src/models"],
+      "@models/*": ["src/models/*"]
+    },
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,

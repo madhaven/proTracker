@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { MainContentComponent } from './main-content/main-content.component';
-import { StateService } from '../services';
+import { StateService } from '@services';
 
 @Component({
   selector: 'app-root',

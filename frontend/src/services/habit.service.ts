@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { Habit } from '../models';
+import { Habit } from '@models';
 
 @Injectable({
   providedIn: 'root'

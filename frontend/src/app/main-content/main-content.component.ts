@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { StateService, TaskService } from '../../services';
-import { ActiveTab } from '../../constants';
+import { StateService, TaskService } from '@services';
+import { ActiveTab } from '@constants';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { TasksComponent } from './tasks/tasks.component';
 import { GoalsComponent } from './goals/goals.component';

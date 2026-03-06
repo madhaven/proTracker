@@ -1,7 +1,7 @@
 import { Component, input, output, ChangeDetectionStrategy, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { StateService } from '../../../services';
-import { ActiveTab } from '../../../constants';
+import { StateService } from '@services';
+import { ActiveTab } from '@constants';
 
 @Component({
   selector: 'pt-nav-button',
