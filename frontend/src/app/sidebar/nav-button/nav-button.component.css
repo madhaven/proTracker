@@ -1,0 +1,41 @@
+button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  background: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--slate-500);
+}
+
+@media (max-width: 768px) {
+  button {
+    justify-content: center;
+  }
+}
+
+button:hover {
+  background-color: var(--slate-50);
+  color: var(--slate-900);
+}
+
+button.active {
+  background-color: var(--indigo-50);
+  color: var(--indigo-700);
+  border-color: var(--indigo-100);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.nav-label {
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .nav-label {
+    display: none;
+  }
+}

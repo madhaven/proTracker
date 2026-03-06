@@ -1,12 +1,18 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { SidebarComponent } from './sidebar/sidebar.component';
+import { MainContentComponent } from './main-content/main-content.component';
+import { StateService } from '../services';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  standalone: true,
+  imports: [CommonModule, SidebarComponent, MainContentComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrls: ['./app.css']
 })
 export class App {
-  protected readonly title = signal('frontend');
+  private stateService = inject(StateService);
+  activeTab = this.stateService.activeTab;
 }
