@@ -1,12 +1,13 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { NavButtonComponent } from './nav-button/nav-button.component';
 import { StateService, ThemeService } from '../../services';
-import { ActiveTab, Theme } from '../../constants';
+import { ActiveTab, Theme, SvgIcon } from '../../constants';
+import { SvgComponent } from '../atoms/svg.component';
 
 @Component({
   selector: 'pt-sidebar',
   standalone: true,
-  imports: [NavButtonComponent],
+  imports: [NavButtonComponent, SvgComponent],
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -20,6 +21,7 @@ export class SidebarComponent {
 
   ActiveTab = ActiveTab;
   Theme = Theme;
+  SvgIcon = SvgIcon;
 
   toggleTheme() {
     this.themeService.toggleTheme();
