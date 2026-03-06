@@ -1,8 +1,8 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { NavButtonComponent } from './nav-button/nav-button.component';
-import { StateService, ThemeService } from '../../services';
-import { ActiveTab, Theme, SvgIcon } from '../../constants';
-import { SvgComponent } from '../atoms/svg.component';
+import { StateService, ThemeService } from '@services';
+import { ActiveTab, Theme, SvgIcon } from '@constants';
+import { SvgComponent } from '@atoms';
 
 @Component({
   selector: 'pt-sidebar',

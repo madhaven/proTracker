@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { ActiveTab } from '../constants';
+import { ActiveTab } from '@constants';
 
 @Injectable({
   providedIn: 'root'

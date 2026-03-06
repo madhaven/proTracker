@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, input, computed, inject } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { SvgIcon, SvgMap } from '../../constants';
+import { SvgIcon, SvgMap } from '@constants';
 
 @Component({
   selector: 'pt-svg',
