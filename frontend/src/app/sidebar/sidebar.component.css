@@ -1,10 +1,10 @@
 :host {
   width: 256px;
-  background-color: white;
-  border-right: 1px solid var(--slate-200);
+  background-color: var(--bg-sidebar);
+  border-right: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
-  transition: all 0.3s;
+  transition: var(--theme-transition);
   z-index: 10;
   height: 100%;
 }
@@ -16,7 +16,9 @@
 }
 
 .sidebar {
-  display: contents;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .sidebar-header {
@@ -32,8 +34,8 @@
 }
 
 .logo-icon {
-  background-color: var(--indigo-600);
-  color: white;
+  background-color: var(--accent-indigo-text);
+  color: var(--text-inverse);
   padding: 8px;
   border-radius: 12px;
   display: flex;
@@ -44,7 +46,7 @@
   margin-left: 12px;
   font-size: 1.25rem;
   font-weight: 700;
-  color: var(--slate-900);
+  color: var(--text-main);
   letter-spacing: -0.025em;
 }
 
@@ -58,4 +60,46 @@
   flex: 1;
   padding: 0 12px;
   margin-top: 16px;
+}
+
+.sidebar-footer {
+  padding: 16px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: center;
+}
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-card);
+  color: var(--text-main);
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: var(--theme-transition);
+}
+
+.theme-toggle:hover {
+  background-color: var(--bg-hover);
+}
+
+.toggle-label {
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .toggle-label {
+    display: none;
+  }
+  .theme-toggle {
+    width: auto;
+    padding: 10px;
+  }
 }
