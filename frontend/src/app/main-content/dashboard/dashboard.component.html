@@ -1,8 +1,11 @@
 <div class="animate-in">
+  <div class="dashboard-stats-wrapper" style="margin-bottom: 24px;">
+    <pt-quick-stats />
+  </div>
   <div class="dashboard-grid">
     <!-- Tasks -->
     <section class="dashboard-section tasks-section">
-      <pt-task-list [showCompleted]="false" [showStats]="false" />
+      <pt-task-list [showCompleted]="false" />
     </section>
 
     <!-- Goal Progress Snapshot -->

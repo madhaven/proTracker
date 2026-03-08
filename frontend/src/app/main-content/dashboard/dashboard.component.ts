@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { TaskService, GoalService, StateService } from '@services';
 import { ActiveTab } from '@constants';
 import { TaskList } from '../tasks/task-list/task-list';
+import { QuickStatsComponent } from '../quick-stats/quick-stats.component';
 
 @Component({
   selector: 'pt-dashboard',
   standalone: true,
-  imports: [CommonModule, TaskList],
+  imports: [CommonModule, TaskList, QuickStatsComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']

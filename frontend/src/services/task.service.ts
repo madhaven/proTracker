@@ -13,6 +13,8 @@ export class TaskService {
     { id: this.uid(), title: 'Initialize Git repository', completed: true, goalId: 'g1', date: new Date().toISOString() },
     { id: this.uid(), title: 'Setup continuous integration', completed: false, goalId: 'g1', date: new Date().toISOString() },
     { id: this.uid(), title: 'Call accountant', completed: false, date: new Date().toISOString() },
+    { id: this.uid(), title: 'Submit tax return', completed: false, date: new Date(Date.now() - 86400000 * 3).toISOString() },
+    { id: this.uid(), title: 'Renew domain name', completed: false, date: new Date(Date.now() - 86400000 * 1).toISOString() },
   ]);
 
   tasks = this.tasksSignal.asReadonly();
