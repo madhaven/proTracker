@@ -1,45 +1,45 @@
-<div class="view-header">
-  <h2 class="view-title">Daily Habits</h2>
-  <p class="view-subtitle">Build consistency. Habits automatically generate tasks for you.</p>
-</div>
-
- <!-- Add Habit Form -->
- <div class="form-card">
-  <form [formGroup]="habitForm" (ngSubmit)="addHabit()" class="form-row">
-    <div class="input-wrapper">
-      <input type="text" formControlName="title" placeholder="New Habit (e.g., Read 20 pages)">
-    </div>
-    <div class="select-wrapper habit-form-select">
-      <select formControlName="frequency">
+<div class="animate-in">
+  <!-- Add Habit Form -->
+  <div class="habit-form-container">
+    <form [formGroup]="habitForm" (ngSubmit)="addHabit()" class="habit-form">
+      <div class="habit-input-group">
+        <input type="text" formControlName="title" placeholder="E.g., Read 20 pages" 
+          class="habit-title-input">
+      </div>
+      <select formControlName="frequency" class="habit-frequency-select">
         <option value="daily">Daily</option>
         <option value="weekly">Weekly</option>
       </select>
-    </div>
-    <button type="submit" [disabled]="habitForm.invalid" class="btn-submit btn-orange">
-      Start Habit
-    </button>
-  </form>
-</div>
-
-<!-- Habits Grid -->
-<div class="grid-3">
-  @for (habit of habits(); track habit.id) {
-    <div class="habit-card">
-      <button (click)="deleteHabit(habit.id)" class="floating-delete">
-         <pt-svg [icon]="SvgIcon.Trash" [size]="18" />
+      <button type="submit" [disabled]="habitForm.invalid" class="btn-add">
+        Add
       </button>
-      <div class="habit-icon-wrapper">
-        <pt-svg [icon]="SvgIcon.Flame" [size]="32" />
+    </form>
+  </div>
+
+  <!-- Habits List -->
+  <div class="habits-container">
+    @for (habit of habits(); track habit.id) {
+      <div class="habit-item group">
+        <div class="habit-main">
+          <button (click)="deleteHabit(habit.id)" class="delete-btn">
+            &times;
+          </button>
+          <div class="habit-info">
+            <h3 class="habit-item-title">{{ habit.title }}</h3>
+            <p class="habit-frequency">{{ habit.frequency }}</p>
+          </div>
+        </div>
+        
+        <div class="habit-streak">
+          <div class="streak-count">
+            <span class="streak-number">{{ habit.streak }}</span>
+            <span class="streak-label">Days</span>
+          </div>
+        </div>
       </div>
-      <h3 class="card-title habit-title-margin">{{ habit.title }}</h3>
-      <p class="habit-freq-label">{{ habit.frequency }}</p>
-      
-      <div class="habit-streak">
-        <p class="streak-label">Current Streak</p>
-        <p class="streak-value">
-          {{ habit.streak }} <span class="streak-unit">days</span>
-        </p>
-      </div>
-    </div>
-  }
+    }
+    @if (habits().length === 0) {
+      <p class="empty-text">No habits tracking yet.</p>
+    }
+  </div>
 </div>

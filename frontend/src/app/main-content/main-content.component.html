@@ -1,23 +1,6 @@
-<main class="main-content">
-  <div class="container">
-    
-    @switch (activeTab()) {
-      
-      @case (ActiveTab.Dashboard) {
-        <pt-dashboard />
-      }
-
-      @case (ActiveTab.Tasks) {
-        <pt-tasks />
-      }
-
-      @case (ActiveTab.Goals) {
-        <pt-goals />
-      }
-
-      @case (ActiveTab.Habits) {
-        <pt-habits />
-      }
-    }
-  </div>
-</main>
+@switch (activeTab()) {
+  @case (ActiveTab.Dashboard) { <pt-dashboard /> }
+  @case (ActiveTab.Tasks) { <pt-tasks /> }
+  @case (ActiveTab.Goals) { <pt-goals /> }
+  @case (ActiveTab.Habits) { <pt-habits /> }
+}

@@ -1,0 +1,15 @@
+.dashboard-stats {
+  display: flex;
+  gap: 16px; /* gap-4 */
+  font-size: 0.875rem; /* text-sm */
+  font-weight: 500;
+  color: var(--text-muted); /* text-gray-400 */
+}
+
+.pending-active {
+  color: var(--text-main); /* text-gray-900 */
+}
+
+.dot {
+  color: var(--text-muted);
+}

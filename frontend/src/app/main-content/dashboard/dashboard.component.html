@@ -1,95 +1,27 @@
-<div class="view-header">
-  <h2 class="view-title">Welcome Back</h2>
-  <p class="view-subtitle">Here is what's happening with your goals and tasks today.</p>
-</div>
+<div class="animate-in">
+  <div class="dashboard-grid">
+    <!-- Tasks -->
+    <section class="dashboard-section tasks-section">
+      <pt-task-list [showCompleted]="false" [showStats]="false" />
+    </section>
 
-<!-- Stats Cards -->
-<div class="stats-grid">
-  <div class="stat-card">
-    <div>
-      <p class="stat-label">Tasks Today</p>
-      <p class="stat-value">{{ pendingTasksToday().length }} <span class="stat-unit">pending</span></p>
-    </div>
-    <div class="stat-icon bg-blue-light">
-      <pt-svg [icon]="SvgIcon.Logo" [size]="24" />
-    </div>
-  </div>
-  <div class="stat-card">
-    <div>
-      <p class="stat-label">Active Goals</p>
-      <p class="stat-value">{{ goals().length }}</p>
-    </div>
-    <div class="stat-icon bg-indigo-light">
-      <pt-svg [icon]="SvgIcon.Goals" [size]="24" />
-    </div>
-  </div>
-  <div class="stat-card">
-    <div>
-      <p class="stat-label">Top Habit Streak</p>
-      <p class="stat-value">{{ topStreak() }} <span class="stat-unit">days</span></p>
-    </div>
-    <div class="stat-icon bg-orange-light">
-      <pt-svg [icon]="SvgIcon.Flame" [size]="24" />
-    </div>
-  </div>
-</div>
-
-<div class="dashboard-grid">
-  <!-- Dashboard Tasks -->
-  <div class="content-card">
-    <div class="card-header">
-      <h3 class="card-title">Today's Focus</h3>
-      <button (click)="activeTab.set(ActiveTab.Tasks)" class="card-link">View all</button>
-    </div>
-    <div class="list-container">
-      @for (task of pendingTasksToday().slice(0, 5); track task.id) {
-        <div class="list-item">
-          <button (click)="toggleTask(task.id)" class="checkbox-btn"></button>
-          <div class="item-content">
-            <p class="item-title">{{ task.title }}</p>
-            @if (task.goalId || task.habitId) {
-              <div class="badge-group">
-                @if (task.goalId) {
-                  <span class="badge badge-indigo">{{ getGoalName(task.goalId) }}</span>
-                }
-                @if (task.habitId) {
-                  <span class="badge badge-orange">Habit</span>
-                }
-              </div>
-            }
+    <!-- Goal Progress Snapshot -->
+    <section class="dashboard-section">
+      <h2 class="section-title">Goals</h2>
+      <div class="goals-progress-list">
+        @for (goal of goals(); track goal.id) {
+          @let stats = getGoalStats(goal.id);
+          <div class="goal-progress-item group" (click)="setGoalsTab()">
+            <div class="goal-header">
+              <h4 class="goal-title">{{ goal.title }}</h4>
+              <span class="goal-percentage">{{ stats.percentage }}%</span>
+            </div>
+            <div class="progress-bar-bg">
+              <div class="progress-bar-fill" [style.width.%]="stats.percentage"></div>
+            </div>
           </div>
-        </div>
-      }
-      @if (pendingTasksToday().length === 0) {
-        <div class="empty-state">
-          <p>All caught up for today! 🎉</p>
-        </div>
-      }
-    </div>
-  </div>
-
-  <!-- Dashboard Goals Progress -->
-  <div class="content-card">
-    <h3 class="card-title mb-24">Goal Progress</h3>
-    <div class="goal-list">
-      @for (goal of goals(); track goal.id) {
-        @let stats = getGoalStats(goal.id);
-        <div class="goal-item">
-          <div class="goal-info">
-            <h4 class="goal-title">{{ goal.title }}</h4>
-            <span class="progress-text">{{ stats.percentage }}%</span>
-          </div>
-          <div class="progress-bg">
-            <div class="progress-fill" [style.width.%]="stats.percentage"></div>
-          </div>
-        </div>
-      }
-      @if (goals().length === 0) {
-        <div class="empty-state">
-          <p>No active goals yet.</p>
-          <button (click)="activeTab.set(ActiveTab.Goals)" class="card-link create-goal-btn">Create a goal</button>
-        </div>
-      }
-    </div>
+        }
+      </div>
+    </section>
   </div>
 </div>

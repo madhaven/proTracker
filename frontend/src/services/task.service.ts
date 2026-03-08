@@ -50,6 +50,14 @@ export class TaskService {
     this.tasksSignal.update(ts => ts.filter(t => t.id !== taskId));
   }
 
+  getGoalStats(goalId: string) {
+    const allTasks = this.tasksSignal().filter(t => t.goalId === goalId);
+    const completed = allTasks.filter(t => t.completed).length;
+    const total = allTasks.length;
+    const percentage = total === 0 ? 0 : Math.round((completed / total) * 100);
+    return { total, completed, percentage };
+  }
+
   orphanGoalTasks(goalId: string) {
     this.tasksSignal.update(ts => ts.map(t => t.goalId === goalId ? { ...t, goalId: null } : t));
   }

@@ -2,13 +2,11 @@ import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TaskService, GoalService } from '@services';
-import { SvgIcon } from '@constants';
-import { SvgComponent } from '@atoms';
 
 @Component({
   selector: 'pt-goals',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, DatePipe, SvgComponent],
+  imports: [CommonModule, ReactiveFormsModule, DatePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './goals.component.html',
   styleUrls: ['./goals.component.css']
@@ -16,8 +14,6 @@ import { SvgComponent } from '@atoms';
 export class GoalsComponent {
   private taskService = inject(TaskService);
   private goalService = inject(GoalService);
-
-  SvgIcon = SvgIcon;
 
   tasks = this.taskService.tasks;
   goals = this.goalService.goals;

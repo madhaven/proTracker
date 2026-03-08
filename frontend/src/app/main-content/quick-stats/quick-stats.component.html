@@ -1,0 +1,7 @@
+<div class="dashboard-stats">
+  <span [class.pending-active]="pendingTasksToday().length > 0">{{ pendingTasksToday().length }} pending</span>
+  <span class="dot">&middot;</span>
+  <span>{{ goals().length }} goals</span>
+  <span class="dot">&middot;</span>
+  <span>{{ topStreak() }}d best streak</span>
+</div>

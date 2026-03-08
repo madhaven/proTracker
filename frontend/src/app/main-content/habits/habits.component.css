@@ -1,72 +1,159 @@
-:host {
-  display: block;
+.habit-form-container {
+  margin-bottom: 48px; /* mb-12 */
 }
 
-.habit-icon-wrapper {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 64px;
-  width: 64px;
-  border-radius: 50%;
-  background-color: var(--accent-orange-bg);
-  color: var(--accent-orange-text);
-  margin-bottom: 16px;
-}
-
-.habit-streak {
-  background-color: var(--bg-input);
-  border-radius: 12px;
-  padding: 16px;
-  border: 1px solid var(--border-light);
-  margin-top: 24px;
-}
-
-.streak-label {
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--text-muted);
-  margin-bottom: 4px;
-}
-
-.streak-value {
-  font-size: 1.875rem;
-  font-weight: 900;
-  color: var(--text-main);
+.habit-form {
   display: flex;
-  justify-content: center;
+  align-items: flex-end;
+  gap: 16px; /* gap-4 */
+  border-bottom: 1px solid var(--border-color); /* border-gray-200 */
+  transition: border-color 0.2s;
+  padding-bottom: 8px; /* pb-2 */
+}
+
+.habit-form:focus-within {
+  border-color: var(--text-main); /* focus-within:border-gray-900 */
+}
+
+.habit-input-group {
+  flex: 1;
+}
+
+.habit-title-input {
+  width: 100%;
+  font-size: 1.125rem; /* text-lg */
+  padding-top: 8px; /* py-2 */
+  padding-bottom: 8px;
+  background-color: transparent;
+  border: none !important;
+  box-shadow: none !important;
+  font-weight: 500;
+  color: var(--text-main);
+}
+
+.habit-title-input::placeholder {
+  color: var(--text-muted); /* placeholder-gray-300 */
+}
+
+.habit-title-input:focus {
+  outline: none;
+}
+
+.habit-frequency-select {
+  font-size: 0.875rem; /* text-sm */
+  color: var(--text-muted); /* text-gray-500 */
+  background-color: transparent;
+  border: none !important;
+  box-shadow: none !important;
+  cursor: pointer;
+  appearance: none;
+  padding-bottom: 8px; /* pb-2 */
+  width: auto;
+}
+
+.habit-frequency-select:focus {
+  outline: none;
+}
+
+.btn-add {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted); /* text-gray-400 */
+  padding-bottom: 8px; /* pb-2 */
+  font-weight: 500;
+  font-size: 0.875rem; /* text-sm */
+  transition: color 0.2s, opacity 0.2s;
+}
+
+.btn-add:hover {
+  color: var(--text-main); /* hover:text-gray-900 */
+}
+
+.btn-add:disabled {
+  opacity: 0.2; /* disabled:opacity-20 */
+  cursor: not-allowed;
+}
+
+.habits-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0; /* space-y-6 - wait, provided code has space-y-6 but also border-b */
+}
+
+.habit-item {
+  display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: space-between;
+  padding-top: 12px; /* py-3 */
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-color); /* border-gray-50 */
+}
+
+.habit-main {
+  display: flex;
+  align-items: center;
+  gap: 16px; /* gap-4 */
+}
+
+.delete-btn {
+  color: var(--text-muted); /* text-gray-200 */
+  background: none;
+  border: none;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s, color 0.2s;
+  font-size: 1.25rem;
+}
+
+.habit-item:hover .delete-btn {
+  opacity: 1; /* group-hover:opacity-100 */
+}
+
+.delete-btn:hover {
+  color: var(--accent-red-text); /* hover:text-red-500 */
+}
+
+.habit-info {
+}
+
+.habit-item-title {
+  font-weight: 500;
+  color: var(--text-main); /* text-gray-800 */
   margin: 0;
 }
 
-.streak-unit {
-  font-size: 1.125rem;
-  font-weight: 500;
-  color: var(--text-muted);
+.habit-frequency {
+  font-size: 0.75rem; /* text-xs */
+  color: var(--text-muted); /* text-gray-400 */
+  text-transform: capitalize;
+  margin: 0;
 }
 
-.btn-orange {
-  background-color: var(--accent-orange-text);
+.habit-streak {
+  text-align: right;
 }
 
-.btn-orange:hover {
-  background-color: var(--accent-orange-hover);
+.streak-count {
+  display: flex;
+  align-items: baseline;
+  gap: 4px; /* gap-1 */
 }
 
-.habit-form-select {
-  width: 192px;
+.streak-number {
+  font-size: 1.5rem; /* text-2xl */
+  font-weight: 300; /* font-light */
+  color: var(--text-main); /* text-gray-900 */
 }
 
-.habit-title-margin {
-  margin-bottom: 4px;
-}
-
-.habit-freq-label {
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: var(--text-muted);
+.streak-label {
+  font-size: 0.75rem; /* text-xs */
+  color: var(--text-muted); /* text-gray-400 */
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-bottom: 24px;
+  letter-spacing: 0.1em; /* tracking-widest */
+}
+
+.empty-text {
+  color: var(--text-muted);
+  font-style: italic;
 }
