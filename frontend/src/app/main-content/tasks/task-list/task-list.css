@@ -135,3 +135,38 @@
   margin-left: 32px;
   padding: 4px 0;
 }
+
+.overdue-section {
+  margin-bottom: 32px;
+}
+
+.danger-header {
+  border-bottom-color: color-mix(in srgb, var(--accent-red-text) 50%, transparent);
+}
+
+.danger-text {
+  color: var(--accent-red-text);
+}
+
+.danger-item {
+  /* Remove layout-breaking paddings and margins */
+}
+
+.danger-checkbox {
+  border-color: var(--accent-red-text);
+}
+
+.danger-checkbox:hover {
+  border-color: var(--accent-red-text);
+  background-color: color-mix(in srgb, var(--accent-red-text) 10%, transparent);
+}
+
+.danger-title {
+  color: var(--accent-red-text);
+}
+
+.danger-meta {
+  color: var(--accent-red-text);
+  opacity: 0.8;
+  font-weight: 600;
+}

@@ -26,6 +26,14 @@ export class QuickStatsComponent {
       .sort((a,b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   });
 
+  overdueTasks = computed(() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const todayTime = today.getTime();
+    return this.tasks()
+      .filter(t => !t.completed && new Date(t.date).getTime() < todayTime);
+  });
+
   topStreak = computed(() => {
     const habitsList = this.habits();
     if(habitsList.length === 0) return 0;

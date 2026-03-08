@@ -6,6 +6,10 @@
   color: var(--text-muted); /* text-gray-400 */
 }
 
+.overdue-active {
+  color: var(--accent-red-text);
+}
+
 .pending-active {
   color: var(--text-main); /* text-gray-900 */
 }

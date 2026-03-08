@@ -1,4 +1,8 @@
 <div class="dashboard-stats">
+  @if (overdueTasks().length > 0) {
+    <span class="overdue-active">{{ overdueTasks().length }} overdue</span>
+    <span class="dot">&middot;</span>
+  }
   <span [class.pending-active]="pendingTasksToday().length > 0">{{ pendingTasksToday().length }} pending</span>
   <span class="dot">&middot;</span>
   <span>{{ goals().length }} goals</span>

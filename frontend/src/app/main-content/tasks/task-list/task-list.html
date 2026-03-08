@@ -1,10 +1,32 @@
 <div class="tasks-container">
+  @if (overdueTasks().length > 0) {
+    <div class="overdue-section">
+      <div class="list-header danger-header">
+        <p class="current-date danger-text">Overdue Tasks</p>
+      </div>
+      <div class="tasks-list overdue-list">
+        @for (task of overdueTasks(); track task.id) {
+          <div class="task-item group danger-item" [style.view-transition-name]="'task-' + task.id">
+            <button (click)="toggleTask(task.id)" class="checkbox-box danger-checkbox"></button>
+            <div class="task-info">
+              <p class="task-title danger-title">{{ task.title }}</p>
+              <p class="task-meta danger-meta">Due: {{ task.date | date:'mediumDate' }}</p>
+              @if (task.goalId) {
+                <p class="task-meta">{{ getGoalName(task.goalId) }}</p>
+              }
+            </div>
+            <button (click)="deleteTask(task.id)" class="delete-btn danger-delete">
+              &times;
+            </button>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
   <div class="pending-section">
     <div class="list-header">
       <p class="current-date">{{ currentDate | date:'fullDate' }}</p>
-      @if (showStats()) {
-        <pt-quick-stats />
-      }
     </div>
 
     <div class="tasks-list">
