@@ -1,3 +1,7 @@
+.dev, .dev * {
+  outline: 1px solid #f003;
+}
+
 :root {
   /* Global Palette - accessible to both themes */
   --white: #ffffff;
@@ -159,7 +163,7 @@ body, html {
   background-color: var(--bg-card);
   border-radius: 16px;
   padding: 24px;
-  border: 1px solid var(--border-light);
+  border: 1px solid var(--border-color);
   box-shadow: var(--shadow-sm);
 }
 

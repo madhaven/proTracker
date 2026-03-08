@@ -1,5 +1,4 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
-import { NavButtonComponent } from './nav-button/nav-button.component';
 import { StateService, ThemeService } from '@services';
 import { ActiveTab, Theme, SvgIcon } from '@constants';
 import { SvgComponent } from '@atoms';
@@ -7,7 +6,7 @@ import { SvgComponent } from '@atoms';
 @Component({
   selector: 'pt-sidebar',
   standalone: true,
-  imports: [NavButtonComponent, SvgComponent],
+  imports: [SvgComponent],
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,

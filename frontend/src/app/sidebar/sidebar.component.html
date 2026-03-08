@@ -1,39 +1,28 @@
-<aside class="sidebar">
-  <div class="sidebar-header">
-    <div class="logo-icon">
-      <pt-svg [icon]="SvgIcon.Logo" [size]="24" />
+<header class="app-header">
+  <div class="header-container">
+    <div class="logo-group">
+      <h1 class="logo-title" (click)="setDashboardTab()">ProTracker.</h1>
+      <button class="theme-minimal-toggle" (click)="toggleTheme()" [title]="'Toggle Theme'">
+        @if (currentTheme() === Theme.Light) {
+          <pt-svg [icon]="SvgIcon.Moon" [size]="18" />
+        } @else {
+          <pt-svg [icon]="SvgIcon.Sun" [size]="18" />
+        }
+      </button>
     </div>
-    <h1 class="logo-text">FocusTrail</h1>
+    <nav class="header-nav">
+      <button (click)="setDashboardTab()" 
+              [class.nav-active]="activeTab() === ActiveTab.Dashboard"
+              class="nav-link">Today</button>
+      <button (click)="setTasksTab()" 
+              [class.nav-active]="activeTab() === ActiveTab.Tasks"
+              class="nav-link">Tasks</button>
+      <button (click)="setGoalsTab()" 
+              [class.nav-active]="activeTab() === ActiveTab.Goals"
+              class="nav-link">Goals</button>
+      <button (click)="setHabitsTab()" 
+              [class.nav-active]="activeTab() === ActiveTab.Habits"
+              class="nav-link">Habits</button>
+    </nav>
   </div>
-
-  <nav class="sidebar-nav">
-    <pt-nav-button label="Dashboard" [tab]="ActiveTab.Dashboard" (clicked)="setDashboardTab()">
-      <pt-svg [icon]="SvgIcon.Dashboard" [size]="20" />
-    </pt-nav-button>
-
-    <pt-nav-button label="Tasks" [tab]="ActiveTab.Tasks" (clicked)="setTasksTab()">
-      <pt-svg [icon]="SvgIcon.Tasks" [size]="20" />
-    </pt-nav-button>
-
-    <pt-nav-button label="Goals" [tab]="ActiveTab.Goals" (clicked)="setGoalsTab()">
-      <pt-svg [icon]="SvgIcon.Goals" [size]="20" />
-    </pt-nav-button>
-
-    <pt-nav-button label="Habits" [tab]="ActiveTab.Habits" (clicked)="setHabitsTab()">
-      <pt-svg [icon]="SvgIcon.Habits" [size]="20" />
-    </pt-nav-button>
-  </nav>
-
-  <div class="sidebar-footer">
-    <button class="theme-toggle" (click)="toggleTheme()" [title]="'Switch Theme'">
-      @if (currentTheme() === Theme.Light) {
-        <pt-svg [icon]="SvgIcon.Moon" [size]="18" />
-        <span class="toggle-label">Go Dark</span>
-      } @else {
-        <pt-svg [icon]="SvgIcon.Sun" [size]="18" />
-        <span class="toggle-label">Light Up</span>
-      }
-    </button>
-  </div>
-
-</aside>
+</header>

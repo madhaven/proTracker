@@ -2,13 +2,11 @@ import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TaskService, HabitService } from '@services';
-import { SvgIcon } from '@constants';
-import { SvgComponent } from '@atoms';
 
 @Component({
   selector: 'pt-habits',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, SvgComponent],
+  imports: [CommonModule, ReactiveFormsModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './habits.component.html',
   styleUrls: ['./habits.component.css']
@@ -16,8 +14,6 @@ import { SvgComponent } from '@atoms';
 export class HabitsComponent {
   private taskService = inject(TaskService);
   private habitService = inject(HabitService);
-
-  SvgIcon = SvgIcon;
 
   habits = this.habitService.habits;
 

@@ -10,6 +10,8 @@ export class ThemeService {
   readonly theme = signal<Theme>(this.getInitialTheme());
 
   constructor() {
+    // setTimeout(() => this.addDebugLines()); // For Development
+
     effect(() => {
       const theme = this.theme();
       this.applyTheme(theme);
@@ -33,6 +35,14 @@ export class ThemeService {
     if (Object.values(Theme).includes(savedTheme)) return savedTheme;
 
     return window.matchMedia('(prefers-color-scheme: dark)').matches ? Theme.Dark : Theme.Light;
+  }
+  
+  private addDebugLines(){
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    const root = document.documentElement;
+    root.classList.add('dev');
   }
 
   private applyTheme(theme: Theme) {

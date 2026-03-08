@@ -1,8 +1,82 @@
-.container {
-  display: flex;
+:host {
+  display: block;
   height: 100vh;
+  overflow: hidden;
+}
+
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.app-container {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
   background-color: var(--bg-main);
   color: var(--text-main);
-  overflow: hidden;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   transition: var(--theme-transition);
+  max-width: 100%; /* Default for mobile */
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+/* sm: 640px */
+@media (min-width: 640px) {
+  .app-container {
+    max-width: 540px;
+    /* padding: 48px 24px; */
+  }
+}
+
+/* md: 768px */
+@media (min-width: 768px) {
+  .app-container {
+    max-width: 768px;
+    /* padding: 80px 24px; */
+  }
+}
+
+/* lg: 1024px */
+@media (min-width: 1024px) {
+  .app-container {
+    max-width: 1024px; /* expanded for more space */
+    /* padding-top: 100px; */
+    /* padding-bottom: 100px; */
+  }
+}
+
+/* xl: 1280px */
+@media (min-width: 1280px) {
+  .app-container {
+    max-width: 1200px;
+    /* padding-top: 120px; */
+    /* padding-bottom: 120px; */
+  }
+}
+
+/* 2xl: 1536px */
+@media (min-width: 1536px) {
+  .app-container {
+    /* padding-top: 160px; */
+    /* padding-bottom: 160px; */
+  }
+}
+
+.animate-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.selection\:bg-gray-200::selection {
+  background-color: #e2e8f0;
 }

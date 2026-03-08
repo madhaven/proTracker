@@ -1,74 +1,74 @@
-:host {
-  display: block;
+.dashboard-header {
+  margin-bottom: 48px; /* mb-12 */
 }
 
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  margin-bottom: 40px;
+.dashboard-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 48px; /* space-y-12 */
 }
 
-@media (max-width: 768px) {
-  .stats-grid {
-    grid-template-columns: 1fr;
+@media (min-width: 1024px) {
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 80px;
+    align-items: start;
   }
 }
 
-.stat-card {
+.section-title {
+  font-size: 0.75rem; /* text-xs */
+  font-weight: 700; /* font-bold */
+  color: var(--text-muted); /* text-gray-400 */
+  text-transform: uppercase; /* uppercase */
+  letter-spacing: 0.1em; /* tracking-widest */
+  margin: 0;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-color); /* border-gray-100 */
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  min-height: 20px;
 }
 
-.stat-label {
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+.goals-progress-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px; /* space-y-6 */
+}
+
+.goal-progress-item {
+  cursor: pointer;
+}
+
+.goal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px; /* mb-2 */
+}
+
+.goal-title {
+  font-weight: 500; /* font-medium */
+  color: var(--text-main); /* text-gray-800 */
   margin: 0;
 }
 
-.stat-value {
-  font-size: 1.875rem;
-  font-weight: 700;
-  color: var(--text-main);
-  margin: 8px 0 0;
+.goal-percentage {
+  font-size: 0.75rem; /* text-xs */
+  color: var(--text-muted); /* text-gray-400 */
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; /* font-mono */
 }
 
-.stat-unit {
-  font-size: 1.125rem;
-  font-weight: 500;
-  color: var(--text-muted);
+.progress-bar-bg {
+  height: 2px; /* h-0.5 */
+  width: 100%;
+  background-color: var(--border-color); /* bg-gray-100 */
 }
 
-.stat-icon {
-  height: 48px;
-  width: 48px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.bg-blue-light { background-color: var(--accent-blue-bg); color: var(--accent-blue-text); }
-.bg-indigo-light { background-color: var(--accent-indigo-bg); color: var(--accent-indigo-text); }
-.bg-orange-light { background-color: var(--accent-orange-bg); color: var(--accent-orange-text); }
-
-.dashboard-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 32px;
-}
-
-@media (max-width: 1024px) {
-  .dashboard-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.create-goal-btn {
-  margin-top: 8px;
-  display: block;
+.progress-bar-fill {
+  height: 100%;
+  background-color: var(--text-main); /* bg-gray-900 */
+  transition: width 0.5s ease-in-out;
 }

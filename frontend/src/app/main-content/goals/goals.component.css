@@ -1,53 +1,156 @@
-:host {
-  display: block;
+.goal-form-container {
+  margin-bottom: 48px; /* mb-12 */
 }
 
-.goal-description-preview {
-  display: -webkit-box;
-  line-clamp: 2;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+.goal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px; /* space-y-4 */
 }
 
-.goal-progress-percentage {
-  font-weight: 700;
-  color: var(--accent-indigo-text);
+.goal-title-input {
+  width: 100%;
+  font-size: 1.25rem; /* text-xl */
+  padding-top: 8px; /* py-2 */
+  padding-bottom: 8px;
+  background-color: transparent;
+  border: none !important;
+  border-bottom: 1px solid var(--border-color) !important; /* border-b border-gray-200 */
+  border-radius: 0 !important;
+  font-weight: 500;
+  color: var(--text-main);
+  transition: border-color 0.2s;
 }
 
-.goal-progress-bar {
-  height: 10px;
+.goal-title-input:focus {
+  outline: none;
+  border-bottom-color: var(--text-main) !important; /* focus:border-gray-900 */
 }
 
-.goal-card-footer {
-  margin-top: 20px;
-  padding-top: 16px;
-  border-top: 1px solid var(--border-light);
+.goal-form-row {
+  display: flex;
+  gap: 16px; /* gap-4 */
+}
+
+.goal-date-input {
+  flex: 1;
+  padding-top: 8px; /* py-2 */
+  padding-bottom: 8px;
+  font-size: 0.875rem; /* text-sm */
+  color: var(--text-muted); /* text-gray-600 */
+  background-color: transparent;
+  border: none !important;
+  border-bottom: 1px solid var(--border-color) !important; /* border-b border-gray-200 */
+  border-radius: 0 !important;
+  transition: border-color 0.2s;
+}
+
+.goal-date-input:focus {
+  outline: none;
+  border-bottom-color: var(--text-main) !important;
+}
+
+.btn-create {
+  padding: 8px 24px; /* px-6 py-2 */
+  background-color: var(--text-main); /* bg-gray-900 */
+  color: var(--text-inverse);
+  font-size: 0.875rem; /* text-sm */
+  font-weight: 500;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-create:hover {
+  background-color: var(--black); /* hover:bg-black */
+}
+
+.btn-create:disabled {
+  opacity: 0.2; /* disabled:opacity-20 */
+  cursor: not-allowed;
+}
+
+.goals-container {
+  display: flex;
+  flex-direction: column;
+  gap: 40px; /* space-y-10 */
+}
+
+.goal-item {
+  position: relative;
+}
+
+.delete-btn-absolute {
+  position: absolute;
+  left: -32px; /* -left-8 */
+  top: 4px; /* top-1 */
+  color: var(--text-muted); /* text-gray-200 */
+  background: none;
+  border: none;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s, color 0.2s;
+  font-size: 1.25rem;
+}
+
+.goal-item:hover .delete-btn-absolute {
+  opacity: 1; /* group-hover:opacity-100 */
+}
+
+.delete-btn-absolute:hover {
+  color: var(--accent-red-text); /* hover:text-red-500 */
+}
+
+.goal-content {
+}
+
+.goal-item-title {
+  font-size: 1.125rem; /* text-lg */
+  font-weight: 500;
+  color: var(--text-main); /* text-gray-900 */
+  margin: 0;
+}
+
+.goal-meta {
   display: flex;
   align-items: center;
-  font-size: 0.75rem;
-  font-weight: 500;
+  gap: 12px; /* gap-3 */
+  margin-top: 4px; /* mt-1 */
+  font-size: 0.75rem; /* text-xs */
+  color: var(--text-muted); /* text-gray-400 */
+}
+
+.dot {
   color: var(--text-muted);
 }
 
-.goal-footer-icon {
-  margin-right: 6px;
-}
-
-.goal-header-spacing {
-  margin-bottom: 16px;
-}
-
-.goal-form-layout {
-  margin-top: 16px;
+.goal-progress-container {
+  margin-top: 16px; /* mt-4 */
   display: flex;
-  gap: 16px;
+  align-items: center;
+  gap: 16px; /* gap-4 */
 }
 
-.textarea-flex {
+.progress-bar-bg {
+  height: 4px; /* h-1 */
   flex: 1;
+  background-color: var(--border-color); /* bg-gray-100 */
 }
 
-.btn-align-end {
-  align-self: flex-end;
+.progress-bar-fill {
+  height: 100%;
+  background-color: var(--text-main); /* bg-gray-900 */
+  transition: width 0.7s ease-out;
+}
+
+.percentage-text {
+  font-size: 0.75rem; /* text-xs */
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; /* font-mono */
+  color: var(--text-muted); /* text-gray-500 */
+}
+
+.empty-text {
+  color: var(--text-muted);
+  font-style: italic;
 }

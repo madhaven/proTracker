@@ -1,0 +1,15 @@
+<div class="task-form-container">
+  <form [formGroup]="taskForm" (ngSubmit)="addTask()" class="task-form">
+    <span class="plus-icon">+</span>
+    <input type="text" formControlName="title" placeholder="Add a new task..." 
+      class="task-input">
+    
+    <select formControlName="goalId" class="task-goal-select">
+      <option value="">No Project</option>
+      @for (goal of goals(); track goal.id) {
+        <option [value]="goal.id">{{ goal.title }}</option>
+      }
+    </select>
+    <button type="submit" class="hidden"></button>
+  </form>
+</div>
