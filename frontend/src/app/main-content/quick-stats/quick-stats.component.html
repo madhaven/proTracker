@@ -3,9 +3,23 @@
     <span class="overdue-active">{{ overdueTasks().length }} overdue</span>
     <span class="dot">&middot;</span>
   }
-  <span [class.pending-active]="pendingTasksToday().length > 0">{{ pendingTasksToday().length }} pending</span>
-  <span class="dot">&middot;</span>
-  <span>{{ goals().length }} goals</span>
-  <span class="dot">&middot;</span>
-  <span>{{ topStreak() }}d best streak</span>
+  
+  @if (showPending() && this.pendingTasks().length > 0) {
+    <span [class.pending-active]="pendingTasks().length > 0">{{ pendingTasks().length }} pending</span>
+    <span class="dot">&middot;</span>
+  }
+  
+  @if (showCompletion()) {
+    <span>{{ this.completion() }}% done</span>
+    <span class="dot">&middot;</span>
+  }
+
+  @if (showGoals()) {
+    <span>{{ goals().length }} goals</span>
+    <span class="dot">&middot;</span>
+  }
+
+  @if (showStreak()) {
+    <span>{{ topStreak() }}d best streak</span>
+  }
 </div>

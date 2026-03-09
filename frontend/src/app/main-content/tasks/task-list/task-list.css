@@ -132,7 +132,7 @@
 .empty-text {
   color: var(--text-muted);
   margin: 0;
-  margin-left: 32px;
+  /* margin-left: 32px; */
   padding: 4px 0;
   opacity: 0.6;
 }
@@ -147,10 +147,6 @@
 
 .danger-text {
   color: var(--accent-red-text);
-}
-
-.danger-item {
-  /* Remove layout-breaking paddings and margins */
 }
 
 .danger-checkbox {
