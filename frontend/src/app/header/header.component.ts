@@ -4,14 +4,14 @@ import { ActiveTab, Theme, SvgIcon } from '@constants';
 import { SvgComponent } from '@atoms';
 
 @Component({
-  selector: 'pt-sidebar',
+  selector: 'pt-header',
   standalone: true,
   imports: [SvgComponent],
-  templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.css'],
+  templateUrl: './header.component.html',
+  styleUrls: ['./header.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SidebarComponent {
+export class HeaderComponent {
   private stateService = inject(StateService);
   private themeService = inject(ThemeService);
 
