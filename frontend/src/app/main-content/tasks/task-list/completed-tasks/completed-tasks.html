@@ -1,0 +1,10 @@
+@if (completedTasks().length > 0) {
+  <div class="completed-section">
+    <h3 class="section-subtitle">Completed</h3>
+    <div class="tasks-list completed-list">
+      @for (task of completedTasks(); track task.id) {
+        <pt-task-item [task]="task" />
+      }
+    </div>
+  </div>
+}

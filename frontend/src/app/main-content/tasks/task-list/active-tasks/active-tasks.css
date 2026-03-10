@@ -1,0 +1,33 @@
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.current-date {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-main); /* emphasized text */
+  font-style: italic;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.tasks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.empty-text {
+  color: var(--text-muted);
+  margin: 0;
+  padding: 4px 0;
+  opacity: 0.6;
+}
