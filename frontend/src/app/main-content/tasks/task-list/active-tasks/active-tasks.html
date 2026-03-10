@@ -1,0 +1,14 @@
+<div>
+  <div class="list-header">
+    <p class="current-date">{{ currentDate | date:'fullDate' }}</p>
+  </div>
+
+  <div class="tasks-list">
+    @for (task of pendingTasks(); track task.id) {
+      <pt-task-item [task]="task"></pt-task-item>
+    }
+    @if (pendingTasks().length === 0) {
+      <p class="empty-text">No tasks left for today.</p>
+    }
+  </div>
+</div>

@@ -1,0 +1,100 @@
+.task-item {
+  display: flex;
+  align-items: flex-start;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.checkbox-box {
+  margin-top: 4px;
+  flex-shrink: 0;
+  height: 16px;
+  width: 16px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.checkbox-box:hover {
+  border-color: var(--text-main);
+}
+
+.checkbox-box:focus {
+  outline: none;
+}
+
+.checkbox-box.checked {
+  background-color: var(--border-color);
+  border-color: var(--border-color);
+}
+
+.check-icon {
+  width: 12px;
+  height: 12px;
+  color: var(--text-inverse);
+}
+
+.task-info {
+  margin-left: 16px;
+  flex: 1;
+}
+
+.task-title {
+  color: var(--text-main);
+  margin: 0;
+}
+
+.task-title.line-through {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+.task-meta {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+  margin-bottom: 0;
+}
+
+.delete-btn {
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0 8px;
+  opacity: 0;
+  transition: opacity 0.2s, color 0.2s;
+}
+
+.task-item:hover .delete-btn {
+  opacity: 1;
+}
+
+.delete-btn:hover {
+  color: var(--accent-red-text);
+}
+
+/* Overdue specific styles */
+.danger-checkbox {
+  border-color: var(--accent-red-text);
+}
+
+.danger-checkbox:hover {
+  border-color: var(--accent-red-text);
+  background-color: color-mix(in srgb, var(--accent-red-text) 10%, transparent);
+}
+
+.danger-title {
+  color: var(--accent-red-text);
+}
+
+.danger-meta {
+  color: var(--accent-red-text);
+  opacity: 0.8;
+  font-weight: 600;
+}
