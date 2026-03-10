@@ -19,10 +19,7 @@ import { HabitsComponent } from './habits/habits.component';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './main-content.component.html',
-  styleUrls: ['./main-content.component.css'],
-  host: {
-    'role': 'main'
-  }
+  styleUrls: ['./main-content.component.css']
 })
 export class MainContentComponent implements OnInit {
   private stateService = inject(StateService);
