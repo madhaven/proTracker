@@ -148,3 +148,4 @@ dist
 *.db
 **/wwwroot/
 appconfig.json
+/ProTracker.Backend/.idea

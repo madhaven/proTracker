@@ -10,7 +10,7 @@ namespace ProTracker.Web.Controllers;
 /// Controller for managing goal tracking data, habits, and tasks.
 /// </summary>
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/pt")]
 public class ProTrackerController : ControllerBase
 {
     private readonly ProTrackerDbContext _context;
