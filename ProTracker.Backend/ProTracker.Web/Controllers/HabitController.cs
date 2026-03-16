@@ -1,7 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using ProTracker.Data;
-using ProTracker.Implementation;
+using ProTracker.Interfaces;
 using ProTracker.Models;
 using ProTracker.Web.Contracts;
 
@@ -9,13 +7,13 @@ namespace ProTracker.Web.Controllers;
 
 [ApiController]
 [Route("api/habit")]
-internal class HabitController : ControllerBase
+public class HabitController : ControllerBase
 {
-    private readonly ProTrackerDbContext _context;
+    private readonly IHabitService _habitService;
 
-    public HabitController(ProTrackerDbContext context)
+    public HabitController(IHabitService habitService)
     {
-        _context = context ?? throw new ArgumentNullException(nameof(context));
+        _habitService = habitService ?? throw new ArgumentNullException(nameof(habitService));
     }
 
     /// <summary>
@@ -26,23 +24,12 @@ internal class HabitController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateHabit(HabitCreateRequest habitRequest)
     {
-        // if (habit.Days > 7 || habit.Days < 1 || string.IsNullOrEmpty(habit.Name))
-        //     return BadRequest("Invalid habit data.");
-
-        var existing = await _context.Habits.AnyAsync(h => h.Title == habitRequest.Title);
-        if (existing)
+        if (await _habitService.HabitTitleExistsAsync(habitRequest.Title))
         {
             return BadRequest("Habit already exists.");
         }
 
-        var habit = new Habit // TODO
-        {
-            Title = habitRequest.Title,
-            Description = habitRequest.Description,
-        };
-
-        _context.Habits.Add(habit.ToDbModel());
-        await _context.SaveChangesAsync();
+        var habit = await _habitService.CreateHabitAsync(habitRequest.Title, habitRequest.Description);
         return Ok(habit);
     }
 
@@ -50,16 +37,19 @@ internal class HabitController : ControllerBase
     /// Updates an existing habit.
     /// </summary>
     /// <param name="id"></param>
-    /// <param name="habit">The habit to update.</param>
+    /// <param name="habitRequest">The habit to update.</param>
     /// <returns>The updated habit.</returns>
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> EditHabit(int id, HabitUpdateRequest habit)
+    public async Task<IActionResult> EditHabit(int id, HabitUpdateRequest habitRequest)
     {
-        // if (habit.Days > 7 || habit.Days < 1 || string.IsNullOrEmpty(habit.Title))
-        //     return BadRequest("Invalid habit data.");
+        var habit = new Habit
+        {
+            Id = id,
+            Title = habitRequest.Title,
+        };
 
-        _context.Entry(habit).State = EntityState.Modified;
-        await _context.SaveChangesAsync();
+        var success = await _habitService.UpdateHabitAsync(id, habit);
+        if (!success) return NotFound();
 
         return Ok(habit);
     }
@@ -72,15 +62,7 @@ internal class HabitController : ControllerBase
     [HttpPut("log")]
     public async Task<IActionResult> HabitDone(HabitLogRequest logRequest)
     {
-        var habit = await _context.Habits.FindAsync(logRequest.HabitId) ?? throw new InvalidOperationException();
-        var habitLog = new HabitLog
-        {
-            Habit = habit.ToModel(),
-            LogTime = logRequest.LogTime,
-        };
-        _context.HabitLogs.Add(habitLog.ToDbModel());
-        await _context.SaveChangesAsync();
-
+        var habitLog = await _habitService.LogHabitAsync(logRequest.HabitId, logRequest.LogTime);
         return Ok(habitLog);
     }
 }

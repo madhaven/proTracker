@@ -6,8 +6,7 @@ namespace ProTracker.Web;
 
 public static class StartupHelper
 {
-    public static void AddAppServices(this WebApplicationBuilder builder)
-    // this IServiceCollection services, IConfiguration configuration,  IWebHostEnvironment env)
+    public static void SetupSqliteDb(this WebApplicationBuilder builder)
     {
         var dataDir = Path.Combine(builder.Environment.ContentRootPath, "Data");
         Directory.CreateDirectory(dataDir); // ensures folder exists
@@ -18,31 +17,47 @@ public static class StartupHelper
 
         builder.Services.AddDbContext<ProTrackerDbContext>(options =>
             options.UseSqlite($"Data Source={dbPath}"));
-
-        builder.Services.AddControllers();
-        builder.Services.AddApiDocumentation();
     }
 
+    public static void PluginDependencies(this WebApplicationBuilder builder)
+    {
+        builder.Services.InvertDependencies();
+        builder.Services.AddControllers();
+        builder.Services.AddApiDocumentation();
+
+        // Dev Functionality
+        if (!builder.Environment.IsDevelopment()) return;
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowAll", policy =>
+            {
+                policy.AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+            });
+        });
+    }
+
+    /// <summary>
+    /// Automatically creates database if it doesn't exist and performs pending migrations on data
+    /// </summary>
+    /// <param name="app">Web Application</param>
     public static async Task ApplyDatabaseMigrations(this WebApplication app)
     {
-        // Automatically create database if it doesn't exist
         using var scope = app.Services.CreateScope();
         var services = scope.ServiceProvider;
         var context = services.GetRequiredService<ProTrackerDbContext>();
         await context.Database.MigrateAsync();
     }
 
-    public static void ConfigureApplication(this WebApplication app)
+    /// <summary>
+    /// Configure the HTTP request pipeline.
+    /// </summary>
+    /// <param name="app">Web Application</param>
+    public static void ConfigureAppPipe(this WebApplication app)
     {
-        // Configure the HTTP request pipeline.
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseDeveloperFeatures();
-    
-            // Redirect root to Scalar UI for convenience
-            app.MapGet("/api", () => Results.Redirect("/scalar/v1"));
-        }
-        
+        app.UseDevFeatures();
+
         app.UseHttpsRedirection();
 
         app.UseStaticFiles();
@@ -53,6 +68,13 @@ public static class StartupHelper
         app.MapControllers();
         app.MapFallbackToFile("index.html"); // Handle Angular routing
     }
+
+    private static void InvertDependencies(this IServiceCollection services)
+    {
+        services.AddScoped<Interfaces.IGoalService, Implementation.Services.GoalService>();
+        services.AddScoped<Interfaces.IHabitService, Implementation.Services.HabitService>();
+        services.AddScoped<Interfaces.ITaskService, Implementation.Services.TaskService>();
+    }
     
     private static void AddApiDocumentation(this IServiceCollection services)
     {
@@ -60,8 +82,12 @@ public static class StartupHelper
         services.AddEndpointsApiExplorer();
     }
 
-    private static void UseDeveloperFeatures(this WebApplication app)
+    private static void UseDevFeatures(this WebApplication app)
     {
+        if (!app.Environment.IsDevelopment()) return;
+
+        app.UseCors("AllowAll");
+        
         app.MapOpenApi();
         app.MapScalarApiReference(options => 
         {
@@ -71,5 +97,8 @@ public static class StartupHelper
                     ScalarTarget.CSharp,
                     ScalarClient.HttpClient);
         });
+
+        // Redirect root to Scalar UI for convenience
+        app.MapGet("/api", () => Results.Redirect("/scalar/v1"));
     }
 }

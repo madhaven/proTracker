@@ -1,52 +1,47 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using ProTracker.Data;
+using ProTracker.Interfaces;
+using ProTracker.Models;
 using ProTracker.Web.Contracts;
 
 namespace ProTracker.Web.Controllers;
 
 [ApiController]
 [Route("api/goal")]
-internal class GoalController : ControllerBase
+public class GoalController : ControllerBase
 {
-    private readonly ProTrackerDbContext _context;
+    private readonly IGoalService _goalService;
     
-    public GoalController(ProTrackerDbContext context)
+    public GoalController(IGoalService goalService)
     {
-        _context = context ?? throw new ArgumentNullException(nameof(context));
+        _goalService = goalService ?? throw new ArgumentNullException(nameof(goalService));
     }
     
     /// <summary>
-    /// Updates an existing goalUpdate's name.
+    /// Updates an existing goal's name.
     /// </summary>
-    /// <param name="id">The id of the goalUpdate.</param>
-    /// <param name="goalUpdate">The goalUpdate to update.</param>
+    /// <param name="id">The id of the goal.</param>
+    /// <param name="goalUpdate">The goal to update.</param>
     /// <returns>True if successful, BadRequest if the name already exists.</returns>
-    [HttpPut("{guid:int}")]
+    [HttpPut("{id:int}")]
     public async Task<IActionResult> EditGoal(int id, GoalUpdateRequest goalUpdate)
     {
-        var existing = await _context.Goals.FirstOrDefaultAsync(p => p.Title == goalUpdate.Title && p.Id != goalUpdate.Id);
-        if (existing != null)
+        if (await _goalService.GoalTitleExistsAsync(goalUpdate.Title, id))
         {
             return BadRequest("Goals name already exists.");
         }
 
-        _context.Entry(goalUpdate).State = EntityState.Modified;
-        try
+        var goal = new Goal
         {
-            await _context.SaveChangesAsync();
-        }
-        catch (DbUpdateConcurrencyException)
+            Id = id,
+            Title = goalUpdate.Title,
+        };
+
+        var result = await _goalService.UpdateGoalAsync(id, goal);
+        if (!result)
         {
-            if (GoalExists(goalUpdate.Id)) throw;
             return NotFound();
         }
 
         return Ok(true);
-    }
-    
-    private bool GoalExists(int id)
-    {
-        return _context.Goals.Any(e => e.Id == id);
     }
 }

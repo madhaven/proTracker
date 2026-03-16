@@ -1,6 +1,6 @@
 namespace ProTracker.Web.Contracts;
 
-internal record TaskCreateRequest
+public record TaskCreateRequest
 {
     public string Project { get; set; } = string.Empty;
     public string Title { get; set; } = string.Empty;

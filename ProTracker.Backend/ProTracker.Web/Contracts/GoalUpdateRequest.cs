@@ -1,9 +1,11 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace ProTracker.Web.Contracts;
 
-internal record GoalUpdateRequest
+public record GoalUpdateRequest
 {
-    public int Id { get; set; }
-    public string Title { get; set; } = string.Empty;
+    [Required]
+    public required string Title { get; set; } = string.Empty;
     
     public DateTimeOffset DateAdded { get; set; }
     public DateTimeOffset DateTarget { get; set; }

@@ -1,6 +1,6 @@
 namespace ProTracker.Web.Contracts;
 
-internal record HabitUpdateRequest
+public record HabitUpdateRequest
 {
     public required string Title { get; set; }
     public required string Description { get; set; }

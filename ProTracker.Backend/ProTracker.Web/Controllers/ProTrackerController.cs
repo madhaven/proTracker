@@ -1,7 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using ProTracker.Data;
-// using ClosedXML.Excel;
+using ProTracker.Interfaces;
 
 namespace ProTracker.Web.Controllers;
 
@@ -10,14 +8,22 @@ namespace ProTracker.Web.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/pt")]
-internal class ProTrackerController : ControllerBase
+public class ProTrackerController : ControllerBase
 {
-    private readonly ProTrackerDbContext _context;
+    private readonly IGoalService _goalService;
+    private readonly IHabitService _habitService;
+    private readonly ITaskService _taskService;
     private readonly IConfiguration _configuration;
 
-    public ProTrackerController(ProTrackerDbContext context, IConfiguration configuration)
+    public ProTrackerController(
+        IGoalService goalService,
+        IHabitService habitService,
+        ITaskService taskService,
+        IConfiguration configuration)
     {
-        _context = context;
+        _goalService = goalService;
+        _habitService = habitService;
+        _taskService = taskService;
         _configuration = configuration;
     }
 
@@ -28,11 +34,11 @@ internal class ProTrackerController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> LoadAllData()
     {
-        var tasks = await _context.Tasks.ToListAsync();
-        var taskLogs = await _context.TaskStatusLogs.ToListAsync();
-        var projects = await _context.Goals.ToListAsync();
-        var habits = await _context.Habits.ToListAsync();
-        var habitLogs = await _context.HabitLogs.ToListAsync();
+        var tasks = await _taskService.GetAllTasksAsync();
+        var taskLogs = await _taskService.GetAllTaskStatusLogsAsync();
+        var projects = await _goalService.GetAllGoalsAsync();
+        var habits = await _habitService.GetAllHabitsAsync();
+        var habitLogs = await _habitService.GetAllHabitLogsAsync();
         var version = _configuration["AppVersion"] ?? "3.0.0";
 
         return Ok(new
@@ -45,64 +51,4 @@ internal class ProTrackerController : ControllerBase
             appVersion = version
         });
     }
-
-    // /// <summary>
-    // /// Exports all goal data to an Excel spreadsheet.
-    // /// </summary>
-    // /// <returns>An Excel file containing logs and goal overview.</returns>
-    // [HttpGet("export")]
-    // public async Task<IActionResult> Export()
-    // {
-    //     using var workbook = new XLWorkbook();
-    //     var logSheet = workbook.Worksheets.Add("Logs");
-    //     var projectSheet = workbook.Worksheets.Add("Goals Overview");
-    //
-    //     // Simplified log sheet export
-    //     logSheet.Cell(1, 1).Value = "Date";
-    //     logSheet.Cell(1, 2).Value = "Goals";
-    //     logSheet.Cell(1, 3).Value = "To-Do";
-    //     logSheet.Cell(1, 4).Value = "Done";
-    //     logSheet.Row(1).Style.Font.Bold = true;
-    //
-    //     var logs = await _context.TaskStatusLogs
-    //         .Include(l => l.Task)
-    //         .ThenInclude(t => t.Goal)
-    //         .OrderByDescending(l => l.DateTime)
-    //         .ToListAsync();
-    //
-    //     int row = 2;
-    //     foreach (var log in logs)
-    //     {
-    //         var date = DateTimeOffset.FromUnixTimeMilliseconds(log.DateTime).DateTime;
-    //         logSheet.Cell(row, 1).Value = date.ToShortDateString();
-    //         logSheet.Cell(row, 2).Value = log.Task.Goal.Title;
-    //         
-    //         if (log.StatusId == TaskStatus.Pending)
-    //             logSheet.Cell(row, 3).Value = log.Task.Summary;
-    //         else if (log.StatusId == TaskStatus.Completed)
-    //             logSheet.Cell(row, 4).Value = log.Task.Summary;
-    //
-    //         row++;
-    //     }
-    //
-    //     // Goals Overview sheet
-    //     projectSheet.Cell(1, 1).Value = "Sl. no.";
-    //     projectSheet.Cell(1, 2).Value = "Goals";
-    //     projectSheet.Row(1).Style.Font.Bold = true;
-    //
-    //     var projects = await _context.Goals.ToListAsync();
-    //     row = 2;
-    //     for (int i = 0; i < projects.Count; i++)
-    //     {
-    //         projectSheet.Cell(row, 1).Value = i + 1;
-    //         projectSheet.Cell(row, 2).Value = projects[i].Title;
-    //         row++;
-    //     }
-    //
-    //     using var stream = new MemoryStream();
-    //     workbook.SaveAs(stream);
-    //     var content = stream.ToArray();
-    //
-    //     return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "proTrackerExport.xlsx");
-    // }
 }

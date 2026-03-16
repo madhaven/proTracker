@@ -1,11 +1,11 @@
 using ProTracker.Web;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.AddAppServices();
+builder.SetupSqliteDb();
+builder.PluginDependencies();
 
 var app = builder.Build();
-
 await app.ApplyDatabaseMigrations();
-app.ConfigureApplication();
+app.ConfigureAppPipe();
 
 await app.RunAsync();
