@@ -146,6 +146,7 @@ dist
 # custom
 *.angular*
 *.db
+**/.idea
+**/Migrations
 **/wwwroot/
 appconfig.json
-/ProTracker.Backend/.idea

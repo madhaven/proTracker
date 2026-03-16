@@ -1,4 +1,10 @@
 <Solution>
+  <Folder Name="/Actions/">
+    <File Path="Actions/add-migration.bat" />
+    <File Path="Actions/clean.bat" />
+    <File Path="Actions/deploy-db.bat" />
+    <File Path="Actions/migrate.bat" />
+  </Folder>
   <Project Path="ProTracker.Data/ProTracker.Data.csproj" />
   <Project Path="ProTracker.Implementation/ProTracker.Implementation.csproj" />
   <Project Path="ProTracker.Web/ProTracker.Web.csproj" />
