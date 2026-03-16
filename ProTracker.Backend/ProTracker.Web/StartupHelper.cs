@@ -6,21 +6,21 @@ namespace ProTracker.Web;
 
 public static class StartupHelper
 {
-    public static void AddAppServices(this IServiceCollection services, IConfiguration configuration,  IWebHostEnvironment env)
-    
+    public static void AddAppServices(this WebApplicationBuilder builder)
+    // this IServiceCollection services, IConfiguration configuration,  IWebHostEnvironment env)
     {
-        var dataDir = Path.Combine(env.ContentRootPath, "Data");
+        var dataDir = Path.Combine(builder.Environment.ContentRootPath, "Data");
         Directory.CreateDirectory(dataDir); // ensures folder exists
 
         // Get DB Path from configuration or default
-        var dbPath = configuration.GetValue<string>("DatabasePath")
+        var dbPath = builder.Configuration.GetValue<string>("DatabasePath")
             ?? Path.Combine(dataDir, "protracker.db");
 
-        services.AddDbContext<ProTrackerDbContext>(options =>
+        builder.Services.AddDbContext<ProTrackerDbContext>(options =>
             options.UseSqlite($"Data Source={dbPath}"));
 
-        services.AddControllers();
-        services.AddApiDocumentation();
+        builder.Services.AddControllers();
+        builder.Services.AddApiDocumentation();
     }
 
     public static async Task ApplyDatabaseMigrations(this WebApplication app)

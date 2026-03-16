@@ -19,8 +19,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ProTracker.Models\ProTracker.Models.csproj" />
     <ProjectReference Include="..\ProTracker.Data\ProTracker.Data.csproj" />
+    <ProjectReference Include="..\ProTracker\ProTracker.csproj" />
+    <ProjectReference Include="..\ProTracker.Implementation\ProTracker.Implementation.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

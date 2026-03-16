@@ -11,8 +11,4 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.3" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\ProTracker.Models\ProTracker.Models.csproj" />
-  </ItemGroup>
-
 </Project>
