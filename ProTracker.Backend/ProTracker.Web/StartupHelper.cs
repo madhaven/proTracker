@@ -37,7 +37,7 @@ public static class StartupHelper
             });
         });
     }
-
+    
     /// <summary>
     /// Automatically creates database if it doesn't exist and performs pending migrations on data
     /// </summary>
