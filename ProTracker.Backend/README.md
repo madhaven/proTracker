@@ -31,10 +31,10 @@ This is the migrated .NET backend for the ProTracker project. It replaces the or
 
 ## How to Run
 
-1.  Navigate to `ProTracker.Backend/ProTracker.Api`.
+1.  Navigate to `ProTracker.Backend/ProTracker.Web`.
 2.  Run `dotnet run`.
 3.  The API will be available at `http://localhost:5000` (or similar, check console output).
 
 ## Note on Frontend Integration
 
-The Angular frontend (`pUIng/`) currently uses Electron IPC (`electron.ipcRenderer`) to communicate with the backend. To use this .NET backend, the frontend services (e.g., `electron-com.service.ts`) should be updated to use Angular's `HttpClient` to communicate with the new API endpoints.
+The Angular frontend (`frontend/`) currently uses Electron IPC (`electron.ipcRenderer`) to communicate with the backend. To use this .NET backend, the frontend services (e.g., `electron-com.service.ts`) should be updated to use Angular's `HttpClient` to communicate with the new API endpoints.

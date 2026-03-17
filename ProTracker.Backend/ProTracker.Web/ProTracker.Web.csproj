@@ -26,14 +26,17 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <SpaRoot>..\..\pUIng\</SpaRoot>
+    <SpaRoot>..\..\frontend\</SpaRoot>
     <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
   </PropertyGroup>
 
   <ItemGroup>
     <SpaSources Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**;$(SpaRoot).angular\**;$(SpaRoot)dist\**" />
-    <SpaSources Remove="..\..\pUIng\**" />
   </ItemGroup>
+  
+  <Target Name="LOG LOCATION" BeforeTargets="DebugEnsureNodeEnv">
+    <Message Importance="high" Text="Fetching UI dists from $([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)\$(SpaRoot)'))" />
+  </Target>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->
@@ -51,7 +54,7 @@
 
     <ItemGroup>
       <!-- Point specifically to the browser subfolder but copy its contents to the root of wwwroot -->
-      <AngularDistFiles Include="$(SpaRoot)dist\pUIng\browser\**\*" />
+      <AngularDistFiles Include="$(SpaRoot)dist\frontend\browser\**\*" />
     </ItemGroup>
 
     <Message Importance="high" Text="Copying fresh Angular files to wwwroot..." />
@@ -66,7 +69,7 @@
     <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build" />
 
     <ItemGroup>
-      <AngularDistFiles Include="$(SpaRoot)dist\pUIng\browser\**\*" />
+      <AngularDistFiles Include="$(SpaRoot)dist\frontend\browser\**\*" />
     </ItemGroup>
 
     <!-- Copy to local wwwroot to ensure files are available -->
