@@ -2,8 +2,8 @@ namespace ProTracker.Web.Contracts;
 
 public record TaskCreateRequest
 {
-    public string Project { get; set; } = string.Empty;
-    public string Title { get; set; } = string.Empty;
-    public long DateTimeCreated { get; set; } = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-    public long DateTimeTarget { get; set; } = (DateTimeOffset.UtcNow + TimeSpan.FromDays(1)).ToUnixTimeMilliseconds();
+    public int? GoalId { get; set; }
+    public required string Title { get; set; }
+    public required DateTimeOffset CreatedOn { get; set; }
+    public DateTimeOffset? CompleteBy { get; set; }
 }

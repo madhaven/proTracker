@@ -2,7 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using ProTracker.Data;
 using ProTracker.Interfaces;
 using ProTracker.Models;
-using Goal = ProTracker.Models.Goal;
 using Task = ProTracker.Models.Task;
 using TaskStatus = ProTracker.Models.TaskStatus;
 
@@ -26,49 +25,30 @@ public class TaskService : ITaskService
         return tasks;
     }
 
-    public async Task<(Task task, TaskStatusLog log, Goal goal)> CreateTaskWithGoalAsync(string title, string project, long dateTimeCreated)
+    public async Task<Task> CreateTaskAsync(Task task)
     {
-        var dbGoal = await _context.Goals
-            .FirstOrDefaultAsync(p => p.Title == project.Trim());
-        if (dbGoal == null)
-        {
-            dbGoal = new Data.DBModels.Goal { Title = project.Trim() };
-            _context.Goals.Add(dbGoal);
-            await _context.SaveChangesAsync();
-        }
-
-        var task = new Task
-        {
-            Goal = dbGoal.ToModel(),
-            Title = title.Trim(),
-            TaskStatus = TaskStatus.Pending
-        };
         var dbTask = task.ToDbModel();
         _context.Tasks.Add(dbTask);
-        await _context.SaveChangesAsync();
-        
-        // Update task with generated ID
-        task = dbTask.ToModel();
-
-        var log = new TaskStatusLog
+        _context.TaskStatusLogs.Add(new Data.DBModels.TaskStatusLog
         {
-            TaskStatus = TaskStatus.Pending,
-            Task = task,
-            LogTime = dateTimeCreated,
-        };
-        var dbLog = log.ToDbModel();
-        _context.TaskStatusLogs.Add(dbLog);
+            LogTime = task.CreatedOn,
+            Status = Data.DBModels.TaskStatus.Pending,
+            Task = dbTask,
+            TaskId =  dbTask.Id
+        });
         await _context.SaveChangesAsync();
 
-        return (task, dbLog.ToModel(), dbGoal.ToModel());
+        task.Id = dbTask.Id;
+        return task;
     }
 
-    public async Task<bool> UpdateTaskTitleAsync(int id, string title)
+    public async Task<bool> UpdateTaskAsync(int id, string title, int? goalId)
     {
         var existingTask = await _context.Tasks.FindAsync(id);
         if (existingTask == null) return false;
 
         existingTask.Title = title;
+        existingTask.GoalId = goalId;
         await _context.SaveChangesAsync();
         return true;
     }

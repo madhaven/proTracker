@@ -16,6 +16,13 @@ public class HabitController : ControllerBase
         _habitService = habitService ?? throw new ArgumentNullException(nameof(habitService));
     }
 
+    [HttpGet]
+    public async Task<IActionResult> GetAllHabits()
+    {
+        var habits = await _habitService.GetAllHabitsAsync();
+        return Ok(habits);
+    }
+
     /// <summary>
     /// Creates a new habit.
     /// </summary>
@@ -40,7 +47,7 @@ public class HabitController : ControllerBase
     /// <param name="habitRequest">The habit to update.</param>
     /// <returns>The updated habit.</returns>
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> EditHabit(int id, HabitUpdateRequest habitRequest)
+    public async Task<IActionResult> UpdateHabit(int id, HabitUpdateRequest habitRequest)
     {
         var habit = new Habit
         {

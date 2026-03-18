@@ -148,7 +148,7 @@ appconfig.json
 *.db
 **/.idea
 **/.angular
-**/bin/
+**/bin
 **/Migrations
-**/obj/
-**/wwwroot/
+**/obj
+**/wwwroot

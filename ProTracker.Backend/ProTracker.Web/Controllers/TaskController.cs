@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using ProTracker.Interfaces;
+using ProTracker.Models;
 using ProTracker.Web.Contracts;
 
 namespace ProTracker.Web.Controllers;
@@ -9,13 +10,15 @@ namespace ProTracker.Web.Controllers;
 public class TaskController : ControllerBase
 {
     private readonly ITaskService _taskService;
+    private readonly IGoalService _goalService;
 
-    public TaskController(ITaskService taskService)
+    public TaskController(ITaskService taskService, IGoalService goalService)
     {
         _taskService = taskService ?? throw new ArgumentNullException(nameof(taskService));
+        _goalService = goalService ?? throw new ArgumentNullException(nameof(goalService));
     }
 
-    [HttpGet("all")]
+    [HttpGet]
     public async Task<IActionResult> GetAllTasks()
     {
         var result = await _taskService.GetAllTasksAsync();
@@ -25,20 +28,42 @@ public class TaskController : ControllerBase
     /// <summary>
     /// Creates a new task and associated goal if it doesn't exist.
     /// </summary>
-    /// <param name="taskCreate">The new task details.</param>
+    /// <param name="createRequest">The new task details.</param>
     /// <returns>The created task, log, and goal.</returns>
     [HttpPost]
-    public async Task<IActionResult> CreateTask(TaskCreateRequest taskCreate)
+    public async Task<IActionResult> CreateTask(TaskCreateRequest createRequest)
     {
-        var result = await _taskService
-            .CreateTaskWithGoalAsync(taskCreate.Title, taskCreate.Project, taskCreate.DateTimeCreated);
+        createRequest.Title = createRequest.Title.Trim();
+        if (string.IsNullOrWhiteSpace(createRequest.Title))
+        { 
+            return BadRequest("Title is required.");
+        }
 
-        return Ok(new
+        Goal? goal = null;
+        if (createRequest.GoalId != null)
         {
-            task = result.task,
-            log = result.log,
-            project = result.goal
-        });
+            var goalId = createRequest.GoalId.Value;
+            goal = await _goalService.GetGoalByIdAsync(goalId);
+            if (goal == null)
+            {
+                return NotFound($"Goal with ID {goalId} not found.");
+            }
+        }
+
+        var taskModel = new Models.Task
+        {
+            Title = createRequest.Title,
+            TaskStatus = Models.TaskStatus.Pending,
+            Goal = goal,
+            CreatedOn = createRequest.CreatedOn,
+            CompleteBy = createRequest.CompleteBy,
+        };
+
+        var createdTask = await _taskService
+            .CreateTaskAsync(taskModel);
+
+        var response = createdTask.ToContract();
+        return Ok(response);
     }
 
     /// <summary>
@@ -50,7 +75,22 @@ public class TaskController : ControllerBase
     [HttpPut("{id:int}")]
     public async Task<IActionResult> UpdateTask(int id, TaskUpdateRequest task)
     {
-        var success = await _taskService.UpdateTaskTitleAsync(id, task.Title);
+        task.Title = task.Title.Trim();
+        if (string.IsNullOrWhiteSpace(task.Title))
+        {
+            return BadRequest("Title is required.");
+        }
+
+        if (task.GoalId.HasValue)
+        {
+            var goal = await _goalService.GetGoalByIdAsync(task.GoalId.Value);
+            if (goal == null)
+            {
+                return NotFound($"Goal with ID {task.GoalId} not found.");
+            }
+        }
+
+        var success = await _taskService.UpdateTaskAsync(id, task.Title, task.GoalId);
         if (!success) return NotFound();
 
         return Ok(true);

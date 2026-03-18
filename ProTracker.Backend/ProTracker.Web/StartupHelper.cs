@@ -66,6 +66,7 @@ public static class StartupHelper
         app.UseAuthorization();
 
         app.MapControllers();
+        app.Map("api/{**slug}", () => Results.NotFound());
         app.MapFallbackToFile("index.html"); // Handle Angular routing
     }
 
@@ -99,6 +100,7 @@ public static class StartupHelper
         });
 
         // Redirect root to Scalar UI for convenience
+        // TODO: Load from config
         app.MapGet("/api", () => Results.Redirect("/scalar/v1"));
     }
 }

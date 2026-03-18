@@ -7,8 +7,12 @@ namespace ProTracker.Data.DBModels;
 public class Task
 {
     [Key] public int Id { get; set; }
-    public int GoalId { get; set; }
-    public Goal Goal { get; set; }
+    public int? GoalId { get; set; }
+    public Goal? Goal { get; set; }
     public string Title { get; set; }
     public TaskStatus Status { get; set; }
+
+    public DateTimeOffset CreatedOn { get; set; }
+    public DateTimeOffset? CompleteBy { get; set; }
+    public DateTimeOffset? CompletedOn { get; set; }
 }

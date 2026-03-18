@@ -15,6 +15,13 @@ public class GoalController : ControllerBase
     {
         _goalService = goalService ?? throw new ArgumentNullException(nameof(goalService));
     }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAllGoals()
+    {
+        var result = await _goalService.GetAllGoalsAsync();
+        return Ok(result);
+    }
     
     /// <summary>
     /// Updates an existing goal's name.

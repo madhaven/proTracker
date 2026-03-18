@@ -75,8 +75,11 @@ public static class Converters
             Id = task.Id,
             Title = task.Title,
             Status = task.TaskStatus.ToDbModel(),
-            GoalId = task.Goal?.Id ?? 0,
-            Goal = task.Goal?.ToDbModel()!,
+            GoalId = task.Goal?.Id,
+            Goal = task.Goal?.ToDbModel(),
+            CreatedOn = task.CreatedOn,
+            CompleteBy = task.CompleteBy,
+            CompletedOn = task.CompletedOn
         };
     }
 
@@ -102,7 +105,7 @@ public static class Converters
             TaskId = log.Task.Id,
             Task = log.Task.ToDbModel(),
             Status = log.TaskStatus.ToDbModel(),
-            LogTime = DateTimeOffset.FromUnixTimeMilliseconds(log.LogTime),
+            LogTime = log.LogTime,
         };
     }
 
@@ -179,6 +182,9 @@ public static class Converters
             Title = task.Title,
             TaskStatus = task.Status.ToModel(),
             Goal = task.Goal?.ToModel(),
+            CreatedOn = task.CreatedOn,
+            CompleteBy = task.CompleteBy,
+            CompletedOn = task.CompletedOn,
         };
     }
 
@@ -203,7 +209,7 @@ public static class Converters
             Id = log.Id,
             Task = log.Task.ToModel(),
             TaskStatus = log.Status.ToModel(),
-            LogTime = log.LogTime.ToUnixTimeMilliseconds(),
+            LogTime = log.LogTime,
         };
     }
 }
