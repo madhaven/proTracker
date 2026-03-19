@@ -1,3 +1,4 @@
+export * from './api.service';
 export * from './goal.service';
 export * from './habit.service';
 export * from './state.service';
