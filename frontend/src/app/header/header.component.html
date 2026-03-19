@@ -11,18 +11,10 @@
       </button>
     </div>
     <nav class="header-nav">
-      <button (click)="setDashboardTab()" 
-              [class.nav-active]="activeTab() === ActiveTab.Dashboard"
-              class="nav-link">Today</button>
-      <button (click)="setTasksTab()" 
-              [class.nav-active]="activeTab() === ActiveTab.Tasks"
-              class="nav-link">Tasks</button>
-      <button (click)="setGoalsTab()" 
-              [class.nav-active]="activeTab() === ActiveTab.Goals"
-              class="nav-link">Goals</button>
-      <button (click)="setHabitsTab()" 
-              [class.nav-active]="activeTab() === ActiveTab.Habits"
-              class="nav-link">Habits</button>
+      <pt-nav-button [label]="'Today'" [tab]="ActiveTab.Dashboard" (clicked)="setDashboardTab()" />
+      <pt-nav-button [label]="'Tasks'" [tab]="ActiveTab.Tasks" (clicked)="setTasksTab()" />
+      <pt-nav-button [label]="'Goals'" [tab]="ActiveTab.Goals" (clicked)="setGoalsTab()" />
+      <pt-nav-button [label]="'Habits'" [tab]="ActiveTab.Habits" (clicked)="setHabitsTab()" />
     </nav>
   </div>
 </header>

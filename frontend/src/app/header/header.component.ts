@@ -2,11 +2,12 @@ import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { StateService, ThemeService } from '@services';
 import { ActiveTab, Theme, SvgIcon } from '@constants';
 import { SvgComponent } from '@atoms';
+import { NavButtonComponent } from './nav-button/nav-button.component';
 
 @Component({
   selector: 'pt-header',
   standalone: true,
-  imports: [SvgComponent],
+  imports: [SvgComponent, NavButtonComponent],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -27,7 +28,7 @@ export class HeaderComponent {
   }
 
   setActiveTab(tab: ActiveTab) {
-    this.activeTab.set(tab);
+    this.stateService.setActiveTab(tab);
   }
 
   setDashboardTab() {
