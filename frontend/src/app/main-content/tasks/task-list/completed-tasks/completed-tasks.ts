@@ -2,6 +2,7 @@ import { Component, ChangeDetectionStrategy, computed, inject } from '@angular/c
 import { CommonModule } from '@angular/common';
 import { TaskItem } from '../task-item/task-item';
 import { TaskService } from '@services';
+import { TaskStatus } from '@models';
 
 @Component({
   selector: 'pt-completed-tasks',
@@ -15,6 +16,6 @@ export class CompletedTasks {
   private readonly taskService = inject(TaskService);
 
   completedTasks = computed(() => this.taskService.tasks()
-    .filter(t => t.completed)
-    .sort((a,b) => new Date(b.date).getTime() - new Date(a.date).getTime()));
+    .filter(t => t.status == TaskStatus.Completed)
+    .sort((a,b) => new Date(b.createdOn).getTime() - new Date(a.createdOn).getTime()));
 }

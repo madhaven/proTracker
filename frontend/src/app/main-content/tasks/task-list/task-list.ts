@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, model } from '@angular/core';
+import { Component, ChangeDetectionStrategy, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { OverdueTasks } from './overdue-tasks/overdue-tasks';
 import { ActiveTasks } from './active-tasks/active-tasks';
@@ -13,6 +13,6 @@ import { CompletedTasks } from './completed-tasks/completed-tasks';
   styleUrls: ['./task-list.css'],
 })
 export class TaskList {
-  showCompleted = model(true);
-  currentDate = new Date()
+  showCompleted = input(true);
+  currentDate = new Date();
 }

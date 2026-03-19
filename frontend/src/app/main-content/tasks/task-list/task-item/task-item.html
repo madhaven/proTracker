@@ -11,14 +11,14 @@
   </button>
   
   <div class="task-info">
-    <p class="task-title" 
+    <p class="task-title"
        [class.danger-title]="isOverdue()" 
        [class.line-through]="isCompleted()">
       {{ task().title }}
     </p>
     
     @if (isOverdue()) {
-      <p class="task-meta danger-meta">Due: {{ task().date | date:'mediumDate' }}</p>
+      <p class="task-meta danger-meta">Due: {{ task().completeBy | date:'mediumDate' }}</p>
     }
     
     @if (task().goalId) {

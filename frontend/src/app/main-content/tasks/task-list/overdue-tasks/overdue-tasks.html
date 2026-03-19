@@ -5,7 +5,7 @@
     </div>
     <div class="tasks-list overdue-list">
       @for (task of overdueTasks(); track task.id) {
-        <pt-task-item [task]="task" [isOverdue]="true"></pt-task-item>
+        <pt-task-item [task]="task"></pt-task-item>
       }
     </div>
   </div>

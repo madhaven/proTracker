@@ -2,6 +2,7 @@ import { Component, ChangeDetectionStrategy, inject, computed } from '@angular/c
 import { CommonModule } from '@angular/common';
 import { TaskItem } from '../task-item/task-item';
 import { TaskService, UtilService } from '@services';
+import { TaskStatus } from '@models';
 
 @Component({
   selector: 'pt-overdue-tasks',
@@ -18,7 +19,7 @@ export class OverdueTasks {
   overdueTasks = computed(() => {
     const today = this.utils.getTodayStart();
     return this.taskService.tasks()
-      .filter(t => !t.completed && new Date(t.date).getTime() < today)
-      .sort((a,b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+      .filter(t => (t.status == TaskStatus.Pending) && new Date(t.createdOn).getTime() < today)
+      .sort((a,b) => new Date(a.createdOn).getTime() - new Date(b.createdOn).getTime());
   });
 }

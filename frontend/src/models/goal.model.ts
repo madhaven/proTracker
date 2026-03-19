@@ -3,5 +3,4 @@ export interface Goal {
   title: string;
   description: string;
   targetDate: string;
-  color: string;
 }

@@ -1,5 +1,5 @@
 import { Injectable, signal, inject } from '@angular/core';
-import { Task } from '@models';
+import { Task, TaskStatus } from '@models';
 import { HabitService } from '@services';
 
 @Injectable({
@@ -9,12 +9,12 @@ export class TaskService {
   private habitService = inject(HabitService);
 
   private tasksSignal = signal<Task[]>([
-    { id: this.uid(), title: 'Draft system architecture', completed: true, goalId: 'g1', date: new Date().toISOString() },
-    { id: this.uid(), title: 'Initialize Git repository', completed: true, goalId: 'g1', date: new Date().toISOString() },
-    { id: this.uid(), title: 'Setup continuous integration', completed: false, goalId: 'g1', date: new Date().toISOString() },
-    { id: this.uid(), title: 'Call accountant', completed: false, date: new Date().toISOString() },
-    { id: this.uid(), title: 'Submit tax return', completed: false, date: new Date(Date.now() - 86400000 * 3).toISOString() },
-    { id: this.uid(), title: 'Renew domain name', completed: false, date: new Date(Date.now() - 86400000 * 1).toISOString() },
+    { id: this.uid(), title: 'Draft system architecture', status: TaskStatus.Completed, goalId: 'g1', createdOn: new Date() },
+    { id: this.uid(), title: 'Initialize Git repository', status: TaskStatus.Completed, goalId: 'g1', createdOn: new Date() },
+    { id: this.uid(), title: 'Setup continuous integration', status: TaskStatus.Pending, goalId: 'g1', createdOn: new Date() },
+    { id: this.uid(), title: 'Call accountant', status: TaskStatus.Pending, createdOn: new Date() },
+    { id: this.uid(), title: 'Submit tax return', status: TaskStatus.Pending, createdOn: new Date(Date.now() - 86400000 * 3) },
+    { id: this.uid(), title: 'Renew domain name', status: TaskStatus.Pending, createdOn: new Date(Date.now() - 86400000 * 1) },
   ]);
 
   tasks = this.tasksSignal.asReadonly();
@@ -23,14 +23,14 @@ export class TaskService {
     return crypto.randomUUID();
   }
 
-  addTask(title: string, goalId: string | null = null, habitId: string | null = null, date: string = new Date().toISOString()) {
+  addTask(title: string, goalId: string | null = null, habitId: string | null = null, date: Date = new Date()) {
     const newTask: Task = {
       id: this.uid(),
-      title,
-      completed: false,
-      date,
-      goalId,
-      habitId
+      title: title,
+      status: TaskStatus.Pending,
+      createdOn: date,
+      goalId: goalId,
+      habitId: habitId
     };
     this.tasksSignal.update(ts => [newTask, ...ts]);
   }
@@ -38,7 +38,7 @@ export class TaskService {
   toggleTask(taskId: string) {
     this.tasksSignal.update(ts => ts.map(t => {
       if (t.id === taskId) {
-        const isNowCompleted = !t.completed;
+        const isNowCompleted = t.status == TaskStatus.Completed;
         if (t.habitId) {
           this.habitService.updateStreak(t.habitId, isNowCompleted ? 1 : -1);
         }
@@ -54,7 +54,7 @@ export class TaskService {
 
   getGoalStats(goalId: string) {
     const allTasks = this.tasksSignal().filter(t => t.goalId === goalId);
-    const completed = allTasks.filter(t => t.completed).length;
+    const completed = allTasks.filter(t => t.status == TaskStatus.Completed).length;
     const total = allTasks.length;
     const percentage = total === 0 ? 0 : Math.round((completed / total) * 100);
     return { total, completed, percentage };
@@ -65,7 +65,7 @@ export class TaskService {
   }
 
   removeHabitTasks(habitId: string) {
-    this.tasksSignal.update(ts => ts.filter(t => t.habitId !== habitId || t.completed));
+    this.tasksSignal.update(ts => ts.filter(t => t.habitId !== habitId));
   }
 
   generateHabitTasks() {
@@ -76,16 +76,16 @@ export class TaskService {
 
     for (const habit of this.habitService.habits()) {
       const hasTaskToday = currentTasks.some(t => 
-        t.habitId === habit.id && t.date.startsWith(todayStr)
+        t.habitId === habit.id && t.createdOn.toISOString().startsWith(todayStr)
       );
 
       if (!hasTaskToday && habit.frequency === 'daily') {
         newTasks.push({
           id: this.uid(),
           title: habit.title,
-          completed: false,
+          status: TaskStatus.Pending,
           habitId: habit.id,
-          date: new Date().toISOString()
+          createdOn: new Date()
         });
         stateChanged = true;
       }

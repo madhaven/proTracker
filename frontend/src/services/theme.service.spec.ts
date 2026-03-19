@@ -22,7 +22,7 @@ describe('ThemeService', () => {
     });
 
     it('should return Light theme on server', () => {
-      expect(service.currentTheme()).toBe(Theme.Light);
+      expect(service.theme()).toBe(Theme.Light);
     });
   });
 

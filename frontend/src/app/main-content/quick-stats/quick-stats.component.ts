@@ -1,6 +1,7 @@
-import { Component, ChangeDetectionStrategy, inject, computed, model } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, computed, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TaskService, GoalService, HabitService } from '@services';
+import { TaskStatus } from '@models';
 
 @Component({
   selector: 'pt-quick-stats',
@@ -16,10 +17,10 @@ export class QuickStatsComponent {
   private habitService = inject(HabitService);
 
   // provide control to stats
-  showCompletion = model<boolean>(false);
-  showPending = model<boolean>(true);
-  showGoals = model<boolean>(true);
-  showStreak = model<boolean>(true);
+  showCompletion = input<boolean>(false);
+  showPending = input<boolean>(true);
+  showGoals = input<boolean>(true);
+  showStreak = input<boolean>(true);
 
   tasks = this.taskService.tasks;
   goals = this.goalService.goals;
@@ -30,14 +31,15 @@ export class QuickStatsComponent {
     today.setHours(0, 0, 0, 0);
     const todayTime = today.getTime();
     return this.tasks()
-      .filter(t => !t.completed && new Date(t.date).getTime() < todayTime);
+      .filter(t => (t.status == TaskStatus.Pending)
+        && t.completeBy !== undefined
+        && new Date(t.completeBy).getTime() < todayTime);
   });
 
   pendingTasks = computed(() => {
-    const todayStr = new Date().toISOString().split('T')[0];
     return this.tasks()
-      .filter(t => !t.completed && t.date.startsWith(todayStr))
-      .sort((a,b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      .filter(t => (t.status == TaskStatus.Pending))
+      .sort((a,b) => new Date(b.createdOn).getTime() - new Date(a.createdOn).getTime());
   });
 
   topStreak = computed(() => {
@@ -49,7 +51,8 @@ export class QuickStatsComponent {
   completion = computed(() => {
     const todayStr = new Date().toISOString().split('T')[0];
     const completed = this.tasks()
-      .filter(t => t.completed && t.date.startsWith(todayStr))
+      .filter(t => (t.status == TaskStatus.Completed)
+        && new Date(t.createdOn).toISOString().startsWith(todayStr))
       .length;
     return Math.ceil(completed * 100 / (this.pendingTasks().length + completed));
   })

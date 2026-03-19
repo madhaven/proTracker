@@ -1,8 +1,12 @@
+import { TaskStatus } from "@models";
+
 export interface Task {
   id: string;
   title: string;
-  completed: boolean;
-  date: string;
+  status: TaskStatus;
+  createdOn: Date;
+  completeBy?: Date;
+  completedOn?: Date;
   goalId?: string | null;
   habitId?: string | null;
 }
