@@ -22,11 +22,12 @@ export class TaskItem {
     const dueDate = this.task().completeBy;
     return dueDate === null || dueDate === undefined
       ? false
-      : dueDate.getUTCMilliseconds() < Date.now();
+      : new Date(dueDate).getTime() < new Date().setHours(0, 0, 0, 0);
   });
 
   private taskService = inject(TaskService);
   private goalService = inject(GoalService);
+  private appref = inject(ApplicationRef);
 
   getGoalName(goalId: string): string {
     return this.goalService.getGoalById(goalId)?.title || 'Unknown Goal';
@@ -35,10 +36,10 @@ export class TaskItem {
   toggleTask(taskId: string) {
     if (typeof document !== 'undefined' && 'startViewTransition' in document) {
       (document as any).startViewTransition(() => {
-        console.log("toggling task1");
         this.taskService.toggleTask(taskId);
+        this.appref.tick();
       });
-    } else {
+    } else { // for old browsers
       this.taskService.toggleTask(taskId);
     }
   }

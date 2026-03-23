@@ -11,7 +11,6 @@ export class TaskService {
   private readonly api = inject(ApiService);
 
   private readonly tasksResource = this.api.getResource<any>('/task');
-
   readonly tasks = computed<Task[]>(() => {
     const rawTasks = this.tasksResource.value();
     if (!rawTasks) { return []; }
@@ -34,27 +33,28 @@ export class TaskService {
   }
 
   async toggleTask(taskId: string): Promise<void> {
-    const task = this.tasks().find(t => t.id === taskId);
-    if (!task) return;
-    
+    const task = this.tasks().find(t => t.id === taskId)!;    
     const newStatus = task.status === TaskStatus.Completed
       ? TaskStatus.Pending
       : TaskStatus.Completed;
-    const taskUpdateRequest = { TaskId: task.id, Status: newStatus };
+    const taskUpdateRequest = { TaskId: taskId, Status: newStatus };
+
+    this.optimisticUpdate((ts: Task[]) => {
+      return ts.map((t: Task) => {
+        if (t.id !== taskId) { return t; }
+        return { ...t, taskStatus: newStatus };
+      });
+    });
 
     await firstValueFrom(this.api.put(`/task/toggle`, taskUpdateRequest));
-    
-    // // task habit relation
-    // const isCurrentlyCompleted = task.status === TaskStatus.Completed;
-    // if (task.habitId) {
-    //   const delta = isCurrentlyCompleted ? -1 : 1;
-    //   await this.habitService.updateStreak(task.habitId, delta);
-    // }
-    
     this.tasksResource.reload();
   }
 
   async deleteTask(taskId: string): Promise<void> {
+    this.optimisticUpdate((ts: Task[]) => {
+      return ts.filter(t => t.id !== taskId);
+    });
+
     await firstValueFrom(this.api.delete(`/task/${taskId}`));
     this.tasksResource.reload();
   }
@@ -119,6 +119,15 @@ export class TaskService {
   }
 
   // --- Private Helpers ---
+
+  /**  Takes a function which will manipulate the tasks resource internally before the api returns */
+  private optimisticUpdate(fun: (tasks: Task[]) => Task[]): void {
+    const currentRawTasks = this.tasksResource.value();
+    if (!currentRawTasks) { return; }
+    var updatedRawTasks = this.parseTaskResponse(currentRawTasks)
+    updatedRawTasks = fun(updatedRawTasks);
+    this.tasksResource.value.set(updatedRawTasks);
+  }
 
   private parseTaskResponse(rawTasks: any): any[] {
     if (Array.isArray(rawTasks)) {

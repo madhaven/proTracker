@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TaskItem } from '../task-item/task-item';
-import { TaskService } from '@services';
+import { TaskService, UtilService } from '@services';
 import { TaskStatus } from '@models';
 
 @Component({
@@ -14,12 +14,14 @@ import { TaskStatus } from '@models';
 })
 export class ActiveTasks {
   private readonly taskService = inject(TaskService);
+  private readonly utils = inject(UtilService);
 
   currentDate = new Date();
 
   pendingTasks = computed(() => {
+    const today = this.utils.getTodayStart();
     const val = this.taskService.tasks()
-      .filter(t => t.status == TaskStatus.Pending && t.completeBy !== null)
+      .filter(t => t.status == TaskStatus.Pending && (t.completeBy === null || t.completeBy === undefined || new Date(t.completeBy).getTime() >= today))
       .sort((a, b) => {
         const timeA = a.createdOn ? new Date(a.createdOn).getTime() : 0;
         const timeB = b.createdOn ? new Date(b.createdOn).getTime() : 0;

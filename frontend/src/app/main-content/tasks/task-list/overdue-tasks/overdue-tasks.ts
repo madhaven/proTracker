@@ -19,7 +19,10 @@ export class OverdueTasks {
   overdueTasks = computed(() => {
     const today = this.utils.getTodayStart();
     return this.taskService.tasks()
-      .filter(t => (t.status == TaskStatus.Pending) && new Date(t.createdOn).getTime() < today)
+      .filter(t => t.status == TaskStatus.Pending
+        && t.completeBy !== null
+        && t.completeBy !== undefined
+        && new Date(t.completeBy).getTime() < today)
       .sort((a,b) => new Date(a.createdOn).getTime() - new Date(b.createdOn).getTime());
   });
 }
