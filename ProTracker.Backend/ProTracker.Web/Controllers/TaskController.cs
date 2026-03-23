@@ -105,6 +105,6 @@ public class TaskController : ControllerBase
     public async Task<IActionResult> ToggleTask(TaskToggleRequest toggleRequest)
     {
         var log = await _taskService.ToggleTaskStatusAsync(toggleRequest.TaskId, toggleRequest.Status.ToModel());
-        return Ok(log);
+        return Ok(log.TaskStatus);
     }
 }

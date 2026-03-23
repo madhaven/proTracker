@@ -57,16 +57,19 @@ public class TaskService : ITaskService
     {
         var dbTask = await _context.Tasks
             .Include(t => t.Goal)
-            .FirstOrDefaultAsync(t => t.Id == taskId) ?? throw new InvalidOperationException("Task not found");
+            .Where(t => t.Id == taskId).FirstOrDefaultAsync()
+            ?? throw new InvalidOperationException("Task not found");
 
-        var log = new TaskStatusLog
+        var dbLog = new Data.DBModels.TaskStatusLog
         {
-            TaskStatus = status,
-            Task = dbTask.ToModel(),
+            LogTime = dbTask.CreatedOn,
+            Status = Data.DBModels.TaskStatus.Pending,
+            Task = dbTask,
         };
-        var dbLog = log.ToDbModel();
 
+        dbTask.Status = status.ToDbModel();
         _context.TaskStatusLogs.Add(dbLog);
+
         await _context.SaveChangesAsync();
         return dbLog.ToModel();
     }

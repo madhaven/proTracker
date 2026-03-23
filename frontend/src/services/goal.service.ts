@@ -1,37 +1,38 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 import { Goal } from '@models';
+import { ApiService } from '@services';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GoalService {
   private goalsSignal = signal<Goal[]>([
-    { id: 'g1', title: 'Launch Web App MVP', description: 'Complete the first version of the core product and deploy to production.', targetDate: '2026-06-01', color: 'indigo' },
-    { id: 'g2', title: 'Run a Marathon', description: 'Train and successfully complete the city marathon this fall.', targetDate: '2026-10-15', color: 'emerald' },
+    { id: 'g1', title: 'Launch Web App MVP', description: 'Complete the first version of the core product and deploy to production.', targetDate: '2026-06-01' },
+    { id: 'g2', title: 'Run a Marathon', description: 'Train and successfully complete the city marathon this fall.', targetDate: '2026-10-15' },
   ]);
 
-  goals = this.goalsSignal.asReadonly();
+  goals = computed(() => this.goalsResource.value() ?? []);
+  
+  private api = inject(ApiService);
+  private goalsResource = this.api.getResource<Goal[]>('/goal');
 
-  private uid(): string {
-    return Date.now().toString(36) + Math.random().toString(36).substring(2);
-  }
-
-  addGoal(title: string, description: string, targetDate: string) {
-    const newGoal: Goal = {
-      id: this.uid(),
+  async addGoal(title: string, description: string, targetDate: string) {
+    const newGoal: Partial<Goal> = {
       title,
       description,
       targetDate,
-      color: 'indigo'
     };
-    this.goalsSignal.update(gs => [newGoal, ...gs]);
+    await firstValueFrom(this.api.post<Goal>('/goal', newGoal));
+    this.goalsResource.reload();
   }
 
-  deleteGoal(goalId: string) {
-    this.goalsSignal.update(gs => gs.filter(g => g.id !== goalId));
+  async deleteGoal(goalId: string) {
+    await firstValueFrom(this.api.delete(`/goal/${goalId}`));
+    this.goalsResource.reload();
   }
 
   getGoalById(goalId: string): Goal | undefined {
-    return this.goalsSignal().find(g => g.id === goalId);
+    return this.goals().find(g => g.id === goalId);
   }
 }

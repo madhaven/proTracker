@@ -19,7 +19,7 @@ export class ActiveTasks {
 
   pendingTasks = computed(() => {
     const val = this.taskService.tasks()
-      .filter(t => t.status == TaskStatus.Pending)
+      .filter(t => t.status == TaskStatus.Pending && t.completeBy !== null)
       .sort((a, b) => {
         const timeA = a.createdOn ? new Date(a.createdOn).getTime() : 0;
         const timeB = b.createdOn ? new Date(b.createdOn).getTime() : 0;

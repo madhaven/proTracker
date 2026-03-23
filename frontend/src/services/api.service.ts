@@ -20,6 +20,11 @@ export class ApiService { // Orchestrates all communication with backend
     }, options);
   }
 
+  get<T> (endpoint: string) {
+    if (!this._isPlatformBrowser) { return of(null as any); }
+    return this.http.get<T>(`${this.baseUrl}${endpoint}`);
+  }
+
   post<T>(endpoint: string, body: any) {
     if (!this._isPlatformBrowser) { return of(null as any); }
     return this.http.post<T>(`${this.baseUrl}${endpoint}`, body);

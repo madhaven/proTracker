@@ -28,6 +28,8 @@
   <PropertyGroup>
     <SpaRoot>..\..\frontend\</SpaRoot>
     <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
+    <InterceptorsNamespaces>$(Inter
+      ceptorsNamespaces);Microsoft.AspNetCore.OpenApi.Generated</InterceptorsNamespaces>
   </PropertyGroup>
 
   <ItemGroup>

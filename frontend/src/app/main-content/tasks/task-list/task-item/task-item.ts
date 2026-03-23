@@ -17,8 +17,13 @@ import { TaskService, GoalService } from '@services';
 })
 export class TaskItem {
   task = input.required<Task>();
-  isOverdue = input(false);
-  isCompleted = computed(() => { return this.task().status === TaskStatus.Completed; });
+  isCompleted = computed(() => this.task().status === TaskStatus.Completed );
+  isOverdue = computed(() => {
+    const dueDate = this.task().completeBy;
+    return dueDate === null || dueDate === undefined
+      ? false
+      : dueDate.getUTCMilliseconds() < Date.now();
+  });
 
   private taskService = inject(TaskService);
   private goalService = inject(GoalService);
@@ -30,6 +35,7 @@ export class TaskItem {
   toggleTask(taskId: string) {
     if (typeof document !== 'undefined' && 'startViewTransition' in document) {
       (document as any).startViewTransition(() => {
+        console.log("toggling task1");
         this.taskService.toggleTask(taskId);
       });
     } else {
