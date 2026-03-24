@@ -1,0 +1,104 @@
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.half-width {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.dialog-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.dialog-input, .dialog-select {
+  width: 100%;
+  padding: 10px 12px;
+  background-color: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  color: var(--text-main);
+  font-size: 0.875rem;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.title-input {
+  font-size: 1.125rem;
+  font-weight: 500;
+  border: none;
+  border-bottom: 1px solid var(--border-color);
+  border-radius: 0;
+  padding: 12px 0;
+  margin-bottom: 8px;
+}
+
+.title-input:focus {
+  border-bottom-color: var(--text-main);
+}
+
+.dialog-input:focus, .dialog-select:focus {
+  outline: none;
+  border-color: var(--text-main);
+}
+
+.dialog-input::placeholder {
+  color: var(--text-muted);
+}
+
+.dialog-select {
+  appearance: none;
+  cursor: pointer;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.btn-cancel, .btn-save {
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-cancel {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-main);
+}
+
+.btn-cancel:hover {
+  background-color: var(--border-color);
+}
+
+.btn-save {
+  background-color: var(--text-main);
+  border: 1px solid var(--text-main);
+  color: var(--bg-main, #ffffff);
+}
+
+.btn-save:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.btn-save:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

@@ -1,0 +1,28 @@
+.add-task-trigger {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 24px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: transparent;
+}
+
+.add-task-trigger:hover {
+  background-color: color-mix(in srgb, var(--border-color) 40%, transparent);
+  color: var(--text-main);
+}
+
+.plus-icon {
+  margin-right: 8px;
+  font-size: 1.1rem;
+  font-weight: 400;
+}
+
+.trigger-text {
+  line-height: 1;
+}

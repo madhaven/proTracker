@@ -1,0 +1,29 @@
+<pt-modal (close)="onCancel()">
+  <form [formGroup]="taskForm" (ngSubmit)="addTask()">
+    <div class="form-group">
+      <input #titleInput type="text" formControlName="title" placeholder="What needs to be done?" class="dialog-input title-input">
+    </div>
+    
+    <div class="form-row">
+      <div class="form-group half-width">
+        <label class="dialog-label">Project / Goal</label>
+        <select formControlName="goalId" class="dialog-select">
+          <option value="">No Project</option>
+          @for (goal of goals(); track goal.id) {
+            <option [value]="goal.id">{{ goal.title }}</option>
+          }
+        </select>
+      </div>
+      
+      <div class="form-group half-width">
+        <label class="dialog-label">Due Date</label>
+        <input type="date" formControlName="date" class="dialog-input">
+      </div>
+    </div>
+
+    <div class="dialog-actions">
+      <button type="button" class="btn-cancel" (click)="onCancel()">Cancel</button>
+      <button type="submit" class="btn-save" [disabled]="taskForm.invalid">Add Task</button>
+    </div>
+  </form>
+</pt-modal>

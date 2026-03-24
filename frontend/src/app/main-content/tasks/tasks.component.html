@@ -1,4 +1,13 @@
 <div class="animate-in">
-  <pt-task-form />
+  <div class="add-task-trigger" (click)="openDialog()">
+    <span class="plus-icon">+</span>
+    <span class="trigger-text">Add a new task...</span>
+  </div>
+  
   <pt-task-list />
+
+  @if (showDialog()) {
+    <pt-task-dialog (close)="closeDialog()" />
+  }
 </div>
+
