@@ -3,14 +3,44 @@
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+  scrollbar-gutter: stable both-edges; /* Prevents content from jumping/shifting when scrollbar appears */
   background-color: var(--bg-main);
   transition: var(--theme-transition);
+}
+
+.content-wrapper {
   padding: 24px 16px;
+  width: 100%;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* sm: 640px */
+@media (min-width: 640px) {
+  .content-wrapper {
+    max-width: 540px;
+  }
 }
 
 /* md: 768px */
 @media (min-width: 768px) {
-  :host {
+  .content-wrapper {
+    max-width: 768px;
     padding: 40px 24px;
+  }
+}
+
+/* lg: 1024px */
+@media (min-width: 1024px) {
+  .content-wrapper {
+    max-width: 1024px;
+  }
+}
+
+/* xl: 1280px */
+@media (min-width: 1280px) {
+  .content-wrapper {
+    max-width: 1200px;
   }
 }
