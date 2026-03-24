@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, inject, input, ApplicationRef, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Task, TaskStatus } from '@models';
-import { TaskService, GoalService } from '@services';
+import { TaskService, GoalService, UtilService } from '@services';
 
 @Component({
   selector: 'pt-task-item',
@@ -16,6 +16,11 @@ import { TaskService, GoalService } from '@services';
   }
 })
 export class TaskItem {
+  private readonly taskService = inject(TaskService);
+  private readonly goalService = inject(GoalService);
+  private readonly appRef = inject(ApplicationRef);
+  private readonly utils = inject(UtilService);
+
   task = input.required<Task>();
   isCompleted = computed(() => this.task().status === TaskStatus.Completed );
   isOverdue = computed(() => {
@@ -25,32 +30,19 @@ export class TaskItem {
       : new Date(dueDate).getTime() < new Date().setHours(0, 0, 0, 0);
   });
 
-  private taskService = inject(TaskService);
-  private goalService = inject(GoalService);
-  private appref = inject(ApplicationRef);
-
   getGoalName(goalId: string): string {
     return this.goalService.getGoalById(goalId)?.title || 'Unknown Goal';
   }
 
-  toggleTask(taskId: string) {
-    if (typeof document !== 'undefined' && 'startViewTransition' in document) {
-      (document as any).startViewTransition(() => {
-        this.taskService.toggleTask(taskId);
-        this.appref.tick();
-      });
-    } else { // for old browsers
+  toggleTask(taskId: string) {    
+    this.utils.transition(this.appRef, () => {
       this.taskService.toggleTask(taskId);
-    }
+    });
   }
 
-  deleteTask(taskId: string) {
-    if (typeof document !== 'undefined' && 'startViewTransition' in document) {
-      (document as any).startViewTransition(() => {
-        this.taskService.deleteTask(taskId);
-      });
-    } else {
+  deleteTask(taskId: string) {    
+    this.utils.transition(this.appRef, () => {
       this.taskService.deleteTask(taskId);
-    }
+    })
   }
 }

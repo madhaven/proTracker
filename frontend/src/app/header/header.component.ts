@@ -1,5 +1,5 @@
-import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
-import { StateService, ThemeService } from '@services';
+import { Component, ChangeDetectionStrategy, inject, ApplicationRef } from '@angular/core';
+import { StateService, ThemeService, UtilService } from '@services';
 import { ActiveTab, Theme, SvgIcon } from '@constants';
 import { SvgComponent } from '@atoms';
 import { NavButtonComponent } from './nav-button/nav-button.component';
@@ -13,8 +13,10 @@ import { NavButtonComponent } from './nav-button/nav-button.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent {
-  private stateService = inject(StateService);
-  private themeService = inject(ThemeService);
+  private readonly stateService = inject(StateService);
+  private readonly themeService = inject(ThemeService);
+  private readonly appRef = inject(ApplicationRef);
+  private readonly utils = inject(UtilService);
 
   activeTab = this.stateService.activeTab;
   currentTheme = this.themeService.theme;
@@ -28,7 +30,9 @@ export class HeaderComponent {
   }
 
   setActiveTab(tab: ActiveTab) {
-    this.stateService.setActiveTab(tab);
+    this.utils.transition(this.appRef, () => {
+      this.stateService.setActiveTab(tab);
+    })
   }
 
   setDashboardTab() {

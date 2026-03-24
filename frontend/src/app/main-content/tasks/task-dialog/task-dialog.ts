@@ -1,7 +1,7 @@
-import { Component, ChangeDetectionStrategy, inject, output, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, output, ElementRef, ViewChild, AfterViewInit, ApplicationRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms';
-import { TaskService, GoalService } from '@services';
+import { TaskService, GoalService, UtilService } from '@services';
 import { ModalComponent } from '@atoms';
 
 @Component({
@@ -15,8 +15,10 @@ import { ModalComponent } from '@atoms';
 export class TaskDialog implements AfterViewInit {
   @ViewChild('titleInput') titleInput!: ElementRef<HTMLInputElement>;
   
-  private taskService = inject(TaskService);
-  private goalService = inject(GoalService);
+  private readonly taskService = inject(TaskService);
+  private readonly goalService = inject(GoalService);
+  private readonly appRef = inject(ApplicationRef);
+  private readonly utils = inject(UtilService);
 
   goals = this.goalService.goals;
   close = output<void>();
@@ -38,8 +40,10 @@ export class TaskDialog implements AfterViewInit {
   addTask() {
     if (this.taskForm.invalid) return;
     const val = this.taskForm.value;
-    
-    this.taskService.addTask(val.title!, val.goalId || null, val.date || null);
+
+    this.utils.transition(this.appRef, () => {
+      this.taskService.addTask(val.title!, val.goalId || null, val.date || null);
+    });
     
     this.close.emit();
   }

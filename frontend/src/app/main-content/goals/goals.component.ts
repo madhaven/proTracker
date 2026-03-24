@@ -1,7 +1,7 @@
-import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, ApplicationRef } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms';
-import { TaskService, GoalService } from '@services';
+import { TaskService, GoalService, UtilService } from '@services';
 
 @Component({
   selector: 'pt-goals',
@@ -12,8 +12,10 @@ import { TaskService, GoalService } from '@services';
   styleUrls: ['./goals.component.css']
 })
 export class GoalsComponent {
-  private taskService = inject(TaskService);
-  private goalService = inject(GoalService);
+  private readonly taskService = inject(TaskService);
+  private readonly goalService = inject(GoalService);
+  private readonly appRef = inject(ApplicationRef);
+  private readonly utils = inject(UtilService);
 
   tasks = this.taskService.tasks;
   goals = this.goalService.goals;
@@ -36,12 +38,17 @@ export class GoalsComponent {
     if (this.goalForm.invalid) return;
     const val = this.goalForm.value;
 
-    this.goalService.addGoal(val.title!, val.description || '', val.targetDate!);
+    this.utils.transition(this.appRef, () => {
+      this.goalService.addGoal(val.title!, val.description || '', val.targetDate!);
+    });
+
     this.goalForm.reset();
   }
 
   deleteGoal(goalId: string) {
-    this.goalService.deleteGoal(goalId);
-    this.taskService.orphanGoalTasks(goalId);
+    this.utils.transition(this.appRef, () => {
+      this.goalService.deleteGoal(goalId);
+      this.taskService.orphanGoalTasks(goalId);
+    })
   }
 }
