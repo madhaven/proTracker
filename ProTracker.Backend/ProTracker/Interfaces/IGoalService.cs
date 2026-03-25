@@ -8,6 +8,7 @@ public interface IGoalService
     Task<Goal?> GetGoalByIdAsync(int id);
     Task<Goal> CreateGoalAsync(Goal goal);
     Task<bool> UpdateGoalAsync(int id, Goal goal);
+    Task<bool> DeleteGoalAsync(int id);
     Task<bool> GoalExistsAsync(int id);
     Task<bool> GoalTitleExistsAsync(string title, int? excludeId = null);
 }

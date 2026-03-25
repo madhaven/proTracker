@@ -19,6 +19,18 @@ public static class Converters
         };
     }
 
+    public static GoalCreateResponse ToContract(this Models.Goal goal)
+    {
+        return new GoalCreateResponse
+        {
+            Id = goal.Id,
+            Title = goal.Title,
+            DateAdded = goal.DateAdded,
+            DateTarget = goal.DateTarget,
+            DateCompleted = goal.DateCompleted
+        };
+    }
+
     public static TaskCreateResponse ToContract(this Models.Task task)
     {
         return new TaskCreateResponse

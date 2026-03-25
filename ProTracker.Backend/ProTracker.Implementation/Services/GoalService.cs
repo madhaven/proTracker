@@ -58,6 +58,16 @@ public class GoalService : IGoalService
         return true;
     }
 
+    public async Task<bool> DeleteGoalAsync(int id)
+    {
+        var existingGoal = await _context.Goals.FindAsync(id);
+        if (existingGoal == null) return false;
+
+        _context.Goals.Remove(existingGoal);
+        await _context.SaveChangesAsync();
+        return true;
+    }
+
     public async Task<bool> GoalExistsAsync(int id)
     {
         return await _context.Goals.AnyAsync(e => e.Id == id);

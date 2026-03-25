@@ -1,11 +1,9 @@
-namespace ProTracker.Models;
+namespace ProTracker.Web.Contracts;
 
-public class Goal
+public record GoalCreateResponse
 {
     public int Id { get; set; }
     public required string Title { get; set; }
-    public IEnumerable<Task> Tasks { get; set; } = new List<Task>();
-    
     public required DateTimeOffset DateAdded { get; set; }
     public DateTimeOffset? DateTarget { get; set; }
     public DateTimeOffset? DateCompleted { get; set; }
