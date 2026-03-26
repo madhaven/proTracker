@@ -53,7 +53,7 @@ public class TaskService : ITaskService
         return true;
     }
 
-    public async Task<TaskStatusLog> ToggleTaskStatusAsync(int taskId, TaskStatus status)
+    public async Task<TaskStatusLog> ToggleTaskStatusAsync(int taskId, TaskStatus status, DateTimeOffset time)
     {
         var dbTask = await _context.Tasks
             .Include(t => t.Goal)
@@ -62,13 +62,17 @@ public class TaskService : ITaskService
 
         var dbLog = new Data.DBModels.TaskStatusLog
         {
-            LogTime = dbTask.CreatedOn,
-            Status = Data.DBModels.TaskStatus.Pending,
+            LogTime = time,
+            Status = status.ToDbModel(),
             Task = dbTask,
         };
 
-        dbTask.Status = status.ToDbModel();
         _context.TaskStatusLogs.Add(dbLog);
+        dbTask.Status = status.ToDbModel();
+        if (status == TaskStatus.Completed)
+        {
+            dbTask.CompletedOn = time;
+        }
 
         await _context.SaveChangesAsync();
         return dbLog.ToModel();

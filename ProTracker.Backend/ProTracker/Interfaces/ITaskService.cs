@@ -9,6 +9,6 @@ public interface ITaskService
     public Task<IEnumerable<Task>> GetAllTasksAsync();
     public Task<Task> CreateTaskAsync(Task task);
     public Task<bool> UpdateTaskAsync(int id, string title, int? goalId);
-    public Task<TaskStatusLog> ToggleTaskStatusAsync(int taskId, TaskStatus status);
+    public Task<TaskStatusLog> ToggleTaskStatusAsync(int taskId, TaskStatus status, DateTimeOffset time);
     public Task<IEnumerable<TaskStatusLog>> GetAllTaskStatusLogsAsync();
 }

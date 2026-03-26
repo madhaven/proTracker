@@ -20,13 +20,15 @@ export class ActiveTasks {
 
   pendingTasks = computed(() => {
     const today = this.utils.getTodayStart();
-    const val = this.taskService.tasks()
-      .filter(t => t.status == TaskStatus.Pending && (t.completeBy === null || t.completeBy === undefined || new Date(t.completeBy).getTime() >= today))
+    return this.taskService.tasks()
+      .filter(t => t.status == TaskStatus.Pending
+        && (t.completeBy === null 
+          || t.completeBy === undefined
+          || new Date(t.completeBy).getTime() >= today))
       .sort((a, b) => {
         const timeA = a.createdOn ? new Date(a.createdOn).getTime() : 0;
         const timeB = b.createdOn ? new Date(b.createdOn).getTime() : 0;
         return (isNaN(timeB) ? 0 : timeB) - (isNaN(timeA) ? 0 : timeA);
       });
-    return val;  
   });
 }

@@ -59,6 +59,8 @@
   color: var(--text-muted);
   margin-top: 2px;
   margin-bottom: 0;
+  font-weight: 600;
+  opacity: 0.8;
 }
 
 .delete-btn {
@@ -91,10 +93,4 @@
 
 .danger-title {
   color: var(--accent-red-text);
-}
-
-.danger-meta {
-  color: var(--accent-red-text);
-  opacity: 0.8;
-  font-weight: 600;
 }

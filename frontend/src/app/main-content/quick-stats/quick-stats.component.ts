@@ -12,9 +12,9 @@ import { TaskStatus } from '@models';
   styleUrls: ['./quick-stats.component.css']
 })
 export class QuickStatsComponent {
-  private taskService = inject(TaskService);
-  private goalService = inject(GoalService);
-  private habitService = inject(HabitService);
+  private readonly taskService = inject(TaskService);
+  private readonly goalService = inject(GoalService);
+  private readonly habitService = inject(HabitService);
 
   // provide control to stats
   showCompletion = input<boolean>(false);
@@ -39,6 +39,7 @@ export class QuickStatsComponent {
   pendingTasks = computed(() => {
     return this.tasks()
       .filter(t => (t.status == TaskStatus.Pending))
+        // && (t.completeBy !== undefined || (t.goalId !== undefined || t.habitId !== undefined))) // tasks from goals with a deadline
       .sort((a,b) => new Date(b.createdOn).getTime() - new Date(a.createdOn).getTime());
   });
 
@@ -48,12 +49,19 @@ export class QuickStatsComponent {
     return Math.max(...habitsList.map(h => h.streak));
   });
 
-  completion = computed(() => {
+  completedToday = computed(() => {
     const todayStr = new Date().toISOString().split('T')[0];
-    const completed = this.tasks()
+    return this.tasks()
       .filter(t => (t.status == TaskStatus.Completed)
-        && new Date(t.createdOn).toISOString().startsWith(todayStr))
-      .length;
-    return Math.ceil(completed * 100 / (this.pendingTasks().length + completed));
-  })
+        && t.completedOn
+        && new Date(t.completedOn).toISOString().startsWith(todayStr));
+  });
+
+  completion = computed(() => {
+    const pendingTaskCount = this.pendingTasks().length;
+    const completedCount = this.completedToday().length;
+    const total = completedCount + pendingTaskCount;
+    if (total === 0) return '0 / 0';
+    return `${completedCount} / ${total}`;
+  });
 }

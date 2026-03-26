@@ -1,5 +1,5 @@
 import { Injectable, computed, inject } from '@angular/core';
-import { Task, TaskStatus } from '@models';
+import { Task, TaskStatus, TaskToggleRequest } from '@models';
 import { HabitService, ApiService } from '@services';
 import { firstValueFrom } from 'rxjs';
 
@@ -37,7 +37,12 @@ export class TaskService {
     const newStatus = task.status === TaskStatus.Completed
       ? TaskStatus.Pending
       : TaskStatus.Completed;
-    const taskUpdateRequest = { TaskId: taskId, Status: newStatus };
+    
+    const taskUpdateRequest: TaskToggleRequest = { 
+      TaskId: parseInt(taskId, 10), 
+      Status: newStatus,
+      Time: new Date()
+    };
 
     this.optimisticUpdate((ts: Task[]) => {
       return ts.map((t: Task) => {

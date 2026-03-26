@@ -1,16 +1,16 @@
 <div class="dashboard-stats">
-  @if (overdueTasks().length > 0) {
-    <span class="overdue-active" style="view-transition-name: overdue-stats">{{ overdueTasks().length }} overdue</span>
+  @if (showCompletion()) {
+    <span style="view-transition-name: completion-stats">{{ this.completion() }}</span>
     <span class="dot">&middot;</span>
   }
-  
+
   @if (showPending() && this.pendingTasks().length > 0) {
     <span [class.pending-active]="pendingTasks().length > 0" style="view-transition-name: pending-stats">{{ pendingTasks().length }} pending</span>
     <span class="dot">&middot;</span>
   }
-  
-  @if (showCompletion()) {
-    <span style="view-transition-name: completion-stats">{{ this.completion() }}% done</span>
+
+  @if (overdueTasks().length > 0) {
+    <span class="overdue-active" style="view-transition-name: overdue-stats">{{ overdueTasks().length }} overdue</span>
     <span class="dot">&middot;</span>
   }
 

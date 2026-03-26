@@ -91,7 +91,7 @@
 .btn-save {
   background-color: var(--text-main);
   border: 1px solid var(--text-main);
-  color: var(--bg-main, #ffffff);
+  color: var(--bg-main);
 }
 
 .btn-save:hover:not(:disabled) {

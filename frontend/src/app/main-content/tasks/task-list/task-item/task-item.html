@@ -16,9 +16,9 @@
        [class.line-through]="isCompleted()">
       {{ task().title }}
     </p>
-    
-    @if (isOverdue()) {
-      <p class="task-meta danger-meta">Due: {{ task().completeBy | date:'mediumDate' }}</p>
+
+    @if (hasDueDate()) {
+      <p class="task-meta" [class.danger-title]="isOverdue()">Due: {{ task().completeBy | date:'mediumDate' }}</p>
     }
     
     @if (task().goalId) {

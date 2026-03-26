@@ -29,6 +29,10 @@ export class TaskItem {
       ? false
       : new Date(dueDate).getTime() < new Date().setHours(0, 0, 0, 0);
   });
+  hasDueDate = computed(() => {
+    const dueDate = this.task().completeBy;
+    return dueDate !== null && dueDate !== undefined;
+  });
 
   getGoalName(goalId: string): string {
     return this.goalService.getGoalById(goalId)?.title || 'Unknown Goal';
