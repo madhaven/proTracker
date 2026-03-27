@@ -28,7 +28,7 @@ export class GoalsComponent {
 
   getGoalStats(goalId: string) {
     const allTasks = this.tasks().filter(t => t.goalId === goalId);
-    const completed = allTasks.filter(t => t.status).length;
+    const completed = allTasks.filter(t => t.taskStatus).length;
     const total = allTasks.length;
     const percentage = total === 0 ? 0 : Math.round((completed / total) * 100);
     return { total, completed, percentage };

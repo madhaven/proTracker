@@ -31,15 +31,17 @@ public static class Converters
         };
     }
 
-    public static TaskCreateResponse ToContract(this Models.Task task)
+    public static TaskResponse ToContract(this Models.Task task)
     {
-        return new TaskCreateResponse
+        return new TaskResponse
         {
             Title = task.Title,
             Id = task.Id, // TODO GUID
             GoalId = task.Goal?.Id,
             TaskStatus = task.TaskStatus.ToContract(),
             CreatedOn = task.CreatedOn,
+            CompleteBy = task.CompleteBy,
+            CompletedOn = task.CompletedOn,
         };
     }
 

@@ -16,6 +16,6 @@ export class CompletedTasks {
   private readonly taskService = inject(TaskService);
 
   completedTasks = computed(() => this.taskService.tasks()
-    .filter(t => t.status == TaskStatus.Completed)
+    .filter(t => t.taskStatus == TaskStatus.Completed)
     .sort((a,b) => new Date(b.createdOn).getTime() - new Date(a.createdOn).getTime()));
 }

@@ -22,16 +22,16 @@ export class TaskItem {
   private readonly utils = inject(UtilService);
 
   task = input.required<Task>();
-  isCompleted = computed(() => this.task().status === TaskStatus.Completed );
+  isCompleted = computed(() => this.task().taskStatus === TaskStatus.Completed );
   isOverdue = computed(() => {
     const dueDate = this.task().completeBy;
-    return dueDate === null || dueDate === undefined
+    return dueDate === null
       ? false
-      : new Date(dueDate).getTime() < new Date().setHours(0, 0, 0, 0);
+      : new Date(dueDate!).getTime() < new Date().setHours(0, 0, 0, 0);
   });
   hasDueDate = computed(() => {
     const dueDate = this.task().completeBy;
-    return dueDate !== null && dueDate !== undefined;
+    return dueDate !== null;
   });
 
   getGoalName(goalId: string): string {

@@ -21,7 +21,8 @@ public class TaskController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAllTasks()
     {
-        var result = await _taskService.GetAllTasksAsync();
+        var tasks = await _taskService.GetAllTasksAsync();
+        var result = tasks.Select(t => t.ToContract());
         return Ok(result);
     }
 

@@ -31,15 +31,15 @@ export class QuickStatsComponent {
     today.setHours(0, 0, 0, 0);
     const todayTime = today.getTime();
     return this.tasks()
-      .filter(t => (t.status == TaskStatus.Pending)
-        && t.completeBy !== undefined
-        && new Date(t.completeBy).getTime() < todayTime);
+      .filter(t => (t.taskStatus == TaskStatus.Pending)
+        && t.completeBy !== null
+        && new Date(t.completeBy!).getTime() < todayTime);
   });
 
   pendingTasks = computed(() => {
     return this.tasks()
-      .filter(t => (t.status == TaskStatus.Pending))
-        // && (t.completeBy !== undefined || (t.goalId !== undefined || t.habitId !== undefined))) // tasks from goals with a deadline
+      .filter(t => (t.taskStatus == TaskStatus.Pending))
+        // && (t.completeBy !== null || (t.goalId !== null || t.habitId !== null))) // tasks from goals with a deadline
       .sort((a,b) => new Date(b.createdOn).getTime() - new Date(a.createdOn).getTime());
   });
 
@@ -52,7 +52,7 @@ export class QuickStatsComponent {
   completedToday = computed(() => {
     const todayStr = new Date().toISOString().split('T')[0];
     return this.tasks()
-      .filter(t => (t.status == TaskStatus.Completed)
+      .filter(t => (t.taskStatus == TaskStatus.Completed)
         && t.completedOn
         && new Date(t.completedOn).toISOString().startsWith(todayStr));
   });
