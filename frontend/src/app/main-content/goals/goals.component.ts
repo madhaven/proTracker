@@ -2,6 +2,7 @@ import { Component, ChangeDetectionStrategy, inject, signal, ApplicationRef } fr
 import { DatePipe } from '@angular/common';
 import { TaskService, GoalService, UtilService } from '@services';
 import { GoalDialog } from './goal-dialog/goal-dialog';
+import { TaskStatus } from '@models';
 
 @Component({
   selector: 'pt-goals',
@@ -20,6 +21,7 @@ export class GoalsComponent {
   readonly tasks = this.taskService.tasks;
   readonly goals = this.goalService.goals;
   readonly showDialog = signal(false);
+  readonly TaskStatus = TaskStatus;
 
   getGoalStats(goalId: string) {
     return this.taskService.getGoalStats(goalId);

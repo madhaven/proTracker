@@ -68,7 +68,7 @@ export class TaskService {
     const completed = allTasks.filter(t => t.taskStatus === TaskStatus.Completed).length;
     const percentage = total === 0 ? 0 : Math.round((completed / total) * 100);
 
-    return { total, completed, percentage };
+    return { total, completed, percentage, tasks: allTasks };
   }
 
   async orphanGoalTasks(goalId: string): Promise<void> {

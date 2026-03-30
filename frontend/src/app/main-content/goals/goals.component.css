@@ -65,13 +65,23 @@
   margin: 0;
 }
 
+.goal-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .goal-meta {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-top: 4px;
   font-size: 0.75rem;
   color: var(--text-muted);
+}
+
+.target-label {
+  color: var(--text-muted);
+  opacity: 0.6;
 }
 
 .goal-progress-container {
@@ -79,4 +89,48 @@
   display: flex;
   align-items: center;
   gap: 16px;
+}
+
+.progress-bar-wrapper {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  height: 12px;
+}
+
+.progress-bar-bg {
+  height: 1px;
+  width: 100%;
+  background-color: var(--border-color);
+  position: relative;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background-color: var(--text-main);
+  transition: width 0.5s ease-in-out;
+}
+
+.progress-ticks {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.tick {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 1px;
+  height: 8px;
+  background-color: var(--border-color);
+  transition: background-color 0.3s ease;
+}
+
+.tick.completed {
+  background-color: var(--text-main);
 }

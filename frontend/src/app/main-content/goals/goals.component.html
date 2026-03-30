@@ -17,7 +17,7 @@
             <h3 class="goal-item-title">{{ goal.title }}</h3>
             <div class="goal-meta">
               @if (goal.dateTarget) {
-                <span>Target</span>
+                <span class="target-label">Target</span>
                 <span>{{ goal.dateTarget | date:'mediumDate' }}</span>
                 <span class="dot">&middot;</span>
               }
@@ -26,8 +26,19 @@
           </div>
           
           <div class="goal-progress-container">
-            <div class="progress-bar-bg">
-              <div class="progress-bar-fill" [style.width.%]="stats.percentage"></div>
+            <div class="progress-bar-wrapper">
+              <div class="progress-bar-bg">
+                <div class="progress-bar-fill" [style.width.%]="stats.percentage"></div>
+              </div>
+              <div class="progress-ticks">
+                @for (task of stats.tasks; track task.id; let i = $index) {
+                  <div 
+                    class="tick" 
+                    [class.completed]="task.taskStatus === TaskStatus.Completed"
+                    [style.left.%]="((i + 1) / stats.total) * 100"
+                  ></div>
+                }
+              </div>
             </div>
             <span class="percentage-text">{{ stats.percentage }}%</span>
           </div>
