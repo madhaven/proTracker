@@ -1,22 +1,22 @@
 .goal-form-container {
-  margin-bottom: 48px; /* mb-12 */
+  margin-bottom: 48px;
 }
 
 .goal-form {
   display: flex;
   flex-direction: column;
-  gap: 16px; /* space-y-4 */
+  gap: 16px;
 }
 
 .goal-title-input {
   width: 100%;
-  font-size: 1.25rem; /* text-xl */
-  padding-top: 8px; /* py-2 */
+  font-size: 1.25rem;
+  padding-top: 8px;
   padding-bottom: 8px;
   background-color: transparent;
-  border: none !important;
-  border-bottom: 1px solid var(--border-color) !important; /* border-b border-gray-200 */
-  border-radius: 0 !important;
+  border: none;
+  border-bottom: 1px solid var(--border-color);
+  border-radius: 0;
   font-weight: 500;
   color: var(--text-main);
   transition: border-color 0.2s;
@@ -24,37 +24,39 @@
 
 .goal-title-input:focus {
   outline: none;
-  border-bottom-color: var(--text-main) !important; /* focus:border-gray-900 */
+  border-bottom-color: var(--text-main);
+  box-shadow: none;
 }
 
 .goal-form-row {
   display: flex;
-  gap: 16px; /* gap-4 */
+  gap: 16px;
 }
 
 .goal-date-input {
   flex: 1;
-  padding-top: 8px; /* py-2 */
+  padding-top: 8px;
   padding-bottom: 8px;
-  font-size: 0.875rem; /* text-sm */
-  color: var(--text-muted); /* text-gray-600 */
+  font-size: 0.875rem;
+  color: var(--text-muted);
   background-color: transparent;
-  border: none !important;
-  border-bottom: 1px solid var(--border-color) !important; /* border-b border-gray-200 */
-  border-radius: 0 !important;
+  border: none;
+  border-bottom: 1px solid var(--border-color);
+  border-radius: 0;
   transition: border-color 0.2s;
 }
 
 .goal-date-input:focus {
   outline: none;
-  border-bottom-color: var(--text-main) !important;
+  border-bottom-color: var(--text-main);
+  box-shadow: none;
 }
 
 .btn-create {
-  padding: 8px 24px; /* px-6 py-2 */
-  background-color: var(--text-main); /* bg-gray-900 */
+  padding: 8px 24px;
+  background-color: var(--text-main);
   color: var(--text-inverse);
-  font-size: 0.875rem; /* text-sm */
+  font-size: 0.875rem;
   font-weight: 500;
   border: none;
   border-radius: 4px;
@@ -63,18 +65,18 @@
 }
 
 .btn-create:hover {
-  background-color: var(--black); /* hover:bg-black */
+  background-color: var(--black);
 }
 
 .btn-create:disabled {
-  opacity: 0.2; /* disabled:opacity-20 */
+  opacity: 0.2;
   cursor: not-allowed;
 }
 
 .goals-container {
   display: flex;
   flex-direction: column;
-  gap: 40px; /* space-y-10 */
+  gap: 40px;
 }
 
 .goal-item {
@@ -83,9 +85,9 @@
 
 .delete-btn-absolute {
   position: absolute;
-  left: -32px; /* -left-8 */
-  top: 4px; /* top-1 */
-  color: var(--text-muted); /* text-gray-200 */
+  left: -32px;
+  top: 4px;
+  color: var(--text-muted);
   background: none;
   border: none;
   cursor: pointer;
@@ -95,62 +97,32 @@
 }
 
 .goal-item:hover .delete-btn-absolute {
-  opacity: 1; /* group-hover:opacity-100 */
+  opacity: 1;
 }
 
 .delete-btn-absolute:hover {
-  color: var(--accent-red-text); /* hover:text-red-500 */
-}
-
-.goal-content {
+  color: var(--accent-red-text);
 }
 
 .goal-item-title {
-  font-size: 1.125rem; /* text-lg */
+  font-size: 1.125rem;
   font-weight: 500;
-  color: var(--text-main); /* text-gray-900 */
+  color: var(--text-main);
   margin: 0;
 }
 
 .goal-meta {
   display: flex;
   align-items: center;
-  gap: 12px; /* gap-3 */
-  margin-top: 4px; /* mt-1 */
-  font-size: 0.75rem; /* text-xs */
-  color: var(--text-muted); /* text-gray-400 */
-}
-
-.dot {
+  gap: 12px;
+  margin-top: 4px;
+  font-size: 0.75rem;
   color: var(--text-muted);
 }
 
 .goal-progress-container {
-  margin-top: 16px; /* mt-4 */
+  margin-top: 16px;
   display: flex;
   align-items: center;
-  gap: 16px; /* gap-4 */
-}
-
-.progress-bar-bg {
-  height: 4px; /* h-1 */
-  flex: 1;
-  background-color: var(--border-color); /* bg-gray-100 */
-}
-
-.progress-bar-fill {
-  height: 100%;
-  background-color: var(--text-main); /* bg-gray-900 */
-  transition: width 0.7s ease-out;
-}
-
-.percentage-text {
-  font-size: 0.75rem; /* text-xs */
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; /* font-mono */
-  color: var(--text-muted); /* text-gray-500 */
-}
-
-.empty-text {
-  color: var(--text-muted);
-  font-style: italic;
+  gap: 16px;
 }

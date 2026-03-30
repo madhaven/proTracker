@@ -103,7 +103,7 @@ export class TaskService {
     const newTasksToCreate = this.habitService.habits()
       .filter(habit => habit.frequency === 'daily')
       .filter(habit => {
-        const hasTaskToday = currentTasks.some(t => 
+        const hasTaskToday = currentTasks.some(t =>
           String(t.createdOn).startsWith(todayStr)
           // && t.habitId === habit.id
         );
@@ -130,7 +130,7 @@ export class TaskService {
   private optimisticUpdate(fun: (tasks: Task[]) => Task[]): void {
     const currentRawTasks = this.tasksResource.value();
     if (!currentRawTasks) { return; }
-    var updatedRawTasks = fun(currentRawTasks);
+    const updatedRawTasks = fun(currentRawTasks);
     this.tasksResource.value.set(updatedRawTasks);
   }
 

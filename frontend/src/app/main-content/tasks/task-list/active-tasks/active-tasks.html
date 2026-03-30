@@ -1,7 +1,5 @@
 <div>
-  <div class="list-header">
-    <p class="current-date">{{ currentDate | date:'fullDate' }}</p>
-  </div>
+  <p class="list-section-header">{{ currentDate | date:'fullDate' }}</p>
 
   <div class="tasks-list">
     @for (task of pendingTasks(); track task.id) {

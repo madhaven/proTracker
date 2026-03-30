@@ -1,5 +1,4 @@
 import { Component, ChangeDetectionStrategy, input } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { OverdueTasks } from './overdue-tasks/overdue-tasks';
 import { ActiveTasks } from './active-tasks/active-tasks';
 import { CompletedTasks } from './completed-tasks/completed-tasks';
@@ -7,12 +6,11 @@ import { CompletedTasks } from './completed-tasks/completed-tasks';
 @Component({
   selector: 'pt-task-list',
   standalone: true,
-  imports: [CommonModule, OverdueTasks, ActiveTasks, CompletedTasks],
+  imports: [OverdueTasks, ActiveTasks, CompletedTasks],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './task-list.html',
-  styleUrls: ['./task-list.css'],
+  styleUrl: './task-list.css',
 })
 export class TaskList {
-  showCompleted = input(true);
-  currentDate = new Date();
+  readonly showCompleted = input(true);
 }

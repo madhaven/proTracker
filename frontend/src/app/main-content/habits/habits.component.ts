@@ -1,15 +1,14 @@
 import { Component, ChangeDetectionStrategy, inject, ApplicationRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TaskService, HabitService, UtilService } from '@services';
 
 @Component({
   selector: 'pt-habits',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [ReactiveFormsModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './habits.component.html',
-  styleUrls: ['./habits.component.css']
+  styleUrl: './habits.component.css'
 })
 export class HabitsComponent {
   private readonly taskService = inject(TaskService);
@@ -17,14 +16,14 @@ export class HabitsComponent {
   private readonly appRef = inject(ApplicationRef);
   private readonly utils = inject(UtilService);
 
-  habits = this.habitService.habits;
+  readonly habits = this.habitService.habits;
 
-  habitForm = new FormGroup({
+  readonly habitForm = new FormGroup({
     title: new FormControl('', Validators.required),
     frequency: new FormControl<'daily' | 'weekly'>('daily', Validators.required),
   });
 
-  addHabit() {
+  addHabit(): void {
     if (this.habitForm.invalid) return;
     const val = this.habitForm.value;
 
@@ -32,14 +31,14 @@ export class HabitsComponent {
       this.habitService.addHabit(val.title!, val.frequency as 'daily' | 'weekly');
       this.taskService.generateHabitTasks();
     });
-    
+
     this.habitForm.reset({ frequency: 'daily' });
   }
 
-  deleteHabit(habitId: string) {
+  deleteHabit(habitId: string): void {
     this.utils.transition(this.appRef, () => {
       this.habitService.deleteHabit(habitId);
       this.taskService.removeHabitTasks(habitId);
-    })
+    });
   }
 }

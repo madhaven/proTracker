@@ -45,7 +45,7 @@ export class ThemeService {
     root.classList.add('dev');
   }
 
-  private applyTheme(theme: Theme) {
+  private applyTheme(theme: Theme): void {
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
@@ -54,10 +54,10 @@ export class ThemeService {
     const root = document.documentElement;
     if (theme === Theme.Dark) {
       root.classList.add('dark');
-      root.classList.remove('light')
+      root.classList.remove('light');
     } else if (theme === Theme.Light) {
       root.classList.remove('dark');
-      root.classList.add('light')
+      root.classList.add('light');
     }
   }
 }

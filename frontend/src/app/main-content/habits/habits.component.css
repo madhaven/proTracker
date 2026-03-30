@@ -1,18 +1,18 @@
 .habit-form-container {
-  margin-bottom: 48px; /* mb-12 */
+  margin-bottom: 48px;
 }
 
 .habit-form {
   display: flex;
   align-items: flex-end;
-  gap: 16px; /* gap-4 */
-  border-bottom: 1px solid var(--border-color); /* border-gray-200 */
+  gap: 16px;
+  border-bottom: 1px solid var(--border-color);
   transition: border-color 0.2s;
-  padding-bottom: 8px; /* pb-2 */
+  padding-bottom: 8px;
 }
 
 .habit-form:focus-within {
-  border-color: var(--text-main); /* focus-within:border-gray-900 */
+  border-color: var(--text-main);
 }
 
 .habit-input-group {
@@ -21,18 +21,18 @@
 
 .habit-title-input {
   width: 100%;
-  font-size: 1.125rem; /* text-lg */
-  padding-top: 8px; /* py-2 */
+  font-size: 1.125rem;
+  padding-top: 8px;
   padding-bottom: 8px;
   background-color: transparent;
-  border: none !important;
-  box-shadow: none !important;
+  border: none;
+  box-shadow: none;
   font-weight: 500;
   color: var(--text-main);
 }
 
 .habit-title-input::placeholder {
-  color: var(--text-muted); /* placeholder-gray-300 */
+  color: var(--text-muted);
 }
 
 .habit-title-input:focus {
@@ -40,14 +40,14 @@
 }
 
 .habit-frequency-select {
-  font-size: 0.875rem; /* text-sm */
-  color: var(--text-muted); /* text-gray-500 */
+  font-size: 0.875rem;
+  color: var(--text-muted);
   background-color: transparent;
-  border: none !important;
-  box-shadow: none !important;
+  border: none;
+  box-shadow: none;
   cursor: pointer;
   appearance: none;
-  padding-bottom: 8px; /* pb-2 */
+  padding-bottom: 8px;
   width: auto;
 }
 
@@ -59,45 +59,45 @@
   background: none;
   border: none;
   cursor: pointer;
-  color: var(--text-muted); /* text-gray-400 */
-  padding-bottom: 8px; /* pb-2 */
+  color: var(--text-muted);
+  padding-bottom: 8px;
   font-weight: 500;
-  font-size: 0.875rem; /* text-sm */
+  font-size: 0.875rem;
   transition: color 0.2s, opacity 0.2s;
 }
 
 .btn-add:hover {
-  color: var(--text-main); /* hover:text-gray-900 */
+  color: var(--text-main);
 }
 
 .btn-add:disabled {
-  opacity: 0.2; /* disabled:opacity-20 */
+  opacity: 0.2;
   cursor: not-allowed;
 }
 
 .habits-container {
   display: flex;
   flex-direction: column;
-  gap: 0; /* space-y-6 - wait, provided code has space-y-6 but also border-b */
+  gap: 0;
 }
 
 .habit-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-top: 12px; /* py-3 */
+  padding-top: 12px;
   padding-bottom: 12px;
-  border-bottom: 1px solid var(--border-color); /* border-gray-50 */
+  border-bottom: 1px solid var(--border-color);
 }
 
 .habit-main {
   display: flex;
   align-items: center;
-  gap: 16px; /* gap-4 */
+  gap: 16px;
 }
 
 .delete-btn {
-  color: var(--text-muted); /* text-gray-200 */
+  color: var(--text-muted);
   background: none;
   border: none;
   cursor: pointer;
@@ -107,25 +107,22 @@
 }
 
 .habit-item:hover .delete-btn {
-  opacity: 1; /* group-hover:opacity-100 */
+  opacity: 1;
 }
 
 .delete-btn:hover {
-  color: var(--accent-red-text); /* hover:text-red-500 */
-}
-
-.habit-info {
+  color: var(--accent-red-text);
 }
 
 .habit-item-title {
   font-weight: 500;
-  color: var(--text-main); /* text-gray-800 */
+  color: var(--text-main);
   margin: 0;
 }
 
 .habit-frequency {
-  font-size: 0.75rem; /* text-xs */
-  color: var(--text-muted); /* text-gray-400 */
+  font-size: 0.75rem;
+  color: var(--text-muted);
   text-transform: capitalize;
   margin: 0;
 }
@@ -137,23 +134,18 @@
 .streak-count {
   display: flex;
   align-items: baseline;
-  gap: 4px; /* gap-1 */
+  gap: 4px;
 }
 
 .streak-number {
-  font-size: 1.5rem; /* text-2xl */
-  font-weight: 300; /* font-light */
-  color: var(--text-main); /* text-gray-900 */
+  font-size: 1.5rem;
+  font-weight: 300;
+  color: var(--text-main);
 }
 
 .streak-label {
-  font-size: 0.75rem; /* text-xs */
-  color: var(--text-muted); /* text-gray-400 */
-  text-transform: uppercase;
-  letter-spacing: 0.1em; /* tracking-widest */
-}
-
-.empty-text {
+  font-size: 0.75rem;
   color: var(--text-muted);
-  font-style: italic;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }

@@ -1,11 +1,7 @@
-.dashboard-header {
-  margin-bottom: 48px; /* mb-12 */
-}
-
 .dashboard-grid {
   display: flex;
   flex-direction: column;
-  gap: 48px; /* space-y-12 */
+  gap: 48px;
 }
 
 @media (min-width: 1024px) {
@@ -18,15 +14,15 @@
 }
 
 .section-title {
-  font-size: 0.75rem; /* text-xs */
-  font-weight: 700; /* font-bold */
-  color: var(--text-muted); /* text-gray-400 */
-  text-transform: uppercase; /* uppercase */
-  letter-spacing: 0.1em; /* tracking-widest */
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
   margin: 0;
   margin-bottom: 16px;
   padding-bottom: 8px;
-  border-bottom: 1px solid var(--border-color); /* border-gray-100 */
+  border-bottom: 1px solid var(--border-color);
   display: flex;
   align-items: center;
   min-height: 20px;
@@ -35,7 +31,7 @@
 .goals-progress-list {
   display: flex;
   flex-direction: column;
-  gap: 24px; /* space-y-6 */
+  gap: 24px;
 }
 
 .goal-progress-item {
@@ -46,29 +42,22 @@
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  margin-bottom: 8px; /* mb-2 */
+  margin-bottom: 8px;
 }
 
 .goal-title {
-  font-weight: 500; /* font-medium */
-  color: var(--text-main); /* text-gray-800 */
+  font-weight: 500;
+  color: var(--text-main);
   margin: 0;
 }
 
 .goal-percentage {
-  font-size: 0.75rem; /* text-xs */
-  color: var(--text-muted); /* text-gray-400 */
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; /* font-mono */
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
-.progress-bar-bg {
-  height: 2px; /* h-0.5 */
-  width: 100%;
-  background-color: var(--border-color); /* bg-gray-100 */
-}
-
-.progress-bar-fill {
-  height: 100%;
-  background-color: var(--text-main); /* bg-gray-900 */
-  transition: width 0.5s ease-in-out;
+/* Override shared progress-bar height for dashboard's thin variant */
+.goal-progress-item .progress-bar-bg {
+  height: 2px;
 }

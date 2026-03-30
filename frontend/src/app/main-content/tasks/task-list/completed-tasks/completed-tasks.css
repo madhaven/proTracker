@@ -1,9 +1,3 @@
-.tasks-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
 .completed-section {
   margin-top: 32px;
 }

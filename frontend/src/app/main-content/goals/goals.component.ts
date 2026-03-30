@@ -1,15 +1,16 @@
 import { Component, ChangeDetectionStrategy, inject, ApplicationRef } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
 import { ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms';
+import { DatePipe } from '@angular/common';
 import { TaskService, GoalService, UtilService } from '@services';
+import { TaskStatus } from '@models';
 
 @Component({
   selector: 'pt-goals',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, DatePipe],
+  imports: [ReactiveFormsModule, DatePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './goals.component.html',
-  styleUrls: ['./goals.component.css']
+  styleUrl: './goals.component.css'
 })
 export class GoalsComponent {
   private readonly taskService = inject(TaskService);
@@ -17,24 +18,20 @@ export class GoalsComponent {
   private readonly appRef = inject(ApplicationRef);
   private readonly utils = inject(UtilService);
 
-  tasks = this.taskService.tasks;
-  goals = this.goalService.goals;
+  readonly tasks = this.taskService.tasks;
+  readonly goals = this.goalService.goals;
 
-  goalForm = new FormGroup({
+  readonly goalForm = new FormGroup({
     title: new FormControl('', Validators.required),
     description: new FormControl(''),
     targetDate: new FormControl('', Validators.required),
   });
 
   getGoalStats(goalId: string) {
-    const allTasks = this.tasks().filter(t => t.goalId === goalId);
-    const completed = allTasks.filter(t => t.taskStatus).length;
-    const total = allTasks.length;
-    const percentage = total === 0 ? 0 : Math.round((completed / total) * 100);
-    return { total, completed, percentage };
+    return this.taskService.getGoalStats(goalId);
   }
 
-  addGoal() {
+  addGoal(): void {
     if (this.goalForm.invalid) return;
     const val = this.goalForm.value;
 
@@ -45,10 +42,10 @@ export class GoalsComponent {
     this.goalForm.reset();
   }
 
-  deleteGoal(goalId: string) {
+  deleteGoal(goalId: string): void {
     this.utils.transition(this.appRef, () => {
       this.goalService.deleteGoal(goalId);
       this.taskService.orphanGoalTasks(goalId);
-    })
+    });
   }
 }

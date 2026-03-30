@@ -9,7 +9,7 @@ import { NavButtonComponent } from './nav-button/nav-button.component';
   standalone: true,
   imports: [SvgComponent, NavButtonComponent],
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css'],
+  styleUrl: './header.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent {
@@ -18,36 +18,36 @@ export class HeaderComponent {
   private readonly appRef = inject(ApplicationRef);
   private readonly utils = inject(UtilService);
 
-  activeTab = this.stateService.activeTab;
-  currentTheme = this.themeService.theme;
+  readonly activeTab = this.stateService.activeTab;
+  readonly currentTheme = this.themeService.theme;
 
-  ActiveTab = ActiveTab;
-  Theme = Theme;
-  SvgIcon = SvgIcon;
+  readonly ActiveTab = ActiveTab;
+  readonly Theme = Theme;
+  readonly SvgIcon = SvgIcon;
 
-  toggleTheme() {
+  toggleTheme(): void {
     this.themeService.toggleTheme();
   }
 
-  setActiveTab(tab: ActiveTab) {
+  setActiveTab(tab: ActiveTab): void {
     this.utils.transition(this.appRef, () => {
       this.stateService.setActiveTab(tab);
-    })
+    });
   }
 
-  setDashboardTab() {
+  setDashboardTab(): void {
     this.setActiveTab(ActiveTab.Dashboard);
   }
 
-  setTasksTab() {
+  setTasksTab(): void {
     this.setActiveTab(ActiveTab.Tasks);
   }
 
-  setGoalsTab() {
+  setGoalsTab(): void {
     this.setActiveTab(ActiveTab.Goals);
   }
 
-  setHabitsTab() {
+  setHabitsTab(): void {
     this.setActiveTab(ActiveTab.Habits);
   }
 }

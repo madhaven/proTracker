@@ -3,7 +3,7 @@
 }
 
 :root {
-  /* Global Palette - accessible to both themes */
+  /* Global Palette */
   --white: #ffffff;
   --black: #000000;
 
@@ -67,7 +67,7 @@
   --bg-active: var(--indigo-50);
   --bg-input: var(--slate-50);
   --bg-section: rgba(var(--slate-50-rgb), 0.5);
-  
+
   --text-main: var(--slate-900);
   --text-muted: var(--slate-500);
   --text-inverse: var(--white);
@@ -102,7 +102,7 @@
   --bg-active: rgba(var(--indigo-500-rgb), 0.15);
   --bg-input: var(--gray-900);
   --bg-section: var(--gray-900);
-  
+
   --text-main: var(--slate-50);
   --text-muted: var(--slate-400);
   --text-inverse: var(--slate-900);
@@ -139,7 +139,8 @@ body, html {
   transition: var(--theme-transition);
 }
 
-/* Common UI Components */
+/* ===== Common UI Components ===== */
+
 .view-header {
   margin-bottom: 32px;
 }
@@ -199,7 +200,8 @@ body, html {
   color: var(--accent-indigo-hover);
 }
 
-/* List Items */
+/* ===== List Items ===== */
+
 .list-container {
   display: flex;
   flex-direction: column;
@@ -211,7 +213,7 @@ body, html {
   align-items: center;
   padding: 12px;
   border: 1px solid transparent;
-  transition: var(--theme-transition);  
+  transition: var(--theme-transition);
   border-bottom: 1px solid var(--border-light);
   border-radius: 0;
 }
@@ -295,7 +297,8 @@ body, html {
   color: var(--accent-red-text);
 }
 
-/* Progress Bar */
+/* ===== Progress Bar ===== */
+
 .goal-item {
   margin-bottom: 24px;
 }
@@ -334,7 +337,8 @@ body, html {
   transition: all 0.5s;
 }
 
-/* Forms */
+/* ===== Forms ===== */
+
 .form-row {
   display: flex;
   gap: 16px;
@@ -399,7 +403,8 @@ input:focus, select:focus, textarea:focus {
   cursor: not-allowed;
 }
 
-/* Grids */
+/* ===== Grids ===== */
+
 .grid-2 {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -424,7 +429,8 @@ input:focus, select:focus, textarea:focus {
   }
 }
 
-/* Sections */
+/* ===== Sections ===== */
+
 .section-divider {
   padding: 16px;
   border-bottom: 1px solid var(--border-light);
@@ -472,13 +478,16 @@ input:focus, select:focus, textarea:focus {
   transition: var(--theme-transition);
 }
 
-.habit-card:hover .floating-delete, .content-card:hover .floating-delete {
+.habit-card:hover .floating-delete,
+.content-card:hover .floating-delete {
   opacity: 1;
 }
 
 .floating-delete:hover {
   color: var(--accent-red-text);
 }
+
+/* ===== Shared Utilities ===== */
 
 .mb-24 { margin-bottom: 24px; }
 .mt-24 { margin-top: 24px; }
@@ -487,7 +496,75 @@ input:focus, select:focus, textarea:focus {
 .p-0 { padding: 0; }
 .relative { position: relative; }
 
-/* Custom Scrollbar */
+/* ===== Shared Component Patterns ===== */
+
+/* Shared section header used by active-tasks, overdue-tasks, completed-tasks */
+.list-section-header {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* Shared task list layout */
+.tasks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Shared empty text */
+.empty-text {
+  color: var(--text-muted);
+  margin: 0;
+  padding: 4px 0;
+  opacity: 0.6;
+  font-style: italic;
+}
+
+/* Shared dot separator */
+.dot {
+  color: var(--text-muted);
+}
+
+/* Shared progress bar (used in dashboard + goals) */
+.progress-bar-bg {
+  height: 4px;
+  width: 100%;
+  background-color: var(--border-color);
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background-color: var(--text-main);
+  transition: width 0.5s ease-in-out;
+}
+
+/* Shared percentage display */
+.percentage-text {
+  font-size: 0.75rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  color: var(--text-muted);
+}
+
+/* Shared animation */
+.animate-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ===== Custom Scrollbar ===== */
+
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--border-color) transparent;
@@ -510,4 +587,3 @@ input:focus, select:focus, textarea:focus {
 ::-webkit-scrollbar-thumb:hover {
   background-color: var(--text-muted);
 }
-

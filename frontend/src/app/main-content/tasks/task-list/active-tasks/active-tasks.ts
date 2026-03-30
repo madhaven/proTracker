@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, inject, computed } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { TaskItem } from '../task-item/task-item';
 import { TaskService, UtilService } from '@services';
 import { TaskStatus } from '@models';
@@ -7,21 +7,21 @@ import { TaskStatus } from '@models';
 @Component({
   selector: 'pt-active-tasks',
   standalone: true,
-  imports: [CommonModule, TaskItem],
+  imports: [DatePipe, TaskItem],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './active-tasks.html',
-  styleUrls: ['./active-tasks.css'],
+  styleUrl: './active-tasks.css',
 })
 export class ActiveTasks {
   private readonly taskService = inject(TaskService);
   private readonly utils = inject(UtilService);
 
-  currentDate = new Date();
+  readonly currentDate = new Date();
 
-  pendingTasks = computed(() => {
+  readonly pendingTasks = computed(() => {
     const today = this.utils.getTodayStart();
     return this.taskService.tasks()
-      .filter(t => t.taskStatus == TaskStatus.Pending
+      .filter(t => t.taskStatus === TaskStatus.Pending
         && (t.completeBy === null || new Date(t.completeBy!).getTime() >= today))
       .sort((a, b) => {
         const timeA = a.createdOn ? new Date(a.createdOn).getTime() : 0;

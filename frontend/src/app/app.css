@@ -18,20 +18,6 @@
   flex-direction: column;
   background-color: var(--bg-main);
   color: var(--text-main);
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   transition: var(--theme-transition);
   width: 100%;
-}
-
-.animate-in {
-  animation: fadeIn 0.5s ease-out;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-.selection\:bg-gray-200::selection {
-  background-color: #e2e8f0;
 }

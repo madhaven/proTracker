@@ -1,11 +1,9 @@
 @if (overdueTasks().length > 0) {
   <div class="overdue-section">
-    <div class="list-header danger-header">
-      <p class="current-date danger-text">Overdue Tasks</p>
-    </div>
-    <div class="tasks-list overdue-list">
+    <p class="list-section-header danger-header danger-text">Overdue Tasks</p>
+    <div class="tasks-list">
       @for (task of overdueTasks(); track task.id) {
-        <pt-task-item [task]="task"></pt-task-item>
+        <pt-task-item [task]="task" />
       }
     </div>
   </div>

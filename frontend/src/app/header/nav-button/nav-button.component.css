@@ -6,7 +6,7 @@ button {
   color: var(--text-main);
   opacity: 0.25;
   transition: opacity 0.2s, color 0.2s;
-  font-weight: 600; /* bold-ish */
+  font-weight: 600;
   display: flex;
   align-items: center;
   gap: 8px;
