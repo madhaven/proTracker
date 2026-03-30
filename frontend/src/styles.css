@@ -379,7 +379,6 @@ input:focus, select:focus, textarea:focus {
   outline: none;
   border-color: var(--accent-indigo-text);
   background-color: var(--bg-card);
-  box-shadow: 0 0 0 2px var(--accent-indigo-bg);
 }
 
 .btn-submit {
