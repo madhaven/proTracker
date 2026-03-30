@@ -1,4 +1,5 @@
 import { ApplicationRef, Injectable } from "@angular/core";
+import { Task } from "@models";
 
 @Injectable({
   providedIn: 'root'
@@ -20,5 +21,11 @@ export class UtilService {
       // for old browsers
       uiOperation();
     }
+  }
+
+  prioritizeTasks(tasks: Task[], lowPriorityFirst: boolean = false): Task[]
+  {
+    // TODO
+    return tasks;
   }
 }

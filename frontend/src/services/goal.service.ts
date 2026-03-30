@@ -1,4 +1,4 @@
-import { Injectable, computed, inject, signal } from '@angular/core';
+import { Injectable, computed, inject } from '@angular/core';
 import { Goal } from '@models';
 import { ApiService } from '@services';
 import { firstValueFrom } from 'rxjs';
@@ -7,15 +7,10 @@ import { firstValueFrom } from 'rxjs';
   providedIn: 'root'
 })
 export class GoalService {
-  private goalsSignal = signal<Goal[]>([
-    { id: 'g1', title: 'Launch Web App MVP', description: 'Complete the first version of the core product and deploy to production.', targetDate: '2026-06-01' },
-    { id: 'g2', title: 'Run a Marathon', description: 'Train and successfully complete the city marathon this fall.', targetDate: '2026-10-15' },
-  ]);
+  private readonly api = inject(ApiService);
+  private readonly goalsResource = this.api.getResource<Goal[]>('/goal');
 
-  goals = computed(() => this.goalsResource.value() ?? []);
-  
-  private api = inject(ApiService);
-  private goalsResource = this.api.getResource<Goal[]>('/goal');
+  readonly goals = computed(() => this.goalsResource.value() ?? []);
 
   async addGoal(title: string, description: string, targetDate: string) {
     const newGoal = {

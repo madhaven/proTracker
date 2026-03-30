@@ -1,4 +1,4 @@
-import { Injectable, computed, inject, signal } from '@angular/core';
+import { Injectable, computed, inject } from '@angular/core';
 import { Habit } from '@models';
 import { ApiService } from '@services';
 import { firstValueFrom } from 'rxjs';
@@ -7,16 +7,10 @@ import { firstValueFrom } from 'rxjs';
   providedIn: 'root'
 })
 export class HabitService {
-  private api = inject(ApiService);
-  private habitsSignal = signal<Habit[]>([
-    { id: 'h1', title: 'Morning Jog (5km)', frequency: 'daily', streak: 14 },
-    { id: 'h2', title: 'Read 20 Pages', frequency: 'daily', streak: 5 },
-    { id: 'h3', title: 'Water Plants', frequency: 'weekly', streak: 3 },
-  ]);
+  private readonly api = inject(ApiService);
+  private readonly habitsResource = this.api.getResource<Habit[]>('/habit');
 
-  private habitsResource = this.api.getResource<Habit[]>('/habit');
-
-  habits = computed(() => this.habitsResource.value() ?? []);
+  readonly habits = computed(() => this.habitsResource.value() ?? []);
 
   async addHabit(title: string, frequency: 'daily' | 'weekly') {
     const newHabit: Partial<Habit> = {
