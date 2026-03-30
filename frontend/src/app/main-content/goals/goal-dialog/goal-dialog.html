@@ -1,0 +1,23 @@
+<pt-modal (close)="onCancel()">
+  <form [formGroup]="goalForm" (ngSubmit)="addGoal()" class="minimal-form">
+    <div class="input-container">
+      <input #titleInput type="text" formControlName="title" placeholder="What's the goal?" class="title-input" autocomplete="off">
+    </div>
+
+    <div class="input-container">
+      <textarea formControlName="description" placeholder="Description (optional)" class="description-input" rows="2"></textarea>
+    </div>
+    
+    <div class="metadata-row">
+      <div class="metadata-item">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+        <input type="date" formControlName="targetDate" class="minimal-date">
+      </div>
+    </div>
+
+    <div class="dialog-actions">
+      <button type="button" class="btn-cancel" (click)="onCancel()">Cancel</button>
+      <button type="submit" class="btn-save" [disabled]="goalForm.invalid">Save Goal</button>
+    </div>
+  </form>
+</pt-modal>

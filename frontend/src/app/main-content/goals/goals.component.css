@@ -1,76 +1,30 @@
-.goal-form-container {
-  margin-bottom: 48px;
-}
-
-.goal-form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.goal-title-input {
-  width: 100%;
-  font-size: 1.25rem;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  background-color: transparent;
-  border: none;
-  border-bottom: 1px solid var(--border-color);
-  border-radius: 0;
-  font-weight: 500;
-  color: var(--text-main);
-  transition: border-color 0.2s;
-}
-
-.goal-title-input:focus {
-  outline: none;
-  border-bottom-color: var(--text-main);
-  box-shadow: none;
-}
-
-.goal-form-row {
-  display: flex;
-  gap: 16px;
-}
-
-.goal-date-input {
-  flex: 1;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  font-size: 0.875rem;
+.add-goal-trigger {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 24px;
+  padding: 6px 12px;
+  border-radius: 6px;
   color: var(--text-muted);
-  background-color: transparent;
-  border: none;
-  border-bottom: 1px solid var(--border-color);
-  border-radius: 0;
-  transition: border-color 0.2s;
-}
-
-.goal-date-input:focus {
-  outline: none;
-  border-bottom-color: var(--text-main);
-  box-shadow: none;
-}
-
-.btn-create {
-  padding: 8px 24px;
-  background-color: var(--text-main);
-  color: var(--text-inverse);
   font-size: 0.875rem;
   font-weight: 500;
-  border: none;
-  border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s ease;
+  background-color: transparent;
 }
 
-.btn-create:hover {
-  background-color: var(--black);
+.add-goal-trigger:hover {
+  background-color: color-mix(in srgb, var(--border-color) 40%, transparent);
+  color: var(--text-main);
 }
 
-.btn-create:disabled {
-  opacity: 0.2;
-  cursor: not-allowed;
+.plus-icon {
+  margin-right: 8px;
+  font-size: 1.1rem;
+  font-weight: 400;
+}
+
+.trigger-text {
+  line-height: 1;
 }
 
 .goals-container {

@@ -1,13 +1,12 @@
-import { Component, ChangeDetectionStrategy, inject, ApplicationRef } from '@angular/core';
-import { ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, ChangeDetectionStrategy, inject, signal, ApplicationRef } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { TaskService, GoalService, UtilService } from '@services';
-import { TaskStatus } from '@models';
+import { GoalDialog } from './goal-dialog/goal-dialog';
 
 @Component({
   selector: 'pt-goals',
   standalone: true,
-  imports: [ReactiveFormsModule, DatePipe],
+  imports: [DatePipe, GoalDialog],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './goals.component.html',
   styleUrl: './goals.component.css'
@@ -20,26 +19,18 @@ export class GoalsComponent {
 
   readonly tasks = this.taskService.tasks;
   readonly goals = this.goalService.goals;
-
-  readonly goalForm = new FormGroup({
-    title: new FormControl('', Validators.required),
-    description: new FormControl(''),
-    targetDate: new FormControl('', Validators.required),
-  });
+  readonly showDialog = signal(false);
 
   getGoalStats(goalId: string) {
     return this.taskService.getGoalStats(goalId);
   }
 
-  addGoal(): void {
-    if (this.goalForm.invalid) return;
-    const val = this.goalForm.value;
+  openDialog(): void {
+    this.showDialog.set(true);
+  }
 
-    this.utils.transition(this.appRef, () => {
-      this.goalService.addGoal(val.title!, val.description || '', val.targetDate!);
-    });
-
-    this.goalForm.reset();
+  closeDialog(): void {
+    this.showDialog.set(false);
   }
 
   deleteGoal(goalId: string): void {

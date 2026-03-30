@@ -1,17 +1,7 @@
 <div class="animate-in">
-  <!-- Add Goal Form -->
-  <div class="goal-form-container">
-    <form [formGroup]="goalForm" (ngSubmit)="addGoal()" class="goal-form">
-      <input type="text" formControlName="title" placeholder="New Goal Title" 
-        class="goal-title-input">
-      <div class="goal-form-row">
-        <input type="date" formControlName="targetDate"
-          class="goal-date-input">
-        <button type="submit" [disabled]="goalForm.invalid" class="btn-create">
-          Create
-        </button>
-      </div>
-    </form>
+  <div class="add-goal-trigger" (click)="openDialog()">
+    <span class="plus-icon">+</span>
+    <span class="trigger-text">Add a new goal...</span>
   </div>
 
   <!-- Goals List -->
@@ -26,8 +16,11 @@
           <div class="goal-info">
             <h3 class="goal-item-title">{{ goal.title }}</h3>
             <div class="goal-meta">
-              <span>Target: {{ goal.targetDate | date:'mediumDate' }}</span>
-              <span class="dot">&middot;</span>
+              @if (goal.dateTarget) {
+                <span>Target</span>
+                <span>{{ goal.dateTarget | date:'mediumDate' }}</span>
+                <span class="dot">&middot;</span>
+              }
               <span>{{ stats.completed }}/{{ stats.total }} tasks</span>
             </div>
           </div>
@@ -45,4 +38,8 @@
       <p class="empty-text">No large objectives set.</p>
     }
   </div>
+
+  @if (showDialog()) {
+    <pt-goal-dialog (close)="closeDialog()" />
+  }
 </div>

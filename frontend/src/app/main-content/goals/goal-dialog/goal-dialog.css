@@ -1,0 +1,153 @@
+.minimal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  padding: 12px 8px 4px;
+}
+
+.input-container {
+  width: 100%;
+}
+
+.title-input {
+  width: 100%;
+  font-size: 1.875rem;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  border: none;
+  background: transparent;
+  color: var(--text-main);
+  padding: 0;
+  outline: none;
+  font-family: inherit;
+}
+
+.title-input::placeholder {
+  color: var(--text-muted);
+  font-weight: 300;
+  opacity: 0.4;
+}
+
+.description-input {
+  width: 100%;
+  font-size: 1rem;
+  font-weight: 400;
+  border: none;
+  background: transparent;
+  color: var(--text-main);
+  padding: 0;
+  outline: none;
+  font-family: inherit;
+  resize: none;
+  line-height: 1.6;
+}
+
+.description-input::placeholder {
+  color: var(--text-muted);
+  font-weight: 400;
+  opacity: 0.4;
+}
+
+.metadata-row {
+  display: flex;
+  gap: 32px;
+  align-items: center;
+}
+
+.metadata-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-muted);
+  position: relative;
+  transition: opacity 0.2s ease;
+}
+
+.icon {
+  opacity: 0.6;
+  transition: all 0.2s ease;
+}
+
+.metadata-item:hover .icon,
+.metadata-item:focus-within .icon {
+  opacity: 1;
+  color: var(--text-main);
+  transform: scale(1.05);
+}
+
+.minimal-date {
+  appearance: none;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  font-weight: 400;
+  cursor: pointer;
+  outline: none;
+  padding: 4px 0;
+  transition: color 0.2s ease;
+  font-family: inherit;
+}
+
+.minimal-date:hover,
+.minimal-date:focus {
+  color: var(--text-main);
+}
+
+.minimal-date::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.btn-cancel, .btn-save {
+  background: transparent;
+  border: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 10px 20px;
+  border-radius: 8px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  letter-spacing: 0.01em;
+  font-family: inherit;
+}
+
+.btn-cancel {
+  color: var(--text-muted);
+}
+
+.btn-cancel:hover {
+  color: var(--text-main);
+  background-color: rgba(128, 128, 128, 0.08);
+}
+
+.btn-save {
+  color: var(--bg-main);
+  background-color: var(--text-main);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.btn-save:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.btn-save:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}

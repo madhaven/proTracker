@@ -18,10 +18,10 @@ export class GoalService {
   private goalsResource = this.api.getResource<Goal[]>('/goal');
 
   async addGoal(title: string, description: string, targetDate: string) {
-    const newGoal: Partial<Goal> = {
+    const newGoal = {
       title,
-      description,
-      targetDate,
+      dateAdded: new Date().toISOString(),
+      dateTarget: new Date(targetDate).toISOString(),
     };
     await firstValueFrom(this.api.post<Goal>('/goal', newGoal));
     this.goalsResource.reload();
