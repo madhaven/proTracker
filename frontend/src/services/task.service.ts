@@ -1,5 +1,5 @@
 import { Injectable, computed, inject } from '@angular/core';
-import { Task, TaskStatus, TaskToggleRequest } from '@models';
+import { GoalStats, Task, TaskStatus, TaskToggleRequest } from '@models';
 import { HabitService, ApiService } from '@services';
 import { firstValueFrom } from 'rxjs';
 
@@ -62,13 +62,13 @@ export class TaskService {
     this.tasksResource.reload();
   }
 
-  getGoalStats(goalId: string) {
+  getGoalStats(goalId: string): GoalStats { // TODO: improve
     const allTasks = this.tasks().filter(t => t.goalId === goalId);
     const total = allTasks.length;
     const completed = allTasks.filter(t => t.taskStatus === TaskStatus.Completed).length;
     const percentage = total === 0 ? 0 : Math.round((completed / total) * 100);
 
-    return { total, completed, percentage, tasks: allTasks };
+    return { total, completed, percentage, allTasks: allTasks };
   }
 
   async orphanGoalTasks(goalId: string): Promise<void> {

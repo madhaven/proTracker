@@ -1,13 +1,13 @@
 import { Component, ChangeDetectionStrategy, inject, signal, ApplicationRef } from '@angular/core';
-import { DatePipe } from '@angular/common';
 import { TaskService, GoalService, UtilService } from '@services';
 import { GoalDialog } from './goal-dialog/goal-dialog';
 import { TaskStatus } from '@models';
+import { GoalCard } from "./goal-card/goal-card";
 
 @Component({
   selector: 'pt-goals',
   standalone: true,
-  imports: [DatePipe, GoalDialog],
+  imports: [GoalDialog, GoalCard],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './goals.component.html',
   styleUrl: './goals.component.css'

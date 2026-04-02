@@ -547,7 +547,7 @@ input:focus, select:focus, textarea:focus {
 
 /* Shared percentage display */
 .percentage-text {
-  font-size: 0.75rem;
+  font-size: 1rem;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   color: var(--text-muted);
 }

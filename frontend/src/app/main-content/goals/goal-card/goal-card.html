@@ -1,0 +1,41 @@
+<div class="goal-item group">
+  <button (click)="deleteClick()" class="delete-btn-absolute">
+    &times;
+  </button>
+  <div class="goal-content">
+    <div class="goal-info">
+      <h3 class="goal-item-title">{{ goal().title }}</h3>
+      <div class="goal-meta">
+        @if (goal().dateTarget) {
+          <span class="target-label">Target</span>
+          <span class="target-label">{{ goal().dateTarget | date:'mediumDate' }}</span>
+        }
+        <!-- <span class="dot">&middot;</span> -->
+        <!-- <span>{{ stats().completed }}/{{ stats().total }} tasks</span> -->
+      </div>
+    </div>
+    
+    <div class="goal-progress-container">
+      <div class="progress-bar-wrapper">
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" [style.width.%]="stats().percentage"></div>
+        </div>
+        <div class="progress-ticks">
+          @for (task of stats().allTasks; track task.id; let i = $index) {
+            <div class="tick-container" [style.left.%]="((i + 1) / stats().total) * 100">
+              <span class="tick-title" [title]="task.title">{{ task.title }}</span>
+              <div 
+                class="tick" 
+                [class.completed]="task.taskStatus === TaskStatus.Completed"
+              ></div>
+              @if (task.completeBy) {
+                <span class="tick-date">{{ task.completeBy | date:'MMM d' }}</span>
+              }
+            </div>
+          }
+        </div>
+      </div>
+      <span class="percentage-text">{{ stats().percentage }}%</span>
+    </div>
+  </div>
+</div>

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using ProTracker.Interfaces;
 using ProTracker.Models;
 using ProTracker.Web.Contracts;
+using Task = ProTracker.Models.Task;
 
 namespace ProTracker.Web.Controllers;
 
@@ -40,28 +41,17 @@ public class TaskController : ControllerBase
             return BadRequest("Title is required.");
         }
 
-        Goal? goal = null;
-        if (createRequest.GoalId != null)
-        {
-            var goalId = createRequest.GoalId.Value;
-            goal = await _goalService.GetGoalByIdAsync(goalId);
-            if (goal == null)
-            {
-                return NotFound($"Goal with ID {goalId} not found.");
-            }
-        }
-
         var taskModel = new Models.Task
         {
             Title = createRequest.Title,
             TaskStatus = Models.TaskStatus.Pending,
-            Goal = goal,
             CreatedOn = createRequest.CreatedOn,
             CompleteBy = createRequest.CompleteBy,
         };
 
-        var createdTask = await _taskService
-            .CreateTaskAsync(taskModel);
+        var createdTask = createRequest.GoalId.HasValue
+            ? await _taskService.CreateTaskAsync(taskModel, createRequest.GoalId.Value)
+            : await _taskService.CreateTaskAsync(taskModel);
 
         var response = createdTask.ToContract();
         return Ok(response);

@@ -1,3 +1,4 @@
+using System.Data;
 using Microsoft.EntityFrameworkCore;
 using ProTracker.Data;
 using ProTracker.Interfaces;
@@ -10,10 +11,12 @@ namespace ProTracker.Implementation.Services;
 public class TaskService : ITaskService
 {
     private readonly ProTrackerDbContext _context;
+    private readonly IGoalService _goalService;
 
-    public TaskService(ProTrackerDbContext context)
+    public TaskService(ProTrackerDbContext context, IGoalService goalService)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
+        _goalService = goalService ?? throw new ArgumentNullException(nameof(goalService));
     }
 
     public async Task<IEnumerable<Task>> GetAllTasksAsync()
@@ -39,6 +42,29 @@ public class TaskService : ITaskService
         await _context.SaveChangesAsync();
 
         task.Id = dbTask.Id;
+        return task;
+    }
+
+    public async Task<Task> CreateTaskAsync(Task task, int goalId)
+    {
+        var goal = await _goalService.GetGoalByIdAsync(goalId)
+            ?? throw new InvalidOperationException("Goal not found");
+
+        var dbTask = task.ToDbModel();
+        dbTask.GoalId = goalId;
+
+        _context.Tasks.Add(dbTask);
+        _context.TaskStatusLogs.Add(new Data.DBModels.TaskStatusLog
+        {
+            LogTime = task.CreatedOn,
+            Status = Data.DBModels.TaskStatus.Pending,
+            Task = dbTask,
+            TaskId = dbTask.Id
+        });
+        await _context.SaveChangesAsync();
+
+        task.Id = dbTask.Id;
+        task.Goal = goal;
         return task;
     }
 
