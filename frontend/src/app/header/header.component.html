@@ -1,7 +1,7 @@
 <header class="app-header">
   <div class="header-container">
     <div class="logo-group">
-      <h1 class="logo-title" (click)="setDashboardTab()">ProTracker.</h1>
+      <h1 class="logo-title" routerLink="/dashboard">ProTracker.</h1>
       <button class="theme-minimal-toggle" (click)="toggleTheme()" [title]="'Toggle Theme'">
         @if (currentTheme() === Theme.Light) {
           <pt-svg [icon]="SvgIcon.Moon" [size]="18" />
@@ -10,11 +10,6 @@
         }
       </button>
     </div>
-    <nav class="header-nav">
-      <pt-nav-button [label]="'Today'" [tab]="ActiveTab.Dashboard" (clicked)="setDashboardTab()" />
-      <pt-nav-button [label]="'Tasks'" [tab]="ActiveTab.Tasks" (clicked)="setTasksTab()" />
-      <pt-nav-button [label]="'Goals'" [tab]="ActiveTab.Goals" (clicked)="setGoalsTab()" />
-      <pt-nav-button [label]="'Habits'" [tab]="ActiveTab.Habits" (clicked)="setHabitsTab()" />
-    </nav>
+    <pt-nav-section />
   </div>
 </header>

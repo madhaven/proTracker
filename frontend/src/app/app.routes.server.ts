@@ -1,8 +1,8 @@
 import { RenderMode, ServerRoute } from '@angular/ssr';
+import { AppRoutes } from '@constants';
 
 export const serverRoutes: ServerRoute[] = [
-  {
-    path: '**',
-    renderMode: RenderMode.Prerender
-  }
+  // for SSR
+  { path: `${AppRoutes.TaskDetail}/:id`, renderMode: RenderMode.Server },
+  { path: '**', renderMode: RenderMode.Prerender }
 ];

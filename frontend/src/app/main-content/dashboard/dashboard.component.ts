@@ -1,8 +1,8 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
-import { TaskService, GoalService, StateService } from '@services';
-import { ActiveTab } from '@constants';
+import { TaskService, GoalService } from '@services';
 import { TaskList } from '../tasks/task-list/task-list';
 import { QuickStatsComponent } from '../quick-stats/quick-stats.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'pt-dashboard',
@@ -15,10 +15,8 @@ import { QuickStatsComponent } from '../quick-stats/quick-stats.component';
 export class DashboardComponent {
   private readonly taskService = inject(TaskService);
   private readonly goalService = inject(GoalService);
-  private readonly stateService = inject(StateService);
+  private readonly router = inject(Router);
 
-  readonly activeTab = this.stateService.activeTab;
-  readonly ActiveTab = ActiveTab;
   readonly goals = this.goalService.goals;
 
   getGoalStats(goalId: string) {
@@ -26,6 +24,6 @@ export class DashboardComponent {
   }
 
   setGoalsTab(): void {
-    this.stateService.activeTab.set(ActiveTab.Goals);
+    this.router.navigate(['/goals']);
   }
 }

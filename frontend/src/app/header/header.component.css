@@ -72,9 +72,3 @@
   color: var(--text-main);
 }
 
-.header-nav {
-  display: flex;
-  gap: 32px;
-  font-size: 1rem;
-  letter-spacing: 0.05em;
-}
