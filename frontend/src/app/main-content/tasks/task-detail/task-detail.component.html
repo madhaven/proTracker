@@ -7,12 +7,12 @@
   @if (task(); as t) {
     <div class="group" [class.danger-item]="isOverdue()" [style.view-transition-name]="'task-' + t.id">
       <div class="detail-header">
-        <button (click)="toggleTask()" 
-                class="checkbox-box" 
-                [class.danger-checkbox]="isOverdue()"
+        <button (click)="toggleTask($event)"
+                class="pt-checkbox-btn task-detail-checkbox size-lg"
+                [class.danger]="isOverdue()"
                 [class.checked]="isCompleted()">
           @if (isCompleted()) {
-            <pt-svg class="check-icon" [icon]="SvgIcon.Check" [size]="16"></pt-svg>
+            <pt-svg class="check-icon" [icon]="SvgIcon.Check" [size]="16" />
           }
         </button>
         <h1 class="task-title" [class.line-through]="isCompleted()" [class.danger-title]="isOverdue()">

@@ -586,3 +586,56 @@ input:focus, select:focus, textarea:focus {
 ::-webkit-scrollbar-thumb:hover {
   background-color: var(--text-muted);
 }
+.pt-checkbox-btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-sizing: border-box;
+  padding: 0;
+  height: 16px;
+  width: 16px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+}
+
+.pt-checkbox-btn.size-lg {
+  height: 24px;
+  width: 24px;
+  border-radius: 6px;
+  border: 2px solid var(--border-color);
+}
+
+.pt-checkbox-btn:hover {
+  border-color: var(--text-main);
+}
+
+.pt-checkbox-btn:focus-visible {
+  outline: 2px solid var(--text-main);
+  outline-offset: 2px;
+}
+
+.pt-checkbox-btn.checked {
+  background-color: var(--border-color);
+  border-color: var(--border-color);
+}
+
+.pt-checkbox-btn.danger {
+  border-color: var(--accent-red-text);
+}
+
+.pt-checkbox-btn.danger:hover {
+  border-color: var(--accent-red-text);
+  background-color: color-mix(in srgb, var(--accent-red-text) 10%, transparent);
+}
+
+.pt-checkbox-btn .check-icon {
+  color: var(--text-inverse);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+

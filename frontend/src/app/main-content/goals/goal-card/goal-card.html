@@ -29,13 +29,11 @@
                   class="tick" 
                   [class.completed]="task.taskStatus === TaskStatus.Completed"
                 ></div>
-                <button (click)="toggleTask(task.id)" 
-                        class="tick-checkbox" 
-                        [class.checked]="task.taskStatus === TaskStatus.Completed">
+                <button (click)="toggleTask(task.id, $event)"
+                    class="pt-checkbox-btn tick-checkbox"
+                    [class.checked]="task.taskStatus === TaskStatus.Completed">
                   @if (task.taskStatus === TaskStatus.Completed) {
-                    <svg class="check-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
-                    </svg>
+                    <pt-svg class="check-icon" [icon]="SvgIcon.Check" [size]="12" />
                   }
                 </button>
               </div>

@@ -70,7 +70,8 @@ export class TaskDetailComponent {
     }
   }
 
-  toggleTask(): void {
+  toggleTask(event: Event): void {
+    event.stopPropagation();
     const taskId = this.id();
     if (taskId) {
       this.utils.transition(this.appRef, () => {

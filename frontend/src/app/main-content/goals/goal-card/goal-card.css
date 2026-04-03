@@ -117,23 +117,7 @@
   position: absolute;
   opacity: 0;
   pointer-events: none;
-  flex-shrink: 0;
-  height: 16px;
-  width: 16px;
-  border-radius: 4px;
-  border: 1px solid var(--border-color);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: none;
-  cursor: pointer;
   transition: border-color 0.2s, opacity 0.2s ease;
-  padding: 0;
-}
-
-.tick-checkbox.checked {
-  background-color: var(--border-color);
-  border-color: var(--border-color);
 }
 
 .tick-container:hover .tick {
@@ -143,20 +127,6 @@
 .tick-container:hover .tick-checkbox {
   opacity: 1;
   pointer-events: auto;
-}
-
-.tick-checkbox:hover {
-  border-color: var(--text-main);
-}
-
-.tick-checkbox:focus {
-  outline: none;
-}
-
-.check-icon {
-  width: 12px;
-  height: 12px;
-  color: var(--text-inverse);
 }
 
 .tick-date {
