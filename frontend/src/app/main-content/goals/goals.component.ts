@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject, signal, ApplicationRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, signal, ApplicationRef, computed } from '@angular/core';
 import { TaskService, GoalService, UtilService } from '@services';
 import { GoalDialog } from './goal-dialog/goal-dialog';
 import { TaskStatus } from '@models';
@@ -20,6 +20,15 @@ export class GoalsComponent {
 
   readonly tasks = this.taskService.tasks;
   readonly goals = this.goalService.goals;
+
+  readonly sortedGoals = computed(() => {
+    return [...this.goals()].sort((a, b) => {
+      const statsA = this.getGoalStats(a.id);
+      const statsB = this.getGoalStats(b.id);
+      return statsB.percentage - statsA.percentage;
+    });
+  });
+
   readonly showDialog = signal(false);
   readonly TaskStatus = TaskStatus;
 

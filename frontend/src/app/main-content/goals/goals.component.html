@@ -6,14 +6,14 @@
 
   <!-- Goals List -->
   <div class="goals-container">
-    @for (goal of goals(); track goal.id) {
+    @for (goal of sortedGoals(); track goal.id) {
       @let stats = getGoalStats(goal.id);
       <pt-goal-card
         [goal]="goal"
         [stats]="stats"
         (delete)="deleteGoal(goal.id)" />
     }
-    @if (goals().length === 0) {
+    @if (sortedGoals().length === 0) {
       <p class="empty-text">No large objectives set.</p>
     }
   </div>
