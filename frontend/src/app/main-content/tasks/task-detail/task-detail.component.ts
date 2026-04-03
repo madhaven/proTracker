@@ -46,6 +46,7 @@ export class TaskDetailComponent {
   });
   
   readonly isOverdue = computed(() => {
+    if (this.isCompleted()) return false;
     const dueDate = this.task()?.completeBy;
     if (!dueDate) return false;
     return new Date(dueDate).getTime() < new Date().setHours(0, 0, 0, 0);

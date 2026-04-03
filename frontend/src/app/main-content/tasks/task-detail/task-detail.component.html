@@ -21,29 +21,25 @@
       </div>
 
       <div class="task-meta-grid">
-        <div class="meta-item">
+        <!-- <div class="meta-item">
           <span class="meta-label">Status</span>
           <span class="meta-value">{{ isCompleted() ? 'Completed' : 'Pending' }}</span>
-        </div>
+        </div> -->
 
         <div class="meta-item">
-          <span class="meta-label">Created On</span>
+          <span class="meta-label">Created</span>
           <span class="meta-value">{{ t.createdOn | date:'medium' }}</span>
         </div>
 
-        @if (hasDueDate()) {
-          <div class="meta-item" [class.danger-text]="isOverdue()">
-            <span class="meta-label">Due Date</span>
-            <span class="meta-value">{{ t.completeBy | date:'mediumDate' }}</span>
-          </div>
-        }
+        <div class="meta-item" [class.danger-text]="isOverdue()">
+          <span class="meta-label">Due</span>
+          <span class="meta-value">{{ !hasDueDate() ? '-' : t.completeBy | date:'mediumDate'}}</span>
+        </div>
 
-        @if (isCompleted() && t.completedOn) {
-          <div class="meta-item">
-            <span class="meta-label">Completed On</span>
-            <span class="meta-value">{{ t.completedOn | date:'medium' }}</span>
-          </div>
-        }
+        <div class="meta-item">
+          <span class="meta-label">Done</span>
+          <span class="meta-value">{{ !(isCompleted() && t.completedOn) ? '-' : t.completedOn | date:'medium' }}</span>
+        </div>
 
         @if (t.goalId) {
           <div class="meta-item">

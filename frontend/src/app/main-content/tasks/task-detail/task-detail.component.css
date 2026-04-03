@@ -1,5 +1,5 @@
 .task-detail-container {
-  padding: 16px;
+  padding: 24px;
   max-width: 800px;
   margin: 0 auto;
 }
@@ -10,68 +10,71 @@
   gap: 8px;
   background: none;
   border: none;
-  color: var(--text-muted);
+  color: var(--text-main);
+  opacity: 0.5;
   cursor: pointer;
   padding: 8px 0;
-  margin-bottom: 24px;
+  margin-bottom: 32px;
   font-size: 0.875rem;
-  font-weight: 500;
-  transition: color 0.2s;
+  font-weight: 600;
+  transition: opacity 0.2s;
 }
 
 .back-btn:hover {
-  color: var(--text-main);
+  opacity: 1;
 }
 
 .detail-header {
   display: flex;
   align-items: flex-start;
-  gap: 16px;
-  margin-bottom: 32px;
+  gap: 20px;
+  margin-bottom: 48px;
 }
 
 .task-detail-checkbox {
-  margin-top: 6px;
+  margin-top: 8px;
 }
 
 .task-title {
   margin: 0;
-  font-size: 1.5rem;
-  font-weight: 600;
+  font-size: 1.875rem;
+  font-weight: 300;
   color: var(--text-main);
-  line-height: 1.3;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
 }
 
 .task-title.line-through {
   text-decoration: line-through;
   color: var(--text-muted);
+  opacity: 0.5;
 }
 
 .task-meta-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 24px;
-  margin-bottom: 32px;
-  padding-bottom: 32px;
+  gap: 40px;
+  margin-bottom: 48px;
+  padding-bottom: 48px;
   border-bottom: 1px solid var(--border-color);
 }
 
 .meta-item {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px;
 }
 
 .meta-label {
   font-size: 0.75rem;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.1em;
   color: var(--text-muted);
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .meta-value {
-  font-size: 0.9375rem;
+  font-size: 1rem;
   color: var(--text-main);
   font-weight: 500;
 }
@@ -89,10 +92,10 @@
   background: none;
   border: 1px solid var(--accent-red-text);
   color: var(--accent-red-text);
-  padding: 8px 16px;
-  border-radius: 6px;
+  padding: 10px 20px;
+  border-radius: 12px;
   font-size: 0.875rem;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
 }
