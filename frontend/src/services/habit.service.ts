@@ -10,7 +10,10 @@ export class HabitService {
   private readonly api = inject(ApiService);
   private readonly habitsResource = this.api.getResource<Habit[]>('/habit');
 
-  readonly habits = computed(() => this.habitsResource.value() ?? []);
+  readonly habits = computed(() => {
+    const rawHabits = this.habitsResource.value() ?? [];
+    return rawHabits.map((h: any) => ({ ...h, id: String(h.id) })) as Habit[];
+  });
 
   async addHabit(title: string, frequency: 'daily' | 'weekly') {
     const newHabit: Partial<Habit> = {

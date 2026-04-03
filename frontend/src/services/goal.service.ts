@@ -10,7 +10,10 @@ export class GoalService {
   private readonly api = inject(ApiService);
   private readonly goalsResource = this.api.getResource<Goal[]>('/goal');
 
-  readonly goals = computed(() => this.goalsResource.value() ?? []);
+  readonly goals = computed(() => {
+    const rawGoals = this.goalsResource.value() ?? [];
+    return rawGoals.map((g: any) => ({ ...g, id: String(g.id) })) as Goal[];
+  });
 
   async addGoal(title: string, description: string, targetDate: string) {
     const newGoal = {

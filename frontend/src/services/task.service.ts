@@ -14,7 +14,12 @@ export class TaskService {
   readonly tasks = computed<Task[]>(() => {
     const rawTasks = this.tasksResource.value();
     if (!rawTasks) { return []; }
-    return rawTasks as Task[];
+    return rawTasks.map((t: any) => ({
+      ...t,
+      id: String(t.id),
+      goalId: t.goalId ? String(t.goalId) : null,
+      habitId: t.habitId ? String(t.habitId) : null
+    })) as Task[];
   });
 
   async addTask(title: string, goalId: string | null = null, date: string | null = null): Promise<void> {
@@ -37,14 +42,14 @@ export class TaskService {
       : TaskStatus.Completed;
     
     const taskUpdateRequest: TaskToggleRequest = { 
-      TaskId: parseInt(taskId, 10), 
+      TaskId: taskId, 
       Status: newStatus,
       Time: new Date()
     };
 
     this.optimisticUpdate((ts: Task[]) => {
       return ts.map((t: Task) => {
-        if (t.id !== taskId) { return t; }
+        if (String(t.id) !== taskId) { return t; }
         return { ...t, taskStatus: newStatus };
       });
     });
@@ -55,7 +60,7 @@ export class TaskService {
 
   async deleteTask(taskId: string): Promise<void> {
     this.optimisticUpdate((ts: Task[]) => {
-      return ts.filter(t => t.id !== taskId);
+      return ts.filter(t => String(t.id) !== taskId);
     });
 
     await firstValueFrom(this.api.delete(`/task/${taskId}`));

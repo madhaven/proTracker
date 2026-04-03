@@ -1,7 +1,7 @@
 import { TaskStatus } from "@models";
 
 export interface TaskToggleRequest {
-    TaskId: number,
+    TaskId: string,
     Status: TaskStatus,
     Time: Date
 };
