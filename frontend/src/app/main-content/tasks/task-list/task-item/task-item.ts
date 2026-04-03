@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { Task, TaskStatus } from '@models';
 import { TaskService, GoalService, UtilService } from '@services';
 import { SvgComponent } from '@atoms';
-import { SvgIcon } from '@constants';
+import { AppRouterLinks, SvgIcon } from '@constants';
 
 @Component({
   selector: 'pt-task-item',
@@ -58,8 +58,6 @@ export class TaskItem {
   }
 
   navigateToDetail(taskId: string): void {
-    this.utils.transition(this.appRef, () => {
-      this.router.navigate(['/task', taskId]);
-    });
+    this.router.navigate([AppRouterLinks.TaskDetail, taskId]);
   }
 }

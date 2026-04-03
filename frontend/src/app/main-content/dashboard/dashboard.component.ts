@@ -3,6 +3,7 @@ import { TaskService, GoalService } from '@services';
 import { TaskList } from '../tasks/task-list/task-list';
 import { QuickStatsComponent } from '../quick-stats/quick-stats.component';
 import { Router } from '@angular/router';
+import { AppRouterLinks } from '@constants';
 
 @Component({
   selector: 'pt-dashboard',
@@ -24,6 +25,6 @@ export class DashboardComponent {
   }
 
   setGoalsTab(): void {
-    this.router.navigate(['/goals']);
+    this.router.navigate([AppRouterLinks.Goals]);
   }
 }

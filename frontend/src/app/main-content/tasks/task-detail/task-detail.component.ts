@@ -5,7 +5,7 @@ import { TaskService, GoalService, UtilService } from '@services';
 import { TaskStatus } from '@models';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { SvgComponent } from '@atoms';
-import { SvgIcon } from '@constants';
+import { SvgIcon, AppRouterLinks } from '@constants';
 
 @Component({
   selector: 'pt-task-detail',
@@ -63,10 +63,8 @@ export class TaskDetailComponent {
   deleteTask(): void {
     const taskId = this.id();
     if (taskId) {
-      this.utils.transition(this.appRef, () => {
-        this.taskService.deleteTask(taskId);
-        this.router.navigate(['/tasks']);
-      });
+      this.taskService.deleteTask(taskId);
+      this.router.navigate([AppRouterLinks.Tasks]);
     }
   }
 

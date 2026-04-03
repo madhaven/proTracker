@@ -1,5 +1,6 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { AppRouterLinks } from '@constants';
 
 @Component({
   selector: 'pt-nav-section',
@@ -9,4 +10,6 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   styleUrl: './nav-section.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NavSectionComponent {}
+export class NavSectionComponent {
+  readonly AppRouterLinks = AppRouterLinks;
+}

@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { ThemeService } from '@services';
-import { Theme, SvgIcon } from '@constants';
+import { Theme, SvgIcon, AppRouterLinks } from '@constants';
 import { SvgComponent } from '@atoms';
 import { RouterLink } from '@angular/router';
 import { NavSectionComponent } from './nav-section/nav-section.component';
@@ -20,6 +20,7 @@ export class HeaderComponent {
 
   readonly Theme = Theme;
   readonly SvgIcon = SvgIcon;
+  readonly AppRouterLinks = AppRouterLinks;
 
   toggleTheme(): void {
     this.themeService.toggleTheme();
