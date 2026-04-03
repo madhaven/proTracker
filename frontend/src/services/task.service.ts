@@ -12,7 +12,7 @@ export class TaskService {
 
   private readonly tasksResource = this.api.getResource<any>('/task');
   readonly tasks = computed<Task[]>(() => {
-    const rawTasks = this.tasksResource.value();
+    var rawTasks = this.tasksResource.value();
     if (!rawTasks) { return []; }
     return rawTasks.map((t: any) => ({
       ...t,

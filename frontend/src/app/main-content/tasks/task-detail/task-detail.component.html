@@ -1,0 +1,65 @@
+<div class="task-detail-container animate-in">
+  <button class="back-btn" (click)="goBack()">
+    <pt-svg [icon]="SvgIcon.ChevronLeft" [size]="20"></pt-svg>
+    Back
+  </button>
+
+  @if (task(); as t) {
+    <div class="group" [class.danger-item]="isOverdue()" [style.view-transition-name]="'task-' + t.id">
+      <div class="detail-header">
+        <button (click)="toggleTask()" 
+                class="checkbox-box" 
+                [class.danger-checkbox]="isOverdue()"
+                [class.checked]="isCompleted()">
+          @if (isCompleted()) {
+            <pt-svg class="check-icon" [icon]="SvgIcon.Check" [size]="16"></pt-svg>
+          }
+        </button>
+        <h1 class="task-title" [class.line-through]="isCompleted()" [class.danger-title]="isOverdue()">
+          {{ t.title }}
+        </h1>
+      </div>
+
+      <div class="task-meta-grid">
+        <div class="meta-item">
+          <span class="meta-label">Status</span>
+          <span class="meta-value">{{ isCompleted() ? 'Completed' : 'Pending' }}</span>
+        </div>
+
+        <div class="meta-item">
+          <span class="meta-label">Created On</span>
+          <span class="meta-value">{{ t.createdOn | date:'medium' }}</span>
+        </div>
+
+        @if (hasDueDate()) {
+          <div class="meta-item" [class.danger-text]="isOverdue()">
+            <span class="meta-label">Due Date</span>
+            <span class="meta-value">{{ t.completeBy | date:'mediumDate' }}</span>
+          </div>
+        }
+
+        @if (isCompleted() && t.completedOn) {
+          <div class="meta-item">
+            <span class="meta-label">Completed On</span>
+            <span class="meta-value">{{ t.completedOn | date:'medium' }}</span>
+          </div>
+        }
+
+        @if (t.goalId) {
+          <div class="meta-item">
+            <span class="meta-label">Associated Goal</span>
+            <span class="meta-value">{{ getGoalName(t.goalId) }}</span>
+          </div>
+        }
+      </div>
+
+      <div class="actions">
+        <button class="delete-btn danger-btn" (click)="deleteTask()">Delete Task</button>
+      </div>
+    </div>
+  } @else {
+    <div class="loading-state">
+      <p>Loading task details...</p>
+    </div>
+  }
+</div>

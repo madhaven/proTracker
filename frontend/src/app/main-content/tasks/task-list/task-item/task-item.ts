@@ -1,5 +1,6 @@
 import { Component, ChangeDetectionStrategy, inject, input, ApplicationRef, computed } from '@angular/core';
 import { DatePipe } from '@angular/common';
+import { Router } from '@angular/router';
 import { Task, TaskStatus } from '@models';
 import { TaskService, GoalService, UtilService } from '@services';
 
@@ -20,6 +21,7 @@ export class TaskItem {
   private readonly goalService = inject(GoalService);
   private readonly appRef = inject(ApplicationRef);
   private readonly utils = inject(UtilService);
+  private readonly router = inject(Router);
 
   readonly task = input.required<Task>();
 
@@ -47,6 +49,12 @@ export class TaskItem {
   deleteTask(taskId: string): void {
     this.utils.transition(this.appRef, () => {
       this.taskService.deleteTask(taskId);
+    });
+  }
+
+  navigateToDetail(taskId: string): void {
+    this.utils.transition(this.appRef, () => {
+      this.router.navigate(['/task', taskId]);
     });
   }
 }

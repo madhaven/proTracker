@@ -10,7 +10,7 @@
     }
   </button>
   
-  <div class="task-info">
+  <div class="task-info" (click)="navigateToDetail(task().id)">
     <p class="task-title"
        [class.danger-title]="isOverdue()" 
        [class.line-through]="isCompleted()">
