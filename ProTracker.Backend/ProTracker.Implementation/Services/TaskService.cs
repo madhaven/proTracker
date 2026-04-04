@@ -1,4 +1,3 @@
-using System.Data;
 using Microsoft.EntityFrameworkCore;
 using ProTracker.Data;
 using ProTracker.Interfaces;
@@ -112,5 +111,15 @@ public class TaskService : ITaskService
             .Select(l => l.ToModel())
             .ToListAsync();
         return dbLogs;
+    }
+
+    public async Task<bool> DeleteTaskAsync(int id)
+    {
+        var task = await _context.Tasks.FindAsync(id);
+        if (task == null) return false;
+
+        _context.Tasks.Remove(task);
+        await _context.SaveChangesAsync();
+        return true;
     }
 }

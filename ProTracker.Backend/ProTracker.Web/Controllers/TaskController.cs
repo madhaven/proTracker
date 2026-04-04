@@ -98,4 +98,18 @@ public class TaskController : ControllerBase
         var log = await _taskService.ToggleTaskStatusAsync(toggleRequest.TaskId, toggleRequest.Status.ToModel(), toggleRequest.Time);
         return Ok(log.TaskStatus);
     }
+
+    /// <summary>
+    /// Deletes a task by its ID.
+    /// </summary>
+    /// <param name="id">The ID of the task to delete.</param>
+    /// <returns>True if the task was successfully deleted, otherwise False.</returns>
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> DeleteTask(int id)
+    {
+        var success = await _taskService.DeleteTaskAsync(id);
+        if (!success) return NotFound();
+
+        return Ok(true);
+    }
 }
