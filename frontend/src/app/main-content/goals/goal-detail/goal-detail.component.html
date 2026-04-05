@@ -1,0 +1,36 @@
+<div class="goal-detail-container">
+  <div class="header-actions">
+    <!-- TODO: make it an atomic button -->
+    <button class="back-btn" (click)="goBack()">&larr; Back to Goals</button>
+  </div>
+
+  @if (goal(); as g) {
+    <div class="goal-header">
+      <h1 class="goal-title">{{ g.title }}</h1>
+      <p class="goal-description">{{ g.description }}</p>
+    </div>
+
+    <!-- <div class="divider"></div> -->
+
+    <div class="tasks-timeline">
+      @for (task of stats()?.allTasks; track task.id) {
+        <div class="task-timeline-entry">
+          <div class="timeline-line"></div>
+          <pt-task-item [task]="task" />
+        </div>
+      }
+      
+      <div class="add-task-trigger" (click)="openTaskDialog()">
+        <span class="plus-icon">+</span>
+        <span class="trigger-text">Add a new task...</span>
+      </div>
+    </div>
+  } @else {
+    <p>Goal not found.</p>
+  }
+</div>
+
+@if (showTaskDialog()) {
+  <!-- TODO: move away to an appropriate location -->
+  <pt-task-dialog [prefilledGoalId]="goalId" (close)="closeTaskDialog()" />
+}

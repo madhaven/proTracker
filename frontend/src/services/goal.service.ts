@@ -18,6 +18,7 @@ export class GoalService {
   async addGoal(title: string, description: string, targetDate: string) {
     const newGoal = {
       title,
+      description,
       dateAdded: new Date().toISOString(),
       dateTarget: new Date(targetDate).toISOString(),
     };

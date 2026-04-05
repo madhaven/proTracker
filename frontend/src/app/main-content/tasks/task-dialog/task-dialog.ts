@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject, output, ElementRef, ViewChild, AfterViewInit, ApplicationRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, input, output, ElementRef, ViewChild, AfterViewInit, OnInit, ApplicationRef } from '@angular/core';
 import { ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TaskService, GoalService, UtilService } from '@services';
 import { ModalComponent } from '@atoms';
@@ -11,7 +11,7 @@ import { ModalComponent } from '@atoms';
   templateUrl: './task-dialog.html',
   styleUrl: './task-dialog.css',
 })
-export class TaskDialog implements AfterViewInit {
+export class TaskDialog implements OnInit, AfterViewInit {
   @ViewChild('titleInput') titleInput!: ElementRef<HTMLInputElement>;
 
   private readonly taskService = inject(TaskService);
@@ -19,6 +19,7 @@ export class TaskDialog implements AfterViewInit {
   private readonly appRef = inject(ApplicationRef);
   private readonly utils = inject(UtilService);
 
+  readonly prefilledGoalId = input<string | null>(null);
   readonly goals = this.goalService.goals;
   readonly close = output<void>();
 
@@ -27,6 +28,13 @@ export class TaskDialog implements AfterViewInit {
     goalId: new FormControl(''),
     date: new FormControl(''),
   });
+
+  ngOnInit(): void {
+    const goalId = this.prefilledGoalId();
+    if (goalId) {
+      this.taskForm.patchValue({ goalId });
+    }
+  }
 
   ngAfterViewInit(): void {
     setTimeout(() => { this.titleInput?.nativeElement?.focus(); }, 50);

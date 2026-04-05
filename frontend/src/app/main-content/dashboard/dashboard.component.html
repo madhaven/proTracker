@@ -14,10 +14,9 @@
       <div class="goals-progress-list">
         @for (goal of goals(); track goal.id) {
           @let stats = getGoalStats(goal.id);
-          <div class="goal-progress-item group" (click)="setGoalsTab()">
-            <!-- TODO: navigate to the goal instead of using the function -->
+          <div class="goal-progress-item group">
             <div class="goal-header">
-              <h4 class="goal-title">{{ goal.title }}</h4>
+              <h4 class="goal-title" (click)="navigateToGoal(goal.id)">{{ goal.title }}</h4>
               <span class="goal-percentage">{{ stats.percentage }}%</span>
             </div>
             <div class="progress-bar-bg">

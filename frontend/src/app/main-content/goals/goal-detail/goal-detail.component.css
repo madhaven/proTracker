@@ -1,0 +1,137 @@
+.goal-detail-container {
+  color: var(--text-main);
+}
+
+.header-actions {
+  margin-bottom: 24px;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 0;
+  transition: color 0.2s;
+}
+
+.back-btn:hover {
+  color: var(--text-main);
+}
+
+.goal-header {
+  margin-bottom: 32px;
+}
+
+.goal-title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+}
+
+.goal-description {
+  font-size: 1rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.divider {
+  height: 4px;
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+  margin: 32px 0;
+  opacity: 0.8;
+}
+
+.tasks-timeline {
+  margin-top: 64px;
+  display: flex;
+  flex-direction: column;
+}
+
+.task-timeline-entry {
+  position: relative;
+  z-index: 1;
+}
+
+.timeline-line {
+  position: absolute;
+  left: 7px; /* Center of the 16px wide pt-checkbox-btn */
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: var(--border-color);
+  z-index: -1;
+  opacity: 0.8; /* Make it slightly visible but not overwhelming */
+}
+
+/* Extend line up to the divider for the first item */
+.task-timeline-entry:first-child .timeline-line {
+  /* top: -32px; /* Matches the margin-bottom of the divider */
+}
+
+/* Stop line at the center of the last checkbox */
+/* TaskItem padding-top: 12px, checkbox margin-top: 4px, half-checkbox: 8px -> center is at 24px */
+.task-timeline-entry:last-child .timeline-line {
+  bottom: auto;
+  height: 24px;
+}
+
+/* If only one item, combine the above two */
+.task-timeline-entry:only-child .timeline-line {
+  top: -32px;
+  bottom: auto;
+  height: calc(32px + 24px);
+}
+
+/* Add padding to the task items to give them breathing room in the timeline */
+::ng-deep .task-timeline-entry .task-item {
+  padding-top: 12px !important;
+  padding-bottom: 12px !important;
+}
+
+/* Ensure the checkbox has a solid background so the line doesn't show through it */
+::ng-deep .task-timeline-entry .pt-checkbox-btn {
+  background-color: var(--bg-main) !important; /* Match the app background */
+}
+
+::ng-deep .task-timeline-entry .pt-checkbox-btn.checked {
+  background-color: var(--border-color) !important; /* Keep the checked background */
+}
+
+.no-tasks {
+  color: var(--text-muted);
+  font-style: italic;
+  margin-bottom: 16px;
+}
+
+.add-task-trigger {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 16px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: transparent;
+  align-self: flex-start;
+}
+
+.add-task-trigger:hover {
+  background-color: color-mix(in srgb, var(--border-color) 40%, transparent);
+  color: var(--text-main);
+}
+
+.plus-icon {
+  margin-right: 8px;
+  font-size: 1.1rem;
+  font-weight: 400;
+}
+
+.trigger-text {
+  line-height: 1;
+}

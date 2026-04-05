@@ -4,7 +4,7 @@
   </button>
   <div class="goal-content">
     <div class="goal-info">
-      <h3 class="goal-item-title">{{ goal().title }}</h3>
+      <h3 class="goal-item-title" (click)="navigateToGoal(goal().id)">{{ goal().title }}</h3>
       <div class="goal-meta">
         @if (goal().dateTarget) {
           <span class="target-label">Target</span>

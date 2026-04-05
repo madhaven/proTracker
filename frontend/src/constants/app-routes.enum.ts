@@ -3,6 +3,7 @@ export enum AppRoutes {
   Tasks = 'tasks',
   TaskDetail = 'task',
   Goals = 'goals',
+  GoalDetail = 'goal',
   Habits = 'habits'
 }
 
@@ -11,5 +12,6 @@ export enum AppRouterLinks {
   Tasks = '/tasks',
   TaskDetail = '/task',
   Goals = '/goals',
+  GoalDetail = '/goal',
   Habits = '/habits'
 }
