@@ -33,9 +33,10 @@ public class GoalController : ControllerBase
     public async Task<IActionResult> CreateGoal(GoalCreateRequest createRequest)
     {
         createRequest.Title = createRequest.Title.Trim();
-        if (string.IsNullOrWhiteSpace(createRequest.Title))
+        createRequest.Description = createRequest.Description?.Trim();
+        if (string.IsNullOrWhiteSpace(createRequest.Title) || string.IsNullOrWhiteSpace(createRequest.Description))
         {
-            return BadRequest("Title is required.");
+            return BadRequest("Valid Title and Description is required.");
         }
 
         if (await _goalService.GoalTitleExistsAsync(createRequest.Title))
@@ -46,6 +47,7 @@ public class GoalController : ControllerBase
         var goalModel = new Goal
         {
             Title = createRequest.Title,
+            Description = createRequest.Description,
             DateAdded = createRequest.DateAdded,
             DateTarget = createRequest.DateTarget,
         };

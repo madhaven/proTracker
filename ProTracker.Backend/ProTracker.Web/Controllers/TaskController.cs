@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using ProTracker.Interfaces;
-using ProTracker.Models;
 using ProTracker.Web.Contracts;
-using Task = ProTracker.Models.Task;
 
 namespace ProTracker.Web.Controllers;
 

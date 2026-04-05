@@ -10,6 +10,7 @@ public static class Converters
         {
             Id = goal.Id,
             Title = goal.Title,
+            Description = goal.Description,
             DateAdded = goal.DateAdded,
             DateCompleted = goal.DateCompleted,
             DateTarget = goal.DateTarget,
@@ -115,6 +116,7 @@ public static class Converters
         {
             Id = goal.Id,
             Title = goal.Title,
+            Description = goal.Description,
             DateAdded = goal.DateAdded,
             DateCompleted = goal.DateCompleted,
             DateTarget = goal.DateTarget,

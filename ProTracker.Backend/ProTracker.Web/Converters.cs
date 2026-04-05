@@ -25,6 +25,7 @@ public static class Converters
         {
             Id = goal.Id,
             Title = goal.Title,
+            Description = goal.Description,
             DateAdded = goal.DateAdded,
             DateTarget = goal.DateTarget,
             DateCompleted = goal.DateCompleted
