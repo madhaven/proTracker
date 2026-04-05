@@ -2,3 +2,40 @@
   display: flex;
   flex-direction: column;
 }
+
+/* From active-tasks.css */
+.list-section-header {
+  color: var(--text-main);
+  font-style: italic;
+}
+
+/* From overdue-tasks.css */
+.overdue-section {
+  margin-bottom: 32px;
+}
+
+.list-section-header.danger-header {
+  border-bottom-color: color-mix(in srgb, var(--accent-red-text) 50%, transparent);
+}
+
+.danger-text {
+  color: var(--accent-red-text);
+}
+
+/* From completed-tasks.css */
+.completed-section {
+  margin-top: 32px;
+}
+
+.section-subtitle {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 16px;
+}
+
+.completed-list {
+  opacity: 0.6;
+}

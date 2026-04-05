@@ -18,6 +18,7 @@ export class DashboardComponent {
   private readonly goalService = inject(GoalService);
   private readonly router = inject(Router);
 
+  readonly tasks = this.taskService.tasks;
   readonly goals = this.goalService.goals;
 
   getGoalStats(goalId: string) {

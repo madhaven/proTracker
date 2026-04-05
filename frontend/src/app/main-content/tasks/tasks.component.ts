@@ -1,6 +1,7 @@
-import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, signal, inject } from '@angular/core';
 import { TaskList } from './task-list/task-list';
 import { TaskDialog } from './task-dialog/task-dialog';
+import { TaskService } from '@services';
 
 @Component({
   selector: 'pt-tasks',
@@ -11,6 +12,9 @@ import { TaskDialog } from './task-dialog/task-dialog';
   styleUrl: './tasks.component.css'
 })
 export class TasksComponent {
+  private readonly taskService = inject(TaskService);
+  
+  readonly tasks = this.taskService.tasks;
   readonly showDialog = signal(false);
 
   openDialog(): void {

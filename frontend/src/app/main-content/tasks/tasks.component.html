@@ -4,7 +4,7 @@
     <span class="trigger-text">Add a new task...</span>
   </div>
   
-  <pt-task-list />
+  <pt-task-list [tasks]="tasks()" />
 
   @if (showDialog()) {
     <pt-task-dialog (close)="closeDialog()" />
