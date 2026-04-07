@@ -25,6 +25,7 @@
 /* From completed-tasks.css */
 .completed-section {
   margin-top: 32px;
+  view-transition-name: tasks-completed-section;
 }
 
 .section-subtitle {
@@ -34,6 +35,10 @@
   text-transform: uppercase;
   letter-spacing: 0.1em;
   margin-bottom: 16px;
+}
+
+.completed-section .section-subtitle {
+  cursor: pointer;
 }
 
 .completed-list {

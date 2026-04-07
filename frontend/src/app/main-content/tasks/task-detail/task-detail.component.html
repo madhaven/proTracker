@@ -1,8 +1,8 @@
 <div class="task-detail-container animate-in">
-  <button class="back-btn" (click)="goBack()">
+  <!-- <button class="back-btn" (click)="goBack()">
     <pt-svg [icon]="SvgIcon.ChevronLeft" [size]="20"></pt-svg>
     Back
-  </button>
+  </button> -->
 
   @if (task(); as t) {
     <div class="group" [class.danger-item]="isOverdue()" [style.view-transition-name]="'task-' + t.id">

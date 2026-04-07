@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, input, computed, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, input, computed, inject, signal, ApplicationRef } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { TaskItem } from './task-item/task-item';
 import { Task, TaskStatus } from '@models';
@@ -14,12 +14,14 @@ import { UtilService } from '@services';
 })
 export class TaskList {
   private readonly utils = inject(UtilService);
+  private readonly appRef = inject(ApplicationRef);
 
   readonly tasks = input.required<Task[]>();
   readonly showCompleted = input(true);
   readonly showOverdue = input(true);
   readonly showActive = input(true);
 
+  readonly isFolded = signal(true);
   readonly currentDate = new Date();
 
   readonly pendingTasks = computed(() => {
@@ -46,4 +48,10 @@ export class TaskList {
   readonly completedTasks = computed(() => this.tasks()
     .filter(t => t.taskStatus === TaskStatus.Completed)
     .sort((a, b) => new Date(b.createdOn).getTime() - new Date(a.createdOn).getTime()));
+
+  toggleFold(): void {
+    this.utils.transition(this.appRef, () => {
+      this.isFolded.update(f => !f);
+    })
+  }
 }
