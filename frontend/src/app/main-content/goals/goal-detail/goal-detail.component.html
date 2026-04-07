@@ -16,7 +16,7 @@
       @for (task of stats()?.allTasks; track task.id) {
         <div class="task-timeline-entry">
           <div class="timeline-line"></div>
-          <pt-task-item [task]="task" />
+          <pt-task-card [task]="task" />
         </div>
       }
       

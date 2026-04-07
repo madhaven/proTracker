@@ -1,13 +1,13 @@
 import { Component, ChangeDetectionStrategy, input, computed, inject, signal, ApplicationRef } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { TaskItem } from './task-item/task-item';
+import { TaskCard } from '../task-card/task-card';
 import { Task, TaskStatus } from '@models';
 import { UtilService } from '@services';
 
 @Component({
   selector: 'pt-task-list',
   standalone: true,
-  imports: [DatePipe, TaskItem],
+  imports: [DatePipe, TaskCard],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './task-list.html',
   styleUrl: './task-list.css',

@@ -4,7 +4,7 @@
       <p class="list-section-header danger-header danger-text">Overdue Tasks</p>
       <div class="tasks-list">
         @for (task of overdueTasks(); track task.id) {
-          <pt-task-item [task]="task" />
+          <pt-task-card [task]="task" />
         }
       </div>
     </div>
@@ -16,7 +16,7 @@
 
       <div class="tasks-list">
         @for (task of pendingTasks(); track task.id) {
-          <pt-task-item [task]="task" />
+          <pt-task-card [task]="task" />
         }
         @if (pendingTasks().length === 0) {
           <p class="empty-text">No tasks left for today.</p>
@@ -33,7 +33,7 @@
       @if (!isFolded()) {
         <div class="tasks-list completed-list">
           @for (task of completedTasks(); track task.id) {
-            <pt-task-item [task]="task" />
+            <pt-task-card [task]="task" />
           }
         </div>
       }

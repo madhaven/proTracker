@@ -7,18 +7,18 @@ import { SvgComponent } from '@atoms';
 import { AppRouterLinks, SvgIcon } from '@constants';
 
 @Component({
-  selector: 'pt-task-item',
+  selector: 'pt-task-card',
   standalone: true,
   imports: [DatePipe, SvgComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './task-item.html',
-  styleUrl: './task-item.css',
+  templateUrl: './task-card.html',
+  styleUrl: './task-card.css',
   host: {
     '[style.view-transition-name]': "'task-' + task().id",
     'style': 'display: block'
   }
 })
-export class TaskItem {
+export class TaskCard {
   SvgIcon = SvgIcon;
   private readonly taskService = inject(TaskService);
   private readonly goalService = inject(GoalService);
