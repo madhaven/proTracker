@@ -13,4 +13,5 @@ public interface ITaskService
     public Task<TaskStatusLog> ToggleTaskStatusAsync(int taskId, TaskStatus status, DateTimeOffset time);
     public Task<IEnumerable<TaskStatusLog>> GetAllTaskStatusLogsAsync();
     public Task<bool> DeleteTaskAsync(int id);
+    public int CalculateTaskPriority(Task task);
 }

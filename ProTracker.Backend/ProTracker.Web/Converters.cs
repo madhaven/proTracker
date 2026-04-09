@@ -40,6 +40,7 @@ public static class Converters
             Id = task.Id, // TODO GUID
             GoalId = task.Goal?.Id,
             TaskStatus = task.TaskStatus.ToContract(),
+            Priority = task.Priority,
             CreatedOn = task.CreatedOn,
             CompleteBy = task.CompleteBy,
             CompletedOn = task.CompletedOn,

@@ -5,6 +5,7 @@ import { Task } from "@models";
   providedIn: 'root'
 })
 export class UtilService {
+
   getTodayStart(): number {
     const d = new Date();
     d.setHours(0, 0, 0, 0);
@@ -18,14 +19,12 @@ export class UtilService {
         appRef.tick();
       });
     } else {
-      // for old browsers
-      uiOperation();
+      uiOperation(); // for old browsers
     }
   }
 
-  prioritizeTasks(tasks: Task[], lowPriorityFirst: boolean = false): Task[]
-  {
-    // TODO
-    return tasks;
+  arrangeToPriority(tasks: Task[], lowPriorityFirst: boolean = false): Task[] {
+    if (lowPriorityFirst) { return tasks.sort((a, b) => b.priority - a.priority); }
+    else { return tasks.sort((a, b) => a.priority - b.priority) }
   }
 }

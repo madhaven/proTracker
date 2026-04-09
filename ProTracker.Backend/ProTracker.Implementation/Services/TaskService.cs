@@ -49,6 +49,7 @@ public class TaskService : ITaskService
         var goal = await _goalService.GetGoalByIdAsync(goalId)
             ?? throw new InvalidOperationException("Goal not found");
 
+        task.Priority = CalculateTaskPriority(task);
         var dbTask = task.ToDbModel();
         dbTask.GoalId = goalId;
 
@@ -74,6 +75,7 @@ public class TaskService : ITaskService
 
         existingTask.Title = title;
         existingTask.GoalId = goalId;
+        existingTask.Priority = CalculateTaskPriority(existingTask.ToModel());
         await _context.SaveChangesAsync();
         return true;
     }
@@ -121,5 +123,41 @@ public class TaskService : ITaskService
         _context.Tasks.Remove(task);
         await _context.SaveChangesAsync();
         return true;
+    }
+
+    public int CalculateTaskPriority(Task task)
+    {
+        // TODO: add UI control on weights, simulation with a scenario of tasks.
+        // TODO: add weighted priority when `task` is a blocker
+        const int tttWeight = 1;
+        const int ageWeight = 10;
+        const int overdueWeight = 100;
+        const int freeTaskBias = 10_000;
+        var priority = 0;
+        var now = DateTimeOffset.UtcNow;
+
+        if (task.TaskStatus == TaskStatus.Completed)
+        {
+            // push older tasks back by a factor of age
+            var completionProximity = (int)(now - task.CompletedOn!.Value).TotalHours;
+            priority += completionProximity * ageWeight;
+            return priority;
+        }
+
+        var age = (int)(now - task.CreatedOn).TotalHours;
+        if (task.CompleteBy == null)
+        {
+            // give priority to age since no deadline
+            priority += freeTaskBias - age * ageWeight;
+        }
+        else
+        {
+            // consider deadline as priority, giving importance to age
+            var timeToTarget = (int)(task.CompleteBy.Value - now).TotalHours;
+            var weight = timeToTarget < 0 ? overdueWeight : tttWeight;
+            priority += timeToTarget * weight - age * ageWeight;
+        }
+        
+        return priority;
     }
 }

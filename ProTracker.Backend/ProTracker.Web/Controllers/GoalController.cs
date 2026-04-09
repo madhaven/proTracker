@@ -33,8 +33,8 @@ public class GoalController : ControllerBase
     public async Task<IActionResult> CreateGoal(GoalCreateRequest createRequest)
     {
         createRequest.Title = createRequest.Title.Trim();
-        createRequest.Description = createRequest.Description?.Trim();
-        if (string.IsNullOrWhiteSpace(createRequest.Title) || string.IsNullOrWhiteSpace(createRequest.Description))
+        createRequest.Description = createRequest.Description?.Trim() ?? null;
+        if (string.IsNullOrWhiteSpace(createRequest.Title))
         {
             return BadRequest("Valid Title and Description is required.");
         }

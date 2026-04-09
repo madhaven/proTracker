@@ -11,6 +11,7 @@ public class Task
     public Goal? Goal { get; set; }
     public string Title { get; set; }
     public TaskStatus Status { get; set; }
+    public int Priority { get; set; }
 
     public DateTimeOffset CreatedOn { get; set; }
     public DateTimeOffset? CompleteBy { get; set; }
