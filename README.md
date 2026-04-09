@@ -16,11 +16,7 @@ That's all there is
 
 checkout [proTracker Lite here](https://madhaven.github.io/proTracker/)  
 
-## Usage
-
-Protracker was built using a [Node](https://nodejs.org/) v22.6.0 environment.  
-Using the same node environment could help avoid errors due to environment differences.  
-
+<!-- Old protracker ui scripts
 * `npm run buildnstart`  
   Builds the Angular UI and starts the app  
   `npm run build`  
@@ -40,33 +36,24 @@ Using the same node environment could help avoid errors due to environment diffe
   Builds the project  
   A number of issues have come to notice: [#54](https://github.com/madhaven/proTracker/issues/54)  
   * Sqlite db having access  
-  * electron and npm version mismatches  
+  * electron and npm version mismatches   -->
 
 ## Architecture
 
-The [Electron framework](https://www.electronjs.org/) as I understand works with 3 components  
+Protracker has two seperate components, the `/frontend` and the `/Protracker.Backend`.  
 
-* The main: handles all the local components of the program  
-* The preload: handles the bridge and permissions between the main world and the front render
-* The renderer: normal frontend script that handles logic on the front end
+* Backend: A robust ASP.NET Core 10 Web API implemented in a layered architecture pattern using Entity Framework Core with a SQLite database.
+  There is also a plan to use it as a desktop application.  
+* Frontend: A modern [Angular](https://angular.io/) 21 application helps render the UI using a [Node](https://nodejs.org/) v20.20.0 environment and uses the standard `npm start` command to run.  
+  Using the same node environment could help avoid errors due to environment differences.  
+* Integration: The `ProTracker.Web.csproj` is already configured to build the Angular app and copy its dist files into `wwwroot` during build/publish, effectively allowing the .NET server to host the UI.
 
-In this project
-
-* The renderer is angular script(s) that are loaded from the Angular distributables created.  
-  During debug, the app accesses `localhost:4200` so changes are dynamically reflected.
-* The Electron / backend section has been modularized into a layered architecture format.
-
-The [Angular framework](https://angular.io/) helps render the UI.  
-The pUIng folder contains all things angular.  
-While debugging, the electron backend fetches the site hosted by Angular CLI at `localhost:4200`.  
-While running the app, the UI is fetched from the distributables generated in build.  
-
-The project can also work in a serverless web-app mode.  
+<!-- The project can also work in a serverless web-app mode.  
 All data will be stored on browser's localStorage.  
 Although this looks like a quick way to get access to proTracker, the storage limits imposed by the browser could be a constraint in the long run.  
 
 ```text
-eMain.js <--ePreload_APIBridge--|--> Angular frontend <--|--BrowserBackendService.ts--> localStorage
+eMain.js <- ePreload_APIBridge -|-> Angular frontend <-|- BrowserBackendService.ts -> localStorage
 |
 |
 handlers.js  - handles IPC with renderer and delegates tasks
@@ -78,7 +65,7 @@ DB
 The Angular UI is setup in such a way that the uiStateService contains all data required for the app.  
 The uiStateService fetches data from either the `BrowserBackendService` or the `ElectronComService`, both of which are implementations of the `DataComInterface`.  
 The DataCom interface contains all API required to fetch information for the frontend and the Electron and BrowserBackend adheres to this standard.
-> PRs implementing an IndexedStorage version of Browser data is welcome.  
+> PRs implementing an IndexedStorage version of Browser data is welcome.   -->
 
 ## Motivation
 
@@ -112,6 +99,9 @@ The DataCom interface contains all API required to fetch information for the fro
   proTracker is now easily accessible.  
   Introducing the BrowserBackend also came with added complexity to handle localStorage data storage and migration strategies.  
 * Adding shortcuts made accessibility so easy, the app felt closer to the keys.  
+--
+* I took another leap by converting the project from electron to a ASP.NET web app.  
+  Although the effort was tremendous, it gave me satisfaction to redesign and implement something that worked more efficiently.
 
 ## Future
 
@@ -132,6 +122,7 @@ The DataCom interface contains all API required to fetch information for the fro
   The need for frameworks only struck me until I made ProTracker, my first deployable app.  
   [Electron](https://www.electronjs.org/) helped me realize aspects of the product lifecycle  
   [Angular](https://angular.io/) standardized my frontend faster.
+  [Dotnet](https://dotnet.microsoft.com/en-us/) showed me how much more I could achieve when reusing boilerplate that I need not really build everytime.
 
   ProTracker helped me realize the need for frameworks to help bootstrap the nitty-gritties and focus on fast product development.  
   In a fast moving industry, it really mattered to stay ahead and frameworks helped you get there.  
