@@ -67,7 +67,7 @@ public static class StartupHelper
 
         app.MapControllers();
         app.Map("api/{**slug}", () => Results.NotFound());
-        app.MapFallbackToFile("index.html"); // Handle Angular routing
+        app.MapFallbackToFile("index.csr.html"); // Handle Angular routing
     }
 
     private static void InvertDependencies(this IServiceCollection services)

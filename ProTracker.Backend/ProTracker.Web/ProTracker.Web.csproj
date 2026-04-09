@@ -59,6 +59,9 @@
       <AngularDistFiles Include="$(SpaRoot)dist\frontend\browser\**\*" />
     </ItemGroup>
 
+    <Message Importance="high" Text="Cleaning wwwroot..." />
+    <RemoveDir Directories="wwwroot" />
+
     <Message Importance="high" Text="Copying fresh Angular files to wwwroot..." />
     <Copy SourceFiles="@(AngularDistFiles)" DestinationFiles="@(AngularDistFiles->'wwwroot\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" />
     
@@ -73,6 +76,9 @@
     <ItemGroup>
       <AngularDistFiles Include="$(SpaRoot)dist\frontend\browser\**\*" />
     </ItemGroup>
+
+    <Message Importance="high" Text="Cleaning wwwroot..." />
+    <RemoveDir Directories="wwwroot" />
 
     <!-- Copy to local wwwroot to ensure files are available -->
     <Copy SourceFiles="@(AngularDistFiles)" DestinationFiles="@(AngularDistFiles->'wwwroot\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" />
