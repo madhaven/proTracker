@@ -42,7 +42,7 @@ export class TaskDetailComponent {
   readonly isCompleted = computed(() => this.task()?.taskStatus === TaskStatus.Completed);
   readonly hasDueDate = computed(() => {
     const task = this.task();
-    return task?.completeBy !== null && task?.completeBy !== undefined;
+    return task?.completeBy !== null;
   });
   
   readonly isOverdue = computed(() => {
@@ -52,9 +52,9 @@ export class TaskDetailComponent {
     return new Date(dueDate).getTime() < new Date().setHours(0, 0, 0, 0);
   });
 
-  getGoalName(goalId: string | null | undefined): string {
+  getGoalName(goalId: string): string | undefined {
     if (!goalId) return '';
-    return this.goalService.getGoalById(goalId)?.title || 'Unknown Goal';
+    return this.goalService.getGoalById(goalId)?.title;
   }
 
   goBack(): void {

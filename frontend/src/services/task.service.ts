@@ -139,7 +139,7 @@ export class TaskService {
     this.tasksResource.value.set(updatedRawTasks);
   }
 
-  private toTaskDto(task: Partial<Task>): Record<string, any> {
+  private toTaskDto(task: Task): Record<string, any> {
     return {
       Id: task.id,
       Title: task.title,

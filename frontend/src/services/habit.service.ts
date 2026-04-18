@@ -16,7 +16,7 @@ export class HabitService {
   });
 
   async addHabit(title: string, frequency: 'daily' | 'weekly') {
-    const newHabit: Partial<Habit> = {
+    const newHabit: Omit<Habit, 'id'> = {
       title,
       frequency,
       streak: 0

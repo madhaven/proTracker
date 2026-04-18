@@ -6,8 +6,8 @@ export interface Task {
   taskStatus: TaskStatus;
   priority: number;
   createdOn: Date;
-  completeBy?: Date;
-  completedOn?: Date;
-  goalId?: string | null;
-  // habitId?: string | null;
+  completeBy: Date | null;
+  completedOn: Date | null;
+  goalId: string | null;
+  // habitId: string | null;
 }

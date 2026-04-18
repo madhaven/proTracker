@@ -1,10 +1,12 @@
-import { ApplicationRef, Injectable } from "@angular/core";
+import { ApplicationRef, Injectable, inject, PLATFORM_ID } from "@angular/core";
+import { isPlatformBrowser } from "@angular/common";
 import { Task } from "@models";
 
 @Injectable({
   providedIn: 'root'
 })
 export class UtilService {
+  private readonly platformId = inject(PLATFORM_ID);
 
   getTodayStart(): number {
     const d = new Date();
@@ -13,7 +15,7 @@ export class UtilService {
   }
 
   transition(appRef: ApplicationRef, uiOperation: () => void): void {
-    if (typeof document !== 'undefined' && (document as any).startViewTransition) {
+    if (isPlatformBrowser(this.platformId) && (document as any).startViewTransition) {
       (document as any).startViewTransition(() => {
         uiOperation();
         appRef.tick();
