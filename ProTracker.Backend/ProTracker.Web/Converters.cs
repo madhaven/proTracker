@@ -1,4 +1,6 @@
+using ProTracker.Models;
 using ProTracker.Web.Contracts;
+using Task = ProTracker.Models.Task;
 using TaskStatus = ProTracker.Models.TaskStatus;
 
 namespace ProTracker.Web;
@@ -16,6 +18,21 @@ public static class Converters
             Contracts.TaskStatus.Waiting => TaskStatus.Waiting,
             Contracts.TaskStatus.Cancelled => TaskStatus.Cancelled,
             _ => throw new ArgumentOutOfRangeException(nameof(taskStatus), taskStatus, null),
+        };
+    }
+
+    public static Task ToModel(this Contracts.TaskUpdateRequest taskUpdateRequest, int id, Goal? goal)
+    {
+        return new Task
+        {
+            Id = id,
+            Title = taskUpdateRequest.Title,
+            TaskStatus = taskUpdateRequest.Status.ToModel(),
+            Priority = 0,
+            CreatedOn = new DateTimeOffset(),
+            CompleteBy = taskUpdateRequest.CompleteBy,
+            CompletedOn = new DateTimeOffset(),
+            Goal = goal
         };
     }
 

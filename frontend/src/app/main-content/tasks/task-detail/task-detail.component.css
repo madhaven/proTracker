@@ -86,6 +86,26 @@
 .actions {
   display: flex;
   justify-content: flex-end;
+  gap: 12px;
+  margin-top: 48px;
+}
+
+.edit-btn {
+  background: var(--text-main);
+  color: var(--bg-main);
+  border: none;
+  padding: 10px 24px;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.edit-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .danger-btn {

@@ -68,14 +68,18 @@ public class TaskService : ITaskService
         return task;
     }
 
-    public async Task<bool> UpdateTaskAsync(int id, string title, int? goalId)
+    public async Task<bool> UpdateTaskAsync(Task task)
     {
-        var existingTask = await _context.Tasks.FindAsync(id);
+        var existingTask = await _context.Tasks.FindAsync(task.Id);
         if (existingTask == null) return false;
 
-        existingTask.Title = title;
-        existingTask.GoalId = goalId;
+        existingTask.Title = task.Title;
+        existingTask.GoalId = task.Goal?.Id;
+        // existingTask.Status = task.TaskStatus.ToDbModel();
         existingTask.Priority = CalculateTaskPriority(existingTask.ToModel());
+        existingTask.CompleteBy = task.CompleteBy;
+        existingTask.CompletedOn = task.CompletedOn;
+
         await _context.SaveChangesAsync();
         return true;
     }
@@ -96,10 +100,7 @@ public class TaskService : ITaskService
 
         _context.TaskStatusLogs.Add(dbLog);
         dbTask.Status = status.ToDbModel();
-        if (status == TaskStatus.Completed)
-        {
-            dbTask.CompletedOn = time;
-        }
+        dbTask.CompletedOn = status == TaskStatus.Completed ? time : null;
 
         await _context.SaveChangesAsync();
         return dbLog.ToModel();

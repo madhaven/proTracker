@@ -4,3 +4,4 @@ export * from './habit.model';
 export * from './task.model';
 export * from './task-status.model';
 export * from './task-toggle-request.model';
+export * from './task-update-request.model';

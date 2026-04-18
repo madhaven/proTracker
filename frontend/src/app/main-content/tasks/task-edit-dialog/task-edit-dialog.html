@@ -1,0 +1,36 @@
+<pt-modal (close)="onCancel()">
+  <form [formGroup]="taskForm" (ngSubmit)="updateTask()" class="minimal-form">
+    <div class="input-container">
+      <input #titleInput type="text" formControlName="title" placeholder="What needs to be done?" class="title-input" autocomplete="off">
+    </div>
+    
+    <div class="metadata-row">
+      <div class="metadata-item">
+        <pt-svg [icon]="SvgIcon.Goals" [size]="18" class="icon" />
+        <select formControlName="goalId" class="minimal-select">
+          <option [value]="null">Inbox</option>
+          @for (goal of goals(); track goal.id) {
+            <option [value]="goal.id">{{ goal.title }}</option>
+          }
+        </select>
+      </div>
+      
+      <div class="metadata-item">
+        <pt-svg [icon]="SvgIcon.Calendar" [size]="18" class="icon" />
+        <input type="date" [value]="taskForm.get('dueDate')?.value | date:'yyyy-MM-dd'" (change)="onDateChange($event)" class="minimal-date">
+      </div>
+    </div>
+
+    <div class="dialog-actions">
+      <button type="button" class="btn-cancel" (click)="onCancel()">Cancel</button>
+      <button type="submit" class="btn-save" [disabled]="isSaveDisabled()">
+        @if (isLoading()) {
+          <span class="loader"></span>
+          Saving...
+        } @else {
+          Save Changes
+        }
+      </button>
+    </div>
+  </form>
+</pt-modal>

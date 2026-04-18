@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject, computed, ApplicationRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, computed, ApplicationRef, signal } from '@angular/core';
 import { DatePipe, Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TaskService, GoalService, UtilService } from '@services';
@@ -6,11 +6,12 @@ import { TaskStatus } from '@models';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { SvgComponent } from '@atoms';
 import { SvgIcon, AppRouterLinks } from '@constants';
+import { TaskEditDialog } from '../task-edit-dialog/task-edit-dialog';
 
 @Component({
   selector: 'pt-task-detail',
   standalone: true,
-  imports: [DatePipe, SvgComponent],
+  imports: [DatePipe, SvgComponent, TaskEditDialog],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './task-detail.component.html',
   styleUrl: './task-detail.component.css',
@@ -52,6 +53,8 @@ export class TaskDetailComponent {
     return new Date(dueDate).getTime() < new Date().setHours(0, 0, 0, 0);
   });
 
+  readonly isEditModalOpen = signal(false);
+
   getGoalName(goalId: string): string | undefined {
     if (!goalId) return '';
     return this.goalService.getGoalById(goalId)?.title;
@@ -77,5 +80,13 @@ export class TaskDetailComponent {
         this.taskService.toggleTask(taskId);
       });
     }
+  }
+
+  openEditModal(): void {
+    this.isEditModalOpen.set(true);
+  }
+
+  closeEditModal(): void {
+    this.isEditModalOpen.set(false);
   }
 }

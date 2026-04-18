@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using ProTracker.Interfaces;
+using ProTracker.Models;
 using ProTracker.Web.Contracts;
 
 namespace ProTracker.Web.Controllers;
@@ -70,16 +71,18 @@ public class TaskController : ControllerBase
             return BadRequest("Title is required.");
         }
 
+        Goal? goal = null;
         if (task.GoalId.HasValue)
         {
-            var goal = await _goalService.GetGoalByIdAsync(task.GoalId.Value);
+            goal = await _goalService.GetGoalByIdAsync(task.GoalId.Value);
             if (goal == null)
             {
                 return NotFound($"Goal with ID {task.GoalId} not found.");
             }
         }
 
-        var success = await _taskService.UpdateTaskAsync(id, task.Title, task.GoalId);
+        var taskModel = task.ToModel(id, goal);
+        var success = await _taskService.UpdateTaskAsync(taskModel);
         if (!success) return NotFound();
 
         return Ok(true);

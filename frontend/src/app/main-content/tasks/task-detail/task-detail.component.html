@@ -21,11 +21,6 @@
       </div>
 
       <div class="task-meta-grid">
-        <!-- <div class="meta-item">
-          <span class="meta-label">Status</span>
-          <span class="meta-value">{{ isCompleted() ? 'Completed' : 'Pending' }}</span>
-        </div> -->
-
         <div class="meta-item">
           <span class="meta-label">Created</span>
           <span class="meta-value">{{ t.createdOn | date:'medium' }}</span>
@@ -42,7 +37,7 @@
         </div>
 
         @if (t.goalId) {
-          <div class="meta-item">
+          <div class="meta-item" [style.view-transition-name]="'goal-' + t.goalId">
             <span class="meta-label">Associated Goal</span>
             <span class="meta-value">{{ getGoalName(t.goalId) }}</span>
           </div>
@@ -50,9 +45,14 @@
       </div>
 
       <div class="actions">
-        <button class="delete-btn danger-btn" (click)="deleteTask()">Delete Task</button>
+        <button class="edit-btn" (click)="openEditModal()">Edit Task</button>
+        <button class="danger-btn" (click)="deleteTask()">Delete Task</button>
       </div>
     </div>
+
+    @if (isEditModalOpen()) {
+      <pt-task-edit-dialog [task]="t" (closed)="closeEditModal()" />
+    }
   } @else {
     <div class="loading-state">
       <p>Loading task details...</p>
