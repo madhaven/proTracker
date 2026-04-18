@@ -1,0 +1,12 @@
+<button 
+  class="btn" 
+  [class.btn-primary]="type() === ButtonType.Primary || type() === 'primary'"
+  [class.btn-secondary]="type() === ButtonType.Secondary || type() === 'secondary'"
+  [class.btn-danger]="type() === ButtonType.Danger || type() === 'danger'"
+  [class.btn-subtle]="type() === ButtonType.Subtle || type() === 'subtle'"
+  [class.btn-icon]="type() === ButtonType.Icon || type() === 'icon'"
+  [disabled]="disabled()"
+>
+<!-- TODO: avoid using type() many times -->
+  <ng-content />
+</button>

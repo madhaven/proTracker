@@ -4,14 +4,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TaskService, GoalService, UtilService } from '@services';
 import { TaskStatus } from '@models';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { SvgComponent } from '@atoms';
-import { SvgIcon, AppRouterLinks } from '@constants';
+import { SvgComponent, ButtonComponent } from '@atoms';
+import { SvgIcon, AppRouterLinks, ButtonType } from '@constants';
 import { TaskEditDialog } from '../task-edit-dialog/task-edit-dialog';
 
 @Component({
   selector: 'pt-task-detail',
   standalone: true,
-  imports: [DatePipe, SvgComponent, TaskEditDialog],
+  imports: [DatePipe, SvgComponent, ButtonComponent, TaskEditDialog],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './task-detail.component.html',
   styleUrl: './task-detail.component.css',
@@ -21,6 +21,7 @@ import { TaskEditDialog } from '../task-edit-dialog/task-edit-dialog';
 })
 export class TaskDetailComponent {
   SvgIcon = SvgIcon;
+  ButtonType = ButtonType;
 
   private readonly taskService = inject(TaskService);
   private readonly goalService = inject(GoalService);

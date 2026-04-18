@@ -1,0 +1,97 @@
+:host {
+  display: inline-block;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-sizing: border-box;
+  white-space: nowrap;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Primary */
+.btn-primary {
+  background-color: var(--text-main);
+  color: var(--bg-main);
+  border: none;
+  padding: 10px 24px;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.btn-primary:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Secondary */
+.btn-secondary {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 10px 24px;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.btn-secondary:hover {
+  background: var(--bg-hover);
+}
+
+/* Danger */
+.btn-danger {
+  background: none;
+  border: 1px solid var(--accent-red-text);
+  color: var(--accent-red-text);
+  padding: 10px 24px;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.btn-danger:hover {
+  background: color-mix(in srgb, var(--accent-red-text) 10%, transparent);
+}
+
+/* Subtle */
+.btn-subtle {
+  background: none;
+  border: none;
+  color: var(--text-main);
+  opacity: 0.6;
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.btn-subtle:hover {
+  opacity: 1;
+  background: var(--bg-hover);
+}
+
+/* Icon (for icon only buttons like back button) */
+.btn-icon {
+  background: none;
+  border: none;
+  color: var(--text-main);
+  opacity: 0.5;
+  padding: 8px;
+  border-radius: 50%;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.btn-icon:hover {
+  opacity: 1;
+  background: var(--bg-hover);
+}

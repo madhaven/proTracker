@@ -45,8 +45,8 @@
       </div>
 
       <div class="actions">
-        <button class="edit-btn" (click)="openEditModal()">Edit Task</button>
-        <button class="danger-btn" (click)="deleteTask()">Delete Task</button>
+        <pt-button [type]="ButtonType.Subtle" (click)="openEditModal()">Edit Task</pt-button>
+        <pt-button [type]="ButtonType.Danger" (click)="deleteTask()">Delete Task</pt-button>
       </div>
     </div>
 
