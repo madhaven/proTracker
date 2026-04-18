@@ -10,6 +10,7 @@ import { ButtonType } from '@constants';
 })
 export class ButtonComponent {
   readonly type = input<ButtonType | string>(ButtonType.Primary);
+  readonly nativeType = input<'button' | 'submit' | 'reset'>('button');
   readonly disabled = input<boolean>(false);
   
   ButtonType = ButtonType;

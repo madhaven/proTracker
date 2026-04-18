@@ -1,5 +1,6 @@
 <button 
   class="btn" 
+  [type]="nativeType()"
   [class.btn-primary]="type() === ButtonType.Primary || type() === 'primary'"
   [class.btn-secondary]="type() === ButtonType.Secondary || type() === 'secondary'"
   [class.btn-danger]="type() === ButtonType.Danger || type() === 'danger'"

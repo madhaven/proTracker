@@ -10,9 +10,9 @@
         <option value="daily">Daily</option>
         <option value="weekly">Weekly</option>
       </select>
-      <button type="submit" [disabled]="habitForm.invalid" class="btn-add">
+      <pt-button nativeType="submit" [disabled]="habitForm.invalid" [type]="ButtonType.Primary">
         Add
-      </button>
+      </pt-button>
     </form>
   </div>
 
@@ -21,9 +21,9 @@
     @for (habit of habits(); track habit.id) {
       <div class="habit-item group">
         <div class="habit-main">
-          <button (click)="deleteHabit(habit.id)" class="delete-btn">
+          <pt-button (click)="deleteHabit(habit.id)" [type]="ButtonType.Icon" title="Delete Habit" class="delete-btn">
             &times;
-          </button>
+          </pt-button>
           <div class="habit-info">
             <h3 class="habit-item-title">{{ habit.title }}</h3>
             <p class="habit-frequency">{{ habit.frequency }}</p>

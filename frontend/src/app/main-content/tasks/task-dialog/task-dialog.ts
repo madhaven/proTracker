@@ -1,18 +1,21 @@
 import { Component, ChangeDetectionStrategy, inject, input, output, ElementRef, ViewChild, AfterViewInit, OnInit, ApplicationRef } from '@angular/core';
 import { ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TaskService, GoalService, UtilService } from '@services';
-import { ModalComponent } from '@atoms';
+import { ModalComponent, ButtonComponent } from '@atoms';
+import { ButtonType } from '@constants';
 
 @Component({
   selector: 'pt-task-dialog',
   standalone: true,
-  imports: [ReactiveFormsModule, ModalComponent],
+  imports: [ReactiveFormsModule, ModalComponent, ButtonComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './task-dialog.html',
   styleUrl: './task-dialog.css',
 })
 export class TaskDialog implements OnInit, AfterViewInit {
   @ViewChild('titleInput') titleInput!: ElementRef<HTMLInputElement>;
+  
+  ButtonType = ButtonType;
 
   private readonly taskService = inject(TaskService);
   private readonly goalService = inject(GoalService);

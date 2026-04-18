@@ -22,8 +22,8 @@
     </div>
 
     <div class="dialog-actions">
-      <button type="button" class="btn-cancel" (click)="onCancel()">Cancel</button>
-      <button type="submit" class="btn-save" [disabled]="taskForm.invalid">Save Task</button>
+      <pt-button [type]="ButtonType.Subtle" nativeType="button" (click)="onCancel()">Cancel</pt-button>
+      <pt-button [type]="ButtonType.Primary" nativeType="submit" [disabled]="taskForm.invalid">Save Task</pt-button>
     </div>
   </form>
 </pt-modal>

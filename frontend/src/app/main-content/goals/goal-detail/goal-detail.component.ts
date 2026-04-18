@@ -2,9 +2,9 @@ import { Component, inject, computed, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GoalService, TaskService } from '@services';
 import { TaskStatus } from '@models';
-import { AppRouterLinks } from '@constants';
-import { TaskCard } from '../../tasks/task-card/task-card';
+import { AppRouterLinks, ButtonType } from '@constants';
 import { TaskDialog } from '../../tasks/task-dialog/task-dialog';
+import { TaskCard } from '../../tasks/task-card/task-card';
 
 @Component({
   selector: 'pt-goal-detail',
@@ -15,6 +15,7 @@ import { TaskDialog } from '../../tasks/task-dialog/task-dialog';
 })
 export class GoalDetailComponent {
   readonly TaskStatus = TaskStatus;
+  readonly ButtonType = ButtonType;
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly goalService = inject(GoalService);

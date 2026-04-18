@@ -1,21 +1,23 @@
 import { Component, ChangeDetectionStrategy, inject, input, output, ElementRef, ViewChild, AfterViewInit, OnInit, ApplicationRef, signal } from '@angular/core';
 import { ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TaskService, GoalService, UtilService } from '@services';
-import { ModalComponent, SvgComponent } from '@atoms';
+import { ModalComponent, SvgComponent, ButtonComponent } from '@atoms';
 import { Task, TaskUpdateRequest } from '@models';
 import { DatePipe } from '@angular/common';
-import { SvgIcon } from '@constants';
+import { SvgIcon, ButtonType } from '@constants';
 
 @Component({
   selector: 'pt-task-edit-dialog',
   standalone: true,
-  imports: [ReactiveFormsModule, ModalComponent, SvgComponent, DatePipe],
+  imports: [ReactiveFormsModule, ModalComponent, SvgComponent, DatePipe, ButtonComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './task-edit-dialog.html',
   styleUrl: './task-edit-dialog.css',
 })
 export class TaskEditDialog implements OnInit, AfterViewInit {
   @ViewChild('titleInput') titleInput!: ElementRef<HTMLInputElement>;
+  
+  ButtonType = ButtonType;
 
   private readonly taskService = inject(TaskService);
   private readonly goalService = inject(GoalService);

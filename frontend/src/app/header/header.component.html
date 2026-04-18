@@ -2,13 +2,13 @@
   <div class="header-container">
     <div class="logo-group">
       <h1 class="logo-title" [routerLink]="[AppRouterLinks.Today]">ProTracker.</h1>
-      <button class="theme-minimal-toggle" (click)="toggleTheme()" [title]="'Toggle Theme'">
+      <pt-button [type]="ButtonType.Icon" (click)="toggleTheme()" [title]="'Toggle Theme'">
         @if (currentTheme() === Theme.Light) {
           <pt-svg [icon]="SvgIcon.Moon" [size]="18" />
         } @else {
           <pt-svg [icon]="SvgIcon.Sun" [size]="18" />
         }
-      </button>
+      </pt-button>
     </div>
     <pt-nav-section />
   </div>

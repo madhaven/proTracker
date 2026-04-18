@@ -1,7 +1,7 @@
 <div class="goal-item group">
-  <button (click)="deleteClick()" class="delete-btn-absolute">
+  <pt-button (click)="deleteClick()" [type]="ButtonType.Icon" class="delete-btn-absolute" title="Delete Goal">
     &times;
-  </button>
+  </pt-button>
   <div class="goal-content">
     <div class="goal-info">
       <h3 class="goal-item-title" (click)="navigateToGoal(goal().id)">{{ goal().title }}</h3>

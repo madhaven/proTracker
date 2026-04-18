@@ -24,9 +24,10 @@
     }
   </div>
   
-  <button (click)="deleteTask(task().id)" 
-          class="delete-btn" 
-          [class.danger-delete]="isOverdue()">
+  <pt-button (click)="deleteTask(task().id)" 
+             [type]="ButtonType.Icon" 
+             class="delete-btn"
+             [class.danger-delete]="isOverdue()">
     &times;
-  </button>
+  </pt-button>
 </div>

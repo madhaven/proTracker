@@ -2,15 +2,19 @@ import { Component, ChangeDetectionStrategy, inject, ApplicationRef } from '@ang
 import { ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TaskService, HabitService, UtilService } from '@services';
 
+import { ButtonComponent } from '@atoms';
+import { ButtonType } from '@constants';
+
 @Component({
   selector: 'pt-habits',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, ButtonComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './habits.component.html',
   styleUrl: './habits.component.css'
 })
 export class HabitsComponent {
+  ButtonType = ButtonType;
   private readonly taskService = inject(TaskService);
   private readonly habitService = inject(HabitService);
   private readonly appRef = inject(ApplicationRef);

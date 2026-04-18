@@ -3,13 +3,13 @@ import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { Task, TaskStatus } from '@models';
 import { TaskService, GoalService, UtilService } from '@services';
-import { SvgComponent } from '@atoms';
-import { AppRouterLinks, SvgIcon } from '@constants';
+import { SvgComponent, ButtonComponent } from '@atoms';
+import { AppRouterLinks, SvgIcon, ButtonType } from '@constants';
 
 @Component({
   selector: 'pt-task-card',
   standalone: true,
-  imports: [DatePipe, SvgComponent],
+  imports: [DatePipe, SvgComponent, ButtonComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './task-card.html',
   styleUrl: './task-card.css',
@@ -20,6 +20,7 @@ import { AppRouterLinks, SvgIcon } from '@constants';
 })
 export class TaskCard {
   SvgIcon = SvgIcon;
+  ButtonType = ButtonType;
   private readonly taskService = inject(TaskService);
   private readonly goalService = inject(GoalService);
   private readonly appRef = inject(ApplicationRef);
@@ -35,7 +36,7 @@ export class TaskCard {
     const dueDate = this.task().completeBy;
     return dueDate === null
       ? false
-      : new Date(dueDate!).getTime() < new Date().setHours(0, 0, 0, 0);
+      : new Date(dueDate).getTime() < new Date().setHours(0, 0, 0, 0);
   });
 
   readonly hasDueDate = computed(() => this.task().completeBy !== null);

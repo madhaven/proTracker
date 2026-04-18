@@ -1,18 +1,21 @@
 import { Component, ChangeDetectionStrategy, inject, output, ElementRef, ViewChild, AfterViewInit, ApplicationRef } from '@angular/core';
 import { ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms';
 import { GoalService, UtilService } from '@services';
-import { ModalComponent } from '@atoms';
+import { ModalComponent, ButtonComponent } from '@atoms';
+import { ButtonType } from '@constants';
 
 @Component({
   selector: 'pt-goal-dialog',
   standalone: true,
-  imports: [ReactiveFormsModule, ModalComponent],
+  imports: [ReactiveFormsModule, ModalComponent, ButtonComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './goal-dialog.html',
   styleUrl: './goal-dialog.css',
 })
 export class GoalDialog implements AfterViewInit {
   @ViewChild('titleInput') titleInput!: ElementRef<HTMLInputElement>;
+  
+  ButtonType = ButtonType;
 
   private readonly goalService = inject(GoalService);
   private readonly appRef = inject(ApplicationRef);

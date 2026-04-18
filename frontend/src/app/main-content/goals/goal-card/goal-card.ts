@@ -3,12 +3,12 @@ import { Component, input, output, inject, ApplicationRef } from '@angular/core'
 import { Router } from '@angular/router';
 import { Goal, GoalStats, TaskStatus } from '@models';
 import { TaskService, UtilService } from '@services';
-import { SvgComponent } from '@atoms';
-import { SvgIcon, AppRouterLinks } from '@constants';
+import { SvgComponent, ButtonComponent } from '@atoms';
+import { SvgIcon, AppRouterLinks, ButtonType } from '@constants';
 
 @Component({
   selector: 'pt-goal-card',
-  imports: [DatePipe, SvgComponent],
+  imports: [DatePipe, SvgComponent, ButtonComponent],
   templateUrl: './goal-card.html',
   styleUrl: './goal-card.css',
 })
@@ -19,6 +19,7 @@ export class GoalCard {
   private readonly router = inject(Router);
 
   readonly SvgIcon = SvgIcon;
+  readonly ButtonType = ButtonType;
   readonly TaskStatus = TaskStatus;
   readonly goal = input.required<Goal>();
   readonly stats = input.required<GoalStats>();
