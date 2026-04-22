@@ -3,6 +3,11 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { ButtonComponent } from '@atoms';
 import { AppRouterLinks, ButtonType } from '@constants';
 
+interface NavItem {
+  label: string;
+  link: string;
+}
+
 @Component({
   selector: 'pt-nav-section',
   standalone: true,
@@ -12,6 +17,12 @@ import { AppRouterLinks, ButtonType } from '@constants';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavSectionComponent {
-  readonly AppRouterLinks = AppRouterLinks;
   readonly ButtonType = ButtonType;
+
+  readonly navItems: NavItem[] = [
+    { label: 'Today', link: AppRouterLinks.Today },
+    { label: 'Tasks', link: AppRouterLinks.Tasks },
+    { label: 'Goals', link: AppRouterLinks.Goals },
+    { label: 'Habits', link: AppRouterLinks.Habits },
+  ];
 }
