@@ -5,6 +5,7 @@ import { TaskDetailComponent } from './main-content/tasks/task-detail/task-detai
 import { GoalsComponent } from './main-content/goals/goals.component';
 import { GoalDetailComponent } from './main-content/goals/goal-detail/goal-detail.component';
 import { HabitsComponent } from './main-content/habits/habits.component';
+import { SettingsComponent } from './main-content/settings/settings.component';
 import { AppRoutes } from '@constants';
 
 export const routes: Routes = [
@@ -14,5 +15,6 @@ export const routes: Routes = [
   { path: AppRoutes.Goals, component: GoalsComponent },
   { path: `${AppRoutes.GoalDetail}/:id`, component: GoalDetailComponent },
   { path: AppRoutes.Habits, component: HabitsComponent },
+  { path: AppRoutes.Settings, component: SettingsComponent },
   { path: '**', redirectTo: AppRoutes.Today, pathMatch: 'full' },
 ];

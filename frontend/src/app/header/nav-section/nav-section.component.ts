@@ -24,5 +24,6 @@ export class NavSectionComponent {
     { label: 'Tasks', link: AppRouterLinks.Tasks },
     { label: 'Goals', link: AppRouterLinks.Goals },
     { label: 'Habits', link: AppRouterLinks.Habits },
+    { label: 'Settings', link: AppRouterLinks.Settings },
   ];
 }
