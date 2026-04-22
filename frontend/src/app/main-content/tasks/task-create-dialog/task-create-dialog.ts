@@ -1,19 +1,19 @@
-import { Component, ChangeDetectionStrategy, inject, input, output, ElementRef, ViewChild, AfterViewInit, OnInit, ApplicationRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, input, output, ElementRef, viewChild, AfterViewInit, OnInit, ApplicationRef } from '@angular/core';
 import { ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TaskService, GoalService, UtilService } from '@services';
 import { ModalComponent, ButtonComponent } from '@atoms';
 import { ButtonType } from '@constants';
 
 @Component({
-  selector: 'pt-task-dialog',
+  selector: 'pt-task-create-dialog',
   standalone: true,
   imports: [ReactiveFormsModule, ModalComponent, ButtonComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './task-dialog.html',
-  styleUrl: './task-dialog.css',
+  templateUrl: './task-create-dialog.html',
+  styleUrl: './task-create-dialog.css',
 })
-export class TaskDialog implements OnInit, AfterViewInit {
-  @ViewChild('titleInput') titleInput!: ElementRef<HTMLInputElement>;
+export class TaskCreateDialog implements OnInit, AfterViewInit {
+  readonly titleInput = viewChild<ElementRef<HTMLInputElement>>('titleInput');
   
   ButtonType = ButtonType;
 
@@ -24,7 +24,7 @@ export class TaskDialog implements OnInit, AfterViewInit {
 
   readonly prefilledGoalId = input<string | null>(null);
   readonly goals = this.goalService.goals;
-  readonly close = output<void>();
+  readonly handleClose = output<void>();
 
   readonly taskForm = new FormGroup({
     title: new FormControl('', Validators.required),
@@ -40,7 +40,7 @@ export class TaskDialog implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    setTimeout(() => { this.titleInput?.nativeElement?.focus(); }, 50);
+    setTimeout(() => { this.titleInput()?.nativeElement?.focus(); }, 50);
   }
 
   addTask(): void {
@@ -51,10 +51,10 @@ export class TaskDialog implements OnInit, AfterViewInit {
       this.taskService.addTask(val.title!, val.goalId || null, val.date || null);
     });
 
-    this.close.emit();
+    this.handleClose.emit();
   }
 
   onCancel(): void {
-    this.close.emit();
+    this.handleClose.emit();
   }
 }

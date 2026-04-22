@@ -1,12 +1,12 @@
 import { Component, ChangeDetectionStrategy, signal, inject } from '@angular/core';
 import { TaskList } from './task-list/task-list';
-import { TaskDialog } from './task-dialog/task-dialog';
+import { TaskCreateDialog } from './task-create-dialog/task-create-dialog';
 import { TaskService } from '@services';
 
 @Component({
   selector: 'pt-tasks',
   standalone: true,
-  imports: [TaskList, TaskDialog],
+  imports: [TaskList, TaskCreateDialog],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './tasks.component.html',
   styleUrl: './tasks.component.css'

@@ -3,13 +3,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { GoalService, TaskService } from '@services';
 import { TaskStatus } from '@models';
 import { AppRouterLinks, ButtonType } from '@constants';
-import { TaskDialog } from '../../tasks/task-dialog/task-dialog';
+import { TaskCreateDialog } from '../../tasks/task-create-dialog/task-create-dialog';
 import { TaskCard } from '../../tasks/task-card/task-card';
 
 @Component({
   selector: 'pt-goal-detail',
   standalone: true,
-  imports: [TaskCard, TaskDialog],
+  imports: [TaskCard, TaskCreateDialog],
   templateUrl: './goal-detail.component.html',
   styleUrl: './goal-detail.component.css'
 })

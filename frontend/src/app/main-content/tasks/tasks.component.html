@@ -7,7 +7,7 @@
   <pt-task-list [tasks]="tasks()" />
 
   @if (showDialog()) {
-    <pt-task-dialog (close)="closeDialog()" />
+    <pt-task-create-dialog (handleClose)="closeDialog()" />
   }
 </div>
 
