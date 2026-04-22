@@ -11,8 +11,6 @@
       <p class="goal-description">{{ g.description }}</p>
     </div>
 
-    <!-- <div class="divider"></div> -->
-
     <div class="tasks-timeline">
       @for (task of stats()?.allTasks; track task.id) {
         <div class="task-timeline-entry">

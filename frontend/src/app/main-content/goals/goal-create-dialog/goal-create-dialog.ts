@@ -5,12 +5,12 @@ import { ModalComponent, ButtonComponent } from '@atoms';
 import { ButtonType } from '@constants';
 
 @Component({
-  selector: 'pt-goal-dialog',
+  selector: 'pt-goal-create-dialog',
   standalone: true,
   imports: [ReactiveFormsModule, ModalComponent, ButtonComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './goal-dialog.html',
-  styleUrl: './goal-dialog.css',
+  templateUrl: './goal-create-dialog.html',
+  styleUrl: './goal-create-dialog.css',
 })
 export class GoalDialog implements AfterViewInit {
   @ViewChild('titleInput') titleInput!: ElementRef<HTMLInputElement>;
@@ -21,7 +21,7 @@ export class GoalDialog implements AfterViewInit {
   private readonly appRef = inject(ApplicationRef);
   private readonly utils = inject(UtilService);
 
-  readonly close = output<void>();
+  readonly handleClose = output<void>();
 
   readonly goalForm = new FormGroup({
     title: new FormControl('', Validators.required),
@@ -41,10 +41,10 @@ export class GoalDialog implements AfterViewInit {
       this.goalService.addGoal(val.title!, val.description || '', val.targetDate!);
     });
 
-    this.close.emit();
+    this.handleClose.emit();
   }
 
   onCancel(): void {
-    this.close.emit();
+    this.handleClose.emit();
   }
 }

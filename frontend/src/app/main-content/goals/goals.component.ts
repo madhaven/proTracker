@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, inject, signal, ApplicationRef, computed } from '@angular/core';
 import { TaskService, GoalService, UtilService } from '@services';
-import { GoalDialog } from './goal-dialog/goal-dialog';
+import { GoalDialog } from './goal-create-dialog/goal-create-dialog';
 import { TaskStatus } from '@models';
 import { GoalCard } from "./goal-card/goal-card";
 
