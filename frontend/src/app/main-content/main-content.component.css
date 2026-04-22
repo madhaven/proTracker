@@ -6,6 +6,7 @@
   scrollbar-gutter: stable both-edges; /* Prevents content from jumping/shifting when scrollbar appears */
   background-color: var(--bg-main);
   transition: var(--theme-transition);
+  view-transition-name: main-content;
 }
 
 .content-wrapper {

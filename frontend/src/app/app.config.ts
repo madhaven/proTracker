@@ -8,7 +8,7 @@ import { provideClientHydration, withEventReplay } from '@angular/platform-brows
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideRouter(routes, withViewTransitions()), // Angular's built-in view transition support
+    provideRouter(routes, withViewTransitions({ skipInitialTransition: true })), // Angular's built-in view transition support
     provideClientHydration(withEventReplay()),
     provideHttpClient(withFetch()), // uses modern fetch api to instead of xhr based requests
   ]
