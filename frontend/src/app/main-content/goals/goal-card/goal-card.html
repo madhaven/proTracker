@@ -1,10 +1,10 @@
 <div class="goal-item group">
-  <pt-button (click)="deleteClick()" [type]="ButtonType.Icon" class="delete-btn-absolute" title="Delete Goal">
+  <pt-button (click)="deleteClick()" (keypress)="deleteClick()" [type]="ButtonType.Icon" class="delete-btn-absolute" title="Delete Goal">
     &times;
   </pt-button>
   <div class="goal-content">
     <div class="goal-info">
-      <h3 class="goal-item-title" (click)="navigateToGoal(goal().id)">{{ goal().title }}</h3>
+      <h3 class="goal-item-title" (click)="navigateToGoal(goal().id)" (keypress)="navigateToGoal(goal().id)">{{ goal().title }}</h3>
       <div class="goal-meta">
         @if (goal().dateTarget) {
           <span class="target-label">Target</span>
@@ -29,7 +29,7 @@
                   class="tick" 
                   [class.completed]="task.taskStatus === TaskStatus.Completed"
                 ></div>
-                <button (click)="toggleTask(task.id, $event)"
+                <button (click)="toggleTask(task.id, $event)" (keypress)="toggleTask(task.id, $event)"
                     class="pt-checkbox-btn tick-checkbox"
                     [class.checked]="task.taskStatus === TaskStatus.Completed">
                   @if (task.taskStatus === TaskStatus.Completed) {

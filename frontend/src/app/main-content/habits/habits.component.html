@@ -21,7 +21,7 @@
     @for (habit of habits(); track habit.id) {
       <div class="habit-item group">
         <div class="habit-main">
-          <pt-button (click)="deleteHabit(habit.id)" [type]="ButtonType.Icon" title="Delete Habit" class="delete-btn">
+          <pt-button (click)="deleteHabit(habit.id)" (keypress)="deleteHabit(habit.id)" [type]="ButtonType.Icon" title="Delete Habit" class="delete-btn">
             &times;
           </pt-button>
           <div class="habit-info">

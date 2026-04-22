@@ -22,7 +22,7 @@
     </div>
 
     <div class="dialog-actions">
-      <pt-button [type]="ButtonType.Subtle" nativeType="button" (click)="onCancel()">Cancel</pt-button>
+      <pt-button [type]="ButtonType.Subtle" nativeType="button" (click)="onCancel()" (keypress)="onCancel()">Cancel</pt-button>
       <pt-button [type]="ButtonType.Primary" nativeType="submit" [disabled]="taskForm.invalid">Save Task</pt-button>
     </div>
   </form>

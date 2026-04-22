@@ -1,5 +1,5 @@
-<div class="dialog-backdrop" (click)="close.emit()">
-  <div class="dialog-content" (click)="$event.stopPropagation()">
+<div class="dialog-backdrop" (click)="close.emit()" (keypress)="close.emit()">
+  <div class="dialog-content" (click)="$event.stopPropagation()" (keypress)="$event.stopPropagation()">
     <ng-content></ng-content>
   </div>
 </div>

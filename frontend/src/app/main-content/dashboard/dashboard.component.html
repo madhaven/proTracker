@@ -16,7 +16,7 @@
           @let stats = getGoalStats(goal.id);
           <div class="goal-progress-item group">
             <div class="goal-header">
-              <h4 class="goal-title" (click)="navigateToGoal(goal.id)">{{ goal.title }}</h4>
+              <h4 class="goal-title" (click)="navigateToGoal(goal.id)" (keypress)="navigateToGoal(goal.id)">{{ goal.title }}</h4>
               <span class="goal-percentage">{{ stats.percentage }}%</span>
             </div>
             <div class="progress-bar-bg">

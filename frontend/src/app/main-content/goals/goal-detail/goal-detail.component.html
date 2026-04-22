@@ -1,6 +1,6 @@
 <div class="goal-detail-container">
   <!-- <div class="header-actions">
-    <pt-button [type]="ButtonType.Subtle" (click)="goBack()">
+    <pt-button [type]="ButtonType.Subtle" (click)="goBack()" (keypress)="goBack()">
       &larr; Back to Goals
     </pt-button>
   </div> -->
@@ -21,7 +21,7 @@
         </div>
       }
       
-      <div class="add-task-trigger" (click)="openTaskDialog()">
+      <div class="add-task-trigger" (click)="openTaskDialog()" (keypress)="openTaskDialog()">
         <span class="plus-icon">+</span>
         <span class="trigger-text">Add a new task...</span>
       </div>

@@ -27,7 +27,7 @@
 
   @if (showCompleted() && completedTasks().length > 0) {
     <div class="completed-section">
-      <h3 class="section-subtitle" (click)="toggleFold()">
+      <h3 class="section-subtitle" (click)="toggleFold()" (keypress)="toggleFold()">
         {{ isFolded() ? 'show completed' : 'Completed' }}
       </h3>
       @if (!isFolded()) {

@@ -1,6 +1,6 @@
 <div class="task-detail-container animate-in">
-  <!-- <pt-button [type]="ButtonType.Icon" (click)="goBack()" title="Back">
-    <pt-svg [icon]="SvgIcon.ChevronLeft" [size]="20"></pt-svg>
+  <!-- <pt-button [type]="ButtonType.Icon" (click)="goBack()" (keypress)="goBack()" title="Back">
+    <pt-svg [icon]="SvgIcon.ChevronLeft" [size]="20" />
     Back
   </pt-button> -->
 
@@ -8,6 +8,7 @@
     <div class="group" [class.danger-item]="isOverdue()" [style.view-transition-name]="'task-' + t.id">
       <div class="detail-header">
         <button (click)="toggleTask($event)"
+                (keypress)="toggleTask($event)"
                 class="pt-checkbox-btn task-detail-checkbox size-lg"
                 [class.danger]="isOverdue()"
                 [class.checked]="isCompleted()">
@@ -45,8 +46,8 @@
       </div>
 
       <div class="actions">
-        <pt-button [type]="ButtonType.Subtle" (click)="openEditModal()">Edit Task</pt-button>
-        <pt-button [type]="ButtonType.Danger" (click)="deleteTask()">Delete Task</pt-button>
+        <pt-button [type]="ButtonType.Subtle" (click)="openEditModal()" (keypress)="openEditModal()">Edit Task</pt-button>
+        <pt-button [type]="ButtonType.Danger" (click)="deleteTask()" (keypress)="deleteTask()">Delete Task</pt-button>
       </div>
     </div>
 

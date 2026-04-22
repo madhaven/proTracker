@@ -1,5 +1,6 @@
 <div class="task-item group" [class.danger-item]="isOverdue()">
   <button (click)="toggleTask(task().id, $event)"
+          (keypress)="toggleTask(task().id, $event)"
           class="pt-checkbox-btn task-item-checkbox"
           [class.danger]="isOverdue()"
           [class.checked]="isCompleted()">
@@ -8,7 +9,7 @@
     }
   </button>
   
-  <div class="task-info" (click)="navigateToDetail(task().id)">
+  <div class="task-info" (click)="navigateToDetail(task().id)" (keypress)="navigateToDetail(task().id)">
     <p class="task-title"
        [class.danger-title]="isOverdue()" 
        [class.line-through]="isCompleted()">
@@ -24,7 +25,8 @@
     }
   </div>
   
-  <pt-button (click)="deleteTask(task().id)" 
+  <pt-button (click)="deleteTask(task().id)"
+             (keypress)="deleteTask(task().id)"
              [type]="ButtonType.Icon" 
              class="delete-btn"
              [class.danger-delete]="isOverdue()">

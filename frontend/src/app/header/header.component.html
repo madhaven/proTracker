@@ -2,7 +2,7 @@
   <div class="header-container">
     <div class="logo-group">
       <h1 class="logo-title" [routerLink]="[AppRouterLinks.Today]">ProTracker.</h1>
-      <pt-button [type]="ButtonType.Icon" (click)="toggleTheme()" [title]="'Toggle Theme'">
+      <pt-button [type]="ButtonType.Icon" (click)="toggleTheme()" (keypress)="toggleTheme()" [title]="'Toggle Theme'">
         @if (currentTheme() === Theme.Light) {
           <pt-svg [icon]="SvgIcon.Moon" [size]="18" />
         } @else {

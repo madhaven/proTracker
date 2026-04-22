@@ -1,3 +1,16 @@
-.svg-container {
+:host {
   display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+}
+
+.svg-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+svg {
+  display: block;
 }
